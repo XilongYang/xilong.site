@@ -1,27 +1,11 @@
-.header{
-    display: grid;
-    text-align: center;
-    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-    font-style: normal;
-}
-rt{
-    color: rgb(89,89,89);
-    font-family:"Courier New", Courier, monospace;
-}
 .page{
     margin-left: 25%;
     margin-right: 25%;
-    font-family:"Courier New", Courier, monospace;
-    font-size: 1.1em;
+    font-family:"Noto Serif SC", Courier, monospace;
+    font-size: 1em;
     text-align: justify;
 }
-@media screen and (max-width: 1000px) {
-    .page{
-        margin-left: 2.5%;
-        margin-right: 2.5%;
-        text-align: left; 
-    }
-}
+
 a { 
     color: #000000;
     font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
@@ -30,18 +14,77 @@ a {
     text-decoration: none;
 }
 a:visited { color: #000000}
-a:hover { color: #002fa7;}
-div.content {
-    line-height: 110%;
+a:hover { color: #feba07;}
+
+.button{
+    background-color: transparent;
+    border: none;
+    font-size: 0.8em;
+    width: 1.8em;
 }
-.button {
-    background: transparent;
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    border: 1px solid #002fa7;
+.button:hover{
+    color: #feba07;
 }
 
-.button:hover {
-    background-color: #002fa7;
-    color: white;
+div.header{
+    display: grid;
+    text-align: center;
+    font-family: "Noto Serif SC","Palatino Linotype", "Book Antiqua", Palatino, serif;
+    font-style: normal;
+}
+
+div.language{
+    position: absolute;
+    top: 10px;
+    left: 25%; 
+}
+
+div.intro{
+    line-height: 120%;
+}
+
+div.works_title{
+    font-size: 0.8em;
+    line-height: 0.8em;
+}
+div.item_header {
+    display: table;
+    line-height: 0.8em;
+}
+div.item_buttons{
+    width: 4.5em;
+    font-size: 0.8em;
+    display: table;
+    margin-right: 0.5em;
+    padding: 0%;
+}
+div.item_button{
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    line-height: 0.8em;
+}
+div.unused{
+    color: #ddd;
+    display: table-cell;
+}
+div.item_title{
+    display: table-cell;
+    line-height: 0.2em;
+}
+div.item_intro{
+    display: none;
+    margin-left: 2em;
+}
+
+@media screen and (max-width: 950px) {
+    .page{
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+        text-align: left; 
+    }
+    div.language {
+        top: 0;
+        left: 2.5%;
+    }
 }
