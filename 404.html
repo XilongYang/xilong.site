@@ -1,16 +1,75 @@
 <!DOCTYPE html>
 <html>
-    <!-- #include "./head.html" -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Xilong Yang</title>
+    <title>404 Not Found - Xilong Yang</title>
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <link rel="stylesheet"b href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic">
-    <link href="./src/default.css" rel="stylesheet">
-    <script src="./scripts/switchDisplay.js"></script>
+    <link href="./src/404.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            margin-top: 5%;
+            margin-left: 25%;
+            margin-right: 25%;
+        }
+
+        a { 
+            color: #000000;
+            font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+            font-weight: bold;
+            font-style: italic;
+            text-decoration: underline dotted #aaa;
+        }
+        a:visited { color: #000000}
+        a:hover { 
+            color: #feba07;
+            text-decoration: none;
+        }
+
+        #header {
+            display: grid;
+            grid: 'left right';
+        }
+
+        #t404 {
+            vertical-align: middle;
+            grid-area: left;
+        }
+
+        #notfound {
+            margin-left: 130px;
+            margin-left: 130px;
+            margin-top: 0%;
+            font-size: 130px;
+            grid-area: right;
+            font-family:Arial,Helvetica,sans-serif;
+        }
+
+        @media screen and (max-width: 950px) {
+            body{
+                margin-left: 2.5%;
+                margin-right: 2.5%;
+                text-align: left; 
+            }
+        }
+    </style>
 </head>
-    <h1>404 Not Found</h1>
+<body>
+    <div id="header">
+        <div id="t404">
+            <img src="./404.png">
+        </div>
+        <h1 id="notfound">
+            Not Found
+        </h1>
+    </div>
+    <div id="contents">
+        <p>That page seems to be missing. Maybe you can:</p>
+        <p><a href="./index.html">Back home.</a></p>
+        <p><a href="mailto:xilong.yang@foxmail.com">Contact me: xilong.yang@foxmail.com.</a></p>
+    </div>
+</body>
 </html>
