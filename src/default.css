@@ -78,6 +78,7 @@ div.item_button{
 }
 div.unused{
     color: #ddd;
+    visibility: hidden;
     display: table-cell;
 }
 div.item_title{
