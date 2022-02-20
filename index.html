@@ -9,14 +9,15 @@
         <link rel="stylesheet"b href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
         <link href="/default.css" rel="stylesheet">
         <script src="/scripts/fade.js"></script>
+        <script src="/scripts/switchLanguage.js"></script>
     </head>
     <body onscroll="fade()">
         <div id="header">
-            <h1>Xilong Yang</h1>
-            <p class="non_important">Programer</p>
-            <div id="language">
-                Language:
-                <select>
+            <h1 id="name">Xilong Yang</h1>
+            <p class="non_important" id="occupation">Programer</p>
+            <div>
+                <span id="language_label">Language:</span>
+                <select id="language" onchange="switchLanguage()">
                     <option value="en">English</option>
                     <option value="zh">中文</option>
                     <option value="jp">日本語</option>
@@ -28,29 +29,29 @@
             <div id="works">
                 <div class="work">
                     <a href="https://github.com/XilongYang/STAMP">STAMP-C++</a>
-                    <p class="non_important">Simple Two-Way Active Measure Protocol(IETF RFC8762).</p>
+                    <p class="non_important" id="stamp_intro">Simple Two-Way Active Measure Protocol(IETF RFC8762).</p>
                 </div>
                 <div class="work">
                     <a href="https://github.com/XilongYang/Fe3OS">Fe3OS</a>
-                    <p class="non_important">A simple web page which simulates a UNIX Shell.</p>
+                    <p class="non_important" id="Fe3OS_intro">A simple web page which simulates a UNIX Shell.</p>
                 </div>
                 <div class="work">
                     <br>
                     <br>
                     <br>
-                    <a href="test.html">misc.</a>
+                    <a href="test.html" id="misc">misc.</a>
                 </div>
             </div>
             <div id="about">
-                <p class="non_important">About</p>
-                <p>I'm a programer with 3 years of experience about C++ and Linux.  </p>
+                <p class="non_important" id="about_label">About</p>
+                <p id="intro">I'm a programer with 3 years of experience about C++ and Linux.  </p>
                 <br>
-                <p>I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>. </p>
+                <p id="intro_site">I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>. </p>
                 <br>
-                <p>You can contact me though email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>
+                <p id="intro_email">You can contact me though email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>
             </div>
             <div id="booter">
-                <p class="non_important">* no more info.</p>
+                <p class="non_important" id="nomore">* no more info.</p>
             </div>
         </div>
     </body>
