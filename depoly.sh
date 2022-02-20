@@ -1,5 +1,5 @@
 #! /bin/bash
-cd /root/Site/xilong.site
+cd /home/xilong/Documents/Codes/Site/xilong.site
 git add *
 git commit -am "update"
 git push origin master
