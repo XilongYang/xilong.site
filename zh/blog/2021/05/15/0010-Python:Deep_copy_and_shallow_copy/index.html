@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -24,12 +24,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python深拷贝与浅拷贝">
 <meta property="og:url" content="https://xilong.site/zh/blog/2021/05/15/0010-Python:Deep_copy_and_shallow_copy/index.html">
-<meta property="og:site_name" content="Xilong&#39;s Blog">
+<meta property="og:site_name" content="在泥坑里跳来跳去">
 <meta property="og:description" content="前言：自从上次略略学习了一些python基础就没怎么用过python了，这次遇到了深浅拷贝问题，在此记录。">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-15T12:36:29.000Z">
 <meta property="article:modified_time" content="2022-01-31T14:25:28.621Z">
-<meta property="article:author" content="Xilong Yang">
+<meta property="article:author" content="杨熙龙">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
 
@@ -42,11 +42,11 @@
     sidebar: "",
     isHome : false,
     isPost : true,
-    lang   : 'en'
+    lang   : 'zh-CN'
   };
 </script>
 
-  <title>Python深拷贝与浅拷贝 | Xilong's Blog</title>
+  <title>Python深拷贝与浅拷贝 | 在泥坑里跳来跳去</title>
   
 
 
@@ -86,7 +86,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -97,7 +97,7 @@
 
     <a href="/zh/blog/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Xilong's Blog</h1>
+      <h1 class="site-title">在泥坑里跳来跳去</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -116,26 +116,26 @@
   <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/zh/blog/" rel="section">Home</a>
+    <a href="/zh/blog/" rel="section">首页</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/zh/blog/archives/" rel="section">Archives</a>
+    <a href="/zh/blog/archives/" rel="section">归档</a>
 
   </li>
-        <li class="menu-item menu-item-discussions">
+        <li class="menu-item menu-item-留言">
 
-    <a href="/zh/blog/guestbook/" rel="section">Discussions</a>
+    <a href="/zh/blog/guestbook/" rel="section">留言</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/zh/blog/.." rel="section">About</a>
+    <a href="/zh/blog/.." rel="section">关于</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger">Search
+        <a role="button" class="popup-trigger">搜索
         </a>
       </li>
   </ul>
@@ -151,7 +151,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -188,17 +188,17 @@
     
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xilong.site/zh/blog/2021/05/15/0010-Python:Deep_copy_and_shallow_copy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/zh/blog/images/avatar.gif">
-      <meta itemprop="name" content="Xilong Yang">
+      <meta itemprop="name" content="杨熙龙">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xilong's Blog">
+      <meta itemprop="name" content="在泥坑里跳来跳去">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -210,34 +210,34 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2021-05-15 20:36:29" itemprop="dateCreated datePublished" datetime="2021-05-15T20:36:29+08:00">2021-05-15</time>
+              <time title="创建时间：2021-05-15 20:36:29" itemprop="dateCreated datePublished" datetime="2021-05-15T20:36:29+08:00">2021-05-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/zh/blog/categories/0x02-%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">0x02 技术杂记</span></a>
                 </span>
             </span>
 
           <br>
-            <span class="post-meta-item" title="Symbols count in article">
+            <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
+                <span class="post-meta-item-text">本文字数：</span>
               <span>2.2k</span>
             </span>
-            <span class="post-meta-item" title="Reading time">
+            <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>4 mins.</span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
             </span>
 
         </div>
@@ -308,14 +308,14 @@
 <div>
 <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>Post author:  </strong>Xilong Yang
+    <strong>本文作者： </strong>杨熙龙
   </li>
   <li class="post-copyright-link">
-    <strong>Post link: </strong>
+    <strong>本文链接：</strong>
     <a href="https://xilong.site/zh/blog/2021/05/15/0010-Python:Deep_copy_and_shallow_copy/" title="Python深拷贝与浅拷贝">https://xilong.site/zh/blog/2021/05/15/0010-Python:Deep_copy_and_shallow_copy/</a>
   </li>
   <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
   </li>
 </ul>
 </div>
@@ -390,10 +390,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -405,7 +405,7 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Xilong Yang</p>
+  <p class="site-author-name" itemprop="name">杨熙龙</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap motion-element">
@@ -414,18 +414,18 @@
           <a href="/zh/blog/archives/">
         
           <span class="site-state-item-count">35</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/zh/blog/categories/">
         <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/zh/blog/tags/">
         <span class="site-state-item-count">16</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -463,19 +463,19 @@
   <span class="with-love">
     <i class=""></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">Xilong Yang</span>
+  <span class="author" itemprop="copyrightHolder">杨熙龙</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-      <span class="post-meta-item-text">Symbols count total: </span>
-    <span title="Symbols count total">147k</span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">147k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-      <span class="post-meta-item-text">Reading time total &asymp;</span>
-    <span title="Reading time total">4:28</span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:28</span>
 </div>
 
         
