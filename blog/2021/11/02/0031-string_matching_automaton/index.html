@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico">
+  <link rel="mask-icon" href="/blog/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Judson:300,300italic,400,400italic,700,700italic|JetBrains Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xilong.site","root":"/blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideDownIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideDownIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="AC自动机是一种综合了Tire树与KMP算法思想的字符串匹配算法，特点是同时进行多个模式串的匹配。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串匹配之AC自动机">
+<meta property="og:url" content="https://xilong.site/blog/2021/11/02/0031-string_matching_automaton/index.html">
+<meta property="og:site_name" content="Xilong&#39;s Blog">
+<meta property="og:description" content="AC自动机是一种综合了Tire树与KMP算法思想的字符串匹配算法，特点是同时进行多个模式串的匹配。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img.xilong.site/20211102/image-20211102120835270.png">
+<meta property="og:image" content="https://img.xilong.site/20211102/image-20211102130728715.png">
+<meta property="article:published_time" content="2021-11-02T12:36:29.000Z">
+<meta property="article:modified_time" content="2022-02-20T06:39:02.899Z">
+<meta property="article:author" content="Xilong Yang">
+<meta property="article:tag" content="字符串">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.xilong.site/20211102/image-20211102120835270.png">
+
+<link rel="canonical" href="https://xilong.site/blog/2021/11/02/0031-string_matching_automaton/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>字符串匹配之AC自动机 | Xilong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Xilong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-discussions">
+
+    <a href="/blog/guestbook/" rel="section">Discussions</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="https://www.xilong.site/" rel="noopener" target="_blank">About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xilong.site/blog/2021/11/02/0031-string_matching_automaton/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Xilong Yang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xilong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符串匹配之AC自动机
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-02 20:36:29" itemprop="dateCreated datePublished" datetime="2021-11-02T20:36:29+08:00">2021-11-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/0x00-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">0x00 数据结构和算法</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>5.9k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>11 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>AC自动机是一种综合了Tire树与KMP算法思想的字符串匹配算法，特点是同时进行多个模式串的匹配。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="AC自动机介绍"><a href="#AC自动机介绍" class="headerlink" title="AC自动机介绍"></a>AC自动机介绍</h2><p>AC自动机利用KMP的最长成功匹配思想对Tire树进行改造，使得搜索效率大副提高，并且可以对多个模式串进行匹配。缺点是效大的空间复杂度，是一种空间换时间的算法。</p>
+<h2 id="Tire树"><a href="#Tire树" class="headerlink" title="Tire树"></a>Tire树</h2><p>Tire树也就是字典树，可以提供高效的字符串查找。要构造一个Tire树，需要明确：</p>
+<ol>
+<li>一个字母表，包括所有模式串中可能出现的字符。</li>
+<li>至少一个模式串。</li>
+</ol>
+<p>构造过程为从根节点开始，对每个串的字符逐位判断，若存在字符相同的子节点则转移到子节点。否则创建一个新节点，并令其字符为当前字符。将每个串遍历结束时停留的节点标记为接受节点。下一个串仍从根节点开始构造。</p>
+<p>比如字母表限定为“小写英文字母（a-z）”，模式串为{“she”,”he”,”her”,”his”,”is”}时，可以生成如下所示Tire树：</p>
+<p><img src="https://img.xilong.site/20211102/image-20211102120835270.png" alt="image-20211102120835270"></p>
+<p>要判断一个串是否与某一模式串相同只需要从根节点开始，对待匹配串逐位判断，若存在与该位字符相同的子节点则转移，否则匹配失败。如果匹配结束时停留在接受节点则匹配成功。例如：</p>
+<ul>
+<li>待匹配串为”her”：<ul>
+<li>初始位置为根节点，匹配字符’h’，存在字符为’h’的子节点，转移到对应节点。</li>
+<li>匹配字符’e’，存在，转移到对应节点。</li>
+<li>匹配字符’r’，存在，转移到对应节点。</li>
+<li>匹配完成，当前节点为接受节点，匹配成功。</li>
+</ul>
+</li>
+<li>待匹配串为”sh”:<ul>
+<li>初始位置为根节点，匹配字符’s’，存在，转移到对应节点。</li>
+<li>匹配字符’h’，存在，转移到对应节点。</li>
+<li>匹配完成，当前节点不是接受节点，匹配失败。</li>
+</ul>
+</li>
+<li>待匹配串为”rsg”:<ul>
+<li>初始位置为根节点，匹配字符’r’，不存在，匹配失败。</li>
+</ul>
+</li>
+</ul>
+<h2 id="多模式匹配"><a href="#多模式匹配" class="headerlink" title="多模式匹配"></a>多模式匹配</h2><p>在Tire树中，一个节点表示的是从根节点到该点的路径对应的串。如上图树中最下层的’r’节点表示的是字符串”her”。考虑字符串”sher”，如果要求出各模式串在其中出现的次数，通常做法就是逐位与所有模式进行匹配：</p>
+<ul>
+<li>”sher”匹配{“she”,”he”,”her”,”his”,”is”}</li>
+<li>”her”匹配{“she”,”he”,”her”,”his”,”is”}</li>
+<li>”er”匹配{“she”,”he”,”her”,”his”,”is”}</li>
+<li>”r”匹配{“she”,”he”,”her”,”his”,”is”}</li>
+</ul>
+<p>这里的匹配规则稍作改动，只要到达接受结点就算一次成功。也就是从匹配整个串变为匹配是否存在一个与模式相同的前缀。</p>
+<p>问题是，匹配次数太多，且多数是不必要的。比如对”er”与”r”的10次（每个串分别与5个模式进行匹配）。以及”sher”对除”she”外的模式的4次匹配和”her”对”is”与”she”的2次匹配。在20次匹配中共有16次匹配是没有必要的，大大降低了去处效率。</p>
+<p>在KMP思想的启发下，可以引入一个最长后缀的概念。当匹配失败时，转移到已匹配部分的最长后缀对应的节点继续匹配，就减少了不必要的匹配。</p>
+<p>如对”sher”而言，匹配到”she”模式的末尾时位于第4层的’e’节点。匹配’r’时，无对应子节点而匹配失败，此时不从头开始，而是转移到第3层的’e’节点，其对应的”he”为”she”在该图中的最长后缀，此时继续匹配’r’，发现对应子节点，并转移到’r’。匹配结束，路径上的共有3个接受节点，分别对应”she”、”he”、”her”，这三个模式的匹配次数分别+1。</p>
+<p>如果将每个节点的失败后转移节点标记出来，就形成了下图结构（蓝色箭头表示失败后转移节点，没有标记的则转移到根节点）：</p>
+<p><img src="https://img.xilong.site/20211102/image-20211102130728715.png" alt="image-20211102130728715"></p>
+<h2 id="失配指针"><a href="#失配指针" class="headerlink" title="失配指针"></a>失配指针</h2><p>上一节中的匹配方式就构成了AC自动机。AC自动机算法即是在Tire树的基础上加入了匹配失败的处理，使其达成了很高的多次匹配效率，主要用于匹配子串中各模式串出现的位置与次数。其中匹配失败处理就是通过失配指针实现的，即在每个节点中加入一个指针指向匹配失败后转移的节点。</p>
+<p>失配指针可以使用如下方法得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// queue: 一个队列，保存节点指针</span><br><span class="line">// root: 根节点</span><br><span class="line">// 将根节点的fail指针设为null，并将其所有子节点入队</span><br><span class="line">root-&gt;fail = null</span><br><span class="line">for p in root.childs:</span><br><span class="line">    queue.push(p)</span><br><span class="line">// 层序遍历tire树</span><br><span class="line">while !queue.empty():</span><br><span class="line">    // 对当前节点，先将其fail值默认为root</span><br><span class="line">    cur = queue.pop();</span><br><span class="line">    cur-&gt;fail = root</span><br><span class="line">    </span><br><span class="line">    for p in cur.childs:</span><br><span class="line">        queue.push(p)</span><br><span class="line">    // 寻找其父节点的fail指针指向的节点的子节点</span><br><span class="line">    // 找到的第一个与当前节点值相同的节点就是当前节点的最长后缀节点</span><br><span class="line">    // 若没有相应的子节点，则迭代寻找fail的fail指针指向的节点。</span><br><span class="line">    fail = cur-&gt;parent-&gt;fail</span><br><span class="line">    while fail != null and cur-&gt;fail == root:</span><br><span class="line">        for p in fail.childs:</span><br><span class="line">            if p-&gt;value == cur-&gt;value:</span><br><span class="line">                cur-&gt;fail = p</span><br><span class="line">        fail = fail-&gt;fail</span><br></pre></td></tr></table></figure>
+
+<h2 id="匹配过程"><a href="#匹配过程" class="headerlink" title="匹配过程"></a>匹配过程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// str:待匹配串</span><br><span class="line">// root:自动机根节点</span><br><span class="line">// 令cur指向根节点，并对str逐位匹配</span><br><span class="line">cur = root</span><br><span class="line">for i in (0, str.length()):</span><br><span class="line">    // 如果当前节点不存在str[i]对应的子节点，则进入cur-&gt;fail</span><br><span class="line">    // 循环直到存在对应节点或到达根节点</span><br><span class="line">	auto index = Node::get_index(str[i])</span><br><span class="line">	while cur-&gt;childs[index] == nullptr &amp;&amp; cur != root :</span><br><span class="line">		cur = cur-&gt;fail</span><br><span class="line">	// 如果仍没有对应节点，则退出此轮循环</span><br><span class="line">	if cur-&gt;childs[index] == nullptr :</span><br><span class="line">    	continue</span><br><span class="line">   	// 进入到对应节点中，同时使用temp遍历该节点的所有后缀</span><br><span class="line">   	// 将路径上的所有接受节点对应模式出现次数+1</span><br><span class="line">	cur = cur-&gt;childs[index]</span><br><span class="line">	temp = cur</span><br><span class="line">	while temp != nullptr :</span><br><span class="line">		for  p in temp-&gt;patterns :</span><br><span class="line">		    ++nums[p]</span><br><span class="line">		temp = temp-&gt;fail</span><br></pre></td></tr></table></figure>
+
+<h2 id="C-实现"><a href="#C-实现" class="headerlink" title="C++实现"></a>C++实现</h2><p>给出一个字母表为小写字母且不考虑内存泄露的简单实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ACAutomaton</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">ACAutomaton</span>(<span class="keyword">const</span> vector&lt;string&gt; &amp;patterns) </span><br><span class="line">    : <span class="built_in">root</span>(<span class="keyword">new</span> <span class="built_in">Node</span>(<span class="literal">nullptr</span>)), <span class="built_in">nums</span>(patterns.<span class="built_in">size</span>(), <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">generate_tire</span>(patterns);</span><br><span class="line">        <span class="built_in">generate_fails</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">match</span><span class="params">(<span class="keyword">const</span> string&amp; str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">auto</span> cur = root;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; str.<span class="built_in">length</span>()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> index = Node::<span class="built_in">get_index</span>(str[i]);</span><br><span class="line">            <span class="keyword">while</span> (cur-&gt;childs[index] == <span class="literal">nullptr</span> &amp;&amp; cur != root) &#123;</span><br><span class="line">                cur = cur-&gt;fail;</span><br><span class="line">            &#125;</span><br><span class="line">            ++i;</span><br><span class="line">            <span class="keyword">if</span> (cur-&gt;childs[index] == <span class="literal">nullptr</span>) <span class="keyword">continue</span>;</span><br><span class="line">            cur = cur-&gt;childs[index];</span><br><span class="line">            <span class="keyword">auto</span> temp = cur;</span><br><span class="line">            <span class="keyword">while</span> (temp != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">auto</span> p : temp-&gt;patterns) &#123;</span><br><span class="line">                    ++nums[p];</span><br><span class="line">                &#125;</span><br><span class="line">                temp = temp-&gt;fail;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">const</span> vector&lt;<span class="keyword">int</span>&gt; &amp;<span class="title">get_nums</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> nums;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Node</span> &#123;</span></span><br><span class="line">        <span class="built_in">Node</span> (Node *parent_) </span><br><span class="line">        : <span class="built_in">value</span>(<span class="number">0</span>), <span class="built_in">parent</span>(parent_), <span class="built_in">fail</span>(<span class="literal">nullptr</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">get_index</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> c - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span> value;</span><br><span class="line">        vector&lt;<span class="keyword">int</span>&gt; patterns;</span><br><span class="line"></span><br><span class="line">        Node *parent;</span><br><span class="line">        Node *fail;</span><br><span class="line">        Node *childs[<span class="number">26</span>] = &#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    Node *root;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; nums;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">generate_tire</span><span class="params">(<span class="keyword">const</span> vector&lt;string&gt; &amp;patterns)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; patterns.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">            <span class="keyword">auto</span> cur = root;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> c : patterns[i]) &#123;</span><br><span class="line">                <span class="keyword">auto</span> index = Node::<span class="built_in">get_index</span>(c);</span><br><span class="line">                <span class="keyword">if</span> (cur-&gt;childs[index] == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">                    cur-&gt;childs[index] = <span class="keyword">new</span> <span class="built_in">Node</span>(cur);</span><br><span class="line">                    cur-&gt;childs[index]-&gt;value = c;</span><br><span class="line">                &#125;</span><br><span class="line">                cur = cur-&gt;childs[index];</span><br><span class="line">            &#125;</span><br><span class="line">            cur-&gt;patterns.<span class="built_in">push_back</span>(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">generate_fails</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        queue&lt;Node*&gt; q;</span><br><span class="line">        root-&gt;fail = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (root-&gt;childs[i])</span><br><span class="line">                q.<span class="built_in">push</span>(root-&gt;childs[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> cur = q.<span class="built_in">front</span>();</span><br><span class="line">            q.<span class="built_in">pop</span>();</span><br><span class="line">            cur-&gt;fail = root;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; ++i) &#123;</span><br><span class="line">                <span class="keyword">if</span> (cur-&gt;childs[i]) </span><br><span class="line">                    q.<span class="built_in">push</span>(cur-&gt;childs[i]);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">auto</span> f = cur-&gt;parent-&gt;fail;</span><br><span class="line">            <span class="keyword">while</span> (f != <span class="literal">nullptr</span> &amp;&amp; cur-&gt;fail == root) &#123;</span><br><span class="line">                <span class="keyword">auto</span> index = Node::<span class="built_in">get_index</span>(cur-&gt;value);</span><br><span class="line">                <span class="keyword">if</span> (f-&gt;childs[index]) &#123;</span><br><span class="line">                    cur-&gt;fail = f-&gt;childs[index];</span><br><span class="line">                &#125;</span><br><span class="line">                f = f-&gt;fail;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="comment">// while !q.empty</span></span><br><span class="line">    &#125; <span class="comment">// generate_fails</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Xilong Yang
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://xilong.site/blog/2021/11/02/0031-string_matching_automaton/" title="字符串匹配之AC自动机">https://xilong.site/blog/2021/11/02/0031-string_matching_automaton/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/blog/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"><i class="fa fa-tag"></i> 字符串</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2021/11/01/0030-string_matching_KMP/" rel="prev" title="字符串匹配之KMP">
+      <i class="fa fa-chevron-left"></i> 字符串匹配之KMP
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2021/12/11/0032-APUE_chapter2/" rel="next" title="APUE学习笔记01——UNIX标准与限制">
+      APUE学习笔记01——UNIX标准与限制 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AC%E8%87%AA%E5%8A%A8%E6%9C%BA%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">AC自动机介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tire%E6%A0%91"><span class="nav-number">2.</span> <span class="nav-text">Tire树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="nav-number">3.</span> <span class="nav-text">多模式匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E9%85%8D%E6%8C%87%E9%92%88"><span class="nav-number">4.</span> <span class="nav-text">失配指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E8%BF%87%E7%A8%8B"><span class="nav-number">5.</span> <span class="nav-text">匹配过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.</span> <span class="nav-text">C++实现</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Xilong Yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xilongyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xilongyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xilong.yang@foxmail.com" title="E-Mail → mailto:xilong.yang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xilong Yang</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">171k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">5:10</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c1269b6959c57e399fea',
+      clientSecret: 'e64a3919346ee6836c207f835025e19feebce1db',
+      repo        : 'xilong.gitment',
+      owner       : 'XilongSite',
+      admin       : ['XilongSite'],
+      id          : 'e40f14639be3de2e1d88883c1daa056e',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico">
+  <link rel="mask-icon" href="/blog/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Judson:300,300italic,400,400italic,700,700italic|JetBrains Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/blog/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xilong.site","root":"/blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideDownIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideDownIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在一个普通的日子，突然想到用闲置的移动硬盘做一个本地git仓库。简单的理了理思路，确定了几个步骤：  准备硬盘，比如分区与格式化。 自动挂载硬盘，实现即插即用。 使用硬盘托管代码。  于是放了一首歌，戴上耳机，哼着小曲开始了这次折腾。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用移动硬盘制作本地git仓库">
+<meta property="og:url" content="https://xilong.site/blog/2021/06/27/0014-Make_a_local_git_repository/index.html">
+<meta property="og:site_name" content="Xilong&#39;s Blog">
+<meta property="og:description" content="在一个普通的日子，突然想到用闲置的移动硬盘做一个本地git仓库。简单的理了理思路，确定了几个步骤：  准备硬盘，比如分区与格式化。 自动挂载硬盘，实现即插即用。 使用硬盘托管代码。  于是放了一首歌，戴上耳机，哼着小曲开始了这次折腾。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-06-27T13:32:06.000Z">
+<meta property="article:modified_time" content="2022-02-20T06:39:02.899Z">
+<meta property="article:author" content="Xilong Yang">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xilong.site/blog/2021/06/27/0014-Make_a_local_git_repository/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>使用移动硬盘制作本地git仓库 | Xilong's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Xilong's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/blog/" rel="section">Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/blog/archives/" rel="section">Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-discussions">
+
+    <a href="/blog/guestbook/" rel="section">Discussions</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="https://www.xilong.site/" rel="noopener" target="_blank">About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger">Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://xilong.site/blog/2021/06/27/0014-Make_a_local_git_repository/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="Xilong Yang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xilong's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用移动硬盘制作本地git仓库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-06-27 21:32:06" itemprop="dateCreated datePublished" datetime="2021-06-27T21:32:06+08:00">2021-06-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/0x02-%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">0x02 技术杂记</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>8 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>在一个普通的日子，突然想到用闲置的移动硬盘做一个本地git仓库。简单的理了理思路，确定了几个步骤：</p>
+<ol>
+<li>准备硬盘，比如分区与格式化。</li>
+<li>自动挂载硬盘，实现即插即用。</li>
+<li>使用硬盘托管代码。</li>
+</ol>
+<p>于是放了一首歌，戴上耳机，哼着小曲开始了这次折腾。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="制备硬盘"><a href="#制备硬盘" class="headerlink" title="制备硬盘"></a>制备硬盘</h2><p>使用fdisk将这块硬盘上的分区全部删除，然后创建一个新的分区，具体步骤这里略过。</p>
+<p>现在是时候格式化分区了，就决定是你了Ext4……等等，既然这个分区只是用来托管代码，为什么不试试没用过的文件系统呢？就决定是你了——Btrfs！</p>
+<p>查阅了ArchWiki，Btrfs的介绍是这样的：</p>
+<blockquote>
+<p>Btrfs 是一种新型的写时复制 (CoW) Linux 文件系统，已经并入内核主线。Btrfs  在设计实现高级功能的同时，着重于容错、修复以及易于管理。它由 Oracle, Red Hat, Fujitsu, Intel, SUSE,  STRATO 等企业和开发者共同开发，Btrfs 以 GNU GPL 协议授权，同时也欢迎任何人的贡献。</p>
+</blockquote>
+<p>经过了解，发现几个比较感兴趣的特点：</p>
+<ul>
+<li>写时复制：任何写入操作都发生在空闲空间。与传统方式最显著的区别大概在于文件覆写时：传统方式直接在文件相应位置写入，而写时复制方式在空闲空间写入数据并通过修改原文件的元数据以使其相应位置的引用指向写入的位置，并在原地址引用数为0时释放其数据。</li>
+<li>透明压缩：btrfs可以自动的尝试压缩文件，这样一方面减少了文件大小，另一方面显著延长了闪存介质的寿命。</li>
+<li>SSD TRIM：btrfs可以从支持TRIM 命令的 SSD 驱动器中释放未使用的块。已释放的空间范围不会被马上丢弃，它们会被集中起来并在稍后由一个单独的工作线程进行 TRIM，这将能改善提交延迟，以提高SSD的性能。</li>
+</ul>
+<p>为了实现上述功能在挂载时需要添加两个参数：</p>
+<p><code>compress=zstd</code>：使用zstd算法启用自动压缩。</p>
+<p><code>discard=async</code>：使用SSD TRIM。</p>
+<h2 id="自动挂载"><a href="#自动挂载" class="headerlink" title="自动挂载"></a>自动挂载</h2><p>首先简单实现一个通过UUID挂载分区的脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">! /bin/sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/bin/mount_repo</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 挂载点</span></span><br><span class="line">readonly target_dir=&quot;/mnt/Repo&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 通过UUID获取分区名</span></span><br><span class="line">label=`lsblk -f | grep 5398cf0b-266e-4874-a8e7-1ac903013b48 | grep -o -E sd..`</span><br><span class="line"><span class="meta">#</span><span class="bash"> 分区名存在则挂载，否则尝试卸载挂载点</span></span><br><span class="line">if [ $&#123;label&#125; ]</span><br><span class="line">then</span><br><span class="line">    label=&quot;/dev/&quot;$&#123;label&#125;</span><br><span class="line">    echo $&#123;label&#125;</span><br><span class="line">    mkdir $&#123;target_dir&#125;</span><br><span class="line">    mount -o compress=zstd,discard=async $&#123;label&#125; $&#123;target_dir&#125;</span><br><span class="line">else</span><br><span class="line">    echo &quot;no device&quot;</span><br><span class="line">    umount $&#123;target_dir&#125;</span><br><span class="line">    rmdir $&#123;target_dir&#125;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>现在我们有了通过指定UUID挂载分区的脚本了。问题是如何才能让硬盘插入时自动挂载呢？几经查询，发现了udev。</p>
+<h3 id="使用udev"><a href="#使用udev" class="headerlink" title="使用udev"></a>使用udev</h3><p>ArchWiki对udev的介绍如下：</p>
+<blockquote>
+<p>udev 是 Linux 内核的设备管理器。总的来说，它取代了 devfs 和 hotplug，负责管理 <code>/dev</code> 中的设备节点。同时，udev 也处理所有用户空间发生的硬件添加、删除事件，以及某些特定设备所需的固件加载。</p>
+<p>与传统的顺序加载相比，udev 通过并行加载内核模块提供了潜在的性能优势。异步加载模块的方式也有一个天生的缺点：无法保证每次加载模块的顺序，如果机器具有多个块设备，那么它们的设备节点可能随机变化。例如如果有两个硬盘，<code>/dev/sda</code> 可能会随机变成<code>/dev/sdb</code>。</p>
+</blockquote>
+<p>当一个设备被添加或是移除时，udev会从kernel得知这个事件。然后遍历规则文件目录（默认在&#x2F;etc&#x2F;udev&#x2F;rules.d）中的规则文件寻找匹配的规则，有就按规则处理，没有就作默认处理。</p>
+<p>也就是说，我们可以通过编写规则文件的方式让udev在加载硬盘时进行挂载处理。</p>
+<h4 id="udev规则简介"><a href="#udev规则简介" class="headerlink" title="udev规则简介"></a>udev规则简介</h4><p>udev规则文件中的一行就是一条规则，一条规则包括了匹配部分和动作部分，各部分通过逗号<code>,</code>分隔。具有如下形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond1,cond2,cond3,...,action1, action2, action3</span><br></pre></td></tr></table></figure>
+
+<p>可以使用换行符<code>\</code>将一条规则分成几行编写。比如，对于以下规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">KERNEL==&quot;video[0-9]*&quot; \</span><br><span class="line">  , SUBSYSTEM==&quot;video4linux&quot; \</span><br><span class="line">  , SUBSYSTEMS==&quot;usb&quot; \</span><br><span class="line">  , ATTRS&#123;idVendor&#125;==&quot;05a9&quot; \</span><br><span class="line">  , ATTRS&#123;idProduct&#125;==&quot;4519&quot; \</span><br><span class="line">  , SYMLINK+=&quot;video-cam1&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>KERNEL</code>是设备的卷标，这条规则使用了一个正则表达式对其进行匹配。</li>
+<li><code>SUBSYSTEM</code>表示设备的类型</li>
+<li><code>ATTRS&#123;sth.&#125;</code>获取设备的某个属性，属性名写在大括号中。</li>
+<li><code>SYMLINK</code>是对该设备的软链接，使用+&#x3D;对设备创建一个软链接。使用+&#x3D;而不是&#x3D;是因为不想覆盖掉默认操作。</li>
+</ul>
+<h4 id="编写自动挂载规则"><a href="#编写自动挂载规则" class="headerlink" title="编写自动挂载规则"></a>编写自动挂载规则</h4><p>根据这个例子，摸着石头过河，编写一个使用脚本自动挂载硬盘的规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KERNEL==&quot;sd[a-z][0-9]&quot; \</span><br><span class="line">  , ACTION==&quot;remove&quot; \</span><br><span class="line">  , ATTRS&#123;idVendor&#125;==&quot;08e4&quot; \</span><br><span class="line">  , ATTRS&#123;idProduct&#125;==&quot;01e8&quot; \</span><br><span class="line">  , RUN+=&quot;/usr/local/bin/mount_repo&quot; </span><br><span class="line"></span><br><span class="line">KERNEL==&quot;sd[a-z][0-9]&quot; \</span><br><span class="line">  , ACTION==&quot;add&quot; \</span><br><span class="line">  , ATTRS&#123;idVendor&#125;==&quot;08e4&quot; \</span><br><span class="line">  , ATTRS&#123;idProduct&#125;==&quot;01e8&quot; \</span><br><span class="line">  , RUN+=&quot;/usr/local/bin/mount_repo&quot;</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>udevadm control --reload</code>重新加载规则。</p>
+<p>到这里，非常开心地，我们掉进坑里了。这条规则可以运行，但mount命令会出错，导致并不能如预期那样工作。</p>
+<p>然后才看见ArchWiki上这条警告：</p>
+<blockquote>
+<p><strong>警告：</strong> 要挂载可移动设备，请<strong>不要</strong>通过在 udev 规则中调用 <code>mount</code> 命令的方法。对 FUSE 文件系统将会导致 <code>Transport endpoint not connected</code> 错误。应代之以 <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Udisks_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">udisks</a> 以正确处理自动挂载。或者把挂载动作放在 udev 规则内部：</p>
+<p>将 <code>/usr/lib/systemd/system/systemd-udevd.service</code> 复制到 <code>/etc/systemd/system/systemd-udevd.service</code>，将 <code>MountFlags=slave</code> 替换为 <code>MountFlags=shared</code>。<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/a/154318">（来源）</a> </p>
+<p>Keep in mind though that udev is not intended to invoke long-running processes.</p>
+</blockquote>
+<p>试图更改systemd-udevd.service，发现没效果。几经辗转，发现使用systemd可以解决这个问题。不再需要折腾systemd-udevd.service了。</p>
+<p>首先创建一个service，repo.service：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Mount Repository Device on /mnt/Repo</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=oneshot</span><br><span class="line">RemainAfterExit=true</span><br><span class="line">ExecStart=/usr/local/bin/mount_repo</span><br><span class="line">ExecStop=/usr/local/bin/mount_repo</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>systemctl daemon-reload</code>重新加载服务。</p>
+<p>然后将规则文件改写为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">KERNEL==&quot;sd[a-z][0-9]&quot; \</span><br><span class="line">  , ACTION==&quot;remove&quot; \</span><br><span class="line">  , ATTRS&#123;idVendor&#125;==&quot;08e4&quot; \</span><br><span class="line">  , ATTRS&#123;idProduct&#125;==&quot;01e8&quot; \</span><br><span class="line">  , RUN+=&quot;/bin/systemctl stop repo.service&quot; </span><br><span class="line"></span><br><span class="line">KERNEL==&quot;sd[a-z][0-9]&quot; \</span><br><span class="line">  , ACTION==&quot;add&quot; \</span><br><span class="line">  , ATTRS&#123;idVendor&#125;==&quot;08e4&quot; \</span><br><span class="line">  , ATTRS&#123;idProduct&#125;==&quot;01e8&quot; \</span><br><span class="line">  , RUN+=&quot;/bin/systemctl start repo.service&quot;</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>udevadm control --reload</code>重新加载规则。</p>
+<p>到这里，自动挂载就可以正常工作了。</p>
+<h2 id="在硬盘上创建仓库"><a href="#在硬盘上创建仓库" class="headerlink" title="在硬盘上创建仓库"></a>在硬盘上创建仓库</h2><p>在使用<code>git --bare init</code>创建一个远程仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /mnt/Repo</span><br><span class="line">mkdir test.git</span><br><span class="line">cd test.git</span><br><span class="line">git --bare init</span><br></pre></td></tr></table></figure>
+
+<p>为本地git仓库添加这个远程仓库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/someprojects</span><br><span class="line">git remote add Repo /mnt/Repo/test.git</span><br><span class="line">git push remote master</span><br></pre></td></tr></table></figure>
+
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这次的折腾算是记录一下与udev的初次接触。使用linux的过程中总能用到以为永远不会碰的工具，这也是linux的魅力所在吧。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Xilong Yang
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://xilong.site/blog/2021/06/27/0014-Make_a_local_git_repository/" title="使用移动硬盘制作本地git仓库">https://xilong.site/blog/2021/06/27/0014-Make_a_local_git_repository/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/blog/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/blog/2021/06/10/0013-Re0:Haskell_01/" rel="prev" title="从零开始的Haskell（一）——Haskell基础">
+      <i class="fa fa-chevron-left"></i> 从零开始的Haskell（一）——Haskell基础
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/blog/2021/07/16/0015-Double_pollution_of_Github/" rel="next" title="Github之禁忌的双重污染">
+      Github之禁忌的双重污染 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%B6%E5%A4%87%E7%A1%AC%E7%9B%98"><span class="nav-number">1.</span> <span class="nav-text">制备硬盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">自动挂载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8udev"><span class="nav-number">2.1.</span> <span class="nav-text">使用udev</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#udev%E8%A7%84%E5%88%99%E7%AE%80%E4%BB%8B"><span class="nav-number">2.1.1.</span> <span class="nav-text">udev规则简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD%E8%A7%84%E5%88%99"><span class="nav-number">2.1.2.</span> <span class="nav-text">编写自动挂载规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%A1%AC%E7%9B%98%E4%B8%8A%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93"><span class="nav-number">3.</span> <span class="nav-text">在硬盘上创建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Xilong Yang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/blog/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/blog/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/blog/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xilongyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xilongyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xilong.yang@foxmail.com" title="E-Mail → mailto:xilong.yang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class=""></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xilong Yang</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">Symbols count total: </span>
+    <span title="Symbols count total">171k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">Reading time total &asymp;</span>
+    <span title="Reading time total">5:10</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/blog/lib/anime.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.min.js"></script>
+  <script src="/blog/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/blog/js/utils.js"></script>
+
+<script src="/blog/js/motion.js"></script>
+
+
+<script src="/blog/js/schemes/pisces.js"></script>
+
+
+<script src="/blog/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/blog/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'c1269b6959c57e399fea',
+      clientSecret: 'e64a3919346ee6836c207f835025e19feebce1db',
+      repo        : 'xilong.gitment',
+      owner       : 'XilongSite',
+      admin       : ['XilongSite'],
+      id          : '1223c358c439c7e75bf8deee9395c422',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
