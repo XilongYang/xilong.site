@@ -21,7 +21,7 @@ function switchLanguage() {
         document.getElementById("misc").innerHTML = "更多";
         document.getElementById("about_label").innerHTML = "关于我";
         document.getElementById("intro").innerHTML = "我是一个有3年 C++ 和 Linux 经验的程序员。";
-        document.getElementById("intro_site").innerHTML = '我有一个<a href="https://github.com/XilongYang">github帐号</a>和一个<a href="/blog">博客</a>。';
+        document.getElementById("intro_site").innerHTML = '我有一个<a href="https://github.com/XilongYang">github帐号</a>和一个<a href="/zh/blog">博客</a>。';
         document.getElementById("intro_email").innerHTML = '你可以通过邮件<a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>联系我。';
         document.getElementById("nomore").innerHTML = '* 没有更多信息了。';
     } else if (lang == "jp") {
