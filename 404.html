@@ -4,11 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>404 Not Found - Xilong Yang</title>
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
     <link rel="stylesheet"b href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic">
-    <link href="./src/404.css" rel="stylesheet">
     <style type="text/css">
         body {
             margin-top: 5%;
@@ -29,23 +27,41 @@
             text-decoration: none;
         }
 
-        #header {
+        #container {
             display: grid;
-            grid: 'left right';
+            grid: 'A B'
+                  'C D';
         }
 
         #t404 {
+            grid-area: A;
             vertical-align: middle;
-            grid-area: left;
+            font-size: 150px;
+            margin-top: 30px;
+            margin-bottom: 0%;
+            margin-right: 60px;
         }
 
-        #notfound {
-            margin-left: 130px;
-            margin-left: 130px;
-            margin-top: 0%;
-            font-size: 130px;
-            grid-area: right;
+        #not {
+            grid-area: B;
+            font-size: 150px;
             font-family:Arial,Helvetica,sans-serif;
+            vertical-align: middle;
+            margin-top: 30px;
+            margin-bottom: 0%;
+        }
+
+        #found {
+            grid-area: D;
+            font-size: 150px;
+            font-family:Arial,Helvetica,sans-serif;
+            vertical-align: middle;
+            margin-top: 0%;
+        }
+
+        #contents {
+            grid-area: C;
+            margin-top: 16px;
         }
 
         @media screen and (max-width: 950px) {
@@ -54,22 +70,57 @@
                 margin-right: 2.5%;
                 text-align: left; 
             }
+            #container {
+                display: grid;
+                grid: 'A' 
+                      'B'
+                      'C' 
+                      'D';
+            }
+
+            #t404 {
+                grid-area: A;
+                margin-top: 10px;
+                margin-bottom: 0%;
+                margin-right: 0%;
+            }
+
+            #not {
+                grid-area: B;
+                margin-top: 0%;
+                margin-bottom: 0%;
+            }
+
+            #found {
+                grid-area: C;
+                margin-top: 0%;
+                margin-bottom: 0%;
+            }
+
+            #contents {
+                grid-area: D;
+                margin-top: 0%;
+                margin-bottom: 0%;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="header">
-        <div id="t404">
-            <img src="/res/404.png">
-        </div>
-        <h1 id="notfound">
-            Not Found
+    <div id="container">
+        <h1 id="t404">
+            404
         </h1>
-    </div>
-    <div id="contents">
-        <p>That page seems to be missing. Maybe you can:</p>
-        <p><a href="./index.html">Back home.</a></p>
-        <p><a href="mailto:xilong.yang@foxmail.com">Contact me: xilong.yang@foxmail.com.</a></p>
+        <div id="not">
+            Not
+        </div>
+        <div id="found">
+            Found
+        </div>
+        <div id="contents">
+            <p>That page seems to be missing. Maybe you can:</p>
+            <p><a href="./index.html">Back home.</a></p>
+            <p><a href="mailto:xilong.yang@foxmail.com">Contact me: xilong.yang@foxmail.com.</a></p>
+        </div>
     </div>
 </body>
 </html>
