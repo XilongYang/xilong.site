@@ -60,6 +60,10 @@ a:hover {
     to {opacity:0;}
 }
 
+#language_label {
+    font-size: 16px;
+}
+
 .language_button {
     font-weight: bold;
     font-size: 14px;
@@ -79,11 +83,16 @@ a:hover {
     background-color: #ddd;
 }
 
+.icons{
+    font-size: 18px;
+}
+
 #header{
     position:fixed;
     top:50%;
     left: 25%;
     font-size: 18px;
+    line-height: 100%;
 }
 
 #space{
@@ -113,6 +122,9 @@ a:hover {
 
 #about{
     margin-top: 200px;
+}
+
+#about p{
     font-size: 20px;
 }
 
@@ -136,7 +148,7 @@ a:hover {
 
 .non_important{
     color:#777;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 150%;
 }
 
