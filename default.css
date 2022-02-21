@@ -192,18 +192,23 @@ a:hover {
 
 @media screen and (max-width: 950px) {
     body{
-        grid: 'A' 
-              'B';
-        margin: 10%;
+        width: 100%;
+        padding: 10%;
     }
     #header{
         position: inherit;
         grid-area: A;
         top: 0px;
-        left: 0px;
+        left:0px;
+        width: 90%;
+        margin: auto;
     }
     #space{
         width: 0px;
+    }
+    #contents{
+        width: 90%;
+        margin: auto;
     }
     #terminal_div{
         width: 90%;
