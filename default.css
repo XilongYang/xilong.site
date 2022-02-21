@@ -1,11 +1,10 @@
 body{
-    margin-left: 160px;
-    margin-right: 160px;
+    margin: auto;
     font-family: sans-serif;
     font-size: 20px;
     text-align: left;
-    display: grid;
-    grid: 'A B';
+    width: 70%;
+    height: 600px;
 }
 
 h1 {
@@ -78,19 +77,21 @@ a:hover {
 
 #header{
     position:fixed;
-    top:320px;
-    left: 300px;
+    top:50%;
+    left: 25%;
     font-size: 16px;
 }
 
 #space{
-    grid-area: A;
-    width: 400px;
+    float: left;
+    width: 60%;
+    height: 100%;
 }
 
 #contents{
-    grid-area: B;
-    width: 300px;
+    float: left;
+    width: 40%;
+    height: 100%;
 }
 
 #works{
