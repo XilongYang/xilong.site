@@ -1,6 +1,31 @@
-function switchLanguage() {
-    var lang = document.getElementById("language").value;
+function switchLanguageBoard() {
+    var switcher = document.getElementById("language_switcher");
+    if (switcher.flag == "on") {
+        switcher.flag = "off";
+        document.getElementById("language_button_1").style.backgroundColor = "transparent";
+        document.getElementById("language_button_1").style.color = "#000";
+        document.getElementById("language_button_3").style.display = "none";
+        document.getElementById("language_button_2").style.display = "none";
+    } else {
+        switcher.flag = "on";
+        document.getElementById("language_button_1").style.backgroundColor = "#222";
+        document.getElementById("language_button_1").style.color = "#fff";
+        document.getElementById("language_button_2").style.animation = "fadein 0.5s";
+        document.getElementById("language_button_2").style.display = "inline";
+        document.getElementById("language_button_3").style.animation = "fadein 1s";
+        document.getElementById("language_button_3").style.display = "inline";
+    }
+}
+
+function switchLanguage(lang) {
     if (lang == "en") {
+        document.getElementById("language_button_label_1").innerHTML = 'English';
+        document.getElementById("language_button_label_2").innerHTML = '中文';
+        document.getElementById("language_button_label_3").innerHTML = '日本語';
+
+        document.getElementById("language_button_2").setAttribute("onclick", "switchLanguage('zh')");
+        document.getElementById("language_button_3").setAttribute("onclick", "switchLanguage('jp')");
+
         document.getElementById("name").innerHTML = "Xilong Yang";
         document.getElementById("occupation").innerHTML = "Programer";
         document.getElementById("language_label").innerHTML = "Language:";
@@ -12,8 +37,17 @@ function switchLanguage() {
         document.getElementById("intro_site").innerHTML = 'I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>.';
         document.getElementById("intro_email").innerHTML = 'You can contact me though email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>';
         document.getElementById("links_label").innerHTML = "Links";
+        document.getElementById("friend_label").innerHTML = "Friends";
+        document.getElementById("music_label").innerHTML = "Playlist";
         document.getElementById("nomore").innerHTML = '* no more info.';
     } else if (lang == "zh") {
+        document.getElementById("language_button_label_1").innerHTML = '中文';
+        document.getElementById("language_button_label_2").innerHTML = '日本語';
+        document.getElementById("language_button_label_3").innerHTML = 'English';
+
+        document.getElementById("language_button_2").setAttribute("onclick", "switchLanguage('jp')");
+        document.getElementById("language_button_3").setAttribute("onclick", "switchLanguage('en')");
+
         document.getElementById("name").innerHTML = "杨熙龙";
         document.getElementById("occupation").innerHTML = "程序员";
         document.getElementById("language_label").innerHTML = "语言:";
@@ -25,8 +59,17 @@ function switchLanguage() {
         document.getElementById("intro_site").innerHTML = '我有一个<a href="https://github.com/XilongYang">github帐号</a>和一个<a href="/zh/blog">博客</a>。';
         document.getElementById("intro_email").innerHTML = '你可以通过邮件<a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>联系我。';
         document.getElementById("links_label").innerHTML = "链接";
+        document.getElementById("friend_label").innerHTML = "朋友";
+        document.getElementById("music_label").innerHTML = "播放列表";
         document.getElementById("nomore").innerHTML = '* 没有更多信息了。';
     } else if (lang == "jp") {
+        document.getElementById("language_button_label_1").innerHTML = '日本語';
+        document.getElementById("language_button_label_2").innerHTML = 'English';
+        document.getElementById("language_button_label_3").innerHTML = '中文';
+
+        document.getElementById("language_button_2").setAttribute("onclick", "switchLanguage('en')");
+        document.getElementById("language_button_3").setAttribute("onclick", "switchLanguage('zh')");
+
         document.getElementById("name").innerHTML = "楊(ヤン) 熙龍(シロ)";
         document.getElementById("occupation").innerHTML = "プログラマー";
         document.getElementById("language_label").innerHTML = "言語:";
@@ -38,6 +81,9 @@ function switchLanguage() {
         document.getElementById("intro_site").innerHTML = '<a href="https://github.com/XilongYang">githubアカウント</a>と<a href="/blog">ブログ</a>を持っています。';
         document.getElementById("intro_email").innerHTML = 'メール<a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>で私に連絡することができます。';
         document.getElementById("links_label").innerHTML = "リンク";
+        document.getElementById("friend_label").innerHTML = "友人";
+        document.getElementById("music_label").innerHTML = "プレイリスト";
         document.getElementById("nomore").innerHTML = '* これ以上の情報はありません。';
     }
+    switchLanguageBoard();
 }
