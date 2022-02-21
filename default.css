@@ -7,19 +7,23 @@ body{
     height: 600px;
 }
 
-h1 {
-    font-size: 25px;
+h1{
     margin: 0%;
+}
+#name {
+    font-size: 25px;
 }
 
 p {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 18px;
 }
 
 a { 
     color: #000000;
     font-weight: bold;
+    font-size: 20px;
     text-decoration: none;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
@@ -79,7 +83,7 @@ a:hover {
     position:fixed;
     top:50%;
     left: 25%;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 #space{
@@ -109,6 +113,12 @@ a:hover {
 
 #about{
     margin-top: 200px;
+    font-size: 20px;
+}
+
+#about a{
+    font-weight: normal;
+    text-decoration: underline;
 }
 
 #link{
@@ -126,7 +136,7 @@ a:hover {
 
 .non_important{
     color:#777;
-    font-size: 18px;
+    font-size: 20px;
     line-height: 150%;
 }
 

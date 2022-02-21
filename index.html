@@ -42,11 +42,11 @@
             <div id="works">
                 <div class="work">
                     <a href="https://github.com/XilongYang/STAMP">STAMP-C++</a>
-                    <p class="non_important" id="stamp_intro">Simple Two-Way Active Measure Protocol(IETF RFC8762).</p>
+                    <p id="stamp_intro">Simple Two-Way Active Measure Protocol(IETF RFC8762).</p>
                 </div>
                 <div class="work">
                     <a href="https://github.com/XilongYang/Fe3OS">Fe3OS</a>
-                    <p class="non_important" id="Fe3OS_intro">A simple web page which simulates a UNIX Shell.</p>
+                    <p id="Fe3OS_intro">A simple web page which simulates a UNIX Shell.</p>
                 </div>
                 <div class="work">
                     <br>
@@ -59,18 +59,16 @@
                 <div id="about">
                     <p class="non_important" id="about_label">About</p>
                     <p id="intro">I'm a programer with 3 years of experience about C++ and Linux.  </p>
-                    <br>
                     <p id="intro_site">I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>. </p>
-                    <br>
                     <p id="intro_email">You can contact me though email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>
                 </div>
                 <div id="link">
                     <p class="non_important" id="links_label">Links</p>
-                    <a href="https://os.xilong.site">Fe3OS</a><br>
                     <a href="https://life.xilong.site">Xilong's Life</a><br>
-                    <a href="https://xilong.site/blog/">Xilong's Blog</a><br>
                     <a href="https://onedrive.xilong.site/">Xilong's Onedrive</a><br>
+                    <a href="https://xilong.site/blog/">Xilong's Blog</a><br>
                     <a href="https://xilong.site/zh/blog">在泥坑里跳来跳去</a><br>
+                    <a href="https://os.xilong.site">Fe3OS</a><br>
                     <br>
                     <p class="non_important" id="friend_label">Friends</p>
                     <a href="https://doerr33.github.io">Doeer's Blog</a><br>
@@ -86,12 +84,6 @@
                     <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-tabi_no_tochuu.mp3')">
                         旅の途中
                     </a><br>
-                    <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-the_everlasting_guilty_crown.mp3')">
-                        The everlasting guilty crown
-                    </a><br>
-                    <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-main_theme_from_laputa.mp3')">
-                        Main theme from laputa
-                    </a><br>
                     <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-bios.mp3')">
                         Bios
                     </a><br>
@@ -104,6 +96,12 @@
                     <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-.mp3')">
                         Departures
                     </a><br>
+                    <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-the_everlasting_guilty_crown.mp3')">
+                        The everlasting guilty crown
+                    </a><br>
+                    <a href="#music_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-main_theme_from_laputa.mp3')">
+                        Main theme from laputa
+                    </a><br>
                 </div>
                 <div id="booter">
                     <p class="non_important" id="nomore">* no more info.</p>
@@ -111,11 +109,11 @@
             </div>
         </div>
         <div id="terminal_div">
-            <iframe id="terminal" src="https://os.xilong.site"></iframe>
+            <iframe id="terminal" loading="lazy" sandbox="allow-scripts" src="https://os.xilong.site"></iframe>
         </div>
         <audio class="music_player" controls id="music_player" src="http://onedrive.xilong.site/Music/animenz_merry-go-round_of_life.mp3"></audio>
         <div id="onedrive_div">
-            <iframe id="onedrive" src="https://onedrive.xilong.site"></iframe>
+            <iframe id="onedrive" loading="lazy" sandbox="allow-same-origin allow-forms allow-scripts" src="https://onedrive.xilong.site"></iframe>
         </div>
     </body>
 </html>
