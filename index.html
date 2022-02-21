@@ -17,8 +17,6 @@
         <div id="header">
             <h1><a id="name" href="/">Xilong Yang</a></h1>
             <span class="non_important" id="occupation">Programer</span>
-            <span id="terminal_icon" onclick="switchDisplay('terminal_div')"> <i class="fa fa-television" aria-hidden="true"></i></span>
-            <span id="music_icon" onclick="switchDisplay('music_player')"> <i class="fa fa-music" aria-hidden="true"></i></span>
             <div>
                 <span id="language_label">Language:</span>
                 <span id="language_switcher" flag="off">
@@ -33,6 +31,11 @@
                     </button>
                 </span>
             </div>
+            <span id="terminal_icon" onclick="switchDisplay('terminal_div')"> <i class="fa fa-television" aria-hidden="true"></i></span>
+            <span id="music_icon" onclick="switchDisplay('music_player')"> <i class="fa fa-music" aria-hidden="true"></i></span>
+            <span id="onedrive_icon" onclick="switchDisplay('onedrive_div')"> <i class="fa fa-cloud-download" aria-hidden="true"></i></span>
+            <span id="mail"><a href="mailto:xilong.yang@foxmail.com"> <i class="fa fa-envelope" aria-hidden="true"></i></a></span>
+            <span id="github"><a href="https://github.com/XilongYang"> <i class="fa fa-github" aria-hidden="true"></i></a></span>
         </div>
         <div id="space"></div>
         <div id="contents">
@@ -111,5 +114,8 @@
             <iframe id="terminal" src="https://os.xilong.site"></iframe>
         </div>
         <audio class="music_player" controls id="music_player" src="http://onedrive.xilong.site/Music/animenz_merry-go-round_of_life.mp3"></audio>
+        <div id="onedrive_div">
+            <iframe id="onedrive" src="https://onedrive.xilong.site"></iframe>
+        </div>
     </body>
 </html>
