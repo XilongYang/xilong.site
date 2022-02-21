@@ -58,11 +58,12 @@ a:hover {
 }
 
 .language_button {
-    border: none;
-    background-color: transparent;
-    transition-duration: 0.3s;
-    height: 20px;
     font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    line-height: 20px;
+    padding: 4px;
+    margin-right: 4px;
 }
 
 #language_button_2 {
@@ -72,7 +73,7 @@ a:hover {
 
 #language_button_3 {
     display: none;
-    background-color: #eee;
+    background-color: #ddd;
 }
 
 #header{
