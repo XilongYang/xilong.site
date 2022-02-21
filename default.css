@@ -88,12 +88,20 @@ select {
     margin-bottom: 15px;
 }
 
+#fades{
+    opacity: 0;
+}
+
 #about{
     margin-top: 200px;
 }
 
+#link{
+    margin-top: 150px;
+}
+
 #booter{
-    margin-top: 200px;
+    margin-top: 150px;
 }
 
 
