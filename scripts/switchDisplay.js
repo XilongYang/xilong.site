@@ -19,19 +19,35 @@ function reloadFrame(id) {
     frame.src = frame.src;
 }
 
-function switchDarkmode() {
-    var mask = document.getElementById("darkmode-mask");
-    if (mask.style.opacity != "1") {
-        mask.style.opacity = "1";
-    } else {
-        mask.style.opacity = "0";
-    }
+function dark() {
     var buttons = document.getElementsByClassName("fake_close");
+    var frames = document.getElementsByClassName("fake_window_contents");
     for (var i = 0; i < buttons.length; ++i) {
         buttons[i].style.filter = "invert(1)";
     }
-    var frames = document.getElementsByClassName("fake_window_contents");
     for (var i = 0; i < buttons.length; ++i) {
         frames[i].style.filter = "invert(1)";
+    }
+}
+function light() {
+    var buttons = document.getElementsByClassName("fake_close");
+    var frames = document.getElementsByClassName("fake_window_contents");
+    for (var i = 0; i < buttons.length; ++i) {
+        buttons[i].style.filter = "invert(0)";
+    }
+    for (var i = 0; i < buttons.length; ++i) {
+        frames[i].style.filter = "invert(0)";
+    }
+}
+function switchDarkmode() {
+    var mask = document.getElementById("darkmode-mask");
+    mask.removeEventListener("transitionend", dark);
+    mask.removeEventListener("transitionend", light);
+    if (mask.style.opacity != "1") {
+        mask.style.opacity = "1";
+        mask.addEventListener("transitionend", dark);
+    } else {
+        mask.style.opacity = "0";
+        mask.addEventListener("transitionend", light);
     }
 }
