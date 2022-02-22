@@ -87,6 +87,7 @@ a:hover {
     line-height: 20px;
     padding: 4px;
     margin-right: 4px;
+    cursor: pointer;
 }
 
 #language_button_2 {
@@ -102,6 +103,7 @@ a:hover {
 .icons{
     font-size: 18px;
     margin: 2px;
+    cursor: pointer;
 }
 .icons:hover{
     color: #777;
