@@ -29,7 +29,7 @@ function switchLanguage(lang) {
         document.getElementById("name").innerHTML = "Xilong Yang";
         document.getElementById("occupation").innerHTML = "Programer";
         document.getElementById("language_label").innerHTML = "Language:";
-        document.getElementById("comments").setAttribute("src","https://www.xilong.site/blog/guestbook/");
+        document.getElementById("comments").setAttribute("src","/blog/guestbook/");
         document.getElementById("stamp_intro").innerHTML = "Simple Two-Way Active Measure Protocol(IETF RFC8762).";
         document.getElementById("Fe3OS_intro").innerHTML = "A simple web page which simulates a UNIX Shell.";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">misc.</a>';
@@ -52,7 +52,7 @@ function switchLanguage(lang) {
         document.getElementById("name").innerHTML = "杨熙龙";
         document.getElementById("occupation").innerHTML = "程序员";
         document.getElementById("language_label").innerHTML = "语言:";
-        document.getElementById("comments").setAttribute("src","https://www.xilong.site/zh/blog/guestbook/");
+        document.getElementById("comments").setAttribute("src","/zh/blog/guestbook/");
         document.getElementById("stamp_intro").innerHTML = "简单的双向主动测量协议 (IETF RFC8762)。";
         document.getElementById("Fe3OS_intro").innerHTML = "一个模拟 UNIX Shell 的简单网页。";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">更多</a>';
@@ -75,7 +75,7 @@ function switchLanguage(lang) {
         document.getElementById("name").innerHTML = "楊(ヤン) 熙龍(シロ)";
         document.getElementById("occupation").innerHTML = "プログラマー";
         document.getElementById("language_label").innerHTML = "言語:";
-        document.getElementById("comments").setAttribute("src","https://www.xilong.site/blog/guestbook/");
+        document.getElementById("comments").setAttribute("src","/blog/guestbook/");
         document.getElementById("stamp_intro").innerHTML = "シンプルな双方向アクティブ測定プロトコル(IETF RFC8762)。";
         document.getElementById("Fe3OS_intro").innerHTML = "UNIXシェルをシミュレートする単純なWebページ。。";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">もっと</a>';
