@@ -13,3 +13,8 @@ function switchDisplay(id, animation_in, animation_out) {
         target.style.display = "inline";
     }
 }
+
+function reloadFrame(id) {
+    var frame = document.getElementById(id);
+    frame.src = frame.src;
+}

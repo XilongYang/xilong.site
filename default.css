@@ -225,16 +225,4 @@ a:hover {
         width: 90%;
         margin: auto;
     }
-    #terminal_div{
-        width: 90%;
-        height: 50%;
-        top: 200px;
-        left: 20px;
-    }
-    #onedrive_div{
-        width: 90%;
-        height: 50%;
-        top: 200px;
-        left: 20px;
-    }
 }
