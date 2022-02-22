@@ -1,6 +1,5 @@
 var prePos = 642;
 function fade() {
-    if (window.innerWidth)
     var fades = document.getElementById("fades");
     var curPos = fades.offsetTop - document.documentElement.scrollTop;
     if (curPos < prePos && curPos < 400) {
