@@ -12,6 +12,7 @@
         <script src="/scripts/switchLanguage.js"></script>
         <script src="/scripts/switchDisplay.js"></script>
         <script src="/scripts/changeMusic.js"></script>
+        <script src="/scripts/drag.js"></script>
     </head>
     <body onscroll="fade()">
         <div id="header">
@@ -108,18 +109,18 @@
                 </div>
             </div>
         </div>
-        <div id="terminal_div" class="fake_window" draggable="true">
+        <div id="terminal_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
             <div class="fake_close" onclick="switchDisplay('terminal_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('terminal')"></div>
             <div class="fake_title">Fe3OS</div>
             <iframe class="fake_window_contents" id="terminal" loading="lazy" src="https://os.xilong.site" frameborder="0"></iframe>
         </div>
         <audio class="music_player" controls id="music_player" src="http://onedrive.xilong.site/Music/animenz_merry-go-round_of_life.mp3"></audio>
-        <div id="onedrive_div" class="fake_window">
+        <div id="onedrive_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
             <div class="fake_close" onclick="switchDisplay('onedrive_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('onedrive')"></div>
             <div class="fake_title">Onedrive</div>
             <iframe class="fake_window_contents" id="onedrive" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>
         </div>
-        <div id="comments_div" class="fake_window">
+        <div id="comments_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
             <div class="fake_close" onclick="switchDisplay('comments_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('comments')"></div>
             <div class="fake_title">Comments</div>
             <iframe class="fake_window_contents" id="comments" loading="lazy" src="/blog/guestbook/" frameborder="0" ></iframe>
