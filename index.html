@@ -13,8 +13,10 @@
         <script src="/scripts/switchDisplay.js"></script>
         <script src="/scripts/changeMusic.js"></script>
         <script src="/scripts/drag.js"></script>
+        <script src="/scripts/paper_darkmode.js"></script>
     </head>
     <body onscroll="fade()">
+        <div class="darkmode-mask" id="darkmode-mask"></div>
         <div id="header">
             <h1><a id="name" href="/">Xilong Yang</a></h1>
             <span class="non_important" id="occupation">Programer</span>
@@ -32,11 +34,11 @@
                     </span>
                 </span>
             </div>
+            <span class="icons" id="music_icon" onclick="switchDisplay('music_player','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-music" aria-hidden="true"></i></span>
             <span class="icons" id="terminal_icon" onclick="switchDisplay('terminal_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-television" aria-hidden="true"></i></span>
             <span class="icons" id="onedrive_icon" onclick="switchDisplay('onedrive_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-cloud-download" aria-hidden="true"></i></span>
-            <span class="icons" id="music_icon" onclick="switchDisplay('music_player','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-music" aria-hidden="true"></i></span>
-            <span class="icons" id="comments_icon" onclick="switchDisplay('comments_div', 'fadein 0.5s', 'fadeout 0.5s')"><i class="fa fa-comments" aria-hidden="true"></i></span>
             <span class="icons" id="mail"><a href="mailto:xilong.yang@foxmail.com"> <i class="fa fa-envelope" aria-hidden="true"></i></a></span>
+            <span class="icons" id="darkmode" onclick="switchDarkmode()"><i class="fa fa-moon-o" aria-hidden="true"></i></span>
         </div>
         <div id="space"></div>
         <div id="contents">
@@ -119,11 +121,6 @@
             <div class="fake_close" onclick="switchDisplay('onedrive_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('onedrive')"></div>
             <div class="fake_title">Onedrive</div>
             <iframe class="fake_window_contents" id="onedrive" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>
-        </div>
-        <div id="comments_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="switchDisplay('comments_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('comments')"></div>
-            <div class="fake_title">Comments</div>
-            <iframe class="fake_window_contents" id="comments" loading="lazy" src="/blog/guestbook/" frameborder="0" ></iframe>
         </div>
     </body>
 </html>
