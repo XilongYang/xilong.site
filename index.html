@@ -31,11 +31,11 @@
                     </span>
                 </span>
             </div>
-            <span class="icons" id="terminal_icon" onclick="switchDisplay('terminal_div')"> <i class="fa fa-television" aria-hidden="true"></i></span>
-            <span class="icons" id="music_icon" onclick="switchDisplay('music_player')"> <i class="fa fa-music" aria-hidden="true"></i></span>
-            <span class="icons" id="onedrive_icon" onclick="switchDisplay('onedrive_div')"> <i class="fa fa-cloud-download" aria-hidden="true"></i></span>
+            <span class="icons" id="terminal_icon" onclick="switchDisplay('terminal_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-television" aria-hidden="true"></i></span>
+            <span class="icons" id="onedrive_icon" onclick="switchDisplay('onedrive_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-cloud-download" aria-hidden="true"></i></span>
+            <span class="icons" id="music_icon" onclick="switchDisplay('music_player','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-music" aria-hidden="true"></i></span>
+            <span class="icons" id="comments_icon" onclick="switchDisplay('comments_div', 'fadein 0.5s', 'fadeout 0.5s')"><i class="fa fa-comments" aria-hidden="true"></i></span>
             <span class="icons" id="mail"><a href="mailto:xilong.yang@foxmail.com"> <i class="fa fa-envelope" aria-hidden="true"></i></a></span>
-            <span class="icons" id="github"><a href="https://github.com/XilongYang"> <i class="fa fa-github" aria-hidden="true"></i></a></span>
         </div>
         <div id="space"></div>
         <div id="contents">
@@ -108,12 +108,35 @@
                 </div>
             </div>
         </div>
-        <div id="terminal_div">
-            <iframe id="terminal" loading="lazy" sandbox="allow-scripts" src="https://os.xilong.site"></iframe>
+        <div id="terminal_div" class="fake_window">
+            <div class="fake_close" onclick="switchDisplay('terminal_div', 'fadein 0.5s', 'fadeout 0.5s')"></div>
+            <div class="fake_title">Fe3OS</div>
+            <iframe class="fake_window_contents" id="terminal" loading="lazy" src="https://os.xilong.site" frameborder="0"></iframe>
         </div>
         <audio class="music_player" controls id="music_player" src="http://onedrive.xilong.site/Music/animenz_merry-go-round_of_life.mp3"></audio>
-        <div id="onedrive_div">
-            <iframe id="onedrive" loading="lazy" sandbox="allow-same-origin allow-forms allow-scripts" src="https://onedrive.xilong.site"></iframe>
+        <div id="onedrive_div" class="fake_window">
+            <div class="fake_close" onclick="switchDisplay('onedrive_div', 'fadein 0.5s', 'fadeout 0.5s')"></div>
+            <div class="fake_title">Onedrive</div>
+            <iframe class="fake_window_contents" id="onedrive" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>
+        </div>
+        <div id="comments_div" class="fake_window">
+            <div class="fake_close" onclick="switchDisplay('comments_div', 'fadein 0.5s', 'fadeout 0.5s')"></div>
+            <div class="fake_title">Comments</div>
+            <div class="fake_window_contents" id="container"></div>
+            <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+            <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+            <script>
+                var gitment = new Gitment({
+                    id: '', // 可选。默认为 location.href
+                    owner: 'XilongSite',
+                    repo: 'gitment',
+                    oauth: {
+                        client_id: '8bcb8c3238363850b52d',
+                        client_secret: 'f4f51200e1c378454e22bbcfa5c259b80ede6b6a',
+                    },
+                 })
+                gitment.render('container'); 
+            </script>
         </div>
     </body>
 </html>
