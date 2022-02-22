@@ -43,7 +43,7 @@ function switchDarkmode() {
     var mask = document.getElementById("darkmode-mask");
     mask.removeEventListener("transitionend", dark);
     mask.removeEventListener("transitionend", light);
-    if (mask.style.opacity != "1") {
+    if (getComputedStyle(mask).opacity != '1') {
         mask.style.opacity = "1";
         mask.addEventListener("transitionend", dark);
     } else {
