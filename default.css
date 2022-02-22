@@ -253,4 +253,10 @@ a:hover {
     #darkmode-mask{
         opacity: 1;
     }
+    .fake_close{
+        filter: invert(1);
+    }
+    .fake_window_contents{
+        filter: invert(1);
+    }
 }
