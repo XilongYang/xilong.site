@@ -10,16 +10,17 @@
         <link href="/components/musicplayer/default.css" rel="stylesheet">
         <script src="/scripts/music.js"></script>
     </head>
-    <body onload="generatePlaylist()">
+    <body onload="generatePlaylist();fixDisk()" onresize="fixDisk()">
         <div id="player">
             <div id="animation">
                 <div id="disk"></div>
-                <div id="disk-spacing"></div>
             </div>
-            <div id="info">
-                <div id="name">Some Music</div>
+            <div id="tools">
+                <div id="info">
+                    <div id="name">Some Music</div>
+                </div>
+                <audio id="control" controls loop onplay="playAnimation()" onpause="stopAnimation()"></audio>
             </div>
-            <audio id="control" controls loop onplay="playAnimation()" onpause="stopAnimation()"></audio>
         </div>
         <div id="spacing"></div>
         <div id="playlist">
