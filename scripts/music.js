@@ -70,3 +70,8 @@ function changeFromUrl() {
     url = "";
     preItem = null;
 }
+
+function fixDisk() {
+    var animation = document.getElementById("animation");
+    animation.style.height = getComputedStyle(animation).width;
+}
