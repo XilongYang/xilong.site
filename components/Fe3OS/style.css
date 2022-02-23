@@ -1,0 +1,48 @@
+/*main*/
+body {
+    display: block;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    letter-spacing: 1px;
+    font-size: 16px;
+    background-color: #222222;
+    color:#dddddd;
+}
+a{color: #bec936;}
+a:visited{color: #bec936;}
+a:hover{color: #29b7cb;}
+.message{
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+input.cmd{
+    border: none;
+    outline: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    letter-spacing: 1px;
+    font-size: 16px;
+    padding: 0px;
+    margin: 0px;
+    background-color: #222222;
+    color:#dddddd;
+}
+
+/*screenfetch*/
+.fox{
+    font-size:10px;
+    color:#aba59a;
+    display: inline-block;
+}
+.fetchinfo{
+    vertical-align: top;
+    display: inline-block;
+}
+
+/*fakefs*/
+.dir{
+    color: aquamarine;
+    display: inline-block;
+}
+.file{
+    display: inline-block;
+}
