@@ -11,9 +11,7 @@
         <script src="/scripts/fade.js"></script>
         <script src="/scripts/switchLanguage.js"></script>
         <script src="/scripts/switchDisplay.js"></script>
-        <script src="/scripts/changeMusic.js"></script>
         <script src="/scripts/drag.js"></script>
-        <script src="/scripts/paper_darkmode.js"></script>
     </head>
     <body onscroll="fade()">
         <div class="darkmode-mask" id="darkmode-mask"></div>
@@ -34,7 +32,7 @@
                     </span>
                 </span>
             </div>
-            <span class="icons" id="music_icon" onclick="switchDisplay('music_player','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-music" aria-hidden="true"></i></span>
+            <span class="icons" id="music_icon" onclick="switchDisplay('musciplayer_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-music" aria-hidden="true"></i></span>
             <span class="icons" id="terminal_icon" onclick="switchDisplay('terminal_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-television" aria-hidden="true"></i></span>
             <span class="icons" id="onedrive_icon" onclick="switchDisplay('onedrive_div','fadein 0.5s', 'fadeout 0.5s')"> <i class="fa fa-cloud-download" aria-hidden="true"></i></span>
             <span class="icons" id="mail"><a href="mailto:xilong.yang@foxmail.com"> <i class="fa fa-envelope" aria-hidden="true"></i></a></span>
@@ -77,51 +75,25 @@
                     <p class="non_important" id="friend_label">Friends</p>
                     <a href="https://doerr33.github.io">Doeer's Blog</a><br>
                 </div>
-                <div id="music_share">
-                    <p class="non_important" id="music_label">Playlist</p>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz_merry-go-round_of_life.mp3')">
-                        Merry-go-round of life
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-one_more_time_one_more_chance.mp3')">
-                        One more time, one more chance
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-tabi_no_tochuu.mp3')">
-                        旅の途中
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-bios.mp3')">
-                        Bios
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-change_the_world.mp3')">
-                        Change the world
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-connect.mp3')">
-                        Connect
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-.mp3')">
-                        Departures
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-the_everlasting_guilty_crown.mp3')">
-                        The everlasting guilty crown
-                    </a><br>
-                    <a href="#musci_player" onclick="changeMusic('music_player', 'http://onedrive.xilong.site/Music/animenz-main_theme_from_laputa.mp3')">
-                        Main theme from laputa
-                    </a><br>
-                </div>
                 <div id="booter">
                     <p class="non_important" id="nomore">* no more info.</p>
                 </div>
             </div>
         </div>
         <div id="terminal_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="switchDisplay('terminal_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('terminal')"></div>
+            <div class="fake_close" onclick="switchDisplay('terminal_div', 'fadein 0.5s', 'fadeout 0.5s');"></div>
             <div class="fake_title">Fe3OS</div>
             <iframe class="fake_window_contents" id="terminal" loading="lazy" src="https://os.xilong.site" frameborder="0"></iframe>
         </div>
-        <audio class="music_player" controls id="music_player" src="http://onedrive.xilong.site/Music/animenz_merry-go-round_of_life.mp3"></audio>
         <div id="onedrive_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="switchDisplay('onedrive_div', 'fadein 0.5s', 'fadeout 0.5s');reloadFrame('onedrive')"></div>
+            <div class="fake_close" onclick="switchDisplay('onedrive_div', 'fadein 0.5s', 'fadeout 0.5s');"></div>
             <div class="fake_title">Onedrive</div>
             <iframe class="fake_window_contents" id="onedrive" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>
+        </div>
+        <div id="musciplayer_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
+            <div class="fake_close" onclick="switchDisplay('musciplayer_div', 'fadein 0.5s', 'fadeout 0.5s');"></div>
+            <div class="fake_title">Music Player</div>
+            <iframe class="fake_window_contents" id="musicplayer" loading="lazy" src="/components/musicplayer/" frameborder="0"></iframe>
         </div>
     </body>
 </html>

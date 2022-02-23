@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Music Player</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet"b href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+        <link href="/components/musicplayer/default.css" rel="stylesheet">
+        <script src="/scripts/music.js"></script>
+    </head>
+    <body onload="generatePlaylist()">
+        <div id="player">
+            <div id="animation">
+                <div id="disk"></div>
+                <div id="disk-spacing"></div>
+            </div>
+            <div id="info">
+                <div id="name">Some Music</div>
+            </div>
+            <audio id="control" controls loop></audio>
+        </div>
+        <div id="spacing"></div>
+        <div id="playlist">
+            <div id="playlist-title">Playlist</div>
+            <div id="url-div">
+                <input id="custom-url" placeholder="Music url." onsubmit="changeFromUrl()">
+                <button id="url-submit" type="submit" onclick="changeFromUrl()"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </div>
+            <div id="musics">
+            </div>
+        </div>
+    </body>
+</html>
