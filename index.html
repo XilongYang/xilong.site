@@ -96,23 +96,24 @@
             <div class="fake_title">Music Player</div>
             <iframe class="fake_window_contents" id="musicplayer" loading="lazy" src="/components/musicplayer/" frameborder="0"></iframe>
         </div>
-        <div id="gitment_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
+        <div id="gitalk_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
             <div class="fake_close" onclick="switchDisplay('gitment_div', 'fadein 0.5s', 'fadeout 0.5s');"></div>
-            <div class="fake_title">Gitment</div>
-            <div id="container"></div>
-            <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-            <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+            <div class="fake_title">Gitalk</div>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+            <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+            <div id="gitalk-container"></div>
             <script>
-            var gitment = new Gitment({
-              id: 'xilong_site', // 可选。默认为 location.href
-              owner: 'XilongYang',
-              repo: 'xilongyang.github.io',
-              oauth: {
-                client_id: 'fae12e78dff0504db954',
-                client_secret: 'ae4a8cdf7739c32d9aa86a08fb3278f52d261f7e',
-              },
-            })
-            gitment.render('container')
+                var gitalk = new Gitalk({
+                    clientID: 'fae12e78dff0504db954',
+                    clientSecret: 'ae4a8cdf7739c32d9aa86a08fb3278f52d261f7e',
+                    repo: 'xilongyang.github.io',
+                    owner: 'XilongYang',
+                    admin: ['XilongYang'],
+                    id: xilong_site,      // Ensure uniqueness and length less than 50
+                    distractionFreeMode: false  // Facebook-like distraction free mode
+                })
+                
+                gitalk.render('gitalk-container')
             </script>
         </div>
     </body>

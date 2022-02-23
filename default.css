@@ -208,11 +208,6 @@ a:hover {
     border-radius: 6px;
 }
 
-#gitment_div {
-    display: inline;
-    opacity: 1;
-}
-
 .fake_close{
     position: absolute;
     right: 10px;
