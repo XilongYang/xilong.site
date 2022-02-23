@@ -21,7 +21,12 @@ body{
 
 @keyframes shake {
     from{width: 0px;}
-    to{width: 1px;}
+    to{width: 2px;}
+}
+
+@-webkit-keyframes shake {
+    from{width: 0px;}
+    to{width: 2px;}
 }
 
 #disk {
