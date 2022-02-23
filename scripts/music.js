@@ -46,12 +46,6 @@ function changeMusic(name, src) {
     nameDiv.innerHTML = name;
 }
 
-function changeFromUrl() {
-    var url = document.getElementById("custom-url").value;
-    changeMusic(url, url);
-    url = "";
-}
-
 function playAnimation() {
     var disk = document.getElementById("disk");
     disk.style.animation = "shake 200ms infinite";
@@ -65,8 +59,14 @@ var preItem = null;
 function changeItemDisplay(id) {
     if (preItem != null) preItem.style = "";
     var item = document.getElementById(id);
-    console.log(id);
-    console.log(item.innerHTML);
     item.style = "box-shadow: 0px 0px 4px 4px #aaa;background-color: #333;color: #fff;";
     preItem = item;
+}
+
+function changeFromUrl() {
+    if (preItem != null) preItem.style = "";
+    var url = document.getElementById("custom-url").value;
+    changeMusic(url, url);
+    url = "";
+    preItem = null;
 }
