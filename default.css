@@ -23,13 +23,6 @@ body{
     transition-duration: 0.5s;
 }
 
-h1{
-    margin: 0%;
-}
-#name {
-    font-size: 25px;
-}
-
 p {
     margin-top: 8px;
     margin-bottom: 8px;
@@ -90,6 +83,26 @@ a:hover {
     to {opacity:0;}
 }
 
+#header{
+    position:fixed;
+    top:45%;
+    left: 25%;
+    font-size: 18px;
+    line-height: 100%;
+}
+
+#header h1 {
+    margin: 0;
+}
+
+#name {
+    font-size: 26px;
+}
+
+#languages{
+    margin-bottom: 5px;
+}
+
 #language_label {
     font-size: 16px;
 }
@@ -98,8 +111,8 @@ a:hover {
     font-weight: bold;
     font-size: 14px;
     text-align: center;
-    line-height: 20px;
-    padding: 4px;
+    line-height: 16px;
+    padding: 2px;
     margin-right: 4px;
     cursor: pointer;
 }
@@ -124,13 +137,6 @@ a:hover {
 }
 
 
-#header{
-    position:fixed;
-    top:50%;
-    left: 25%;
-    font-size: 18px;
-    line-height: 100%;
-}
 
 #space{
     float: left;
