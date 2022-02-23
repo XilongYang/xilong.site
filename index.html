@@ -73,17 +73,17 @@
                         terminal
                     </i>
                 </div>
-                <div class="icons" id="blog_life_icon" onclick="lightIcon('blog_life_icon');callWindow('blog_life_div','fadein 0.5s')"> 
+                <div class="icons non_dark" id="blog_life_icon" onclick="lightIcon('blog_life_icon');callWindow('blog_life_div','fadein 0.5s')"> 
                     <i class="material-icons">
                         podcasts
                     </i>
                 </div>
-                <div class="icons" id="blog_icon" onclick="lightIcon('blog_icon');callWindow('blog_div','fadein 0.5s')"> 
+                <div class="icons non_dark" id="blog_icon" onclick="lightIcon('blog_icon');callWindow('blog_div','fadein 0.5s')"> 
                     <i class="material-icons">
                         podcasts
                     </i>
                 </div>
-                <div class="icons" id="blog_zh_icon" onclick="lightIcon('blog_zh_icon');callWindow('blog_zh_div','fadein 0.5s')"> 
+                <div class="icons non_dark" id="blog_zh_icon" onclick="lightIcon('blog_zh_icon');callWindow('blog_zh_div','fadein 0.5s')"> 
                     <i class="material-icons">
                         podcasts
                     </i>
@@ -98,8 +98,8 @@
                     <p id="stamp_intro">Simple Two-Way Active Measure Protocol(IETF RFC8762).</p>
                 </div>
                 <div class="work">
-                    <a href="https://github.com/XilongYang/Fe3OS">Fe3OS</a>
-                    <p id="Fe3OS_intro">A simple web page which simulates a UNIX Shell.</p>
+                    <a id="this_site" href="https://github.com/XilongYang/xilongyang.github.io">This site</a>
+                    <p id="this_site_intro">A static site that simulates a OS.</p>
                 </div>
                 <div class="work" id="misc">
                     <a href="https://github.com/XilongYang?tab=repositories" id="misc">misc.</a>
@@ -118,7 +118,6 @@
                     <a href="https://onedrive.xilong.site/">Xilong's Onedrive</a><br>
                     <a href="https://xilong.site/blog/">Xilong's Blog</a><br>
                     <a href="https://xilong.site/zh/blog">在泥坑里跳来跳去</a><br>
-                    <a href="https://os.xilong.site">Fe3OS</a><br>
                     <br>
                     <p class="non_important" id="friend_label">Friends</p>
                     <a href="https://doerr33.github.io">Doeer's Blog</a><br>
@@ -129,30 +128,30 @@
             </div>
         </div>
         <div id="terminal_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('terminal_div','fadeout 0.5s', true, 'terminal_icon', 'terminal')"></div>
-            <div class="fake_min" onclick="closeWindow('terminal_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('terminal_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('terminal_div','fadeout 0.5s', true, 'terminal_icon', 'terminal')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('terminal_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('terminal_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">Fe3OS</div>
-            <iframe class="fake_window_contents" id="terminal" loading="lazy" src="https://os.xilong.site" frameborder="0"></iframe>
+            <iframe class="fake_window_contents" id="terminal" loading="lazy" src="/components/Fe3OS/" frameborder="0"></iframe>
         </div>
         <div id="onedrive_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('onedrive_div', 'fadeout 0.5s', true, 'onedrive_icon', 'onedrive')"></div>
-            <div class="fake_min" onclick="closeWindow('onedrive_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('onedrive_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('onedrive_div', 'fadeout 0.5s', true, 'onedrive_icon', 'onedrive')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('onedrive_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('onedrive_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">Onedrive</div>
             <iframe class="fake_window_contents" id="onedrive" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>
         </div>
         <div id="musciplayer_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('musciplayer_div', 'fadeout 0.5s', true, 'music_icon', 'musicplayer')"></div>
-            <div class="fake_min" onclick="closeWindow('musciplayer_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('musciplayer_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('musciplayer_div', 'fadeout 0.5s', true, 'music_icon', 'musicplayer')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('musciplayer_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('musciplayer_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">Music Player</div>
             <iframe class="fake_window_contents" id="musicplayer" loading="lazy" src="/components/musicplayer/" frameborder="0"></iframe>
         </div>
         <div id="gitalk_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('gitalk_div', 'fadeout 0.5s', true, 'gitalk_icon')"></div>
-            <div class="fake_min" onclick="closeWindow('gitalk_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('gitalk_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('gitalk_div', 'fadeout 0.5s', true, 'gitalk_icon')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('gitalk_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('gitalk_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">Gitalk</div>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
             <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
@@ -171,23 +170,23 @@
             </script>
         </div>
         <div id="blog_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('blog_div', 'fadeout 0.5s', true, 'blog_icon', 'blog')"></div>div>
-            <div class="fake_min" onclick="closeWindow('blog_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('blog_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('blog_div', 'fadeout 0.5s', true, 'blog_icon', 'blog')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('blog_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('blog_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">Xilong's Blog</div>
             <iframe class="fake_window_contents" id="blog" loading="lazy" src="/blog/" frameborder="0"></iframe>
         </div>
         <div id="blog_zh_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('blog_zh_div', 'fadeout 0.5s', true, 'blog_zh_icon', 'blog_zh')"></div>
-            <div class="fake_min" onclick="closeWindow('blog_zh_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('blog_zh_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('blog_zh_div', 'fadeout 0.5s', true, 'blog_zh_icon', 'blog_zh')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('blog_zh_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('blog_zh_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">在泥坑里跳来跳去</div>
             <iframe class="fake_window_contents" id="blog_zh" loading="lazy" src="/zh/blog/" frameborder="0"></iframe>
         </div>
         <div id="blog_life_div" class="fake_window" draggable="true" ondragstart="dragStart(event)" ondragend="dragEnd(event)">
-            <div class="fake_close" onclick="closeWindow('blog_life_div', 'fadeout 0.5s', true, 'blog_life_icon', 'blog_life')"></div>
-            <div class="fake_min" onclick="closeWindow('blog_life_div', 'fadeout 0.5s');"></div>
-            <div class="fake_full" onclick="switchFull('blog_life_div')"></div>
+            <div class="fake_close non_dark" onclick="closeWindow('blog_life_div', 'fadeout 0.5s', true, 'blog_life_icon', 'blog_life')"></div>
+            <div class="fake_full non_dark" onclick="switchFull('blog_life_div')"></div>
+            <div class="fake_min non_dark" onclick="closeWindow('blog_life_div', 'fadeout 0.5s');"></div>
             <div class="fake_title">Xilong's Life</div>
             <iframe class="fake_window_contents" id="blog_life" loading="lazy" src="/zh/life/" frameborder="0"></iframe>
         </div>

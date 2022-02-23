@@ -30,7 +30,8 @@ function switchLanguage(lang) {
         document.getElementById("occupation").innerHTML = "Programer";
         document.getElementById("language_label").innerHTML = "Language:";
         document.getElementById("stamp_intro").innerHTML = "Simple Two-Way Active Measure Protocol(IETF RFC8762).";
-        document.getElementById("Fe3OS_intro").innerHTML = "A simple web page which simulates a UNIX Shell.";
+        document.getElementById("this_site").innerHTML = "This site";
+        document.getElementById("this_site_intro").innerHTML = "A static site that simulates a OS.";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">misc.</a>';
         document.getElementById("about_label").innerHTML = "About";
         document.getElementById("intro").innerHTML = "I'm a programer with 3 years of experience about C++ and Linux.";
@@ -52,7 +53,8 @@ function switchLanguage(lang) {
         document.getElementById("occupation").innerHTML = "程序员";
         document.getElementById("language_label").innerHTML = "语言:";
         document.getElementById("stamp_intro").innerHTML = "简单的双向主动测量协议 (IETF RFC8762)。";
-        document.getElementById("Fe3OS_intro").innerHTML = "一个模拟 UNIX Shell 的简单网页。";
+        document.getElementById("this_site").innerHTML = "本站";
+        document.getElementById("this_site_intro").innerHTML = "一个模拟成OS的静态网站。";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">更多</a>';
         document.getElementById("about_label").innerHTML = "关于我";
         document.getElementById("intro").innerHTML = "我是一个有3年 C++ 和 Linux 经验的程序员。";
@@ -74,7 +76,8 @@ function switchLanguage(lang) {
         document.getElementById("occupation").innerHTML = "プログラマー";
         document.getElementById("language_label").innerHTML = "言語:";
         document.getElementById("stamp_intro").innerHTML = "シンプルな双方向アクティブ測定プロトコル(IETF RFC8762)。";
-        document.getElementById("Fe3OS_intro").innerHTML = "UNIXシェルをシミュレートする単純なWebページ。。";
+        document.getElementById("this_site").innerHTML = "このサイト";
+        document.getElementById("this_site_intro").innerHTML = "OSをシミュレートする静的なWebサイト。";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">もっと</a>';
         document.getElementById("about_label").innerHTML = "紹介";
         document.getElementById("intro").innerHTML = "私はC++とLinuxについて3年の経験を持つプログラマーです。";

@@ -34,11 +34,11 @@ function callWindow(id, animation) {
 
 function lightIcon(id) {
     var icon = document.getElementById(id);
-    icon.style.borderBottom="solid 2px";
+    icon.style.backgroundColor="#ccc";
 }
 function resetIcon(id) {
     var icon = document.getElementById(id);
-    icon.style.borderBottom="";
+    icon.style.backgroundColor="";
 }
 
 function reloadFrame(id) {
@@ -47,22 +47,22 @@ function reloadFrame(id) {
 }
 
 function dark() {
-    var buttons = document.getElementsByClassName("fake_close");
+    var nondarks = document.getElementsByClassName("non_dark");
     var frames = document.getElementsByClassName("fake_window_contents");
-    for (var i = 0; i < buttons.length; ++i) {
-        buttons[i].style.filter = "invert(1)";
+    for (var i = 0; i < nondarks.length; ++i) {
+        nondarks[i].style.filter = "invert(1)";
     }
-    for (var i = 0; i < buttons.length; ++i) {
+    for (var i = 0; i < frames.length; ++i) {
         frames[i].style.filter = "invert(1)";
     }
 }
 function light() {
-    var buttons = document.getElementsByClassName("fake_close");
+    var nondarks = document.getElementsByClassName("non_dark");
     var frames = document.getElementsByClassName("fake_window_contents");
-    for (var i = 0; i < buttons.length; ++i) {
-        buttons[i].style.filter = "invert(0)";
+    for (var i = 0; i < nondarks.length; ++i) {
+        nondarks[i].style.filter = "invert(0)";
     }
-    for (var i = 0; i < buttons.length; ++i) {
+    for (var i = 0; i < frames.length; ++i) {
         frames[i].style.filter = "invert(0)";
     }
 }
