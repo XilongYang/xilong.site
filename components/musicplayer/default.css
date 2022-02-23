@@ -144,7 +144,7 @@ body{
     #player{
         float: none;
         width: 100%;
-        height: auto;
+        
     }
     #animation{
         margin-bottom: 30px;
@@ -155,6 +155,7 @@ body{
     #playlist{
         float: none;
         width: 100%;
+        margin-top: 100px;
     }
 }
 
