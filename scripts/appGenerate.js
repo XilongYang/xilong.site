@@ -4,27 +4,27 @@ function appGenerate() {
     , "<i class='material-icons'>album</i>", "icons_tray_tools");
 
     new Application("onedrive", "OneDrive"
-    , '<iframe class="fake_window_contents" id="onedrive-content" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>'
+    , '<iframe class="fake_window_contents non_dark" id="onedrive-content" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>'
     , "<i class='material-icons'>cloud_sync</i>", "icons_tray_tools");
 
     new Application("terminal", "Terminal"
-    , '<iframe class="fake_window_contents" id="terminal-content" loading="lazy" src="/components/Fe3OS/" frameborder="0"></iframe>'
+    , '<iframe class="fake_window_contents non_dark" id="terminal-content" loading="lazy" src="/components/Fe3OS/" frameborder="0"></iframe>'
     , "<i class='material-icons'>terminal</i>", "icons_tray_tools");
 
     new Application("blog_life", "Xilong's Blog"
-    , '<iframe class="fake_window_contents" id="blog_life-content" loading="lazy" src="/zh/life/" frameborder="0"></iframe>'
+    , '<iframe class="fake_window_contents non_dark" id="blog_life-content" loading="lazy" src="/zh/life/" frameborder="0"></iframe>'
     , "<i class='material-icons non_dark'>podcasts</i>", "icons_tray_tools");
 
     new Application("blog_en", "Xilong's Life"
-    , '<iframe class="fake_window_contents" id="blog_en-content" loading="lazy" src="/blog/" frameborder="0"></iframe>'
+    , '<iframe class="fake_window_contents non_dark" id="blog_en-content" loading="lazy" src="/blog/" frameborder="0"></iframe>'
     , "<i class='material-icons non_dark'>podcasts</i>", "icons_tray_tools");
 
     new Application("blog_zh", "在泥坑里跳来跳去"
-    , '<iframe class="fake_window_contents" id="blog_zh-content" loading="lazy" src="/zh/blog/" frameborder="0"></iframe>'
+    , '<iframe class="fake_window_contents non_dark" id="blog_zh-content" loading="lazy" src="/zh/blog/" frameborder="0"></iframe>'
     , "<i class='material-icons non_dark'>podcasts</i>", "icons_tray_tools");
 
     new Application("gitalk", "Gitalk"
-    , "<div id='gitalk'></div>"
+    , "<div id='gitalk' class='non_dark'></div>"
     , "<i class='material-icons'>sticky_note_2</i>", "icons_tray_contact");
     var gitalk_generator = new Gitalk({
         clientID: 'fae12e78dff0504db954',

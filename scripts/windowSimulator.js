@@ -2,11 +2,13 @@
 var startX;
 var startY;
 function dragStart(e) {
+    console.log(e);
     startX = e.screenX;
     startY = e.screenY;
     updateOrder(e);
 }
 function dragEnd(e) {
+    console.log(e);
     var target = e.target;
     var endX = e.screenX;
     var endY = e.screenY;
@@ -148,6 +150,9 @@ function updateOrder(e) {
     var target = e.target;
     while(target.className != "fake_window") {
         target = target.parentNode;
+    }
+    if (target.className != "fake_window") {
+        return;
     }
     for (var i = 0; i < order.length; ++i) {
         if (order[i] == target) {
