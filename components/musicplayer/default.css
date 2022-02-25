@@ -95,7 +95,7 @@ body{
 }
 
 #url-div{
-    width: 100%;
+    width: 99%;
     height: 5%;
     margin-left: 0px;
     margin-right: 0px;
@@ -107,21 +107,9 @@ body{
 #custom-url{
     vertical-align: top;
     height: 92%;
-    width: 85%;
+    width: 100%;
     border: none;
     box-shadow: 0px 0px 2px 2px #aaa inset;
-}
-
-#url-submit{
-    vertical-align: top;
-    margin-left: 1%;
-    height: 100%;
-    width: 12%;
-    background-color: #333;
-    border: none;
-    box-shadow: 0px 0px 4px 1px #555;
-    color: #fff;
-    font-size: 16px;
 }
 
 #musics {
