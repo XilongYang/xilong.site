@@ -1,255 +1,213 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/zh/blog/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/zh/blog/images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="/zh/blog/images/favicon.ico">
-  <link rel="mask-icon" href="/zh/blog/images/favicon.ico" color="#222">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Xilong Yang">
+    
+    <title>
+        
+            Arch Linux安装与配置 |
+        
+        在泥坑里跳来跳去
+    </title>
+    
+<link rel="stylesheet" href="/zh/blog/css/style.css">
 
-<link rel="stylesheet" href="/zh/blog/css/main.css">
+    <link rel="shortcut icon" href="/zh/blog/../../res/favicon.ico">
+    
+<link rel="stylesheet" href="/zh/blog/css/font-awesome.min.css">
 
-<link rel="stylesheet" href="https://fonts.loli.net/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Judson:300,300italic,400,400italic,700,700italic|JetBrains Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/zh/blog/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"xilong.site","root":"/zh/blog/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"slideDownIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideDownIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {};
+    KEEP.hexo_config = {"hostname":"xilong.site","root":"/zh/blog/","language":"zh-CN","path":"search.xml"};
+    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#D31919","avatar":"../../res/me.jpg","favicon":"../../res/favicon.ico","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"background_img":null,"description":"To be or not to be, 这么着还是那么着。"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":false,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
   </script>
-
-  <meta name="description" content="Arch Linux是GNU&#x2F;Linux的众多发行版中相对小众的一个。相对Ubuntu等更加广为人知的发行版，Arch对新手并不是很友好。这篇文章旨在从零开始，一步一步帮助读者完成Arch Linux的安装与配置。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Arch Linux安装与配置">
-<meta property="og:url" content="https://xilong.site/zh/blog/2020/03/20/0003-Arch_linux_configuration/index.html">
-<meta property="og:site_name" content="在泥坑里跳来跳去">
-<meta property="og:description" content="Arch Linux是GNU&#x2F;Linux的众多发行版中相对小众的一个。相对Ubuntu等更加广为人知的发行版，Arch对新手并不是很友好。这篇文章旨在从零开始，一步一步帮助读者完成Arch Linux的安装与配置。">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-03-20T12:36:29.000Z">
-<meta property="article:modified_time" content="2022-01-31T14:25:28.617Z">
-<meta property="article:author" content="杨熙龙">
-<meta property="article:tag" content="Linux">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://xilong.site/zh/blog/2020/03/20/0003-Arch_linux_configuration/">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>Arch Linux安装与配置 | 在泥坑里跳来跳去</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/zh/blog/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">在泥坑里跳来跳去</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/zh/blog/" rel="section">首页</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/zh/blog/archives/" rel="section">归档</a>
-
-  </li>
-        <li class="menu-item menu-item-留言">
-
-    <a href="/zh/blog/guestbook/" rel="section">留言</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/zh/blog/../.." rel="section">关于</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger">搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
-    </header>
+<body>
+<div class="progress-bar-container">
+    
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+</div>
 
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
+<main class="page-container">
 
-          <div class="content post posts-expand">
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            <header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
             
+            <a class="logo-title" href="/">
+                在泥坑里跳来跳去
+            </a>
+        </div>
 
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xilong.site/zh/blog/2020/03/20/0003-Arch_linux_configuration/">
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/zh/blog/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/zh/blog/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/zh/blog/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/zh/blog/../../"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/zh/blog/images/avatar.gif">
-      <meta itemprop="name" content="杨熙龙">
-      <meta itemprop="description" content="">
-    </span>
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/zh/blog/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/zh/blog/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/zh/blog/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/zh/blog/../../">关于</a>
+                </li>
+            
+        </ul>
+    </div>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="在泥坑里跳来跳去">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Arch Linux安装与配置
-        </h1>
+    <div class="window-mask"></div>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
+</header>
 
-              <time title="创建时间：2020-03-20 20:36:29" itemprop="dateCreated datePublished" datetime="2020-03-20T20:36:29+08:00">2020-03-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/zh/blog/categories/0x02-%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">0x02 技术杂记</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
-            </span>
 
         </div>
-      </header>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            <span class="title-hover-animation">Arch Linux安装与配置</span>
+        </div>
+
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/zh/blog/../../res/me.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">Xilong Yang</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fas fa-edit"></i>&nbsp;
+        <span class="pc">2020-03-20 20:36:29</span>
+        <span class="mobile">2020-03-20 20:36</span>
+    </span>
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/zh/blog/categories/0x02-%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/">0x02 技术杂记</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/zh/blog/tags/Linux/">Linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
 
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    
+</div>
 
-      
-        <blockquote>
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <blockquote>
 <p>Arch Linux是GNU/Linux的众多发行版中相对小众的一个。相对Ubuntu等更加广为人知的发行版，Arch对新手并不是很友好。这篇文章旨在从零开始，一步一步帮助读者完成Arch Linux的安装与配置。</p>
 </blockquote>
 <span id="more"></span>
@@ -280,7 +238,7 @@
 <td>Intel 9260AC</td>
 </tr>
 </tbody></table>
-<h3 id="为什么选择Arch-Linux"><a href="#为什么选择Arch-Linux" class="headerlink" title="为什么选择Arch Linux"></a>为什么选择Arch Linux</h3><p><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Arch_Linux">点击进入官方介绍页面</a></p>
+<h3 id="为什么选择Arch-Linux"><a href="#为什么选择Arch-Linux" class="headerlink" title="为什么选择Arch Linux"></a>为什么选择Arch Linux</h3><p><a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Arch_Linux" >点击进入官方介绍页面<i class="fas fa-external-link-alt"></i></a></p>
 <p>对我而言Arch Linux相效于其它发行版有以下几点优点：</p>
 <ol>
 <li><p>极简的安装：安装完成后的Arch Linux仅有一百余个软件包，作为对比，Ubuntu通常有上千个包。</p>
@@ -295,8 +253,8 @@
 </li>
 </ol>
 <p>另一方面，这些优点也意味着Arch Linux无法长时间停留在某一版本，安装更繁琐，且可能不如其它发行版稳定。用作个人桌面通常不用担心这些问题。</p>
-<h2 id="安装：基本系统的搭建"><a href="#安装：基本系统的搭建" class="headerlink" title="安装：基本系统的搭建"></a>安装：基本系统的搭建</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>首先需要下载Arch Linux的镜像文件，建议从国内的镜像源下载，比如：<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站</a>。</p>
-<p>安装过程可能会随时产生变化，为防止步骤过期对读者造成误导，这里不再赘述，参看<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Installation_guide">ArchWiki</a>即可。</p>
+<h2 id="安装：基本系统的搭建"><a href="#安装：基本系统的搭建" class="headerlink" title="安装：基本系统的搭建"></a>安装：基本系统的搭建</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>首先需要下载Arch Linux的镜像文件，建议从国内的镜像源下载，比如：<a class="link"   target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/" >清华大学开源软件镜像站<i class="fas fa-external-link-alt"></i></a>。</p>
+<p>安装过程可能会随时产生变化，为防止步骤过期对读者造成误导，这里不再赘述，参看<a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Installation_guide" >ArchWiki<i class="fas fa-external-link-alt"></i></a>即可。</p>
 <h3 id="对wiki的一些补充"><a href="#对wiki的一些补充" class="headerlink" title="对wiki的一些补充"></a>对wiki的一些补充</h3><ol>
 <li><p>EFI分区的格式是FAT32，使用<code>mkfs.fat -F32 /dev/sdxx</code>创建。</p>
 </li>
@@ -309,13 +267,13 @@
 <li>vim</li>
 </ul>
 <ol start="3">
-<li><p>若系统以BIOS模式启动，分区时记得为GRUB提前分配一个1M大小的分区，参照<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/GRUB">GRUB-ArchWiki</a>。</p>
+<li><p>若系统以BIOS模式启动，分区时记得为GRUB提前分配一个1M大小的分区，参照<a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/GRUB" >GRUB-ArchWiki<i class="fas fa-external-link-alt"></i></a>。</p>
 </li>
 <li><p>安装系统时建议直接安装linux-lts:</p>
 <p> 即<code>pacstrap /mnt base linux linux-firmware</code>这步换成<code>pacstrap /mnt base linux-lts linux-firmware</code></p>
 </li>
 </ol>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><p>参照<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/General_recommendations">General recommendations-ArchWiki</a>，完成用户、网络等设置，并安装xorg服务。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><p>参照<a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/General_recommendations" >General recommendations-ArchWiki<i class="fas fa-external-link-alt"></i></a>，完成用户、网络等设置，并安装xorg服务。</p>
 <h3 id="yay"><a href="#yay" class="headerlink" title="yay"></a>yay</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><ol>
 <li>安装<code>base-devel</code>、<code>git</code>、<code>go</code></li>
 <li>执行<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/yay.git</span><br><span class="line"><span class="built_in">cd</span> yay</span><br><span class="line">makepkg -si</span><br></pre></td></tr></table></figure></li>
@@ -330,7 +288,7 @@
 </li>
 <li><p>切换默认终端：<code>chsh -s /bin/zsh</code></p>
 </li>
-<li><p>配置可参考<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Zsh">zsh-ArchWiki</a>、<a target="_blank" rel="noopener" href="https://github.com/ohmyzsh/ohmyzsh">oh-my-zsh</a></p>
+<li><p>配置可参考<a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Zsh" >zsh-ArchWiki<i class="fas fa-external-link-alt"></i></a>、<a class="link"   target="_blank" rel="noopener" href="https://github.com/ohmyzsh/ohmyzsh" >oh-my-zsh<i class="fas fa-external-link-alt"></i></a></p>
 <ol>
 <li><p>复制配置文件：<code>cp /usr/share/oh-my-zsh/zshrc ~/.zshrc</code></p>
 </li>
@@ -370,7 +328,7 @@
 <li><p>开机自启<code>sudo systemctl enable privoxy.service</code></p>
 </li>
 </ol>
-<p>参照<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Privoxy">Privoxy - ArchWiki</a></p>
+<p>参照<a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Privoxy" >Privoxy - ArchWiki<i class="fas fa-external-link-alt"></i></a></p>
 <h4 id="配置命令行模式的代理"><a href="#配置命令行模式的代理" class="headerlink" title="配置命令行模式的代理"></a>配置命令行模式的代理</h4><p>将以下内容添加进终端的配置文件.bashrc或.zshrc</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">proxy_off</span></span>()&#123;</span><br><span class="line">	<span class="built_in">unset</span> http_proxy</span><br><span class="line">	<span class="built_in">unset</span> https_proxy</span><br><span class="line">	<span class="built_in">unset</span> ftp_proxy</span><br><span class="line">	<span class="built_in">unset</span> rsync_proxy</span><br><span class="line">	<span class="built_in">echo</span> -e <span class="string">&quot;proxy off&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> proxy_on&#123;</span><br><span class="line">	<span class="built_in">export</span> no_proxy=<span class="string">&quot;localhost,127.0.0.1,localaddress,.localdomain.com&quot;</span></span><br><span class="line">	<span class="built_in">export</span> http_proxy=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> https_proxy=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> ftp_proxy=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> rsync_proxy=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> HTTP_PROXY=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> HTTPS_PROXY=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> FTP_PROXY=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">export</span> RSYNC_PROXY=<span class="string">&quot;http://127.0.0.1:8118&quot;</span></span><br><span class="line">	<span class="built_in">echo</span> -e <span class="string">&quot;proxy on&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -415,7 +373,7 @@
 <li><p>添加环境变量，在主目录新建一个文件~/.pam_environment，并加入以下内容</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GTK_IM_MODULE=fcitx</span><br><span class="line">QT_IM_MODULE=fcitx</span><br><span class="line">XMODIFIERS=@im=fcitx</span><br></pre></td></tr></table></figure></li>
 </ol>
-<p>参照<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Fcitx">Fcitx - ArchWiki</a></p>
+<p>参照<a class="link"   target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Fcitx" >Fcitx - ArchWiki<i class="fas fa-external-link-alt"></i></a></p>
 </li>
 </ul>
 <h4 id="i3-gaps"><a href="#i3-gaps" class="headerlink" title="i3-gaps"></a>i3-gaps</h4><h5 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h5><ol>
@@ -441,227 +399,237 @@
 <li>壁纸显示:<code>sudo pacman -S feh</code></li>
 <li>桌面信息:<code>sudo pacman -S conky</code></li>
 </ol>
-<h5 id="附配置文件与官方文档"><a href="#附配置文件与官方文档" class="headerlink" title="附配置文件与官方文档"></a>附配置文件与官方文档</h5><p><a target="_blank" rel="noopener" href="https://github.com/XilongYang/Arch-i3_configfile">XilongYang/Arch-i3_configfile</a></p>
-<p><a target="_blank" rel="noopener" href="https://i3wm.org/docs/userguide.html">i3 User’s Guide</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/polybar/polybar/wiki">polybar wiki</a></p>
-
-    </div>
-
-    
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>杨熙龙
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://xilong.site/zh/blog/2020/03/20/0003-Arch_linux_configuration/" title="Arch Linux安装与配置">https://xilong.site/zh/blog/2020/03/20/0003-Arch_linux_configuration/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/zh/blog/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/zh/blog/2020/02/26/0002-C++:Declaration_and_definition/" rel="prev" title="C++的声明与定义">
-      <i class="fa fa-chevron-left"></i> C++的声明与定义
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/zh/blog/2020/04/24/0004-Binary_tree/" rel="next" title="二叉树的存储结构及其非层序遍历">
-      二叉树的存储结构及其非层序遍历 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-    <div class="comments" id="gitalk-container"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
+<h5 id="附配置文件与官方文档"><a href="#附配置文件与官方文档" class="headerlink" title="附配置文件与官方文档"></a>附配置文件与官方文档</h5><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/XilongYang/Arch-i3_configfile" >XilongYang/Arch-i3_configfile<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://i3wm.org/docs/userguide.html" >i3 User’s Guide<i class="fas fa-external-link-alt"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/polybar/polybar/wiki" >polybar wiki<i class="fas fa-external-link-alt"></i></a></p>
 
         </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
 
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D"><span class="nav-number">1.</span> <span class="nav-text">开始之前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E7%9A%84%E7%A1%AC%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">检查你的硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9Arch-Linux"><span class="nav-number">1.2.</span> <span class="nav-text">为什么选择Arch Linux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%EF%BC%9A%E5%9F%BA%E6%9C%AC%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">安装：基本系统的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9wiki%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A1%A5%E5%85%85"><span class="nav-number">2.2.</span> <span class="nav-text">对wiki的一些补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yay"><span class="nav-number">3.2.</span> <span class="nav-text">yay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">3.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-amp-amp-oh-my-zsh"><span class="nav-number">3.3.</span> <span class="nav-text">zsh &amp;&amp; oh-my-zsh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%AD%90"><span class="nav-number">3.4.</span> <span class="nav-text">梯子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Trojan"><span class="nav-number">3.4.1.</span> <span class="nav-text">Trojan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Privoxy"><span class="nav-number">3.4.2.</span> <span class="nav-text">Privoxy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BB%A3%E7%90%86"><span class="nav-number">3.4.3.</span> <span class="nav-text">配置命令行模式的代理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%86%9B%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="nav-number">3.5.</span> <span class="nav-text">进军图形界面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%89%8D%E5%87%86%E5%A4%87"><span class="nav-number">3.5.1.</span> <span class="nav-text">安装前准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#i3-gaps"><span class="nav-number">3.5.2.</span> <span class="nav-text">i3-gaps</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-1"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">附配置文件与官方文档</span></a></li></ol></li></ol></li></ol></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">杨熙龙</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/zh/blog/archives/">
         
-          <span class="site-state-item-count">35</span>
-          <span class="site-state-item-name">文章</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/zh/blog/categories/">
-        <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/zh/blog/tags/">
-        <span class="site-state-item-count">16</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li>本文标题：Arch Linux安装与配置</li>
+        <li>本文作者：Xilong Yang</li>
+        <li>创建时间：2020-03-20 20:36:29</li>
+        <li>
+            本文链接：https://xilong.site/zh/blog/2020/03/20/0003-Arch_linux_configuration/
+        </li>
+        <li>
+            版权声明：本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！
+        </li>
+    </ul>
 </div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/xilongyang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xilongyang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:xilong.yang@foxmail.com" title="E-Mail → mailto:xilong.yang@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-  </div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box">
+                
+                    <li class="tag-item">
+                        <a href="/zh/blog/tags/Linux/">#Linux</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                           rel="prev"
+                           href="/zh/blog/2020/04/24/0004-Binary_tree/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">二叉树的存储结构及其非层序遍历</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                           rel="next"
+                           href="/zh/blog/2020/02/26/0002-C++:Declaration_and_definition/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">C++的声明与定义</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+        
+    </div>
+</div>
 
 
+                
+            </div>
 
-      </div>
+        </div>
+
+        <div class="page-main-content-bottom">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+              <span>2019</span>
+              -
+            
+            2022&nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;<a href="/">Xilong Yang</a>
+        </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.4.5</a>
+        </div>
+        
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item page-aside-toggle">
+                <i class="fas fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-expand-width flex-center">
+            <i class="fas fa-arrows-alt-h"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="fas fa-arrow-up"></i>
+            </li>
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+    </ul>
+</div>
 
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
 
+    
+        <aside class="page-aside">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D"><span class="nav-text">开始之前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E7%9A%84%E7%A1%AC%E4%BB%B6"><span class="nav-text">检查你的硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9Arch-Linux"><span class="nav-text">为什么选择Arch Linux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%EF%BC%9A%E5%9F%BA%E6%9C%AC%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-text">安装：基本系统的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9wiki%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A1%A5%E5%85%85"><span class="nav-text">对wiki的一些补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yay"><span class="nav-text">yay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-amp-amp-oh-my-zsh"><span class="nav-text">zsh &amp;&amp; oh-my-zsh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%AD%90"><span class="nav-text">梯子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Trojan"><span class="nav-text">Trojan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Privoxy"><span class="nav-text">Privoxy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BB%A3%E7%90%86"><span class="nav-text">配置命令行模式的代理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%86%9B%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="nav-text">进军图形界面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%89%8D%E5%87%86%E5%A4%87"><span class="nav-text">安装前准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#i3-gaps"><span class="nav-text">i3-gaps</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-1"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="nav-text">附配置文件与官方文档</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+        </aside>
+    
 
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class=""></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">杨熙龙</span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-chart-area"></i>
-    </span>
-      <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">147k</span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item-icon">
-      <i class="fa fa-coffee"></i>
-    </span>
-      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:28</span>
+    <div class="image-viewer-container">
+    <img src="">
 </div>
 
-        
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
 
 
 
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/zh/blog/lib/anime.min.js"></script>
-  <script src="/zh/blog/lib/velocity/velocity.min.js"></script>
-  <script src="/zh/blog/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/zh/blog/js/utils.js"></script>
 
-<script src="/zh/blog/js/motion.js"></script>
+<script src="/zh/blog/js/main.js"></script>
 
+<script src="/zh/blog/js/header-shrink.js"></script>
 
-<script src="/zh/blog/js/schemes/pisces.js"></script>
+<script src="/zh/blog/js/back2top.js"></script>
 
-
-<script src="/zh/blog/js/next-boot.js"></script>
-
-
-
-
-  
+<script src="/zh/blog/js/dark-light-toggle.js"></script>
 
 
 
-
-  
+    
 <script src="/zh/blog/js/local-search.js"></script>
 
 
@@ -670,90 +638,19 @@
 
 
 
+<div class="post-scripts">
+    
+        
+<script src="/zh/blog/js/left-side-toggle.js"></script>
 
+<script src="/zh/blog/js/libs/anime.min.js"></script>
 
-
-
-
-
-  
-
-  
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
+<script src="/zh/blog/js/toc.js"></script>
 
     
+</div>
 
-  
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
-
-<script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : '8bcb8c3238363850b52d',
-      clientSecret: 'f4f51200e1c378454e22bbcfa5c259b80ede6b6a',
-      repo        : 'gitment',
-      owner       : 'XilongSite',
-      admin       : ['XilongSite'],
-      id          : '4ad6b21e3d3623cbe86737580e24d19e',
-        language: '',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-</script>
 
 </body>
 </html>
