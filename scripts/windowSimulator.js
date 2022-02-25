@@ -21,7 +21,9 @@ function close(e) {
     var window = e.target;
     window.removeEventListener("animationend", close);
     window.style.display = "none";
-    resetWindowDirect(window);
+    if (document.getElementById("body").mobile != "true") {
+        resetWindowDirect(window);
+    }
     var childs = window.childNodes;
     for (var i = 0; i < childs.length; ++i) {
         if (childs[i].nodeName == "IFRAME") {

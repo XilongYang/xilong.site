@@ -36,4 +36,12 @@ function appGenerate() {
         distractionFreeMode: false  // Facebook-like distraction free mode
     })
     gitalk_generator.render('gitalk');
+
+    if (screen.availWidth < 950) {
+        document.getElementById("body").mobile = "true";
+        var apps = document.getElementsByClassName("fake_window");
+        for (var i = 0; i < apps.length; ++i) {
+            apps[i].full = "true";
+        }
+    }
 }
