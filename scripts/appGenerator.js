@@ -3,7 +3,7 @@ class Application {
         this.name = name;
         this.title = title;
         this.content = content;
-        this.#generateApp(icon, trayID);
+        this.generateApp(icon, trayID);
     }
     generateApp(icon, trayID) {
         var tray = document.getElementById(trayID);
