@@ -1,3 +1,21 @@
+// Drag
+var startX;
+var startY;
+function dragStart(e) {
+    startX = e.screenX;
+    startY = e.screenY;
+}
+function dragEnd(e) {
+    var target = document.getElementById(e.path[0].id);
+    var endX = e.screenX;
+    var endY = e.screenY;
+    var originX = parseInt(target.getBoundingClientRect().left);
+    var originY = parseInt(target.getBoundingClientRect().top);
+    target.style.left = originX + endX - startX + "px";
+    target.style.top = originY + endY - startY + "px";
+}
+
+//Close&Open
 var realClose=false;
 var hideID=null;
 var iconID=null;
@@ -31,64 +49,38 @@ function callWindow(id, animation) {
     }
 }
 
-
+//Icon Light&Reset
 function lightIcon(id) {
     var icon = document.getElementById(id);
-    icon.style.backgroundColor="#ccc";
+    icon.style.borderBottomStyle="solid";
 }
 function resetIcon(id) {
     var icon = document.getElementById(id);
-    icon.style.backgroundColor="";
+    icon.style.borderBottomStyle="";
 }
 
+//Reload frame that in windows.
 function reloadFrame(id) {
     var frame = document.getElementById(id);
     frame.src = frame.src;
 }
 
-function dark() {
-    var nondarks = document.getElementsByClassName("non_dark");
-    var frames = document.getElementsByClassName("fake_window_contents");
-    for (var i = 0; i < nondarks.length; ++i) {
-        nondarks[i].style.filter = "invert(1)";
-    }
-    for (var i = 0; i < frames.length; ++i) {
-        frames[i].style.filter = "invert(1)";
-    }
-}
-function light() {
-    var nondarks = document.getElementsByClassName("non_dark");
-    var frames = document.getElementsByClassName("fake_window_contents");
-    for (var i = 0; i < nondarks.length; ++i) {
-        nondarks[i].style.filter = "invert(0)";
-    }
-    for (var i = 0; i < frames.length; ++i) {
-        frames[i].style.filter = "invert(0)";
-    }
-}
-
-function switchDarkmode() {
-    var mask = document.getElementById("darkmode-mask");
-    mask.removeEventListener("transitionend", dark);
-    mask.removeEventListener("transitionend", light);
-    if (getComputedStyle(mask).opacity != '1') {
-        mask.style.opacity = "1";
-        mask.addEventListener("transitionend", dark);
-    } else {
-        mask.style.opacity = "0";
-        mask.addEventListener("transitionend", light);
-    }
-}
-
+//Scale Window
 function fullscreen(id) {
     var windowTarget = document.getElementById(id);
-    windowTarget.full = "true";
     windowTarget.style.animation="fullscreen 0.5s";
+    fullscreenDirect(id);
+}
+
+function fullscreenDirect(id) {
+    var windowTarget = document.getElementById(id);
+    windowTarget.full = "true";
     windowTarget.style.top = "0";
     windowTarget.style.left = "0";
     windowTarget.style.width = "100%";
     windowTarget.style.height = "100%";
 }
+
 function resetWindow(id) {
     var windowTarget = document.getElementById(id);
     windowTarget.style.animation="window 0.5s";

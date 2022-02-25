@@ -157,10 +157,12 @@ a:hover {
 
 #header h1 {
     margin: 0;
+    margin-bottom: 2px;
 }
 
 #name {
     font-size: 30px;
+    margin-left: -2px;
 }
 
 #languages{
@@ -194,15 +196,13 @@ a:hover {
 .tray {
     display: flex;
     flex-direction: row;
-    margin-left: -6px;
+    margin-left: -4px;
 }
 
 .icons{
-    margin: 4px;
-    height: 18px;
-    width: 18px;
+    margin-left: 1px;
+    margin-right: 1px;
     cursor: pointer;
-    border-radius: 5px;
 }
 .icons:hover{
     color: #777;
@@ -212,16 +212,25 @@ a:hover {
     font-size: 28px;
 }
 
-#blog_life_icon {
+#blog_life-icon {
     color: #fd7d00;
 }
-
-#blog_icon {
-    color: #377cf1;
+#blog_life-icon:hover{
+    color: #cd4d00;
 }
 
-#blog_zh_icon {
+#blog_en-icon {
+    color: #377cf1;
+}
+#blog_en-icon:hover{
+    color: #175cd1;
+}
+
+#blog_zh-icon {
     color: #d31919;
+}
+#blog_zh-icon:hover{
+    color: #a30000;
 }
 
 #space{
