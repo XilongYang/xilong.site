@@ -15,7 +15,7 @@ body{
     background-color: #f5f5f5;
     top: 0px;
     left: 0px;
-    z-index: 20;
+    z-index: 50;
     mix-blend-mode: difference;
     pointer-events: none;
     visibility: visible;
@@ -199,12 +199,12 @@ a:hover {
     margin-left: -4px;
 }
 
-.icons{
+.icon{
     margin-left: 1px;
     margin-right: 1px;
     cursor: pointer;
 }
-.icons:hover{
+.icon:hover{
     color: #777;
 }
 
@@ -288,6 +288,10 @@ a:hover {
     color:#777;
     font-size: 18px;
     line-height: 150%;
+}
+
+#windows {
+    z-index: 10;
 }
 
 .fake_window{
