@@ -63,9 +63,11 @@ function changeItemDisplay(id) {
     preItem = item;
 }
 
-function changeFromUrl() {
-    if (preItem != null) preItem.style = "";
+function changeFromUrl(e) {
+    console.log(e);
+    if (e.code != 'Enter') return;
     var url = document.getElementById("custom-url").value;
+    if (url == "") return;
     changeMusic(url, url);
     url = "";
     preItem = null;
