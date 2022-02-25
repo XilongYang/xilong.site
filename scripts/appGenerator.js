@@ -23,15 +23,12 @@ class Application {
                + "id='"+this.name+"-div'" 
                + "onclick='updateOrder(event)'>"
                + this.buttons()
-               + this.title()
+               + "<div class='fake_title'>"+this.title+"</div>"
                + this.content+"</div>\n";
     }
     buttons() {
         return "<div class='fake_close non_dark' onclick='closeButtonEvent(event)'></div>"
                +"<div class='fake_full non_dark' onclick='switchFull(event)'></div>"
                +"<div class='fake_min non_dark' onclick='hideButtonEvent(event)'></div>\n"
-    }
-    title() {
-        return "<div class='fake_title'>"+this.title+"</div>";
     }
 }
