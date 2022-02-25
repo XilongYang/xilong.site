@@ -14,7 +14,7 @@ class Application {
                         + icon
                         + "</abbr>"
                         + "</div>"
-                        + this.#app()
+                        + this.app()
                         + "</div>";
     }
     app() {
@@ -22,8 +22,8 @@ class Application {
                + "ondragstart='dragStart(event)' ondragend='dragEnd(event)'"
                + "id='"+this.name+"-div'" 
                + "onclick='updateOrder(event)'>"
-               + this.#buttons()
-               + this.#title()
+               + this.buttons()
+               + this.title()
                + this.content+"</div>\n";
     }
     buttons() {
