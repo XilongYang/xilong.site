@@ -22,7 +22,7 @@ function appGenerate() {
     new Application("blog_zh", "在泥坑里跳来跳去"
     , '<iframe class="fake_window_contents" id="blog_zh-content" loading="lazy" src="/zh/blog/" frameborder="0"></iframe>'
     , "<i class='material-icons non_dark'>podcasts</i>", "icons_tray_tools");
-    
+
     new Application("gitalk", "Gitalk"
     , "<div id='gitalk'></div>"
     , "<i class='material-icons'>sticky_note_2</i>", "icons_tray_contact");
@@ -35,6 +35,5 @@ function appGenerate() {
         id: "xilong_site",      // Ensure uniqueness and length less than 50
         distractionFreeMode: false  // Facebook-like distraction free mode
     })
-    gitalk_generator.render('gitalk')
-    
+    gitalk_generator.render('gitalk');
 }
