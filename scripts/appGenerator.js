@@ -5,7 +5,7 @@ class Application {
         this.content = content;
         this.#generateApp(icon, trayID);
     }
-    #generateApp(icon, trayID) {
+    generateApp(icon, trayID) {
         var tray = document.getElementById(trayID);
         tray.innerHTML += "<div class='app'><div class='icon' id='"+this.name+"-icon' "
                         + "onclick='lightIcon(event);"
@@ -17,7 +17,7 @@ class Application {
                         + this.#app()
                         + "</div>";
     }
-    #app() {
+    app() {
         return "<div class='fake_window' draggable='true' "
                + "ondragstart='dragStart(event)' ondragend='dragEnd(event)'"
                + "id='"+this.name+"-div'" 
@@ -26,12 +26,12 @@ class Application {
                + this.#title()
                + this.content+"</div>\n";
     }
-    #buttons() {
+    buttons() {
         return "<div class='fake_close non_dark' onclick='closeButtonEvent(event)'></div>"
                +"<div class='fake_full non_dark' onclick='switchFull(event)'></div>"
                +"<div class='fake_min non_dark' onclick='hideButtonEvent(event)'></div>\n"
     }
-    #title() {
+    title() {
         return "<div class='fake_title'>"+this.title+"</div>";
     }
 }
