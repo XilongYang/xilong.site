@@ -2,13 +2,11 @@
 var startX;
 var startY;
 function dragStart(e) {
-    console.log(e);
     startX = e.screenX;
     startY = e.screenY;
-    updateOrder(e);
+    updateOrderEvent(e);
 }
 function dragEnd(e) {
-    console.log(e);
     var target = e.target;
     var endX = e.screenX;
     var endY = e.screenY;
@@ -100,6 +98,7 @@ function callWindow(e) {
     if (getComputedStyle(target).display == "none") {
         target.style.animation="fadein 0.5s";
         target.style.display = "inline";
+        updateOrder(target);
     } else {
         hideWindow(target);
     }
@@ -146,8 +145,7 @@ function switchFull(e) {
 
 //Stack simulation
 var order = new Array();
-function updateOrder(e) {
-    var target = e.target;
+function updateOrder(target) {
     while(target.className != "fake_window") {
         target = target.parentNode;
     }
@@ -158,11 +156,16 @@ function updateOrder(e) {
         if (order[i] == target) {
             for (var j = i; j + 1 < order.length; ++j) {
                 order[j] = order[j + 1];
-                order[j].style.zIndex = j + 1;
+                order[j].style.zIndex = j + 20;
             }
             order.pop();
         }
     }
     order.push(target);
-    target.style.zIndex = order.length;
+    target.style.zIndex = order.length + 20;
+}
+
+function updateOrderEvent(e) {
+    var target = e.target;
+    updateOrder(target);
 }
