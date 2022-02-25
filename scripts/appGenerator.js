@@ -21,7 +21,7 @@ class Application {
         return "<div class='fake_window' draggable='true' "
                + "ondragstart='dragStart(event)' ondragend='dragEnd(event)'"
                + "id='"+this.name+"-div'" 
-               + "onclick='updateOrder(event)'>"
+               + "onclick='updateOrderEvent(event)'>"
                + this.buttons()
                + "<div class='fake_title'>"+this.title+"</div>"
                + this.content+"</div>\n";
