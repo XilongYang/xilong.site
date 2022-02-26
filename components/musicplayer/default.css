@@ -8,6 +8,7 @@ body{
     background-color: #f0f0f0;
     min-width: 500px;
     max-width: 800px;
+    min-height: 450px;
 }
 
 #player{
