@@ -44,16 +44,29 @@ function changeMusic(name, src) {
 
     var nameDiv = document.getElementById("name");
     nameDiv.innerHTML = name;
+
+    var label = document.getElementById("label");
+    label.innerHTML = name;
 }
 
 function playAnimation() {
     var disk = document.getElementById("disk");
-    disk.style.animation = "shake 200ms infinite";
+    disk.style.animation = "rotation 6s linear infinite";
+    var label = document.getElementById("label");
+    label.style.opacity = "1";
+    var probe = document.getElementById("probe");
+    probe.style.animation = "probe 1s"
+    probe.style.transform = "rotate(80deg)";
 }
 
 function stopAnimation() {
     var disk = document.getElementById("disk");
     disk.style.animation = "";
+    var label = document.getElementById("label");
+    label.style.opacity = "0";
+    var probe = document.getElementById("probe");
+    probe.style.animation = "probe-back 1s"
+    probe.style.transform = "rotate(90deg)";
 }
 var preItem = null;
 function changeItemDisplay(id) {
