@@ -1360,6 +1360,30 @@
       </tags>
   </entry>
   <entry>
+    <title>Github之禁忌的双重污染</title>
+    <url>/zh/blog/2021/07/16/0015-Double_pollution_of_Github/</url>
+    <content><![CDATA[<blockquote>
+<p>Http被污染的时候，我没有说话，因为我用SSH。</p>
+<p>SSH被污染的时候，我只好乖乖地去修改我的host文件了。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="查询正确的IP地址"><a href="#查询正确的IP地址" class="headerlink" title="查询正确的IP地址"></a>查询正确的IP地址</h2><p>使用这个网站<a class="link"   href="https://www.ipaddress.com/" >ipaddress.com<i class="fas fa-external-link-alt"></i></a>进行查询，输入域名获得IP地址。</p>
+<p>查询结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 注意，这个ip地址可能会改变，每次配置前最好重新查询</span><br><span class="line">github.com: 140.82.112.4</span><br><span class="line">global-ssh.fastly.net: 199.232.4.249</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改host文件"><a href="#修改host文件" class="headerlink" title="修改host文件"></a>修改host文件</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># /etc/hosts</span><br><span class="line"># 在末尾添加以下记录</span><br><span class="line"># github</span><br><span class="line">140.82.112.4 github.com</span><br><span class="line">140.82.112.4 raw.githubusercontent.com</span><br><span class="line">140.82.112.4 user-images.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars2.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars1.githubusercontent.com</span><br><span class="line"></span><br><span class="line"># ssh</span><br><span class="line">199.232.4.249 global-ssl.fastly.net</span><br><span class="line">199.232.4.249 github.global-ssl.fastly.net</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>0x02 技术杂记</category>
+      </categories>
+      <tags>
+        <tag>Great Wall</tag>
+        <tag>DNS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用移动硬盘制作本地git仓库</title>
     <url>/zh/blog/2021/06/27/0014-Make_a_local_git_repository/</url>
     <content><![CDATA[<blockquote>
@@ -1445,30 +1469,6 @@
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Github之禁忌的双重污染</title>
-    <url>/zh/blog/2021/07/16/0015-Double_pollution_of_Github/</url>
-    <content><![CDATA[<blockquote>
-<p>Http被污染的时候，我没有说话，因为我用SSH。</p>
-<p>SSH被污染的时候，我只好乖乖地去修改我的host文件了。</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="查询正确的IP地址"><a href="#查询正确的IP地址" class="headerlink" title="查询正确的IP地址"></a>查询正确的IP地址</h2><p>使用这个网站<a class="link"   href="https://www.ipaddress.com/" >ipaddress.com<i class="fas fa-external-link-alt"></i></a>进行查询，输入域名获得IP地址。</p>
-<p>查询结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 注意，这个ip地址可能会改变，每次配置前最好重新查询</span><br><span class="line">github.com: 140.82.112.4</span><br><span class="line">global-ssh.fastly.net: 199.232.4.249</span><br></pre></td></tr></table></figure>
-
-<h2 id="修改host文件"><a href="#修改host文件" class="headerlink" title="修改host文件"></a>修改host文件</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># /etc/hosts</span><br><span class="line"># 在末尾添加以下记录</span><br><span class="line"># github</span><br><span class="line">140.82.112.4 github.com</span><br><span class="line">140.82.112.4 raw.githubusercontent.com</span><br><span class="line">140.82.112.4 user-images.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars2.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars1.githubusercontent.com</span><br><span class="line"></span><br><span class="line"># ssh</span><br><span class="line">199.232.4.249 global-ssl.fastly.net</span><br><span class="line">199.232.4.249 github.global-ssl.fastly.net</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>0x02 技术杂记</category>
-      </categories>
-      <tags>
-        <tag>Great Wall</tag>
-        <tag>DNS</tag>
       </tags>
   </entry>
   <entry>
