@@ -18,10 +18,11 @@ class Application {
                         + "</div>";
     }
     app() {
-        return "<div class='fake_window' draggable='true' "
-               + "ondragstart='dragStart(event)' ondragend='dragEnd(event)'"
+        return "<div class='fake_window'"
+               + "onmousedown='dragStart(event)' ondrag='return;'"
                + "id='"+this.name+"-div'" 
                + "onclick='updateOrderEvent(event)'>"
+               + "<div class='drag_mask'></div>"
                + this.buttons()
                + "<div class='fake_title'>"+this.title+"</div>"
                + this.content+"</div>\n";
