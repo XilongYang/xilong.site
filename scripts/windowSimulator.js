@@ -44,7 +44,7 @@ function dragEnd() {
 }
 
 function dragMode(e) {
-    if (e.key == "Control") {
+    if (e.key == "Alt") {
         var dragMasks = document.getElementsByClassName("drag_mask");
         for (var i = 0; i < dragMasks.length; ++i) {
             dragMasks[i].style.display = "inline";
@@ -53,7 +53,7 @@ function dragMode(e) {
 }
 
 function clearDragMode(e) {
-    if (e.key == "Control" && selected == null) {
+    if (e.key == "Alt" && selected == null) {
         var dragMasks = document.getElementsByClassName("drag_mask");
         for (var i = 0; i < dragMasks.length; ++i) {
             dragMasks[i].style.display = "none";

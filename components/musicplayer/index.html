@@ -6,6 +6,11 @@
         <title>Music Player</title>
         <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/res/MaterialIcons/normal.css" rel="stylesheet">
+        <link href="/res/MaterialIcons/outlined.css" rel="stylesheet">
+        <link href="/res/MaterialIcons/round.css" rel="stylesheet">
+        <link href="/res/MaterialIcons/sharp.css" rel="stylesheet">
+        <link href="/res/MaterialIcons/twotone.css" rel="stylesheet">
         <link href="default.css" rel="stylesheet">
         <script src="music.js"></script>
     </head>
@@ -13,7 +18,7 @@
         <div id="player">
             <div id="animation">
                 <div id="disk">
-                    <div id="label">Some Label</div>
+                    <div id="label"></div>
                 </div>
                 <div id="probe">
                     <div id="rod"></div>
@@ -25,12 +30,20 @@
                 <div id="info">
                     <div id="name"></div>
                 </div>
-                <audio id="control" controls loop onplay="playAnimation()" onpause="stopAnimation()"></audio>
+                <audio id="control" controls loop
+                onplay="playAnimation()" 
+                onpause="stopAnimation()"
+                onended="switchMusic()"></audio>
             </div>
         </div>
         <div id="spacing"></div>
         <div id="playlist">
-            <div id="playlist-title">Playlist</div>
+            <div id="playlist-title">
+                <span>Playlist</span>
+                <span id="play-mode" class="material-icons" onclick="changePlayMode(event)">
+                    repeat_one
+                </span>
+            </div>
             <div id="url-div">
                 <input id="custom-url" placeholder="Music url." onkeypress="changeFromUrl(event)">
             </div>

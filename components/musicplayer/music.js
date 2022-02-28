@@ -6,8 +6,7 @@ class Music {
     }
     item() {
         return "<div class='music-item' onclick='changeMusic(\""+this.name
-               +"\", \""+this.url+"\");changeItemDisplay(\""+this.id
-               +"\")' id='"+this.id+"'>"+this.name+"</div>";
+               +"\", \""+this.url+"\");' id='"+this.id+"'>"+this.name+"</div>";
     }
 }
 
@@ -35,20 +34,6 @@ function generatePlaylist() {
     }
 }
 
-function changeMusic(name, src) {
-    var player = document.getElementById("control");
-    player.pause();
-    player.setAttribute("src", src);
-    console.log(player.innerHTML);
-    player.play();
-
-    var nameDiv = document.getElementById("name");
-    nameDiv.innerHTML = name;
-
-    var label = document.getElementById("label");
-    label.innerHTML = name;
-}
-
 function playAnimation() {
     var disk = document.getElementById("disk");
     disk.style.animation = "rotation 6s linear infinite";
@@ -69,15 +54,47 @@ function stopAnimation() {
     probe.style.transform = "rotate(90deg)";
 }
 var preItem = null;
-function changeItemDisplay(id) {
+function clearItemDisplay() {
     if (preItem != null) preItem.style = "";
+}
+
+function changeItemDisplay(id) {
+    clearItemDisplay();
     var item = document.getElementById(id);
     item.style = "box-shadow: 0px 0px 4px 4px #aaa;background-color: #333;color: #fff;";
     preItem = item;
 }
 
+function fixDisk() {
+    var animation = document.getElementById("animation");
+    animation.style.height = getComputedStyle(animation).width;
+}
+
+function changeMusic(name, src) {
+    var player = document.getElementById("control");
+    player.pause();
+    player.setAttribute("src", src);
+    console.log(player.innerHTML);
+    player.play();
+
+    var nameDiv = document.getElementById("name");
+    nameDiv.innerHTML = name;
+
+    var label = document.getElementById("label");
+    label.innerHTML = name;
+
+    var i = 0;
+    while (i < playlist.length && src != playlist[i].url) {
+        ++i;
+    }
+    if (i < playlist.length) {
+        changeItemDisplay((i + 1).toString());
+    } else {
+        clearItemDisplay();
+    }
+}
+
 function changeFromUrl(e) {
-    console.log(e);
     if (e.code != 'Enter') return;
     var url = document.getElementById("custom-url").value;
     if (url == "") return;
@@ -86,7 +103,37 @@ function changeFromUrl(e) {
     preItem = null;
 }
 
-function fixDisk() {
-    var animation = document.getElementById("animation");
-    animation.style.height = getComputedStyle(animation).width;
+function changePlayMode(e) {
+    var target = e.target;
+    var player = document.getElementById("control");
+    if (target.innerText== "repeat_one") {
+        target.innerText = "shuffle"
+        player.removeAttribute("loop");
+    } else if (target.innerText == "shuffle") {
+        target.innerText = "playlist_play" 
+    } else if (target.innerText == "playlist_play") {
+        target.innerText = "repeat";
+    } else if (target.innerText == "repeat") {
+        target.innerText = "repeat_one";
+        player.setAttribute("loop", "");
+    }
+}
+
+function switchMusic() {
+    var playMode = document.getElementById('play-mode').innerText;
+    var src = document.getElementById('control').src;
+    if (playMode == "shuffle") {
+        var x = Math.round(Math.random() * (playlist.length - 1));
+        changeMusic(playlist[x].name, playlist[x].url);
+    } else {
+        var i = 0;
+        while (i < playlist.length && src != playlist[i].url) {
+            ++i;
+        }
+        if (i + 1 < playlist.length) {
+            changeMusic(playlist[i + 1].name, playlist[i + 1].url);
+        } else if (playMode == "repeat") {
+            changeMusic(playlist[0].name, playlist[0].url);
+        }
+    }
 }
