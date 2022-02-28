@@ -1,19 +1,64 @@
 // Drag
-var startX;
-var startY;
+var curX = 0;
+var curY = 0;
+var selected = null;
+
+var startX = 0;
+var startY = 0;
+var originX = 0;
+var originY = 0;
 function dragStart(e) {
-    startX = e.screenX;
-    startY = e.screenY;
+    startX = curX;
+    startY = curY;
+    selected = e.target;
+    while (selected.className != "fake_window" && selected.parentNode != null) {
+        selected = selected.parentNode;
+    }
+    if (selected.className != "fake_window") {
+        selected = null;
+        return;
+    }
+    originX = parseInt(selected.getBoundingClientRect().left);
+    originY = parseInt(selected.getBoundingClientRect().top);
+    var dragMasks = document.getElementsByClassName("drag_mask");
+    for (var i = 0; i < dragMasks.length; ++i) {
+        dragMasks[i].style.display = "inline";
+    }
     updateOrderEvent(e);
 }
-function dragEnd(e) {
-    var target = e.target;
-    var endX = e.screenX;
-    var endY = e.screenY;
-    var originX = parseInt(target.getBoundingClientRect().left);
-    var originY = parseInt(target.getBoundingClientRect().top);
-    target.style.left = originX + endX - startX + "px";
-    target.style.top = originY + endY - startY + "px";
+
+function updateMousePos(e) {
+    curX = e.clientX;
+    curY = e.clientY;
+    if (selected == null) return;
+    selected.style.left = originX + curX - startX + "px";
+    selected.style.top = originY + curY - startY + "px";
+}
+
+function dragEnd() {
+    selected = null;
+    var dragMasks = document.getElementsByClassName("drag_mask");
+    for (var i = 0; i < dragMasks.length; ++i) {
+        dragMasks[i].style.display = "none";
+    }
+}
+
+function dragMode(e) {
+    if (e.key == "Control") {
+        var dragMasks = document.getElementsByClassName("drag_mask");
+        for (var i = 0; i < dragMasks.length; ++i) {
+            dragMasks[i].style.display = "inline";
+        }
+    }
+}
+
+function clearDragMode(e) {
+    if (e.key == "Control" && selected == null) {
+        var dragMasks = document.getElementsByClassName("drag_mask");
+        for (var i = 0; i < dragMasks.length; ++i) {
+            dragMasks[i].style.display = "none";
+        }
+    }
 }
 
 //Close&Open

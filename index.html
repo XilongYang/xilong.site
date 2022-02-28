@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html onmousemove="updateMousePos(event)" onmouseup="dragEnd()" 
+onkeydown="dragMode(event)" onkeyup="clearDragMode(event)">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -19,8 +20,8 @@
         <script src="/scripts/appGenerator.js"></script>
         <script src="/scripts/appGenerate.js"></script>
         <script src="/scripts/darkmode.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-        <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+        <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>-->
     </head>
     <body id="body" onscroll="fade()" onload="appGenerate()">
         <div class="darkmode-mask" id="darkmode-mask"></div>
