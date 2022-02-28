@@ -319,9 +319,6 @@ a:hover {
     width: 15px;
     height: 15px;
     background-color: #d31919;
-    border-style: solid;
-    border-color: #777;
-    border-width: 0px;
     border-radius: 8px;
 }
 
@@ -336,9 +333,6 @@ a:hover {
     width: 15px;
     height: 15px;
     background-color: #377cf1;
-    border-style: solid;
-    border-color: #777;
-    border-width: 0px;
     border-radius: 8px;
 }
 
@@ -353,9 +347,6 @@ a:hover {
     width: 15px;
     height: 15px;
     background-color: #fd7d00;
-    border-style: solid;
-    border-color: #777;
-    border-width: 0px;
     border-radius: 8px;
 }
 

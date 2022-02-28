@@ -171,6 +171,16 @@ body{
     font-weight: bold;
 }
 
+#play-mode {
+    vertical-align: bottom;
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+
+#play-mode:hover {
+    filter: invert(1);
+}
+
 #url-div{
     width: 99%;
     height: 5%;
