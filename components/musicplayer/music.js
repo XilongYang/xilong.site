@@ -27,11 +27,13 @@ playlist[12] = new Music("13", "Animenz - Screct base", "https://onedrive.xilong
 playlist[13] = new Music("14", "Animenz - Tabi no tochuu", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-tabi_no_tochuu.mp3");
 playlist[14] = new Music("15", "Animenz - The everlasting guilty crown", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-the_everlasting_guilty_crown.mp3");
 
+var listLength = 0;
 function generatePlaylist() {
     var musics = document.getElementById("musics");
-    for (var i = 0; i < playlist.length; ++i) {
+    for (var i = listLength; i < playlist.length; ++i) {
         musics.innerHTML += playlist[i].item();
     }
+    listLength = playlist.length;
 }
 
 function playAnimation() {
@@ -96,11 +98,10 @@ function changeMusic(name, src) {
 
 function changeFromUrl(e) {
     if (e.code != 'Enter') return;
-    var url = document.getElementById("custom-url").value;
-    if (url == "") return;
-    changeMusic(url, url);
-    url = "";
-    preItem = null;
+    var url = document.getElementById("custom-url");
+    if (url.value == "") return;
+    changeMusic(url.value, url.value);
+    url.value = "";
 }
 
 function changePlayMode(e) {
