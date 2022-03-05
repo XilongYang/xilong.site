@@ -72,7 +72,7 @@ function switchLanguage(lang) {
         document.getElementById("language_button_2").setAttribute("onclick", "switchLanguage('en')");
         document.getElementById("language_button_3").setAttribute("onclick", "switchLanguage('zh')");
 
-        document.getElementById("name").innerHTML = "楊(ヤン) 熙龍(シロ)";
+        document.getElementById("name").innerHTML = "楊(ヤン) 熙龍(シロン)";
         document.getElementById("occupation").innerHTML = "プログラマー";
         document.getElementById("language_label").innerHTML = "言語:";
         document.getElementById("stamp_intro").innerHTML = "シンプルな双方向アクティブ測定プロトコル(IETF RFC8762)。";
