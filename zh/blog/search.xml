@@ -681,54 +681,6 @@
       </tags>
   </entry>
   <entry>
-    <title>NC15553题解</title>
-    <url>/zh/blog/2020/10/11/0007-NC15553/</url>
-    <content><![CDATA[<blockquote>
-<p>NC15553 数学考试，对理解前缀和与枚举很有好处。<br>题目链接：<a class="link"   href="https://ac.nowcoder.com/acm/problem/15553" >NC15553 数学考试——牛客网<i class="fas fa-external-link-alt"></i></a></p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>今天qwb要参加一个数学考试，这套试卷一共有n道题，每道题qwb能获得的分数为ai，qwb并不打算把这些题全做完，<br> 他想选总共2k道题来做，并且期望他能获得的分数尽可能的大，他准备选2个不连续的长度为k的区间,<br> 即[L,L+1,L+2,….,L+k-1]，[R,R+1,R+2,…,R+k-1]（R &gt;= L+k）。</p>
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">第一行一个整数T（T&lt;=10）,代表有T组数据</span><br><span class="line">接下来一行两个整数n,k,(1&lt;=n&lt;=200,000),(1&lt;=k,2k &lt;= n)</span><br><span class="line">接下来一行n个整数a1,a2,...,an，（-100,000&lt;=ai&lt;=100,000）</span><br></pre></td></tr></table></figure>
-
-<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输出一个整数，qwb能获得的最大分数</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例:"></a>示例:</h3><p>输入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">6 3</span><br><span class="line">1 1 1 1 1 1</span><br><span class="line">8 2</span><br><span class="line">-1 0 2 -1 -1 2 3 -1</span><br></pre></td></tr></table></figure>
-
-<p>输出</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">7</span><br></pre></td></tr></table></figure>
-
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>首先需要解决的是如何确定一个区间。一个区间显然可以用[左端点, 右端点]这样的数对来确定，而本题中区间的长度是给定的，因此只要用左端点与右端点中的一个点就能确定一个区间，这里我们选用左端点。</p>
-<p>然后考虑暴力解法，这题如果用暴力来做，需要O(n^2)的复杂度遍历每种可能的区间组合。以及O(k)的复杂度计算每个区间的和。则总的时间复杂度为O(kn^2)，最坏情况下kn^2 = 4 x 10^15，显然无法在可接受的时间内完成运算。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//main</span><br><span class="line">//暴力枚举区间组合，求解最大值</span><br><span class="line">for(i : n - k)</span><br><span class="line">&#123;</span><br><span class="line">	for(j = i + k : n - k)</span><br><span class="line">	&#123;</span><br><span class="line">		//Sum为求和函数</span><br><span class="line">		maxCount = max(maxCount, Sum(i) + Sum(j))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//Sum(i)</span><br><span class="line">&#123;</span><br><span class="line">	count = 0</span><br><span class="line">	for(i : i + k)</span><br><span class="line">	&#123;</span><br><span class="line">		count += a[i]</span><br><span class="line">	&#125;</span><br><span class="line">	return count</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>看见区间的和可以想到前缀和，通过维护一个前缀和来将每个区间的和的计算时间复杂度降为O(1)，这样整个问题的时间复杂度就降为了枚举的O(n^2)，最坏情况下n^2 = 4 x 10^10，仍然无法在可接受的时间内完成运算。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//main</span><br><span class="line">//暴力枚举区间组合，求解最大值</span><br><span class="line">for(i : n - k)</span><br><span class="line">&#123;</span><br><span class="line">	for(j = i + k : n - k)</span><br><span class="line">	&#123;</span><br><span class="line">		//sum为维护的区间和</span><br><span class="line">		maxCount = max(maxCount, sum[i] + sum[j]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们规定j一定大于i，由此观察遍历过程</p>
-<p><img src="https://img.xilong.site/20201011/image-20201011145807948.png" alt="image-20201011145807948"></p>
-<p>两次遍历中有很多重合部分，对于寻找最大值而言是没有必要的。因为若前进一步后的i’ &lt; i，则它们分别加上同一个数后大小关系不变。而变化后i仍在有效取值范围内，因此，维护一个maxi的值即可省略对灰色部分的遍历。</p>
-<p><img src="https://img.xilong.site/20201011/image-20201011151108260.png" alt="image-20201011151108260"></p>
-<p>对于j’以后的值无需判断，因为max’定不小于max且j’后的值max和max’都可取用，所以不可能存在max + jx &gt; max’ + jx（jx在j’之后）。</p>
-<p><img src="https://img.xilong.site/20201011/image-20201011152355021.png" alt="image-20201011152355021"></p>
-<p>因此我们仅需考虑这一部分，其中对于step2，max’ + j’即是这一步的最大值，将其与上一步的最大值比较来更新maxCount，再将step2看做step1对其进行相同操作，最后即可求出maxCount的值。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maxi = sum[0];</span><br><span class="line">maxCount = maxi + sum[k];</span><br><span class="line">for(i : n - k)</span><br><span class="line">&#123;</span><br><span class="line">	maxi = max(maxi, sum[i]);</span><br><span class="line">	maxCount = max(maxCount, maxi + sum[i + k]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>时间复杂度O(n)，满足题目要求。</p>
-<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="keyword">long</span> <span class="keyword">long</span>;</span><br><span class="line"><span class="keyword">const</span> ll infinity = <span class="number">3e10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span>(t--)</span><br><span class="line">    &#123;</span><br><span class="line">        ll n, k;</span><br><span class="line">        cin &gt;&gt; n &gt;&gt; k;</span><br><span class="line">        <span class="comment">//输入时即维护前缀和</span></span><br><span class="line">        <span class="function">vector&lt;ll&gt; <span class="title">sum</span><span class="params">(n, <span class="number">0</span>)</span></span>;</span><br><span class="line">        cin &gt;&gt; sum[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(ll i = <span class="number">1</span>; i &lt; n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            cin &gt;&gt; sum[i];</span><br><span class="line">            sum[i] += sum[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">		</span><br><span class="line">        <span class="comment">//跟据前缀和求出每个区间的和</span></span><br><span class="line">        <span class="function">vector&lt;ll&gt; <span class="title">kSum</span><span class="params">(n + <span class="number">1</span> - k, <span class="number">0</span>)</span></span>;</span><br><span class="line">        kSum[<span class="number">0</span>] = sum[k - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(ll i = <span class="number">1</span>; i &lt; n + <span class="number">1</span> - k; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            kSum[i] = sum[i - <span class="number">1</span> + k] - sum[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//枚举求最大值</span></span><br><span class="line">        ll curMax = infinity * <span class="number">-1</span>;</span><br><span class="line">        ll count = infinity * <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(ll i = <span class="number">0</span>; i &lt;= n - <span class="number">2</span> * k; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            curMax = <span class="built_in">max</span>(curMax, kSum[i]);</span><br><span class="line">            count = <span class="built_in">max</span>(count, curMax + kSum[i + k]);</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; count &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>0x00 数据结构和算法</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>前缀和</tag>
-        <tag>枚举</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux平台下C++库的生成与使用</title>
     <url>/zh/blog/2020/06/07/0006-Creating_and_using_library_in_linux/</url>
     <content><![CDATA[<blockquote>
@@ -812,6 +764,54 @@
       <tags>
         <tag>C++</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>NC15553题解</title>
+    <url>/zh/blog/2020/10/11/0007-NC15553/</url>
+    <content><![CDATA[<blockquote>
+<p>NC15553 数学考试，对理解前缀和与枚举很有好处。<br>题目链接：<a class="link"   href="https://ac.nowcoder.com/acm/problem/15553" >NC15553 数学考试——牛客网<i class="fas fa-external-link-alt"></i></a></p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>今天qwb要参加一个数学考试，这套试卷一共有n道题，每道题qwb能获得的分数为ai，qwb并不打算把这些题全做完，<br> 他想选总共2k道题来做，并且期望他能获得的分数尽可能的大，他准备选2个不连续的长度为k的区间,<br> 即[L,L+1,L+2,….,L+k-1]，[R,R+1,R+2,…,R+k-1]（R &gt;= L+k）。</p>
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述:"></a>输入描述:</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">第一行一个整数T（T&lt;=10）,代表有T组数据</span><br><span class="line">接下来一行两个整数n,k,(1&lt;=n&lt;=200,000),(1&lt;=k,2k &lt;= n)</span><br><span class="line">接下来一行n个整数a1,a2,...,an，（-100,000&lt;=ai&lt;=100,000）</span><br></pre></td></tr></table></figure>
+
+<h3 id="输出描述"><a href="#输出描述" class="headerlink" title="输出描述:"></a>输出描述:</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输出一个整数，qwb能获得的最大分数</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例:"></a>示例:</h3><p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">6 3</span><br><span class="line">1 1 1 1 1 1</span><br><span class="line">8 2</span><br><span class="line">-1 0 2 -1 -1 2 3 -1</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">6</span><br><span class="line">7</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>首先需要解决的是如何确定一个区间。一个区间显然可以用[左端点, 右端点]这样的数对来确定，而本题中区间的长度是给定的，因此只要用左端点与右端点中的一个点就能确定一个区间，这里我们选用左端点。</p>
+<p>然后考虑暴力解法，这题如果用暴力来做，需要O(n^2)的复杂度遍历每种可能的区间组合。以及O(k)的复杂度计算每个区间的和。则总的时间复杂度为O(kn^2)，最坏情况下kn^2 = 4 x 10^15，显然无法在可接受的时间内完成运算。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//main</span><br><span class="line">//暴力枚举区间组合，求解最大值</span><br><span class="line">for(i : n - k)</span><br><span class="line">&#123;</span><br><span class="line">	for(j = i + k : n - k)</span><br><span class="line">	&#123;</span><br><span class="line">		//Sum为求和函数</span><br><span class="line">		maxCount = max(maxCount, Sum(i) + Sum(j))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//Sum(i)</span><br><span class="line">&#123;</span><br><span class="line">	count = 0</span><br><span class="line">	for(i : i + k)</span><br><span class="line">	&#123;</span><br><span class="line">		count += a[i]</span><br><span class="line">	&#125;</span><br><span class="line">	return count</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看见区间的和可以想到前缀和，通过维护一个前缀和来将每个区间的和的计算时间复杂度降为O(1)，这样整个问题的时间复杂度就降为了枚举的O(n^2)，最坏情况下n^2 = 4 x 10^10，仍然无法在可接受的时间内完成运算。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//main</span><br><span class="line">//暴力枚举区间组合，求解最大值</span><br><span class="line">for(i : n - k)</span><br><span class="line">&#123;</span><br><span class="line">	for(j = i + k : n - k)</span><br><span class="line">	&#123;</span><br><span class="line">		//sum为维护的区间和</span><br><span class="line">		maxCount = max(maxCount, sum[i] + sum[j]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们规定j一定大于i，由此观察遍历过程</p>
+<p><img src="https://img.xilong.site/20201011/image-20201011145807948.png" alt="image-20201011145807948"></p>
+<p>两次遍历中有很多重合部分，对于寻找最大值而言是没有必要的。因为若前进一步后的i’ &lt; i，则它们分别加上同一个数后大小关系不变。而变化后i仍在有效取值范围内，因此，维护一个maxi的值即可省略对灰色部分的遍历。</p>
+<p><img src="https://img.xilong.site/20201011/image-20201011151108260.png" alt="image-20201011151108260"></p>
+<p>对于j’以后的值无需判断，因为max’定不小于max且j’后的值max和max’都可取用，所以不可能存在max + jx &gt; max’ + jx（jx在j’之后）。</p>
+<p><img src="https://img.xilong.site/20201011/image-20201011152355021.png" alt="image-20201011152355021"></p>
+<p>因此我们仅需考虑这一部分，其中对于step2，max’ + j’即是这一步的最大值，将其与上一步的最大值比较来更新maxCount，再将step2看做step1对其进行相同操作，最后即可求出maxCount的值。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maxi = sum[0];</span><br><span class="line">maxCount = maxi + sum[k];</span><br><span class="line">for(i : n - k)</span><br><span class="line">&#123;</span><br><span class="line">	maxi = max(maxi, sum[i]);</span><br><span class="line">	maxCount = max(maxCount, maxi + sum[i + k]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>时间复杂度O(n)，满足题目要求。</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> ll = <span class="keyword">long</span> <span class="keyword">long</span>;</span><br><span class="line"><span class="keyword">const</span> ll infinity = <span class="number">3e10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ll t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span>(t--)</span><br><span class="line">    &#123;</span><br><span class="line">        ll n, k;</span><br><span class="line">        cin &gt;&gt; n &gt;&gt; k;</span><br><span class="line">        <span class="comment">//输入时即维护前缀和</span></span><br><span class="line">        <span class="function">vector&lt;ll&gt; <span class="title">sum</span><span class="params">(n, <span class="number">0</span>)</span></span>;</span><br><span class="line">        cin &gt;&gt; sum[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(ll i = <span class="number">1</span>; i &lt; n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            cin &gt;&gt; sum[i];</span><br><span class="line">            sum[i] += sum[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">		</span><br><span class="line">        <span class="comment">//跟据前缀和求出每个区间的和</span></span><br><span class="line">        <span class="function">vector&lt;ll&gt; <span class="title">kSum</span><span class="params">(n + <span class="number">1</span> - k, <span class="number">0</span>)</span></span>;</span><br><span class="line">        kSum[<span class="number">0</span>] = sum[k - <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(ll i = <span class="number">1</span>; i &lt; n + <span class="number">1</span> - k; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            kSum[i] = sum[i - <span class="number">1</span> + k] - sum[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//枚举求最大值</span></span><br><span class="line">        ll curMax = infinity * <span class="number">-1</span>;</span><br><span class="line">        ll count = infinity * <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span>(ll i = <span class="number">0</span>; i &lt;= n - <span class="number">2</span> * k; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            curMax = <span class="built_in">max</span>(curMax, kSum[i]);</span><br><span class="line">            count = <span class="built_in">max</span>(count, curMax + kSum[i + k]);</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; count &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>0x00 数据结构和算法</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>前缀和</tag>
+        <tag>枚举</tag>
       </tags>
   </entry>
   <entry>
@@ -1360,30 +1360,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Github之禁忌的双重污染</title>
-    <url>/zh/blog/2021/07/16/0015-Double_pollution_of_Github/</url>
-    <content><![CDATA[<blockquote>
-<p>Http被污染的时候，我没有说话，因为我用SSH。</p>
-<p>SSH被污染的时候，我只好乖乖地去修改我的host文件了。</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="查询正确的IP地址"><a href="#查询正确的IP地址" class="headerlink" title="查询正确的IP地址"></a>查询正确的IP地址</h2><p>使用这个网站<a class="link"   href="https://www.ipaddress.com/" >ipaddress.com<i class="fas fa-external-link-alt"></i></a>进行查询，输入域名获得IP地址。</p>
-<p>查询结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 注意，这个ip地址可能会改变，每次配置前最好重新查询</span><br><span class="line">github.com: 140.82.112.4</span><br><span class="line">global-ssh.fastly.net: 199.232.4.249</span><br></pre></td></tr></table></figure>
-
-<h2 id="修改host文件"><a href="#修改host文件" class="headerlink" title="修改host文件"></a>修改host文件</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># /etc/hosts</span><br><span class="line"># 在末尾添加以下记录</span><br><span class="line"># github</span><br><span class="line">140.82.112.4 github.com</span><br><span class="line">140.82.112.4 raw.githubusercontent.com</span><br><span class="line">140.82.112.4 user-images.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars2.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars1.githubusercontent.com</span><br><span class="line"></span><br><span class="line"># ssh</span><br><span class="line">199.232.4.249 global-ssl.fastly.net</span><br><span class="line">199.232.4.249 github.global-ssl.fastly.net</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>0x02 技术杂记</category>
-      </categories>
-      <tags>
-        <tag>Great Wall</tag>
-        <tag>DNS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用移动硬盘制作本地git仓库</title>
     <url>/zh/blog/2021/06/27/0014-Make_a_local_git_repository/</url>
     <content><![CDATA[<blockquote>
@@ -1573,6 +1549,86 @@
       </tags>
   </entry>
   <entry>
+    <title>Github之禁忌的双重污染</title>
+    <url>/zh/blog/2021/07/16/0015-Double_pollution_of_Github/</url>
+    <content><![CDATA[<blockquote>
+<p>Http被污染的时候，我没有说话，因为我用SSH。</p>
+<p>SSH被污染的时候，我只好乖乖地去修改我的host文件了。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="查询正确的IP地址"><a href="#查询正确的IP地址" class="headerlink" title="查询正确的IP地址"></a>查询正确的IP地址</h2><p>使用这个网站<a class="link"   href="https://www.ipaddress.com/" >ipaddress.com<i class="fas fa-external-link-alt"></i></a>进行查询，输入域名获得IP地址。</p>
+<p>查询结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 注意，这个ip地址可能会改变，每次配置前最好重新查询</span><br><span class="line">github.com: 140.82.112.4</span><br><span class="line">global-ssh.fastly.net: 199.232.4.249</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改host文件"><a href="#修改host文件" class="headerlink" title="修改host文件"></a>修改host文件</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># /etc/hosts</span><br><span class="line"># 在末尾添加以下记录</span><br><span class="line"># github</span><br><span class="line">140.82.112.4 github.com</span><br><span class="line">140.82.112.4 raw.githubusercontent.com</span><br><span class="line">140.82.112.4 user-images.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars2.githubusercontent.com</span><br><span class="line">140.82.112.4 avatars1.githubusercontent.com</span><br><span class="line"></span><br><span class="line"># ssh</span><br><span class="line">199.232.4.249 global-ssl.fastly.net</span><br><span class="line">199.232.4.249 github.global-ssl.fastly.net</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>0x02 技术杂记</category>
+      </categories>
+      <tags>
+        <tag>Great Wall</tag>
+        <tag>DNS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++变量初始化</title>
+    <url>/zh/blog/2021/07/19/0019-C++:Variable_initialization/</url>
+    <content><![CDATA[<blockquote>
+<p>使用列表初始化时发现记忆很模糊，写下来备忘顺便总结一下。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="初始化的概念"><a href="#初始化的概念" class="headerlink" title="初始化的概念"></a>初始化的概念</h2><p>初始化是指<strong>创建变量时赋予其一个初始值</strong>。特别要注意C++中初始化与赋值的区别，赋值的含义是抹去原有的值后赋予一个新值。不可以将赋值和初始化混为一谈。</p>
+<p>比如对于一个类：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Whatever</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Whatever</span>();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> v1;</span><br><span class="line">    <span class="keyword">int</span> v2;</span><br><span class="line">    std::string key;</span><br><span class="line">    OtherClass value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>考虑其构造函数两种定义形式的区别：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用初始值列表</span></span><br><span class="line">Whatever::<span class="built_in">Whatever</span>() : <span class="built_in">v1</span>(...), <span class="built_in">v2</span>(...), <span class="built_in">key</span>(...), <span class="built_in">value</span>(...) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在构造函数内赋值</span></span><br><span class="line">Whatever::<span class="built_in">Whatever</span>() &#123;</span><br><span class="line">    v1 = ...;</span><br><span class="line">    v2 = ...;</span><br><span class="line">    key = ...;</span><br><span class="line">    value = ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两种方式的区别在于，只有使用了初始值列表的方式真正实现了初始化，而构造函数内赋值的做法等价于先<em>默认初始化</em>一个对象中的所有成员再分别对其中的成员赋值。由于我们创建一个对象后马上就会调用它的构造函数，这两种方法似乎并没有显著的区别。</p>
+<p>考虑到初始化和赋值的过程，可以知道先初始化再赋值的开销至少是直接初始化的两倍。对于一个内置类型的成员而言这样的代价可以忽略不计，然而一个类类型成员的构造代价却有可能非常大。因此，定义构造函数时应尽量使用初始值列表的方式，这不单是为了节省这些性能，也是一个语义上的准确表达。</p>
+<h2 id="默认初始化"><a href="#默认初始化" class="headerlink" title="默认初始化"></a>默认初始化</h2><p>定义一个变量而不显式指定初始值时，变量被默认初始化。默认初始化的规则如下</p>
+<ul>
+<li>类类型对象：由类的默认构造函数定义。</li>
+<li>内置类型对象：<ul>
+<li>全局对象：初值为0。</li>
+<li>非全局对象：不初始化，其值为未定义的，取决于分配到的内存块上已存在的值。</li>
+</ul>
+</li>
+</ul>
+<p>试图默认初始化一个不允许默认初始化的类类型对象将导致编译错误。</p>
+<h2 id="直接初始化"><a href="#直接初始化" class="headerlink" title="直接初始化"></a>直接初始化</h2><p>定义时显式地调用对象的构造函数称为直接初始化，例如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">a</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br><span class="line"><span class="function">std::string <span class="title">str</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>注意，只有定义时调用构造函数才是初始化，通过构造函数修改已存在变量的值也是赋值操作。</p>
+<h2 id="列表初始化"><a href="#列表初始化" class="headerlink" title="列表初始化"></a>列表初始化</h2><p>在C++11之前，可以对POD（Plain Old Data，即可以使用memcpy拷贝的类型）类型和内置数组进行列表初始化，如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[<span class="number">3</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 列表初始化, x = 1, y = 2</span></span><br><span class="line">A a = &#123;<span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line"><span class="comment">// 列表初始化, x = 1, y默认构造</span></span><br><span class="line">A a = &#123;<span class="number">1</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>C++11以后，这种初始化方式得到了普及，现在可以对任何对象使用列表初始化并且无需<code>=</code>号。如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a&#123;<span class="number">5</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> arr[<span class="number">3</span>]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">std::string str&#123;<span class="string">&quot;hello&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>列表初始化有一个重要特性，内置类型不会进行隐式类型转换。比如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1.5</span>; <span class="comment">// a == 1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">b</span><span class="params">(<span class="number">1.5</span>)</span></span>;  <span class="comment">// b == 1</span></span><br><span class="line"><span class="keyword">int</span> c&#123;<span class="number">1.5</span>&#125;;  <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
+
+<p>列表初始化和初始化列表有关系吗？答案是大有关系。列表初始化就是根据定义了初始化列表的构造函数初始化对象的。比如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="built_in">A</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) : <span class="built_in">x</span>(a), <span class="built_in">y</span>(b) &#123;&#125;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">&#125;;</span><br><span class="line">A&#123;a, b&#125; == <span class="built_in">A</span>(a, b) <span class="comment">// .x == a, .y == b</span></span><br></pre></td></tr></table></figure>
+
+<p>那么类似于数组形式的列表初始化是如何实现的呢？使用<code>std::initializer_list</code>：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="built_in">A</span>(initializer_list&lt;<span class="keyword">int</span>&gt; list) </span><br><span class="line">    : <span class="built_in">size</span>(list.<span class="built_in">size</span>()), <span class="built_in">head</span>(<span class="keyword">new</span> <span class="keyword">int</span>[size]) &#123;</span><br><span class="line">        <span class="keyword">auto</span> cur = head;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> i : list) &#123;</span><br><span class="line">            *cur = i;</span><br><span class="line">            ++cur;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ~<span class="built_in">A</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] head;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">int</span> *head;</span><br><span class="line">&#125;; <span class="comment">// 一个简单的数组， 可以接受任意数量的参数</span></span><br><span class="line">A&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125; == <span class="built_in">A</span>(&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当同时存在接受参数的构造函数和接受<code>std::initializer_list</code>的构造函数时，列表初始化优先调用接受<code>std::initializer_list</code>的构造函数。</p>
+<h2 id="拷贝初始化"><a href="#拷贝初始化" class="headerlink" title="拷贝初始化"></a>拷贝初始化</h2><p>使用<code>Type id = value</code>或<code>Type id(value) // value 为一个Type类型的变量</code>的形式定义的初始化称为拷贝初始化。其实质是使用另一个对象的值来构造对象，使用拷贝赋值运算符函数定义其行为。</p>
+]]></content>
+      <categories>
+        <category>0x01 C++之旅</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++三/五法则</title>
     <url>/zh/blog/2021/07/18/0018-C++:The_rule_of_three_five/</url>
     <content><![CDATA[<blockquote>
@@ -1626,62 +1682,6 @@
 <p>因此，像上面那样使用指针传递的方式就解决了问题，这样临时对象的类型就变成了指针，从而不会对树本身产生影响。但这种方式本质上只是在逃避，并没有解决问题。</p>
 <p>真正要解决这个问题，那还得是为<code>Tree</code>添加正确的拷贝构造函数、拷贝赋值运算符、移动构造函数和移动赋值运算符。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>遵循三/五法则是一个类正常运行的基础，绝不能偷懒省略其中的组件。还好我以这样低的成本——一个测试算法用的临时程序——完成了三/五法则的试错。</p>
-]]></content>
-      <categories>
-        <category>0x01 C++之旅</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++变量初始化</title>
-    <url>/zh/blog/2021/07/19/0019-C++:Variable_initialization/</url>
-    <content><![CDATA[<blockquote>
-<p>使用列表初始化时发现记忆很模糊，写下来备忘顺便总结一下。</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="初始化的概念"><a href="#初始化的概念" class="headerlink" title="初始化的概念"></a>初始化的概念</h2><p>初始化是指<strong>创建变量时赋予其一个初始值</strong>。特别要注意C++中初始化与赋值的区别，赋值的含义是抹去原有的值后赋予一个新值。不可以将赋值和初始化混为一谈。</p>
-<p>比如对于一个类：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Whatever</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Whatever</span>();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> v1;</span><br><span class="line">    <span class="keyword">int</span> v2;</span><br><span class="line">    std::string key;</span><br><span class="line">    OtherClass value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>考虑其构造函数两种定义形式的区别：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 使用初始值列表</span></span><br><span class="line">Whatever::<span class="built_in">Whatever</span>() : <span class="built_in">v1</span>(...), <span class="built_in">v2</span>(...), <span class="built_in">key</span>(...), <span class="built_in">value</span>(...) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在构造函数内赋值</span></span><br><span class="line">Whatever::<span class="built_in">Whatever</span>() &#123;</span><br><span class="line">    v1 = ...;</span><br><span class="line">    v2 = ...;</span><br><span class="line">    key = ...;</span><br><span class="line">    value = ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这两种方式的区别在于，只有使用了初始值列表的方式真正实现了初始化，而构造函数内赋值的做法等价于先<em>默认初始化</em>一个对象中的所有成员再分别对其中的成员赋值。由于我们创建一个对象后马上就会调用它的构造函数，这两种方法似乎并没有显著的区别。</p>
-<p>考虑到初始化和赋值的过程，可以知道先初始化再赋值的开销至少是直接初始化的两倍。对于一个内置类型的成员而言这样的代价可以忽略不计，然而一个类类型成员的构造代价却有可能非常大。因此，定义构造函数时应尽量使用初始值列表的方式，这不单是为了节省这些性能，也是一个语义上的准确表达。</p>
-<h2 id="默认初始化"><a href="#默认初始化" class="headerlink" title="默认初始化"></a>默认初始化</h2><p>定义一个变量而不显式指定初始值时，变量被默认初始化。默认初始化的规则如下</p>
-<ul>
-<li>类类型对象：由类的默认构造函数定义。</li>
-<li>内置类型对象：<ul>
-<li>全局对象：初值为0。</li>
-<li>非全局对象：不初始化，其值为未定义的，取决于分配到的内存块上已存在的值。</li>
-</ul>
-</li>
-</ul>
-<p>试图默认初始化一个不允许默认初始化的类类型对象将导致编译错误。</p>
-<h2 id="直接初始化"><a href="#直接初始化" class="headerlink" title="直接初始化"></a>直接初始化</h2><p>定义时显式地调用对象的构造函数称为直接初始化，例如：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">a</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br><span class="line"><span class="function">std::string <span class="title">str</span><span class="params">(<span class="string">&quot;Hello&quot;</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>注意，只有定义时调用构造函数才是初始化，通过构造函数修改已存在变量的值也是赋值操作。</p>
-<h2 id="列表初始化"><a href="#列表初始化" class="headerlink" title="列表初始化"></a>列表初始化</h2><p>在C++11之前，可以对POD（Plain Old Data，即可以使用memcpy拷贝的类型）类型和内置数组进行列表初始化，如：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[<span class="number">3</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 列表初始化, x = 1, y = 2</span></span><br><span class="line">A a = &#123;<span class="number">1</span>, <span class="number">2</span>&#125;;</span><br><span class="line"><span class="comment">// 列表初始化, x = 1, y默认构造</span></span><br><span class="line">A a = &#123;<span class="number">1</span>&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>C++11以后，这种初始化方式得到了普及，现在可以对任何对象使用列表初始化并且无需<code>=</code>号。如：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a&#123;<span class="number">5</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> arr[<span class="number">3</span>]&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">std::string str&#123;<span class="string">&quot;hello&quot;</span>&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>列表初始化有一个重要特性，内置类型不会进行隐式类型转换。比如：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">1.5</span>; <span class="comment">// a == 1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">b</span><span class="params">(<span class="number">1.5</span>)</span></span>;  <span class="comment">// b == 1</span></span><br><span class="line"><span class="keyword">int</span> c&#123;<span class="number">1.5</span>&#125;;  <span class="comment">// error</span></span><br></pre></td></tr></table></figure>
-
-<p>列表初始化和初始化列表有关系吗？答案是大有关系。列表初始化就是根据定义了初始化列表的构造函数初始化对象的。比如：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="built_in">A</span>(<span class="keyword">int</span> a, <span class="keyword">int</span> b) : <span class="built_in">x</span>(a), <span class="built_in">y</span>(b) &#123;&#125;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="keyword">int</span> y;</span><br><span class="line">&#125;;</span><br><span class="line">A&#123;a, b&#125; == <span class="built_in">A</span>(a, b) <span class="comment">// .x == a, .y == b</span></span><br></pre></td></tr></table></figure>
-
-<p>那么类似于数组形式的列表初始化是如何实现的呢？使用<code>std::initializer_list</code>：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="built_in">A</span>(initializer_list&lt;<span class="keyword">int</span>&gt; list) </span><br><span class="line">    : <span class="built_in">size</span>(list.<span class="built_in">size</span>()), <span class="built_in">head</span>(<span class="keyword">new</span> <span class="keyword">int</span>[size]) &#123;</span><br><span class="line">        <span class="keyword">auto</span> cur = head;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> i : list) &#123;</span><br><span class="line">            *cur = i;</span><br><span class="line">            ++cur;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ~<span class="built_in">A</span>() &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] head;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="keyword">int</span> *head;</span><br><span class="line">&#125;; <span class="comment">// 一个简单的数组， 可以接受任意数量的参数</span></span><br><span class="line">A&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125; == <span class="built_in">A</span>(&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>当同时存在接受参数的构造函数和接受<code>std::initializer_list</code>的构造函数时，列表初始化优先调用接受<code>std::initializer_list</code>的构造函数。</p>
-<h2 id="拷贝初始化"><a href="#拷贝初始化" class="headerlink" title="拷贝初始化"></a>拷贝初始化</h2><p>使用<code>Type id = value</code>或<code>Type id(value) // value 为一个Type类型的变量</code>的形式定义的初始化称为拷贝初始化。其实质是使用另一个对象的值来构造对象，使用拷贝赋值运算符函数定义其行为。</p>
 ]]></content>
       <categories>
         <category>0x01 C++之旅</category>
@@ -1949,6 +1949,50 @@
       </tags>
   </entry>
   <entry>
+    <title>C++结构体内存对齐</title>
+    <url>/zh/blog/2021/08/11/0022-C++:Memory_alignment_of_structure/</url>
+    <content><![CDATA[<blockquote>
+<p>疏理一下结构体的内存对齐规则 </p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="内存对齐是什么？为什么要进行内存对齐？"><a href="#内存对齐是什么？为什么要进行内存对齐？" class="headerlink" title="内存对齐是什么？为什么要进行内存对齐？"></a>内存对齐是什么？为什么要进行内存对齐？</h2><p>现代计算机以字节为单位划分内存空间，但大多不是以字节为单位存取内存的。一次存取往往涉及多个字节，这个大小称为存取粒度。存取粒度通常与系统有关，如32位系统存取粒度大多为4字节，而64位系统的存取粒度大多为8字节。</p>
+<p>对于这个结构体：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line">    <span class="keyword">int</span>  a; <span class="comment">// 假定int占用4字节</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，它的成员大小总和为5字节。但通常这个结构体的大小会被填充到8字节。原因如下：</p>
+<p>考虑不对齐字节的情况，如果结构体地址为0x00，则c的地址为0x00，a的地址为0x01。此时一个存取粒度为4字节的机器要取出a，需要以下几步。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─┬────┐        1.取地址0x00开始的4字节，并保留需要的数据0x01、0x02、0x03</span><br><span class="line">│c│a   │        2.取地址0x04开始的4字节，并保留需要的数据0x04</span><br><span class="line">└─┴────┘        3.将上两步获取的数据合并，计算出a的值</span><br><span class="line"> 0|1234</span><br></pre></td></tr></table></figure>
+
+<p>这样的过程对计算机来说是很麻烦的，而如果进行字节对齐，则结构体地址和c的地址依然是0x00，而a的地址移到了0x04，此时一个存取粒度为4字节的机器可以直接取出a的值。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌───────┬───────┐    直接取地址0x04开始的4字节即可取出a的值。</span><br><span class="line">│c      │a      │</span><br><span class="line">└───────┴───────┘</span><br><span class="line">0 1 2 3 4 5 6 7</span><br></pre></td></tr></table></figure>
+
+<p>由此不难看出，所谓的内存对齐就是为了便于机器存取而根据存储粒度对内存布局的调整。</p>
+<h2 id="内存对齐的规则"><a href="#内存对齐的规则" class="headerlink" title="内存对齐的规则"></a>内存对齐的规则</h2><h3 id="规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。"><a href="#规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。" class="headerlink" title="规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。"></a>规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。</h3><p>比如上面的例子中，int类型大小为4字节，而0x01并不是4字节的整数倍，因此对齐到0x04。</p>
+<p>考虑下面结构体：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo1</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span>  a; <span class="comment">// 假定int为4字节</span></span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>根据规则1：a的地址为0x00，不需对齐；c的地址为0x04，是char类型大小的整数倍，也不需对齐。于是该结构体的大小应当是5字节。</p>
+<p>但此时，对于数组：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">foo1 arr[<span class="number">2</span>];</span><br></pre></td></tr></table></figure>
+
+<p>其内存布局为如下，此时若想取出<code>arr[1].a</code>，则有：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌───────┬─┬──────┬─┐    1.由于arr[1].a的地址为0x05，则需要先取出0x04开始的4个字节，</span><br><span class="line">│a      │c│a     │c│      并保留0x05、0x06、0x07。</span><br><span class="line">└───────┴─┴──────┴─┘    2.然后取出0x08开始的4字节，并保留0x08</span><br><span class="line">0 1 2 3 4 5 6 7 8 9     3.将上两步数据合并计算出arr[1].a的值。</span><br></pre></td></tr></table></figure>
+
+<p>这又回到了没有对齐的情况了，因此为了避免这种情况，引入了规则2：</p>
+<h3 id="规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。"><a href="#规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。" class="headerlink" title="规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。"></a>规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。</h3><p>在此规则下，结构体foo1的大小应为8字节。需要注意，结构体中最大成员并不包括结构体成员，如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假定int占4字节</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">byte8</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo2</span> &#123;</span></span><br><span class="line">    byte8 a;</span><br><span class="line">    <span class="keyword">char</span>  b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo3</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> a;</span><br><span class="line">    <span class="keyword">char</span> b;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>此时foo2的最大成员并不是看做整体的byte8的8字节，而是byte8与foo2中的基础成员中的最大成员，此处为int。因此foo2对4字节对齐，大小为12字节。而foo3的最大成员为long long，对8字节对齐，大小为16字节。</p>
+]]></content>
+      <categories>
+        <category>0x01 C++之旅</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CMakeLists.txt编写入门</title>
     <url>/zh/blog/2021/08/02/0021-CMakeLists/</url>
     <content><![CDATA[<blockquote>
@@ -2028,50 +2072,6 @@
       </tags>
   </entry>
   <entry>
-    <title>C++结构体内存对齐</title>
-    <url>/zh/blog/2021/08/11/0022-C++:Memory_alignment_of_structure/</url>
-    <content><![CDATA[<blockquote>
-<p>疏理一下结构体的内存对齐规则 </p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="内存对齐是什么？为什么要进行内存对齐？"><a href="#内存对齐是什么？为什么要进行内存对齐？" class="headerlink" title="内存对齐是什么？为什么要进行内存对齐？"></a>内存对齐是什么？为什么要进行内存对齐？</h2><p>现代计算机以字节为单位划分内存空间，但大多不是以字节为单位存取内存的。一次存取往往涉及多个字节，这个大小称为存取粒度。存取粒度通常与系统有关，如32位系统存取粒度大多为4字节，而64位系统的存取粒度大多为8字节。</p>
-<p>对于这个结构体：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line">    <span class="keyword">int</span>  a; <span class="comment">// 假定int占用4字节</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>可以看出，它的成员大小总和为5字节。但通常这个结构体的大小会被填充到8字节。原因如下：</p>
-<p>考虑不对齐字节的情况，如果结构体地址为0x00，则c的地址为0x00，a的地址为0x01。此时一个存取粒度为4字节的机器要取出a，需要以下几步。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌─┬────┐        1.取地址0x00开始的4字节，并保留需要的数据0x01、0x02、0x03</span><br><span class="line">│c│a   │        2.取地址0x04开始的4字节，并保留需要的数据0x04</span><br><span class="line">└─┴────┘        3.将上两步获取的数据合并，计算出a的值</span><br><span class="line"> 0|1234</span><br></pre></td></tr></table></figure>
-
-<p>这样的过程对计算机来说是很麻烦的，而如果进行字节对齐，则结构体地址和c的地址依然是0x00，而a的地址移到了0x04，此时一个存取粒度为4字节的机器可以直接取出a的值。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌───────┬───────┐    直接取地址0x04开始的4字节即可取出a的值。</span><br><span class="line">│c      │a      │</span><br><span class="line">└───────┴───────┘</span><br><span class="line">0 1 2 3 4 5 6 7</span><br></pre></td></tr></table></figure>
-
-<p>由此不难看出，所谓的内存对齐就是为了便于机器存取而根据存储粒度对内存布局的调整。</p>
-<h2 id="内存对齐的规则"><a href="#内存对齐的规则" class="headerlink" title="内存对齐的规则"></a>内存对齐的规则</h2><h3 id="规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。"><a href="#规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。" class="headerlink" title="规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。"></a>规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。</h3><p>比如上面的例子中，int类型大小为4字节，而0x01并不是4字节的整数倍，因此对齐到0x04。</p>
-<p>考虑下面结构体：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo1</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span>  a; <span class="comment">// 假定int为4字节</span></span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>根据规则1：a的地址为0x00，不需对齐；c的地址为0x04，是char类型大小的整数倍，也不需对齐。于是该结构体的大小应当是5字节。</p>
-<p>但此时，对于数组：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">foo1 arr[<span class="number">2</span>];</span><br></pre></td></tr></table></figure>
-
-<p>其内存布局为如下，此时若想取出<code>arr[1].a</code>，则有：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">┌───────┬─┬──────┬─┐    1.由于arr[1].a的地址为0x05，则需要先取出0x04开始的4个字节，</span><br><span class="line">│a      │c│a     │c│      并保留0x05、0x06、0x07。</span><br><span class="line">└───────┴─┴──────┴─┘    2.然后取出0x08开始的4字节，并保留0x08</span><br><span class="line">0 1 2 3 4 5 6 7 8 9     3.将上两步数据合并计算出arr[1].a的值。</span><br></pre></td></tr></table></figure>
-
-<p>这又回到了没有对齐的情况了，因此为了避免这种情况，引入了规则2：</p>
-<h3 id="规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。"><a href="#规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。" class="headerlink" title="规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。"></a>规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。</h3><p>在此规则下，结构体foo1的大小应为8字节。需要注意，结构体中最大成员并不包括结构体成员，如：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假定int占4字节</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">byte8</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo2</span> &#123;</span></span><br><span class="line">    byte8 a;</span><br><span class="line">    <span class="keyword">char</span>  b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo3</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> a;</span><br><span class="line">    <span class="keyword">char</span> b;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>此时foo2的最大成员并不是看做整体的byte8的8字节，而是byte8与foo2中的基础成员中的最大成员，此处为int。因此foo2对4字节对齐，大小为12字节。而foo3的最大成员为long long，对8字节对齐，大小为16字节。</p>
-]]></content>
-      <categories>
-        <category>0x01 C++之旅</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>从零开始的Haskell（三）——递归模式、多态和Prelude</title>
     <url>/zh/blog/2021/09/03/0023-Re0:Haskell_03/</url>
     <content><![CDATA[<blockquote>
@@ -2139,117 +2139,6 @@
 <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">headSafe</span> :: [<span class="type">Maybe</span> a] -&gt; <span class="type">Maybe</span> a</span><br><span class="line"><span class="title">head</span> [] = <span class="type">Nothing</span></span><br><span class="line"><span class="title">head</span> (x : _) = <span class="type">Just</span> x</span><br></pre></td></tr></table></figure>
 
 <p>尽可能地使用全函数可以大大减少我们犯错的可能。</p>
-]]></content>
-      <categories>
-        <category>0x03 从零开始的Haskell</category>
-      </categories>
-      <tags>
-        <tag>Haskell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从零开始的Haskell（四）——高阶编程与类型接口</title>
-    <url>/zh/blog/2021/09/06/0024-Re0:Haskell_04/</url>
-    <content><![CDATA[<blockquote>
-<p>不幸遭遇飞机延误，候机室写下系列第四篇，主题是高阶编程与类型接口。</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="匿名函数（lambda表达式）"><a href="#匿名函数（lambda表达式）" class="headerlink" title="匿名函数（lambda表达式）"></a>匿名函数（lambda表达式）</h2><p>设想一下这样的函数，功能仅仅是简单的：保留数列中大于100的数。如：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">greaterThan100</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">300</span>,<span class="number">4</span>,<span class="number">245</span>] = [<span class="number">300</span>,<span class="number">245</span>]</span><br></pre></td></tr></table></figure>
-
-<p>我们可以使用很棒的方法实现：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">gt100</span> :: <span class="type">Integer</span> -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">gt100</span> x = x &gt; <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="title">greaterThan100</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100</span> xs = filter gt100 xs</span><br></pre></td></tr></table></figure>
-
-<p>但我们可能并不希望定义<code>gt100</code>这样的只使用一次的函数。此时就可以使用lambda表达式来代替<code>gt100</code>：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">greaterThan100_new</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100_new</span> xs = filter (\x -&gt; x &gt; <span class="number">100</span>) xs</span><br></pre></td></tr></table></figure>
-
-<p>其中<code>\x -&gt; x &gt; 100</code>就是一个lambda表达式，它也可以有多个参数，如：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 结果为6</span></span><br><span class="line">(\x y z -&gt; x + y + z) <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
-
-<p>lambda已经足够简单了，但这个函数还有一种更好的写法：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">greaterThan100_newer</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100_newer</span> xs = filter (&gt;<span class="number">100</span>) xs</span><br></pre></td></tr></table></figure>
-
-<p>这里的<code>(&gt;100)</code>是一个操作片段，操作片段允许我们使用一个函数的部分调用。对于任意一个二元操作符<code>?</code>：<code>(?y)</code>等价于<code>\x -&gt; x?y</code>；<code>(y?)</code>等价于<code>\x -&gt; y?x</code>。即将缺少的部分作为函数的参数。例如：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">(&gt;<span class="number">100</span>) <span class="number">110</span> <span class="comment">-- True</span></span><br><span class="line">(<span class="number">100</span>&gt;) <span class="number">110</span> <span class="comment">-- False</span></span><br><span class="line"><span class="title">map</span> (*<span class="number">2</span>) [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] <span class="comment">-- [2,4,6]</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="函数组成"><a href="#函数组成" class="headerlink" title="函数组成"></a>函数组成</h2><p>试写出一个类型为<code>(b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</code>的函数。首先我们能知道这个函数的两个参数都是函数，并且该函数的返回值也是一个函数。首先我们给出类型签名：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span><br></pre></td></tr></table></figure>
-
-<p>试着写出函数的参数：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> f g = ...</span><br></pre></td></tr></table></figure>
-
-<p>由于返回值是一个函数，我们可以使用lambda表达式来实现：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> f g = \x -&gt; ...</span><br></pre></td></tr></table></figure>
-
-<p>根据类型签名可以看出<code>x</code>先由<code>g</code>处理再由<code>f</code>处理就得到了类型为<code>c</code>的值，因此有：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> f g = \x -&gt; f (g x)</span><br></pre></td></tr></table></figure>
-
-<p>思考一下，这个函数有什么用？答案是组合两个函数。Haskell中这样的操作是非常常用的，因此语言内置了这个操作，用操作符<code>.</code>表示，上式可写为：<code>f.g</code>。</p>
-<p>题外话，在引入了函数式范式后，C++也能实现类似操作了（什么叫头号粉丝啊，战术后仰.jpg）：</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> std::function;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> a, <span class="keyword">typename</span> b, <span class="keyword">typename</span> c&gt;</span></span><br><span class="line"><span class="function">function&lt;<span class="title">c</span><span class="params">(a)</span>&gt; <span class="title">foo</span><span class="params">(<span class="keyword">const</span> function&lt;c(b)&gt; &amp;f, <span class="keyword">const</span> function&lt;b(a)&gt; &amp;g)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [&amp;f, &amp;g](a x) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">f</span>(<span class="built_in">g</span>(x));</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可见C++在这方面已经挻不错了，不过与真正的函数式编程语言相比仍有些距离。</p>
-<p>言归正传，<code>.</code>操作乍看起来好像没什么用，但下面这个例子会为其用途提供一个有力的说明：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">test</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">test</span> xs = even (length (greatThan100 xs))</span><br><span class="line"><span class="comment">-- 可以写作</span></span><br><span class="line"><span class="title">test&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">test&#x27;</span> = even.length.greatThan100</span><br></pre></td></tr></table></figure>
-
-<p>去掉了层层叠叠的括号和有些累缀的参数后，看起来优雅多了。<code>.</code>运算将函数<code>test&#39;</code>的定义表示为了几个小函数的组合。接下来让我们再看看<code>.</code>运算：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="type">Prelude</span>&gt; :t (.)</span><br><span class="line">(.) :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c</span><br></pre></td></tr></table></figure>
-
-<p>疑点出现了：返回值为什么不是<code>(a -&gt; c)</code>?</p>
-<h2 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h2><p>回顾我们的函数定义，如：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">f</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">f</span> x y = <span class="number">2</span>*x + y</span><br></pre></td></tr></table></figure>
-
-<p>还记得之前说过使用连续的<code>-&gt;</code>作为参数与返回值的声明背后有非常<del>暖心</del>优雅的理由吗？现在就是揭晓谜底的时刻了，先说结论：<strong>Haskell中的任何函数都接收一个参数</strong>。等等，难道上面刚定义的函数<code>f</code>不是接收了<code>x</code>和<code>y</code>两个参数吗？确实不是，实际上<code>f</code>是接收<code>x</code>作为参数，同时返回一个<code>Int -&gt; Int</code>型的函数，<code>y</code>是作为这个返回函数的参数被接收的。实际上就是lambda演算，之后会单独写一篇文章介绍lambda演算。也就是说，函数<code>f</code>的定义等价于：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">f</span> :: <span class="type">Int</span> -&gt; (<span class="type">Int</span> -&gt; <span class="type">Int</span>)</span><br></pre></td></tr></table></figure>
-
-<p>由于<code>-&gt;</code>符合右结合律，因此上式括号可以不写。这也解释了上一节末尾的疑问。同时，函数调用符合左结合律，因此：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">f</span> x y = ((f x) y)</span><br></pre></td></tr></table></figure>
-
-<p>思考一下，<code>f x</code>的类型是一个<code>Int -&gt; Int</code>型的函数，而表达式中这个函数又接受了<code>y</code>返回一个<code>Int</code>。整个运算过程就是将参数逐个输入到对应的函数中，因此使用<code>-&gt;</code>符号来声明函数再贴切不过了。</p>
-<h2 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h2><p>函数的部分调用本质上就是对柯里化的应用，但永远记住每个函数本质上只有一个参数，因此我们<strong>只能对函数的第一个参数进行部分应用</strong>。唯一的例外是中缀函数，正如之前的例子所示，可以对中缀函数两个参数中的任何一个进行部分应用。</p>
-<p>由于只能对第一个参数进行部分应用，因此我们的参数顺序应该遵循由普通到特殊的规则。即最容易相同的参数放在最前面。</p>
-<h2 id="全麦编程"><a href="#全麦编程" class="headerlink" title="全麦编程"></a>全麦编程</h2><p>记得一开始介绍过的全麦编程概念吗？站在整体的角度思考问题，考虑如何处理整个列表而不是处理列表中的元素，就像全麦面粉一样，直接对麦子打粉而不考虑脱壳。现在是时候体会下全麦风格的威力了，考虑下面程序：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foobar</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">foobar</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">foobar</span> (x:xs)</span><br><span class="line">    | x &gt; <span class="number">3</span> = (<span class="number">7</span> * x + <span class="number">2</span>) + foobar xs</span><br><span class="line">    | otherwise foobar xs</span><br></pre></td></tr></table></figure>
-
-<p>这个程序的功能看起来很直观，但并不是良好的Haskell风格，主要存在两点问题：</p>
-<ol>
-<li>一个程序同时处理了过多的事务。</li>
-<li>代码工作得太底层了。</li>
-</ol>
-<p>我们可以将其功能实现为：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foobar&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">foobar&#x27;</span> sum . map (\x -&gt; <span class="number">7</span> * x + <span class="number">2</span>) . filter (&gt;<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-
-<p>这样的实现将很多只做好一件事的小函数组合起来，使得函数更加清晰与直观。</p>
-<h2 id="折叠"><a href="#折叠" class="headerlink" title="折叠"></a>折叠</h2><p>增加了许多知识后，我们可以讨论上一节中被搁置的折叠操作了。先来直观体会折叠操作：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">sum&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">sum&#x27;</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">sum&#x27;</span> (x:xs) = x + sum&#x27; xs</span><br><span class="line"></span><br><span class="line"><span class="title">product&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">product&#x27;</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">product&#x27;</span> (x:xs) = x * product&#x27; xs</span><br><span class="line"></span><br><span class="line"><span class="title">length&#x27;</span> :: [a] -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">length&#x27;</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">length&#x27;</span> (x:xs) = <span class="number">1</span> + length&#x27; xs</span><br></pre></td></tr></table></figure>
-
-<p>这三个函数的共性是什么？是通过某种方式将元素们组合成一个最终结果。我们可以将其抽象为：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">fold</span> :: b -&gt; (a -&gt; b -&gt; b) -&gt; [a] -&gt; b</span><br><span class="line"><span class="title">fold</span> z f [] = z</span><br><span class="line"><span class="title">fold</span> z f (x:xs) = f x (fold z f xs)</span><br></pre></td></tr></table></figure>
-
-<p>此时函数运算过程可以做如下展开：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">fold</span> z f [a,b,c] == f a (f b (f c z))</span><br><span class="line"><span class="comment">-- 写成中缀形式可能更好理解</span></span><br><span class="line"><span class="title">fold</span> z f [a,b,c] == a `f` (b `f` (c `f` z))</span><br></pre></td></tr></table></figure>
-
-<p>看出来了吗？<code>fold</code>函数是把一个列表最右边的两个元素进行组合，并使用组合后的元素代替原来的两个函数，直到列表为空。</p>
-<p>有了这个函数，之前的几个函数就可以写为：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">sum&#x27;&#x27;</span> = fold <span class="number">0</span> (+)</span><br><span class="line"><span class="title">product&#x27;&#x27;</span> = fold <span class="number">0</span> (*)</span><br><span class="line"><span class="title">length&#x27;&#x27;</span> = fold <span class="number">0</span> (\_ s -&gt; s + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p>观察<code>\_ s -&gt; s + 1</code>，可以消去两边的<code>s</code>，化为<code>\_ -&gt; (+1)</code>。</p>
-<p>另一种思路是使用<code>const</code>函数。<code>const</code>函数的类型为<code>a-&gt;b-&gt;a</code>，效果是输入两个参数，并返回第一个参数作为结果（即丢弃第二个参数），和C++的const关键字完全不是一回事。</p>
-<p><code>\_ s -&gt; s + 1</code>的作用显然是丢弃第一个参数，并返回第二个参数+1后的值。可写为<code>const (+1)</code>。</p>
-<p>解说一下：<code>const (+1)  </code>是一个对<code>const</code>的部分应用，即使用<code>(+1)</code>作为<code>const</code>的第一个参数，此时这个部分应用变成了接受一个参数并返回<code>(+1)</code>的函数。不要忘记<code>(+1)</code>本身也是一个部分应用，其类型为<code>a -&gt; a</code>，则<code>const (+1)</code>的类型就是<code>b -&gt; a -&gt; a</code>。符合了我们<code>fold</code>函数对参数<code>f</code>的要求。</p>
-<p>具体举例，对于<code>f 2 3</code>，有：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- f = \_ s -&gt; s + 1</span></span><br><span class="line"><span class="title">f</span> <span class="number">2</span> <span class="number">3</span> == <span class="number">3</span> + <span class="number">1</span> == <span class="number">4</span></span><br><span class="line"><span class="comment">-- f = \_ -&gt; (+1)</span></span><br><span class="line"><span class="title">f</span> <span class="number">2</span> <span class="number">3</span> == (+<span class="number">1</span>) <span class="number">3</span> == <span class="number">4</span></span><br><span class="line"><span class="comment">-- f = const (+1)</span></span><br><span class="line"><span class="title">f</span> <span class="number">2</span> <span class="number">3</span> == const (+<span class="number">1</span>) <span class="number">2</span> <span class="number">3</span> == (+<span class="number">1</span>) <span class="number">3</span> == <span class="number">4</span></span><br></pre></td></tr></table></figure>
-
-<p>作为一个常用的函数，<code>fold</code>在<code>Prelude</code>中当然也有定义，即为<code>foldr</code>。<code>Prelude</code>中依赖于<code>foldr</code>定义的函数有：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">length</span> :: [a] -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">sum</span> :: <span class="type">Num</span> a =&gt; a -&gt; a</span><br><span class="line"><span class="title">product</span> :: <span class="type">Num</span> a =&gt; [a] -&gt; a</span><br><span class="line"><span class="title">and</span> :: [<span class="type">Bool</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">or</span> :: [<span class="type">Bool</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">any</span> :: (a -&gt; <span class="type">Bool</span>) -&gt; [a] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">all</span> :: (a-&gt; <span class="type">Bool</span>) -&gt; [a] -&gt; <span class="type">Bool</span></span><br></pre></td></tr></table></figure>
-
-<p>你可能会对<code>=&gt;</code>感到默生，这个符号我们会在下一节进行介绍。</p>
-<p>还有一个<code>foldl</code>函数，表示从左边折叠，与<code>foldr</code>的区别如下：</p>
-<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foldr</span> f z [a,b,c] = a `f` (b `f` (c `f` z))</span><br><span class="line"><span class="title">foldl</span> f z [a,b,c] = ((z `f` a) `f` b) `f` c</span><br></pre></td></tr></table></figure>
-
-<p>注意<code>foldr</code>和<code>foldl</code>的参数顺序与我们的<code>fold</code>函数不同。</p>
-<p>一般来说我们还可以使用<code>Data.List</code>模块中的<code>foldl&#39;</code>函数，它是<code>foldl</code>的一个更高性能的实现。</p>
 ]]></content>
       <categories>
         <category>0x03 从零开始的Haskell</category>
@@ -2386,6 +2275,117 @@
 <figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">instance</span> (<span class="type">Listable</span> <span class="title">a</span>, <span class="type">Listable</span> <span class="title">b</span>) =&gt; <span class="type">Listable</span> (<span class="title">a</span>, <span class="title">b</span>) <span class="keyword">where</span></span></span><br><span class="line">  toList (x, y) = toList x ++ toList y</span><br></pre></td></tr></table></figure>
 
 <p>只要类型变量在函数定义中，我们就可以为它指定类型类。注意，这个函数并不是递归函数，调用的<code>toList x</code>与<code>toList y</code>是其它类型的实例，而不是该函数本身。</p>
+]]></content>
+      <categories>
+        <category>0x03 从零开始的Haskell</category>
+      </categories>
+      <tags>
+        <tag>Haskell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从零开始的Haskell（四）——高阶编程与类型接口</title>
+    <url>/zh/blog/2021/09/06/0024-Re0:Haskell_04/</url>
+    <content><![CDATA[<blockquote>
+<p>不幸遭遇飞机延误，候机室写下系列第四篇，主题是高阶编程与类型接口。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="匿名函数（lambda表达式）"><a href="#匿名函数（lambda表达式）" class="headerlink" title="匿名函数（lambda表达式）"></a>匿名函数（lambda表达式）</h2><p>设想一下这样的函数，功能仅仅是简单的：保留数列中大于100的数。如：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">greaterThan100</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">300</span>,<span class="number">4</span>,<span class="number">245</span>] = [<span class="number">300</span>,<span class="number">245</span>]</span><br></pre></td></tr></table></figure>
+
+<p>我们可以使用很棒的方法实现：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">gt100</span> :: <span class="type">Integer</span> -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">gt100</span> x = x &gt; <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="title">greaterThan100</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100</span> xs = filter gt100 xs</span><br></pre></td></tr></table></figure>
+
+<p>但我们可能并不希望定义<code>gt100</code>这样的只使用一次的函数。此时就可以使用lambda表达式来代替<code>gt100</code>：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">greaterThan100_new</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100_new</span> xs = filter (\x -&gt; x &gt; <span class="number">100</span>) xs</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>\x -&gt; x &gt; 100</code>就是一个lambda表达式，它也可以有多个参数，如：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 结果为6</span></span><br><span class="line">(\x y z -&gt; x + y + z) <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>lambda已经足够简单了，但这个函数还有一种更好的写法：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">greaterThan100_newer</span> :: [<span class="type">Integer</span>] -&gt; [<span class="type">Integer</span>]</span><br><span class="line"><span class="title">greaterThan100_newer</span> xs = filter (&gt;<span class="number">100</span>) xs</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>(&gt;100)</code>是一个操作片段，操作片段允许我们使用一个函数的部分调用。对于任意一个二元操作符<code>?</code>：<code>(?y)</code>等价于<code>\x -&gt; x?y</code>；<code>(y?)</code>等价于<code>\x -&gt; y?x</code>。即将缺少的部分作为函数的参数。例如：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line">(&gt;<span class="number">100</span>) <span class="number">110</span> <span class="comment">-- True</span></span><br><span class="line">(<span class="number">100</span>&gt;) <span class="number">110</span> <span class="comment">-- False</span></span><br><span class="line"><span class="title">map</span> (*<span class="number">2</span>) [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] <span class="comment">-- [2,4,6]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="函数组成"><a href="#函数组成" class="headerlink" title="函数组成"></a>函数组成</h2><p>试写出一个类型为<code>(b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</code>的函数。首先我们能知道这个函数的两个参数都是函数，并且该函数的返回值也是一个函数。首先我们给出类型签名：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</span><br></pre></td></tr></table></figure>
+
+<p>试着写出函数的参数：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> f g = ...</span><br></pre></td></tr></table></figure>
+
+<p>由于返回值是一个函数，我们可以使用lambda表达式来实现：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> f g = \x -&gt; ...</span><br></pre></td></tr></table></figure>
+
+<p>根据类型签名可以看出<code>x</code>先由<code>g</code>处理再由<code>f</code>处理就得到了类型为<code>c</code>的值，因此有：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foo</span> f g = \x -&gt; f (g x)</span><br></pre></td></tr></table></figure>
+
+<p>思考一下，这个函数有什么用？答案是组合两个函数。Haskell中这样的操作是非常常用的，因此语言内置了这个操作，用操作符<code>.</code>表示，上式可写为：<code>f.g</code>。</p>
+<p>题外话，在引入了函数式范式后，C++也能实现类似操作了（什么叫头号粉丝啊，战术后仰.jpg）：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> std::function;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> a, <span class="keyword">typename</span> b, <span class="keyword">typename</span> c&gt;</span></span><br><span class="line"><span class="function">function&lt;<span class="title">c</span><span class="params">(a)</span>&gt; <span class="title">foo</span><span class="params">(<span class="keyword">const</span> function&lt;c(b)&gt; &amp;f, <span class="keyword">const</span> function&lt;b(a)&gt; &amp;g)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> [&amp;f, &amp;g](a x) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">f</span>(<span class="built_in">g</span>(x));</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见C++在这方面已经挻不错了，不过与真正的函数式编程语言相比仍有些距离。</p>
+<p>言归正传，<code>.</code>操作乍看起来好像没什么用，但下面这个例子会为其用途提供一个有力的说明：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">test</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">test</span> xs = even (length (greatThan100 xs))</span><br><span class="line"><span class="comment">-- 可以写作</span></span><br><span class="line"><span class="title">test&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">test&#x27;</span> = even.length.greatThan100</span><br></pre></td></tr></table></figure>
+
+<p>去掉了层层叠叠的括号和有些累缀的参数后，看起来优雅多了。<code>.</code>运算将函数<code>test&#39;</code>的定义表示为了几个小函数的组合。接下来让我们再看看<code>.</code>运算：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="type">Prelude</span>&gt; :t (.)</span><br><span class="line">(.) :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c</span><br></pre></td></tr></table></figure>
+
+<p>疑点出现了：返回值为什么不是<code>(a -&gt; c)</code>?</p>
+<h2 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h2><p>回顾我们的函数定义，如：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">f</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">f</span> x y = <span class="number">2</span>*x + y</span><br></pre></td></tr></table></figure>
+
+<p>还记得之前说过使用连续的<code>-&gt;</code>作为参数与返回值的声明背后有非常<del>暖心</del>优雅的理由吗？现在就是揭晓谜底的时刻了，先说结论：<strong>Haskell中的任何函数都接收一个参数</strong>。等等，难道上面刚定义的函数<code>f</code>不是接收了<code>x</code>和<code>y</code>两个参数吗？确实不是，实际上<code>f</code>是接收<code>x</code>作为参数，同时返回一个<code>Int -&gt; Int</code>型的函数，<code>y</code>是作为这个返回函数的参数被接收的。实际上就是lambda演算，之后会单独写一篇文章介绍lambda演算。也就是说，函数<code>f</code>的定义等价于：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">f</span> :: <span class="type">Int</span> -&gt; (<span class="type">Int</span> -&gt; <span class="type">Int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>由于<code>-&gt;</code>符合右结合律，因此上式括号可以不写。这也解释了上一节末尾的疑问。同时，函数调用符合左结合律，因此：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">f</span> x y = ((f x) y)</span><br></pre></td></tr></table></figure>
+
+<p>思考一下，<code>f x</code>的类型是一个<code>Int -&gt; Int</code>型的函数，而表达式中这个函数又接受了<code>y</code>返回一个<code>Int</code>。整个运算过程就是将参数逐个输入到对应的函数中，因此使用<code>-&gt;</code>符号来声明函数再贴切不过了。</p>
+<h2 id="函数的部分应用"><a href="#函数的部分应用" class="headerlink" title="函数的部分应用"></a>函数的部分应用</h2><p>函数的部分调用本质上就是对柯里化的应用，但永远记住每个函数本质上只有一个参数，因此我们<strong>只能对函数的第一个参数进行部分应用</strong>。唯一的例外是中缀函数，正如之前的例子所示，可以对中缀函数两个参数中的任何一个进行部分应用。</p>
+<p>由于只能对第一个参数进行部分应用，因此我们的参数顺序应该遵循由普通到特殊的规则。即最容易相同的参数放在最前面。</p>
+<h2 id="全麦编程"><a href="#全麦编程" class="headerlink" title="全麦编程"></a>全麦编程</h2><p>记得一开始介绍过的全麦编程概念吗？站在整体的角度思考问题，考虑如何处理整个列表而不是处理列表中的元素，就像全麦面粉一样，直接对麦子打粉而不考虑脱壳。现在是时候体会下全麦风格的威力了，考虑下面程序：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foobar</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">foobar</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">foobar</span> (x:xs)</span><br><span class="line">    | x &gt; <span class="number">3</span> = (<span class="number">7</span> * x + <span class="number">2</span>) + foobar xs</span><br><span class="line">    | otherwise foobar xs</span><br></pre></td></tr></table></figure>
+
+<p>这个程序的功能看起来很直观，但并不是良好的Haskell风格，主要存在两点问题：</p>
+<ol>
+<li>一个程序同时处理了过多的事务。</li>
+<li>代码工作得太底层了。</li>
+</ol>
+<p>我们可以将其功能实现为：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foobar&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">foobar&#x27;</span> sum . map (\x -&gt; <span class="number">7</span> * x + <span class="number">2</span>) . filter (&gt;<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样的实现将很多只做好一件事的小函数组合起来，使得函数更加清晰与直观。</p>
+<h2 id="折叠"><a href="#折叠" class="headerlink" title="折叠"></a>折叠</h2><p>增加了许多知识后，我们可以讨论上一节中被搁置的折叠操作了。先来直观体会折叠操作：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">sum&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">sum&#x27;</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">sum&#x27;</span> (x:xs) = x + sum&#x27; xs</span><br><span class="line"></span><br><span class="line"><span class="title">product&#x27;</span> :: [<span class="type">Integer</span>] -&gt; <span class="type">Integer</span></span><br><span class="line"><span class="title">product&#x27;</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">product&#x27;</span> (x:xs) = x * product&#x27; xs</span><br><span class="line"></span><br><span class="line"><span class="title">length&#x27;</span> :: [a] -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">length&#x27;</span> [] = <span class="number">0</span></span><br><span class="line"><span class="title">length&#x27;</span> (x:xs) = <span class="number">1</span> + length&#x27; xs</span><br></pre></td></tr></table></figure>
+
+<p>这三个函数的共性是什么？是通过某种方式将元素们组合成一个最终结果。我们可以将其抽象为：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">fold</span> :: b -&gt; (a -&gt; b -&gt; b) -&gt; [a] -&gt; b</span><br><span class="line"><span class="title">fold</span> z f [] = z</span><br><span class="line"><span class="title">fold</span> z f (x:xs) = f x (fold z f xs)</span><br></pre></td></tr></table></figure>
+
+<p>此时函数运算过程可以做如下展开：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">fold</span> z f [a,b,c] == f a (f b (f c z))</span><br><span class="line"><span class="comment">-- 写成中缀形式可能更好理解</span></span><br><span class="line"><span class="title">fold</span> z f [a,b,c] == a `f` (b `f` (c `f` z))</span><br></pre></td></tr></table></figure>
+
+<p>看出来了吗？<code>fold</code>函数是把一个列表最右边的两个元素进行组合，并使用组合后的元素代替原来的两个函数，直到列表为空。</p>
+<p>有了这个函数，之前的几个函数就可以写为：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">sum&#x27;&#x27;</span> = fold <span class="number">0</span> (+)</span><br><span class="line"><span class="title">product&#x27;&#x27;</span> = fold <span class="number">0</span> (*)</span><br><span class="line"><span class="title">length&#x27;&#x27;</span> = fold <span class="number">0</span> (\_ s -&gt; s + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>观察<code>\_ s -&gt; s + 1</code>，可以消去两边的<code>s</code>，化为<code>\_ -&gt; (+1)</code>。</p>
+<p>另一种思路是使用<code>const</code>函数。<code>const</code>函数的类型为<code>a-&gt;b-&gt;a</code>，效果是输入两个参数，并返回第一个参数作为结果（即丢弃第二个参数），和C++的const关键字完全不是一回事。</p>
+<p><code>\_ s -&gt; s + 1</code>的作用显然是丢弃第一个参数，并返回第二个参数+1后的值。可写为<code>const (+1)</code>。</p>
+<p>解说一下：<code>const (+1)  </code>是一个对<code>const</code>的部分应用，即使用<code>(+1)</code>作为<code>const</code>的第一个参数，此时这个部分应用变成了接受一个参数并返回<code>(+1)</code>的函数。不要忘记<code>(+1)</code>本身也是一个部分应用，其类型为<code>a -&gt; a</code>，则<code>const (+1)</code>的类型就是<code>b -&gt; a -&gt; a</code>。符合了我们<code>fold</code>函数对参数<code>f</code>的要求。</p>
+<p>具体举例，对于<code>f 2 3</code>，有：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- f = \_ s -&gt; s + 1</span></span><br><span class="line"><span class="title">f</span> <span class="number">2</span> <span class="number">3</span> == <span class="number">3</span> + <span class="number">1</span> == <span class="number">4</span></span><br><span class="line"><span class="comment">-- f = \_ -&gt; (+1)</span></span><br><span class="line"><span class="title">f</span> <span class="number">2</span> <span class="number">3</span> == (+<span class="number">1</span>) <span class="number">3</span> == <span class="number">4</span></span><br><span class="line"><span class="comment">-- f = const (+1)</span></span><br><span class="line"><span class="title">f</span> <span class="number">2</span> <span class="number">3</span> == const (+<span class="number">1</span>) <span class="number">2</span> <span class="number">3</span> == (+<span class="number">1</span>) <span class="number">3</span> == <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+<p>作为一个常用的函数，<code>fold</code>在<code>Prelude</code>中当然也有定义，即为<code>foldr</code>。<code>Prelude</code>中依赖于<code>foldr</code>定义的函数有：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">length</span> :: [a] -&gt; <span class="type">Int</span></span><br><span class="line"><span class="title">sum</span> :: <span class="type">Num</span> a =&gt; a -&gt; a</span><br><span class="line"><span class="title">product</span> :: <span class="type">Num</span> a =&gt; [a] -&gt; a</span><br><span class="line"><span class="title">and</span> :: [<span class="type">Bool</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">or</span> :: [<span class="type">Bool</span>] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">any</span> :: (a -&gt; <span class="type">Bool</span>) -&gt; [a] -&gt; <span class="type">Bool</span></span><br><span class="line"><span class="title">all</span> :: (a-&gt; <span class="type">Bool</span>) -&gt; [a] -&gt; <span class="type">Bool</span></span><br></pre></td></tr></table></figure>
+
+<p>你可能会对<code>=&gt;</code>感到默生，这个符号我们会在下一节进行介绍。</p>
+<p>还有一个<code>foldl</code>函数，表示从左边折叠，与<code>foldr</code>的区别如下：</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><span class="line"><span class="title">foldr</span> f z [a,b,c] = a `f` (b `f` (c `f` z))</span><br><span class="line"><span class="title">foldl</span> f z [a,b,c] = ((z `f` a) `f` b) `f` c</span><br></pre></td></tr></table></figure>
+
+<p>注意<code>foldr</code>和<code>foldl</code>的参数顺序与我们的<code>fold</code>函数不同。</p>
+<p>一般来说我们还可以使用<code>Data.List</code>模块中的<code>foldl&#39;</code>函数，它是<code>foldl</code>的一个更高性能的实现。</p>
 ]]></content>
       <categories>
         <category>0x03 从零开始的Haskell</category>
@@ -4650,5 +4650,11 @@
         <tag>算法</tag>
         <tag>贪心</tag>
       </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/zh/blog/2022/03/11/0036-Googletest/</url>
+    <content><![CDATA[<h2 id="Googletest介绍"><a href="#Googletest介绍" class="headerlink" title="Googletest介绍"></a>Googletest介绍</h2><p>Googletest是Google开发的C++测试框架，可以方便我们为代码编写测试。</p>
+]]></content>
   </entry>
 </search>
