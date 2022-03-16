@@ -1,3 +1,4 @@
+var windowsNums = 0;
 // Drag
 var curX = 0;
 var curY = 0;
@@ -85,6 +86,7 @@ function close(e) {
             appchilds[i].style.borderBottomStyle = "";
         }
     }
+    --windowsNums;
 }
 
 function closeWindow(target) {
@@ -104,6 +106,7 @@ function hide(e) {
     var target = e.target;
     target.style.display="none";
     target.removeEventListener("animationend", hide);
+    --windowsNums;
 };
 
 function hideWindow(target) {
@@ -144,6 +147,7 @@ function callWindow(e) {
         target.style.animation="fadein 0.5s";
         target.style.display = "inline";
         updateOrder(target);
+        ++windowsNums;
     } else {
         hideWindow(target);
     }
