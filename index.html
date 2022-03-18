@@ -22,7 +22,7 @@ onkeydown="dragMode(event)" onkeyup="clearDragMode(event)">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
         <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
     </head>
-    <body id="body" onscroll="fade()" onload="appGenerate()">
+    <body id="body" onscroll="fade()" onload="appGenerate();fade()">
         <div class="darkmode-mask" id="darkmode-mask"></div>
         <div id="header">
             <h1><a id="name" href="/">Xilong Yang</a></h1>
@@ -79,26 +79,26 @@ onkeydown="dragMode(event)" onkeyup="clearDragMode(event)">
                 <div class="work" id="misc">
                     <a href="https://github.com/XilongYang?tab=repositories" id="misc">misc.</a>
                 </div>
-            </div>
-            <div id="fades">
-                <div id="about">
-                    <p class="non_important" id="about_label">About</p>
-                    <p id="intro">I'm a programer with 3 years of experience about C++ and Linux.  </p>
-                    <p id="intro_site">I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>. </p>
-                    <p id="intro_email">You can contact me though email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>
-                </div>
-                <div id="link">
-                    <p class="non_important" id="links_label">Links</p>
-                    <a href="/zh/life">Xilong's Life</a><br>
-                    <a href="https://onedrive.xilong.site/">Xilong's Onedrive</a><br>
-                    <a href="/blog/">Xilong's Blog</a><br>
-                    <a href="/zh/blog">在泥坑里跳来跳去</a><br>
-                    <br>
-                    <p class="non_important" id="friend_label">Friends</p>
-                    <a href="https://doerr33.github.io">Doeer's Blog</a><br>
-                </div>
-                <div id="booter">
-                    <p class="non_important" id="nomore">* no more info.</p>
+                <div id="fades">
+                    <div id="about">
+                        <p class="non_important" id="about_label">About</p>
+                        <p id="intro">I'm a programer with 3 years of experience about C++ and Linux.  </p>
+                        <p id="intro_site">I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>. </p>
+                        <p id="intro_email">You can contact me though email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>
+                    </div>
+                    <div id="link">
+                        <p class="non_important" id="links_label">Links</p>
+                        <a href="/zh/life">Xilong's Life</a><br>
+                        <a href="https://onedrive.xilong.site/">Xilong's Onedrive</a><br>
+                        <a href="/blog/">Xilong's Blog</a><br>
+                        <a href="/zh/blog">在泥坑里跳来跳去</a><br>
+                        <br>
+                        <p class="non_important" id="friend_label">Friends</p>
+                        <a href="https://doerr33.github.io">Doeer's Blog</a><br>
+                    </div>
+                    <div id="booter">
+                        <p class="non_important" id="nomore">* no more info.</p>
+                    </div>
                 </div>
             </div>
         </div>
