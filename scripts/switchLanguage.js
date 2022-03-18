@@ -58,8 +58,8 @@ function switchLanguage(lang) {
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">更多</a>';
         document.getElementById("about_label").innerHTML = "关于我";
         document.getElementById("intro").innerHTML = "我是一个有3年 C++ 和 Linux 经验的程序员。";
-        document.getElementById("intro_site").innerHTML = '我有一个<a href="https://github.com/XilongYang">github帐号</a>和一个<a href="/zh/blog">博客</a>。';
-        document.getElementById("intro_email").innerHTML = '你可以通过邮件<a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>联系我。';
+        document.getElementById("intro_site").innerHTML = '有一个<a href="https://github.com/XilongYang">github帐号</a>和一个<a href="/zh/blog">博客</a>。';
+        document.getElementById("intro_email").innerHTML = '可以通过邮件<a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>联系我。';
         document.getElementById("links_label").innerHTML = "链接";
         document.getElementById("friend_label").innerHTML = "朋友";
         document.getElementById("music_label").innerHTML = "播放列表";
@@ -80,7 +80,7 @@ function switchLanguage(lang) {
         document.getElementById("this_site_intro").innerHTML = "OSをシミュレートする静的なWebサイト。";
         document.getElementById("misc").innerHTML = '<a href="https://github.com/XilongYang?tab=repositories">もっと</a>';
         document.getElementById("about_label").innerHTML = "紹介";
-        document.getElementById("intro").innerHTML = "私はC++とLinuxについて3年の経験を持つプログラマーです。";
+        document.getElementById("intro").innerHTML = "C++とLinuxについて3年の経験を持つプログラマーです。";
         document.getElementById("intro_site").innerHTML = '<a href="https://github.com/XilongYang">githubアカウント</a>と<a href="/blog">ブログ</a>を持っています。';
         document.getElementById("intro_email").innerHTML = 'メール<a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>で私に連絡することができます。';
         document.getElementById("links_label").innerHTML = "リンク";
