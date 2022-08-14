@@ -212,27 +212,6 @@ a:hover {
     font-size: 28px;
 }
 
-#blog_life-icon {
-    color: #fd7d00;
-}
-#blog_life-icon:hover{
-    color: #cd4d00;
-}
-
-#blog_en-icon {
-    color: #377cf1;
-}
-#blog_en-icon:hover{
-    color: #175cd1;
-}
-
-#blog_zh-icon {
-    color: #d31919;
-}
-#blog_zh-icon:hover{
-    color: #a30000;
-}
-
 #space{
     float: left;
     width: 60%;
@@ -388,6 +367,7 @@ a:hover {
         top: 0px;
         left:0px;
         width: 90%;
+
     }
     #space{
         width: 0px;
@@ -395,6 +375,7 @@ a:hover {
     #contents{
         width: 90%;
         margin: auto;
+        padding: 0;
     }
     .fake_window{
         width: 100%;
