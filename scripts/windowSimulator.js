@@ -66,14 +66,14 @@ function clearDragMode(e) {
 function close(e) {
     var window = e.target;
     window.removeEventListener("animationend", close);
-    window.style.display = "none";
     if (document.getElementById("body").mobile != "true") {
         resetWindowDirect(window);
     }
+    window.style.visibility = "hidden";
     var childs = window.childNodes;
     for (var i = 0; i < childs.length; ++i) {
         if (childs[i].nodeName == "IFRAME") {
-            childs[i].src = childs[i].src;
+            childs[i].src = childs[i].src + ''; 
         }
     }
     var app = window.parentNode;
@@ -104,7 +104,7 @@ function closeButtonEvent(e) {
 
 function hide(e) {
     var target = e.target;
-    target.style.display="none";
+    target.style.visibility ="hidden";
     target.removeEventListener("animationend", hide);
     --windowsNums;
 };
@@ -143,9 +143,9 @@ function callWindow(e) {
             break;
         }
     }
-    if (getComputedStyle(target).display == "none") {
+    if (getComputedStyle(target).visibility == "hidden") {
         target.style.animation="fadein 0.5s";
-        target.style.display = "inline";
+        target.style.visibility = "visible";
         updateOrder(target);
         ++windowsNums;
     } else {

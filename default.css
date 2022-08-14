@@ -275,7 +275,7 @@ a:hover {
 }
 
 .fake_window{
-    display: none;
+    visibility: hidden;
     position: fixed;
     width: 70%;
     height: 80%;
