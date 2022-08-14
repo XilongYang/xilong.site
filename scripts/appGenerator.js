@@ -47,7 +47,7 @@ function appGenerate() {
     , '<iframe class="fake_window_contents non_dark" id="terminal-content" loading="lazy" src="/components/Fe3OS/" frameborder="0"></iframe>'
     , "<i class='material-icons'>terminal</i>", "icons_tray_tools");
 
-    new Application("blog", "Xilong's Life"
+    new Application("blog", "Xilong's Blog"
     , '<iframe class="fake_window_contents non_dark" id="blog" loading="lazy" src="/blog/" frameborder="0"></iframe>'
     , "<i class='material-icons'>podcasts</i>", "icons_tray_tools");
 
