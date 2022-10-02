@@ -83,6 +83,32 @@ a:hover {
     to {opacity:0;}
 }
 
+@keyframes invert
+{
+    from {filter:invert(0);}
+    to {filter:invert(1);}
+}
+ 
+/*Safari 和 Chrome:*/
+@-webkit-keyframes invert
+{
+    from {filter:invert(0);}
+    to {filter:invert(1);}
+}
+
+@keyframes devert
+{
+    from {filter:invert(1);}
+    to {filter:invert(0);}
+}
+ 
+/*Safari 和 Chrome:*/
+@-webkit-keyframes devert
+{
+    from {filter:invert(1);}
+    to {filter:invert(0);}
+}
+
 @keyframes fullscreen
 {
     from {
@@ -206,6 +232,10 @@ a:hover {
 }
 .icon:hover{
     color: #777;
+}
+
+#blog-icon {
+    color: #d31919;
 }
 
 #github{

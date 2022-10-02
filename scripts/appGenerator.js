@@ -49,7 +49,7 @@ function appGenerate() {
 
     new Application("blog", "Xilong's Blog"
     , '<iframe class="fake_window_contents non_dark" id="blog" loading="lazy" src="/blog/" frameborder="0"></iframe>'
-    , "<i class='material-icons'>podcasts</i>", "icons_tray_tools");
+    , "<i class='material-icons non_dark'>podcasts</i>", "icons_tray_tools");
 
     if (screen.availWidth < 950) {
         document.getElementById("body").mobile = "true";
