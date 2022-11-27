@@ -39,10 +39,6 @@ function appGenerate() {
     , '<iframe class="fake_window_contents" id="music-content" loading="lazy" src="/components/musicplayer/" frameborder="0"></iframe>'
     , "<i class='material-icons'>album</i>", "icons_tray_tools");
 
-    new Application("onedrive", "OneDrive"
-    , '<iframe class="fake_window_contents non_dark" id="onedrive-content" loading="lazy" src="https://onedrive.xilong.site" frameborder="0"></iframe>'
-    , "<i class='material-icons'>cloud_sync</i>", "icons_tray_tools");
-
     new Application("terminal", "Terminal"
     , '<iframe class="fake_window_contents non_dark" id="terminal-content" loading="lazy" src="/components/Fe3OS/" frameborder="0"></iframe>'
     , "<i class='material-icons'>terminal</i>", "icons_tray_tools");
