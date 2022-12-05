@@ -256,7 +256,7 @@ a:hover {
 }
 
 #works{
-    margin-top: 150px;
+    margin-top: 25vh;
 }
 
 .work{
@@ -266,6 +266,7 @@ a:hover {
 
 #misc {
     margin-top: 150px;
+    margin-bottom: 150px;
 }
 
 #fades{
