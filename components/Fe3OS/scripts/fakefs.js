@@ -8,23 +8,17 @@ fs.set("/works/", ["<div class='file'>README.md</div>"]);
 
 var files = new Map();
 files.set("/README.md", "Hello! Xilong's Here.<br>"
-    +"You can learn more about me at <a href='https://xilong.site'>xilong.site</a>.");
+    +"You can learn more about me at <a target='_blank' href='https://xilong.site'>xilong.site</a>.");
 
 files.set("/blog/posts.txt"
-, "<a href='https://blog.xilong.site/2021/07/21/0020-STL%E5%AE%B9%E5%99%A8%E6%80%BB%E7%BB%93/'>STL容器备忘总结</a><br>"
-+ "<a href='https://blog.xilong.site/2021/07/19/0019-C++%E5%8F%98%E9%87%8F%E5%88%9D%E5%A7%8B%E5%8C%96/'>C++变量初始化</a><br>"
-+ "<a href='https://blog.xilong.site/2021/07/18/0018-C++%E4%B8%89%E4%BA%94%E6%B3%95%E5%88%99/'>C++三/五法则</a><br>"
-+ "<a href='https://blog.xilong.site/2021/07/17/0016-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84Haskell(%E4%BA%8C)/'>从零开始的Haskell（二）——ADT</a><br>"
-+ "<a href='https://blog.xilong.site/2021/06/10/0013-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84Haskell(%E4%B8%80)/'>从零开始的Haskell（一）——Haskell基础</a><br>"
-+ "<a href='https://blog.xilong.site'>Find more in my blog!</a><br>"
+, "<a target='_blank' href='/blog/2022/01/08/0033-Haskell:operator_and_lazy/'>Haskell：理解惰性求值与运算符优先级</a><br>"
++ "<a target='_blank' href='/blog/2021/09/23/0028-RB_Tree_C++/'>红黑树概念解析与C++实现</a><br>"
++ "<a target='_blank' href='/blog/2021/07/19/0019-C++:Variable_initialization/'>C++变量初始化</a><br>"
++ "<a target='_blank' href='/blog'>Find more in my blog!</a><br>"
 );
 
 files.set("/works/README.md"
-, "<a href='https://github.com/XilongYang/Fe3OS'>Fe3OS</a>: The project of this site.<br>"
-+ "<a href='https://github.com/XilongYang/STAMP'>STAMP-C++</a>: An implement for the STAMP using C++.<br>"
-+ "<a href='https://github.com/XilongYang/Connect6'>Connect6</a>: A Connect6 game with a simple AI, making with QT5/C++.<br>"
-+ "<a href='https://github.com/XilongYang/VrchPE'>VrchPE</a>: A PE image file for Arch Linux.<br>"
-+ "<a href='https://github.com/XilongYang/RunningDango'>RunningDango</a>: A simple game making with Java.<br>"
+, "<a target='_blank' href='https://github.com/XilongYang/littledb'>LittleDB</a>: A simple C++ library provides an embedded K-V database and some encrypt/decrypt concerned functions.<br>"
 );
 
 function path(dir, type = "file") {
