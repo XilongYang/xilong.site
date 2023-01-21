@@ -11,21 +11,15 @@ class Music {
 }
 
 var playlist = new Array();
-playlist[0] = new Music("1", "Animenz - Merry-go-round of life", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz_merry-go-round_of_life.mp3");
-playlist[1] = new Music("2", "Animenz - A cruel angel thesis", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-a_cruel_angel_thesis.mp3");
-playlist[2] = new Music("3", "Animenz - βios", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-bios.mp3");
-playlist[3] = new Music("4", "Animenz - Blue bird", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-blue_bird.mp3");
-playlist[4] = new Music("5", "Animenz - Change the world", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-change_the_world.mp3");
-playlist[5] = new Music("6", "Animenz - Connect", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-connect.mp3");
-playlist[6] = new Music("7", "Animenz - Dango family", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-dango.mp3");
-playlist[7] = new Music("8", "Animenz - Departures", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-departures.mp3");
-playlist[8] = new Music("9", "Animenz - Hikaru nara", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-hikaru_nara.mp3");
-playlist[9] = new Music("10", "Animenz - Kawaki wo ameku", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-kawaki_wo_ameku.mp3");
-playlist[10] = new Music("11", "Animenz - Main theme from laputa", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-main_theme_from_laputa.mp3");
-playlist[11] = new Music("12", "Animenz - One more time, one more chance", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-one_more_time_one_more_chance.mp3");
-playlist[12] = new Music("13", "Animenz - Screct base", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-screct_base.mp3");
-playlist[13] = new Music("14", "Animenz - Tabi no tochuu", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-tabi_no_tochuu.mp3");
-playlist[14] = new Music("15", "Animenz - The everlasting guilty crown", "https://onedrive.xilong.site/Music/Pure/Animenz/animenz-the_everlasting_guilty_crown.mp3");
+playlist[0]  = new Music("1" , "めのう", "http://music.163.com/song/media/outer/url?id=29562691.mp3");
+playlist[1]  = new Music("2" , "リズと青い鳥 第三楽章「愛ゆえの決断」", "http://music.163.com/song/media/outer/url?id=554245324.mp3");
+playlist[2]  = new Music("3" , "Nocturne No. 2 in E Flat Major, Op. 9, No. 2", "http://music.163.com/song/media/outer/url?id=1060914.mp3");
+playlist[3]  = new Music("4" , "Clair de Lune (from Suite Bergamasque)", "http://music.163.com/song/media/outer/url?id=1145380.mp3");
+playlist[4]  = new Music("5" , "Serenade in D Minor", "http://music.163.com/song/media/outer/url?id=5215247.mp3");
+playlist[5]  = new Music("6" , "Ballade No. 1 in G Minor, Op. 23", "http://music.163.com/song/media/outer/url?id=461231968.mp3");
+playlist[6]  = new Music("7" , "冬", "http://music.163.com/song/media/outer/url?id=29562665.mp3");
+playlist[7]  = new Music("8" , "冬Ⅱ", "http://music.163.com/song/media/outer/url?id=29562666.mp3");
+playlist[8]  = new Music("9" , "由綺Ⅱ", "http://music.163.com/song/media/outer/url?id=29562676.mp3");
 
 var listLength = 0;
 function generatePlaylist() {
