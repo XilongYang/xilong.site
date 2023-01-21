@@ -7,8 +7,8 @@ body {
     background-color: #222222;
     color:#dddddd;
 }
-a{color: #bec936;}
-a:visited{color: #bec936;}
+a{color: #fff586;}
+a:visited{color: #fff586;}
 a:hover{color: #29b7cb;}
 .message{
     padding: 0px;
@@ -28,9 +28,9 @@ input.cmd{
 }
 
 /*screenfetch*/
-.fox{
+.avatar{
     font-size:10px;
-    color:#aba59a;
+    color:#fff586;
     display: inline-block;
 }
 .fetchinfo{
