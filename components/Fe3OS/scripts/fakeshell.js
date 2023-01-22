@@ -5,7 +5,9 @@ var cmd_set = ["ls", "cd", "cat", "screenfetch"
     , "uname", "clear", "help", "exit"];
 
 function read_cmd(event){
+    var welcome = document.getElementById("welcome");
     var msg = document.getElementById("hismsg");
+    var cur_msg = document.getElementById("curmsg");
     var cur_cmd = document.getElementById("cmd");
 
     var tips = document.getElementById("tipsmsg");
@@ -60,6 +62,24 @@ function read_cmd(event){
     result = parse_cmd(cur_cmd.value);
     if (result == "--clr__clr") {
         msg.innerHTML = "";
+    } else if (result == "exit") {
+        parse_cmd("cd /");
+        welcome.style.display = "none";
+        cur_msg.style.display = "none";
+
+        msg.innerHTML = "Good bye!";
+
+        setTimeout(() => {
+            msg.innerHTML = "";
+            msg.innerHTML = "Restarting...";
+        }, 1000);
+
+        setTimeout(() => {
+            welcome.style.display = "block";
+            cur_msg.style.display = "block";
+            msg.innerHTML = "";
+        }, 2000);
+        
     } else {
         msg.innerHTML += result;
         if (result != "") {
@@ -73,14 +93,13 @@ function read_cmd(event){
 function parse_cmd(value) {
     var rex = /\s+/g;
     var args = value.replace(rex, ' ').trim().split(' ');
-    var msg = document.getElementById("hismsg");
     switch (args[0]) {
         case "clear":
             return clear(args);
         case "help":
             return get_help();
         case "exit":
-            return "Good bye!<br>Restarting...";
+            return "exit";
         case "uname":
             if (args.length > 1) {
                 return "uname: invalid option: " + args[1];
