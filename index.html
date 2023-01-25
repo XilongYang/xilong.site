@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html onmousemove="updateMousePos(event)" onmouseup="dragEnd()" 
+onkeydown="dragMode(event)" onkeyup="clearDragMode(event)">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -20,8 +21,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
         <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
     </head>
-    <body id="body" onscroll="fade()" onload="appGenerate();fade()" onmousemove="updateMousePos(event)" onmouseup="dragEnd()" 
-onkeydown="dragMode(event)" onkeyup="clearDragMode(event)">
+    <body id="body" onscroll="fade()" onload="appGenerate();fade()">
         <div class="darkmode-mask" id="darkmode-mask"></div>
         <div id="header">
             <h1><a id="name" href="/">Xilong Yang</a></h1>
