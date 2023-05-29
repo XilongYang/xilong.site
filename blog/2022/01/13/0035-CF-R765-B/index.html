@@ -18,13 +18,24 @@
 
     <link rel="shortcut icon" href="/blog/../res/favicon.ico">
     
-<link rel="stylesheet" href="/blog/css/font-awesome.min.css">
+<link rel="stylesheet" href="/blog/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/brands.min.css">
 
     <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#D31919","favicon":"/../res/favicon.ico","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"description":"To be or not to be, 这么着还是那么着。"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":false},"style":{"primary_color":"#D31919","logo":null,"favicon":"/../res/favicon.ico","avatar":null,"font_size":null,"font_family":null,"hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"header_transparent":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","font_color":null,"hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":false},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_avatar":{"enable":false},"author_label":{"enable":false,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":false},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
   </script>
 <meta name="generator" content="Hexo 6.2.0"><style>mjx-container[jax="SVG"] {
   direction: ltr;
@@ -156,13 +167,14 @@ mjx-container[display="true"] + br {
     <div class="page-main-content">
 
         <div class="page-main-content-top">
-            <header class="header-wrapper">
+            
+<header class="header-wrapper">
 
     <div class="header-content">
         <div class="left">
             
-            <a class="logo-title" href='/blog/'>
-                Xilong&#39;s Blog
+            <a class="logo-title" href="/blog">
+               Xilong&#39;s Blog
             </a>
         </div>
 
@@ -272,26 +284,37 @@ mjx-container[display="true"] + br {
 
                 
                     <div class="fade-in-down-animation">
-    <div class="article-content-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-        <div class="article-title">
-            <span class="title-hover-animation">CF-R765-B题解</span>
-        </div>
+            <div class="article-title">
+                <span class="title-hover-animation">CF-R765-B题解</span>
+            </div>
 
-        
-            <div class="article-header">
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Xilong Yang</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
+            
+                <div class="article-header">
+                  
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Xilong Yang</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
         <span class="pc">2022-01-13 20:36:29</span>
         <span class="mobile">2022-01-13 20:36</span>
     </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2022-06-25 14:13:31</span>
+    </span>
+    
     
         <span class="article-categories article-meta-item">
             <i class="fas fa-folder"></i>&nbsp;
@@ -343,13 +366,15 @@ mjx-container[display="true"] + br {
     
 </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        
+            
 
-        <div class="article-content markdown-body">
-            <blockquote>
+            <div class="article-content keep-markdown-body">
+                
+
+                <blockquote>
 <p><a class="link" target="_blank" rel="noopener" href="https://codeforces.com/contest/1625">Codeforces Round #765<i class="fas fa-external-link-alt"></i></a>被橄榄了。但B与C两题都刚好处在有思路而没解出来的难度，是很好的学习机会。</p>
 </blockquote>
 <span id="more"></span>
@@ -395,88 +420,81 @@ mjx-container[display="true"] + br {
 <h2 id="代码实现">代码实现</h2>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">unsigned</span> <span class="type">int</span> MAX = <span class="number">150005</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存储上个元素的位置</span></span><br><span class="line"><span class="type">int</span> l[MAX];</span><br><span class="line"><span class="comment">// 存储当前元素的位置</span></span><br><span class="line"><span class="type">int</span> r[MAX];</span><br><span class="line"><span class="comment">// 存储元素最小间距</span></span><br><span class="line"><span class="type">int</span> d[MAX]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; MAX; ++i) {</span><br><span class="line">        l[i] = <span class="number">0</span>; </span><br><span class="line">        r[i] = <span class="number">0</span>; </span><br><span class="line">        d[i] = MAX;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">input</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) {</span><br><span class="line">        <span class="type">int</span> tmp;</span><br><span class="line">        cin &gt;&gt; tmp;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果是第一个元素，则加入l。</span></span><br><span class="line">        <span class="comment">// 如果第二个则加入r并计算间距。</span></span><br><span class="line">        <span class="comment">// 否则更新位置并计算间距。</span></span><br><span class="line">        <span class="keyword">if</span> (l[tmp] == <span class="number">0</span>) {</span><br><span class="line">            l[tmp] = i;</span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (r[tmp] == <span class="number">0</span>) {</span><br><span class="line">            r[tmp] = i;</span><br><span class="line">            d[tmp] = <span class="built_in">min</span>(d[tmp], r[tmp] - l[tmp]);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            l[tmp] = r[tmp];</span><br><span class="line">            r[tmp] = i;</span><br><span class="line">            d[tmp] = <span class="built_in">min</span>(d[tmp], r[tmp] - l[tmp]);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">output</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// 因为没有结果时，输出将是n - m，且要求为-1，故置m为n+1。</span></span><br><span class="line">    <span class="type">int</span> m = n + <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 使用最小的间距值来代替m。</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; MAX; ++i ) {</span><br><span class="line">        m = <span class="built_in">min</span>(d[i], m);</span><br><span class="line">    }</span><br><span class="line">    cout &lt;&lt; n - m &lt;&lt; endl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="type">int</span> t;</span><br><span class="line">    cin &gt;&gt; t;</span><br><span class="line">    <span class="keyword">while</span> (t--) {</span><br><span class="line">        <span class="built_in">init</span>();</span><br><span class="line">        <span class="built_in">input</span>();</span><br><span class="line">        <span class="built_in">output</span>(); </span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                
-<div class="article-copyright-info-container">
-    <ul>
-        <li>Post title：CF-R765-B题解</li>
-        <li>Post author：Xilong Yang</li>
-        <li>Create time：2022-01-13 20:36:29</li>
-        <li>
-            Post link：https://xilong.site/blog/2022/01/13/0035-CF-R765-B/
-        </li>
-        <li>
-            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
-        </li>
-    </ul>
-</div>
-
-
             </div>
-        
 
-        
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/C/">#C++</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/%E6%9E%9A%E4%B8%BE/">#枚举</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/%E7%AE%97%E6%B3%95/">#算法</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/%E8%B4%AA%E5%BF%83/">#贪心</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
+            
 
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/blog/2022/03/11/0036-Googletest/"
-                        >
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/C/">#C++</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/%E6%9E%9A%E4%B8%BE/">#枚举</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/%E7%AE%97%E6%B3%95/">#算法</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/%E8%B4%AA%E5%BF%83/">#贪心</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/blog/2022/03/11/0036-Googletest/"
+                            >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
-                            <span class="title flex-center">
+                                <span class="title flex-center">
                                 <span class="post-nav-title-item">使用Googletest进行单元测试：概念篇</span>
                                 <span class="post-nav-item">Prev posts</span>
                             </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/blog/2022/01/12/L020-%E3%80%8A%E9%9B%AA%E5%9B%BD%E3%80%8B%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B001%E2%80%94%E2%80%94%E5%BC%80%E5%B9%95/"
-                        >
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/blog/2022/01/12/L020-%E3%80%8A%E9%9B%AA%E5%9B%BD%E3%80%8B%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B001%E2%80%94%E2%80%94%E5%BC%80%E5%B9%95/"
+                            >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">《雪国》阅读笔记01——开幕</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
-                            <span class="right arrow-icon flex-center">
+                                <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
                             </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
+                            </a>
+                        </div>
+                    
+                </div>
+            
 
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-number">1.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">题目描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#input"><span class="nav-number">1.1.1.</span> <span class="nav-text">Input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output"><span class="nav-number">1.1.2.</span> <span class="nav-text">Output</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">1.1.3.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A"><span class="nav-number">1.2.</span> <span class="nav-text">解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.3.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B"><span class="nav-number">1.3.1.</span> <span class="nav-text">暴力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%BF%83"><span class="nav-number">1.3.2.</span> <span class="nav-text">贪心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.</span> <span class="nav-text">代码实现</span></a></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
         
     </div>
 </div>
@@ -488,22 +506,24 @@ mjx-container[display="true"] + br {
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
+            
+<footer class="footer">
     <div class="info-container">
         
-        
             <div class="site-total-word-count">
-                Total Words:  213.3k |  
+                Total Words:  213.3k |
                 Total posts:  56
             </div>
         
         <div class="copyright-info info-item">
             &copy;
             
-              <span>2019</span>
-              -
+                <span>2019</span> -
             
-            2023&nbsp;&nbsp;<a href="/">Xilong Yang</a>
+            2023
+            
+                &nbsp;<a href="/blog">Xilong Yang</a>
+            
         </div>
         
         
@@ -521,8 +541,8 @@ mjx-container[display="true"] + br {
     <ul class="tools-list">
         <!-- TOC aside toggle -->
         
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
             </li>
         
 
@@ -543,10 +563,6 @@ mjx-container[display="true"] + br {
 
         <li class="tools-item tool-font-adjust-minus flex-center">
             <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
         </li>
 
         <li class="tools-item tool-dark-light-toggle flex-center">
@@ -577,18 +593,8 @@ mjx-container[display="true"] + br {
 
     </div>
 
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#section"><span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="nav-text">题目描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#input"><span class="nav-text">Input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#output"><span class="nav-text">Output</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A"><span class="nav-text">解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B"><span class="nav-text">暴力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%AA%E5%BF%83"><span class="nav-text">贪心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-text">代码实现</span></a></li></ol></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
 </div>
 
 
@@ -609,7 +615,7 @@ mjx-container[display="true"] + br {
                        class="search-input"
                 >
             </div>
-            <span class="popup-btn-close">
+            <span class="close-popup-btn">
                 <i class="fas fa-times"></i>
             </span>
         </div>
@@ -642,6 +648,8 @@ mjx-container[display="true"] + br {
 
 
 
+
+
     
 <script src="/blog/js/local-search.js"></script>
 
@@ -649,7 +657,7 @@ mjx-container[display="true"] + br {
 
 
     
-<script src="/blog/js/code-copy.js"></script>
+<script src="/blog/js/code-block.js"></script>
 
 
 
@@ -658,12 +666,18 @@ mjx-container[display="true"] + br {
 <div class="post-scripts">
     
         
-<script src="/blog/js/left-side-toggle.js"></script>
+<script src="/blog/js/post-helper.js"></script>
 
+        
+            
 <script src="/blog/js/libs/anime.min.js"></script>
 
+        
+        
+            
 <script src="/blog/js/toc.js"></script>
 
+        
     
 </div>
 

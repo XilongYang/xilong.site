@@ -18,13 +18,24 @@
 
     <link rel="shortcut icon" href="/blog/../res/favicon.ico">
     
-<link rel="stylesheet" href="/blog/css/font-awesome.min.css">
+<link rel="stylesheet" href="/blog/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/brands.min.css">
 
     <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#D31919","favicon":"/../res/favicon.ico","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"description":"To be or not to be, 这么着还是那么着。"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":false},"style":{"primary_color":"#D31919","logo":null,"favicon":"/../res/favicon.ico","avatar":null,"font_size":null,"font_family":null,"hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"header_transparent":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","font_color":null,"hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":false},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_avatar":{"enable":false},"author_label":{"enable":false,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":false},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
   </script>
 <meta name="generator" content="Hexo 6.2.0"></head>
 
@@ -44,13 +55,14 @@
     <div class="page-main-content">
 
         <div class="page-main-content-top">
-            <header class="header-wrapper">
+            
+<header class="header-wrapper">
 
     <div class="header-content">
         <div class="left">
             
-            <a class="logo-title" href='/blog/'>
-                Xilong&#39;s Blog
+            <a class="logo-title" href="/blog">
+               Xilong&#39;s Blog
             </a>
         </div>
 
@@ -160,26 +172,37 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="article-content-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-        <div class="article-title">
-            <span class="title-hover-animation">《如何高效学习》笔记——方法篇</span>
-        </div>
+            <div class="article-title">
+                <span class="title-hover-animation">《如何高效学习》笔记——方法篇</span>
+            </div>
 
-        
-            <div class="article-header">
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Xilong Yang</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
+            
+                <div class="article-header">
+                  
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Xilong Yang</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
         <span class="pc">2019-08-23 01:45:00</span>
         <span class="mobile">2019-08-23 01:45</span>
     </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2022-06-25 14:13:31</span>
+    </span>
+    
     
         <span class="article-categories article-meta-item">
             <i class="fas fa-folder"></i>&nbsp;
@@ -219,13 +242,15 @@
     
 </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        
+            
 
-        <div class="article-content markdown-body">
-            <blockquote>
+            <div class="article-content keep-markdown-body">
+                
+
+                <blockquote>
 <p>《如何高效学习》斯科特.扬，介绍了一种整体性学习方法。</p>
 <p>全书分为三个部分：1、整体性学习的原理。2、整体性学习的方法。3、一些提高效率的建议。</p>
 <p>本书虽然不免带着些营销意味，但大体上还是包涵了很多值得借鉴的方法。</p>
@@ -462,76 +487,69 @@
 <p>本篇还额外介绍了费曼技巧，旨在通过苏格拉底式的模拟找出自己的漏洞，提高知识的掌握程度。</p>
 <p>实践与练习在这些学习方法里占据了相当重要的地位，一切方法如果没有练习就只是纸上谈兵。世界上并不存在看了就能突然变强的秘籍，一切方法都要经过训练才可以产生效果。</p>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                
-<div class="article-copyright-info-container">
-    <ul>
-        <li>Post title：《如何高效学习》笔记——方法篇</li>
-        <li>Post author：Xilong Yang</li>
-        <li>Create time：2019-08-23 01:45:00</li>
-        <li>
-            Post link：https://xilong.site/blog/2019/08/23/L009-如何高效学习2/
-        </li>
-        <li>
-            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
-        </li>
-    </ul>
-</div>
-
-
             </div>
-        
 
-        
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/%E6%96%B9%E6%B3%95/">#方法</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
+            
 
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/blog/2019/08/23/L010-%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A03/"
-                        >
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/%E6%96%B9%E6%B3%95/">#方法</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/blog/2019/08/23/L010-%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A03/"
+                            >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
-                            <span class="title flex-center">
+                                <span class="title flex-center">
                                 <span class="post-nav-title-item">《如何高效学习》笔记——效率篇</span>
                                 <span class="post-nav-item">Prev posts</span>
                             </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/blog/2019/08/21/L008-%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A01/"
-                        >
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/blog/2019/08/21/L008-%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A01/"
+                            >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">《如何高效学习》笔记——原理篇</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
-                            <span class="right arrow-icon flex-center">
+                                <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
                             </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
+                            </a>
+                        </div>
+                    
+                </div>
+            
 
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">导言：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%9F%A5%E8%AF%86"><span class="nav-number">2.</span> <span class="nav-text">获取知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E9%98%85%E8%AF%BB%E5%9C%A8%E7%90%86%E8%A7%A3%E7%A8%8B%E5%BA%A6%E5%92%8C%E8%8E%B7%E5%8F%96%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%97%B4%E6%89%BE%E5%88%B0%E5%B9%B3%E8%A1%A1"><span class="nav-number">2.1.</span> <span class="nav-text">1.快速阅读：在理解程度和获取速度之间找到平衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">2.1.2.</span> <span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%94%E8%AE%B0%E6%B5%81%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%AA%E6%9C%80%E7%AE%80%E7%9A%84%E4%BF%A1%E6%81%AF%E8%BE%93%E5%85%A5%E6%B5%81%E4%BB%A5%E7%90%86%E8%A7%A3%E4%B8%BA%E4%B8%BB%E5%87%8F%E5%B0%91%E5%9C%A8%E8%AE%B0%E7%AC%94%E8%AE%B0%E4%B8%8A%E8%8A%B1%E8%B4%B9%E7%9A%84%E6%97%B6%E9%97%B4"><span class="nav-number">2.2.</span> <span class="nav-text">2.笔记流：记录一个最简的信息输入流，以理解为主，减少在“记笔记”上花费的时间。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%94%E7%B3%BB%E8%A7%82%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">联系观点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E5%96%BB%E6%B3%95%E9%80%9A%E8%BF%87%E5%B7%B2%E7%9F%A5%E7%9A%84%E7%BB%8F%E9%AA%8C%E5%AF%B9%E6%96%B0%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%9F%A5%E8%AF%86%E8%BF%9B%E8%A1%8C%E6%AF%94%E5%96%BB%E4%BB%A5%E5%BB%BA%E7%AB%8B%E5%AE%B9%E6%98%93%E7%90%86%E8%A7%A3%E5%92%8C%E8%AE%B0%E5%BF%86%E7%9A%84%E4%BF%A1%E6%81%AF%E5%8C%85%E6%8B%AC%E4%BB%A5%E4%B8%8B%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.1.</span> <span class="nav-text">1. 比喻法：通过已知的经验对新学习的知识进行比喻，以建立容易理解和记忆的信息。包括以下步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-2"><span class="nav-number">3.1.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-2"><span class="nav-number">3.1.2.</span> <span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%9C%A8%E5%8C%96%E9%80%9A%E8%BF%87%E5%AF%B9%E5%85%B7%E4%BD%93%E7%9A%84%E6%84%9F%E5%AE%98%E8%BF%9B%E8%A1%8C%E6%83%B3%E8%B1%A1%E5%8A%A0%E6%B7%B1%E7%9F%A5%E8%AF%86%E7%9A%84%E5%8D%B0%E8%B1%A1"><span class="nav-number">3.2.</span> <span class="nav-text">2. 内在化：通过对具体的感官进行想象，加深知识的印象。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-3"><span class="nav-number">3.2.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-3"><span class="nav-number">3.2.2.</span> <span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E8%A1%A8%E6%B3%95%E7%BB%98%E5%88%B6%E5%85%B7%E4%BD%93%E7%9A%84%E5%9B%BE%E8%A1%A8%E6%AF%94%E5%86%85%E5%9C%A8%E5%8C%96%E8%B4%B9%E6%97%B6%E9%97%B4%E4%BD%86%E6%AF%94%E5%86%85%E5%9C%A8%E5%8C%96%E6%9B%B4%E5%AE%B9%E6%98%93%E5%B0%A4%E5%85%B6%E6%98%AF%E4%B8%80%E4%BA%9B%E6%8A%BD%E8%B1%A1%E6%A6%82%E5%BF%B5%E5%9B%BE%E6%A0%87%E7%9A%84%E7%9B%AE%E7%9A%84%E6%98%AF%E5%B0%86%E5%A4%9A%E4%B8%AA%E4%BF%A1%E6%81%AF%E5%8E%8B%E7%BC%A9%E6%88%90%E4%B8%80%E5%B9%85%E5%9B%BE%E7%94%BB%E5%9B%BE%E6%A0%87%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%A4%A7%E8%87%B4%E5%8F%AF%E4%BB%A5%E5%88%86%E4%B8%BA%E4%B8%89%E7%A7%8D"><span class="nav-number">3.3.</span> <span class="nav-text">3. 图表法：绘制具体的图表，比内在化费时间，但比内在化更容易，尤其是一些抽象概念。图标的目的是将多个信息压缩成一幅图画。图标的类型大致可以分为三种：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-4"><span class="nav-number">3.3.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-4"><span class="nav-number">3.3.2.</span> <span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%84%8F%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">随意信息处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E6%83%B3%E6%B3%95%E5%B0%86%E4%B8%80%E7%B3%BB%E5%88%97%E4%BF%A1%E6%81%AF%E4%B8%B2%E8%81%94%E8%B5%B7%E6%9D%A5%E5%BD%A2%E6%88%90%E4%B8%80%E4%B8%AA%E9%93%BE%E5%BC%8F%E7%BB%93%E6%9E%84%E9%80%9A%E8%BF%87%E5%AF%B9%E5%85%B6%E4%B8%AD%E4%B8%80%E7%8E%AF%E7%9A%84%E8%AE%B0%E5%BF%86%E8%AE%B0%E8%B5%B7%E5%85%B6%E5%AE%83%E4%BF%A1%E6%81%AF%E8%BF%99%E7%A7%8D%E6%96%B9%E6%B3%95%E5%AF%B9%E4%B8%80%E7%B3%BB%E5%88%97%E7%9A%84%E4%BF%A1%E6%81%AF%E5%B0%A4%E4%B8%BA%E6%9C%89%E6%95%88"><span class="nav-number">4.1.</span> <span class="nav-text">1.联想法：将一系列信息串联起来，形成一个链式结构，通过对其中一环的记忆记起其它信息。这种方法对一系列的信息尤为有效。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-5"><span class="nav-number">4.1.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9%E5%A4%84%E7%90%86"><span class="nav-number">4.1.2.</span> <span class="nav-text">难点处理：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-5"><span class="nav-number">4.1.3.</span> <span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%82%E9%92%A9%E6%B3%95%E4%B8%BA%E6%95%B0%E5%AD%97%E5%88%9B%E9%80%A0%E5%BD%A2%E8%B1%A1%E5%B0%86%E6%9D%82%E4%B9%B1%E7%9A%84%E4%BF%A1%E6%81%AF%E4%B8%8E%E5%AF%B9%E5%BA%94%E7%9A%84%E6%95%B0%E5%AD%97%E6%8C%82%E9%92%A9%E4%BB%8E%E8%80%8C%E4%BB%A5%E4%B8%80%E4%B8%B2%E6%95%B0%E5%AD%97%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%82%A8%E5%AD%98"><span class="nav-number">4.2.</span> <span class="nav-text">2. 挂钩法：为数字创造形象，将杂乱的信息与对应的数字挂钩，从而以一串数字的形式储存。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-6"><span class="nav-number">4.2.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-6"><span class="nav-number">4.2.2.</span> <span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%8E%8B%E7%BC%A9%E6%8A%80%E6%9C%AF%E5%87%8F%E5%B0%91%E4%BF%A1%E6%81%AF%E7%9A%84%E5%AE%B9%E9%87%8F%E5%BB%BA%E7%AB%8B%E4%BF%A1%E6%81%AF%E7%9A%84%E9%80%BB%E8%BE%91%E5%85%B3%E7%B3%BB"><span class="nav-number">4.3.</span> <span class="nav-text">3.信息压缩技术：减少信息的容量，建立信息的逻辑关系。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-7"><span class="nav-number">4.3.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-7"><span class="nav-number">4.3.2.</span> <span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%9A%84%E5%BB%B6%E4%BC%B8"><span class="nav-number">5.</span> <span class="nav-text">知识的延伸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%B0%86%E7%9F%A5%E8%AF%86%E5%BA%94%E7%94%A8%E5%88%B0%E5%AE%9E%E9%99%85%E7%94%9F%E6%B4%BB%E4%B8%AD"><span class="nav-number">5.1.</span> <span class="nav-text">1.实际应用：将知识应用到实际生活中。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BA%A0%E9%94%99%E4%B8%8D%E6%96%AD%E5%9C%B0%E7%BB%83%E4%B9%A0%E5%92%8C%E5%AE%9E%E8%B7%B5%E5%8F%91%E7%8E%B0%E8%87%AA%E5%B7%B1%E7%9F%A5%E8%AF%86%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.2.</span> <span class="nav-text">2.模型纠错：不断地练习和实践，发现自己知识模型中的问题。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-8"><span class="nav-number">5.2.1.</span> <span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-8"><span class="nav-number">5.2.2.</span> <span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E9%A1%B9%E7%9B%AE%E4%B8%BA%E5%9F%BA%E7%A1%80%E7%9A%84%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E6%9C%89%E7%9B%AE%E7%9A%84%E6%80%A7%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B0%E7%9A%84%E7%9F%A5%E8%AF%86"><span class="nav-number">5.3.</span> <span class="nav-text">3.以项目为基础的学习：通过完成一个实际项目，有目的性的学习新的知识。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%B9%E6%9B%BC%E6%8A%80%E5%B7%A7%E9%80%9A%E8%BF%87%E6%A8%A1%E6%8B%9F%E6%95%99%E6%8E%88%E4%B8%80%E4%B8%AA%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%AD%A6%E7%94%9F%E7%9A%84%E6%83%85%E5%86%B5%E6%9D%A5%E5%8A%A0%E6%B7%B1%E8%87%AA%E5%B7%B1%E5%AF%B9%E7%9F%A5%E8%AF%86%E7%9A%84%E7%90%86%E8%A7%A3%E5%92%8C%E6%8E%8C%E6%8F%A1"><span class="nav-number">5.4.</span> <span class="nav-text">费曼技巧：通过模拟教授一个零基础学生的情况来加深自己对知识的理解和掌握。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-9"><span class="nav-number">5.4.1.</span> <span class="nav-text">方法：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结：</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
         
     </div>
 </div>
@@ -543,22 +561,24 @@
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
+            
+<footer class="footer">
     <div class="info-container">
         
-        
             <div class="site-total-word-count">
-                Total Words:  213.3k |  
+                Total Words:  213.3k |
                 Total posts:  56
             </div>
         
         <div class="copyright-info info-item">
             &copy;
             
-              <span>2019</span>
-              -
+                <span>2019</span> -
             
-            2023&nbsp;&nbsp;<a href="/">Xilong Yang</a>
+            2023
+            
+                &nbsp;<a href="/blog">Xilong Yang</a>
+            
         </div>
         
         
@@ -576,8 +596,8 @@
     <ul class="tools-list">
         <!-- TOC aside toggle -->
         
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
             </li>
         
 
@@ -598,10 +618,6 @@
 
         <li class="tools-item tool-font-adjust-minus flex-center">
             <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
         </li>
 
         <li class="tools-item tool-dark-light-toggle flex-center">
@@ -632,18 +648,8 @@
 
     </div>
 
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E8%A8%80"><span class="nav-text">导言：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%9F%A5%E8%AF%86"><span class="nav-text">获取知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E9%98%85%E8%AF%BB%E5%9C%A8%E7%90%86%E8%A7%A3%E7%A8%8B%E5%BA%A6%E5%92%8C%E8%8E%B7%E5%8F%96%E9%80%9F%E5%BA%A6%E4%B9%8B%E9%97%B4%E6%89%BE%E5%88%B0%E5%B9%B3%E8%A1%A1"><span class="nav-text">1.快速阅读：在理解程度和获取速度之间找到平衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%94%E8%AE%B0%E6%B5%81%E8%AE%B0%E5%BD%95%E4%B8%80%E4%B8%AA%E6%9C%80%E7%AE%80%E7%9A%84%E4%BF%A1%E6%81%AF%E8%BE%93%E5%85%A5%E6%B5%81%E4%BB%A5%E7%90%86%E8%A7%A3%E4%B8%BA%E4%B8%BB%E5%87%8F%E5%B0%91%E5%9C%A8%E8%AE%B0%E7%AC%94%E8%AE%B0%E4%B8%8A%E8%8A%B1%E8%B4%B9%E7%9A%84%E6%97%B6%E9%97%B4"><span class="nav-text">2.笔记流：记录一个最简的信息输入流，以理解为主，减少在“记笔记”上花费的时间。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-1"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-1"><span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%94%E7%B3%BB%E8%A7%82%E7%82%B9"><span class="nav-text">联系观点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E5%96%BB%E6%B3%95%E9%80%9A%E8%BF%87%E5%B7%B2%E7%9F%A5%E7%9A%84%E7%BB%8F%E9%AA%8C%E5%AF%B9%E6%96%B0%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%9F%A5%E8%AF%86%E8%BF%9B%E8%A1%8C%E6%AF%94%E5%96%BB%E4%BB%A5%E5%BB%BA%E7%AB%8B%E5%AE%B9%E6%98%93%E7%90%86%E8%A7%A3%E5%92%8C%E8%AE%B0%E5%BF%86%E7%9A%84%E4%BF%A1%E6%81%AF%E5%8C%85%E6%8B%AC%E4%BB%A5%E4%B8%8B%E6%AD%A5%E9%AA%A4"><span class="nav-text">1. 比喻法：通过已知的经验对新学习的知识进行比喻，以建立容易理解和记忆的信息。包括以下步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-2"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-2"><span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%9C%A8%E5%8C%96%E9%80%9A%E8%BF%87%E5%AF%B9%E5%85%B7%E4%BD%93%E7%9A%84%E6%84%9F%E5%AE%98%E8%BF%9B%E8%A1%8C%E6%83%B3%E8%B1%A1%E5%8A%A0%E6%B7%B1%E7%9F%A5%E8%AF%86%E7%9A%84%E5%8D%B0%E8%B1%A1"><span class="nav-text">2. 内在化：通过对具体的感官进行想象，加深知识的印象。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-3"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-3"><span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E8%A1%A8%E6%B3%95%E7%BB%98%E5%88%B6%E5%85%B7%E4%BD%93%E7%9A%84%E5%9B%BE%E8%A1%A8%E6%AF%94%E5%86%85%E5%9C%A8%E5%8C%96%E8%B4%B9%E6%97%B6%E9%97%B4%E4%BD%86%E6%AF%94%E5%86%85%E5%9C%A8%E5%8C%96%E6%9B%B4%E5%AE%B9%E6%98%93%E5%B0%A4%E5%85%B6%E6%98%AF%E4%B8%80%E4%BA%9B%E6%8A%BD%E8%B1%A1%E6%A6%82%E5%BF%B5%E5%9B%BE%E6%A0%87%E7%9A%84%E7%9B%AE%E7%9A%84%E6%98%AF%E5%B0%86%E5%A4%9A%E4%B8%AA%E4%BF%A1%E6%81%AF%E5%8E%8B%E7%BC%A9%E6%88%90%E4%B8%80%E5%B9%85%E5%9B%BE%E7%94%BB%E5%9B%BE%E6%A0%87%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%A4%A7%E8%87%B4%E5%8F%AF%E4%BB%A5%E5%88%86%E4%B8%BA%E4%B8%89%E7%A7%8D"><span class="nav-text">3. 图表法：绘制具体的图表，比内在化费时间，但比内在化更容易，尤其是一些抽象概念。图标的目的是将多个信息压缩成一幅图画。图标的类型大致可以分为三种：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-4"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-4"><span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%84%8F%E4%BF%A1%E6%81%AF%E5%A4%84%E7%90%86"><span class="nav-text">随意信息处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E6%83%B3%E6%B3%95%E5%B0%86%E4%B8%80%E7%B3%BB%E5%88%97%E4%BF%A1%E6%81%AF%E4%B8%B2%E8%81%94%E8%B5%B7%E6%9D%A5%E5%BD%A2%E6%88%90%E4%B8%80%E4%B8%AA%E9%93%BE%E5%BC%8F%E7%BB%93%E6%9E%84%E9%80%9A%E8%BF%87%E5%AF%B9%E5%85%B6%E4%B8%AD%E4%B8%80%E7%8E%AF%E7%9A%84%E8%AE%B0%E5%BF%86%E8%AE%B0%E8%B5%B7%E5%85%B6%E5%AE%83%E4%BF%A1%E6%81%AF%E8%BF%99%E7%A7%8D%E6%96%B9%E6%B3%95%E5%AF%B9%E4%B8%80%E7%B3%BB%E5%88%97%E7%9A%84%E4%BF%A1%E6%81%AF%E5%B0%A4%E4%B8%BA%E6%9C%89%E6%95%88"><span class="nav-text">1.联想法：将一系列信息串联起来，形成一个链式结构，通过对其中一环的记忆记起其它信息。这种方法对一系列的信息尤为有效。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-5"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%BE%E7%82%B9%E5%A4%84%E7%90%86"><span class="nav-text">难点处理：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-5"><span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%82%E9%92%A9%E6%B3%95%E4%B8%BA%E6%95%B0%E5%AD%97%E5%88%9B%E9%80%A0%E5%BD%A2%E8%B1%A1%E5%B0%86%E6%9D%82%E4%B9%B1%E7%9A%84%E4%BF%A1%E6%81%AF%E4%B8%8E%E5%AF%B9%E5%BA%94%E7%9A%84%E6%95%B0%E5%AD%97%E6%8C%82%E9%92%A9%E4%BB%8E%E8%80%8C%E4%BB%A5%E4%B8%80%E4%B8%B2%E6%95%B0%E5%AD%97%E7%9A%84%E5%BD%A2%E5%BC%8F%E5%82%A8%E5%AD%98"><span class="nav-text">2. 挂钩法：为数字创造形象，将杂乱的信息与对应的数字挂钩，从而以一串数字的形式储存。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-6"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-6"><span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E5%8E%8B%E7%BC%A9%E6%8A%80%E6%9C%AF%E5%87%8F%E5%B0%91%E4%BF%A1%E6%81%AF%E7%9A%84%E5%AE%B9%E9%87%8F%E5%BB%BA%E7%AB%8B%E4%BF%A1%E6%81%AF%E7%9A%84%E9%80%BB%E8%BE%91%E5%85%B3%E7%B3%BB"><span class="nav-text">3.信息压缩技术：减少信息的容量，建立信息的逻辑关系。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-7"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-7"><span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%9A%84%E5%BB%B6%E4%BC%B8"><span class="nav-text">知识的延伸</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%B0%86%E7%9F%A5%E8%AF%86%E5%BA%94%E7%94%A8%E5%88%B0%E5%AE%9E%E9%99%85%E7%94%9F%E6%B4%BB%E4%B8%AD"><span class="nav-text">1.实际应用：将知识应用到实际生活中。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BA%A0%E9%94%99%E4%B8%8D%E6%96%AD%E5%9C%B0%E7%BB%83%E4%B9%A0%E5%92%8C%E5%AE%9E%E8%B7%B5%E5%8F%91%E7%8E%B0%E8%87%AA%E5%B7%B1%E7%9F%A5%E8%AF%86%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">2.模型纠错：不断地练习和实践，发现自己知识模型中的问题。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-8"><span class="nav-text">方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0-8"><span class="nav-text">练习：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E9%A1%B9%E7%9B%AE%E4%B8%BA%E5%9F%BA%E7%A1%80%E7%9A%84%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E5%AE%8C%E6%88%90%E4%B8%80%E4%B8%AA%E5%AE%9E%E9%99%85%E9%A1%B9%E7%9B%AE%E6%9C%89%E7%9B%AE%E7%9A%84%E6%80%A7%E7%9A%84%E5%AD%A6%E4%B9%A0%E6%96%B0%E7%9A%84%E7%9F%A5%E8%AF%86"><span class="nav-text">3.以项目为基础的学习：通过完成一个实际项目，有目的性的学习新的知识。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%B9%E6%9B%BC%E6%8A%80%E5%B7%A7%E9%80%9A%E8%BF%87%E6%A8%A1%E6%8B%9F%E6%95%99%E6%8E%88%E4%B8%80%E4%B8%AA%E9%9B%B6%E5%9F%BA%E7%A1%80%E5%AD%A6%E7%94%9F%E7%9A%84%E6%83%85%E5%86%B5%E6%9D%A5%E5%8A%A0%E6%B7%B1%E8%87%AA%E5%B7%B1%E5%AF%B9%E7%9F%A5%E8%AF%86%E7%9A%84%E7%90%86%E8%A7%A3%E5%92%8C%E6%8E%8C%E6%8F%A1"><span class="nav-text">费曼技巧：通过模拟教授一个零基础学生的情况来加深自己对知识的理解和掌握。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95-9"><span class="nav-text">方法：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结：</span></a></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
 </div>
 
 
@@ -664,7 +670,7 @@
                        class="search-input"
                 >
             </div>
-            <span class="popup-btn-close">
+            <span class="close-popup-btn">
                 <i class="fas fa-times"></i>
             </span>
         </div>
@@ -697,6 +703,8 @@
 
 
 
+
+
     
 <script src="/blog/js/local-search.js"></script>
 
@@ -704,7 +712,7 @@
 
 
     
-<script src="/blog/js/code-copy.js"></script>
+<script src="/blog/js/code-block.js"></script>
 
 
 
@@ -713,12 +721,18 @@
 <div class="post-scripts">
     
         
-<script src="/blog/js/left-side-toggle.js"></script>
+<script src="/blog/js/post-helper.js"></script>
 
+        
+            
 <script src="/blog/js/libs/anime.min.js"></script>
 
+        
+        
+            
 <script src="/blog/js/toc.js"></script>
 
+        
     
 </div>
 

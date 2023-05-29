@@ -18,13 +18,24 @@
 
     <link rel="shortcut icon" href="/blog/../res/favicon.ico">
     
-<link rel="stylesheet" href="/blog/css/font-awesome.min.css">
+<link rel="stylesheet" href="/blog/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/brands.min.css">
 
     <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#D31919","favicon":"/../res/favicon.ico","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"description":"To be or not to be, 这么着还是那么着。"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":false},"style":{"primary_color":"#D31919","logo":null,"favicon":"/../res/favicon.ico","avatar":null,"font_size":null,"font_family":null,"hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"header_transparent":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","font_color":null,"hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":false},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_avatar":{"enable":false},"author_label":{"enable":false,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":false},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
   </script>
 <meta name="generator" content="Hexo 6.2.0"></head>
 
@@ -44,13 +55,14 @@
     <div class="page-main-content">
 
         <div class="page-main-content-top">
-            <header class="header-wrapper">
+            
+<header class="header-wrapper">
 
     <div class="header-content">
         <div class="left">
             
-            <a class="logo-title" href='/blog/'>
-                Xilong&#39;s Blog
+            <a class="logo-title" href="/blog">
+               Xilong&#39;s Blog
             </a>
         </div>
 
@@ -160,26 +172,37 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="article-content-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-        <div class="article-title">
-            <span class="title-hover-animation">《故事》结构笔记</span>
-        </div>
+            <div class="article-title">
+                <span class="title-hover-animation">《故事》结构笔记</span>
+            </div>
 
-        
-            <div class="article-header">
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Xilong Yang</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
+            
+                <div class="article-header">
+                  
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Xilong Yang</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
         <span class="pc">2019-08-18 06:30:54</span>
         <span class="mobile">2019-08-18 06:30</span>
     </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2022-06-25 14:13:31</span>
+    </span>
+    
     
         <span class="article-categories article-meta-item">
             <i class="fas fa-folder"></i>&nbsp;
@@ -223,13 +246,15 @@
     
 </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        
+            
 
-        <div class="article-content markdown-body">
-            <blockquote>
+            <div class="article-content keep-markdown-body">
+                
+
+                <blockquote>
 <p>对《故事》做的结构笔记，将其划分为由内到外的六个层次：基本原理，核心原则，创作与故事的本质，故事的要素，故事设计原理，创作方法。</p>
 </blockquote>
 <span id="more"></span>
@@ -450,80 +475,73 @@
     1. 从里到外的写作：由高度简洁的单个元素推敲排列再渐渐填充。从外到里的写作：由一个想法开始的写作行为，一气完成。
     2. 应该使用从里到外的写作并且尽量推迟台词创作，不好的台词会使故事窒息。</code></pre>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                
-<div class="article-copyright-info-container">
-    <ul>
-        <li>Post title：《故事》结构笔记</li>
-        <li>Post author：Xilong Yang</li>
-        <li>Create time：2019-08-18 06:30:54</li>
-        <li>
-            Post link：https://xilong.site/blog/2019/08/18/L006-故事结构笔记/
-        </li>
-        <li>
-            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
-        </li>
-    </ul>
-</div>
-
-
             </div>
-        
 
-        
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/%E6%95%85%E4%BA%8B/">#故事</a>&nbsp;
-                    </li>
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/%E6%96%B9%E6%B3%95/">#方法</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
+            
 
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/blog/2019/08/18/0001-C:Floating_point_numbers_IEEE754/"
-                        >
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/%E6%95%85%E4%BA%8B/">#故事</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/%E6%96%B9%E6%B3%95/">#方法</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/blog/2019/08/18/0001-C:Floating_point_numbers_IEEE754/"
+                            >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
-                            <span class="title flex-center">
+                                <span class="title flex-center">
                                 <span class="post-nav-title-item">C语言中浮点数的二进制表示（IEEE754）</span>
                                 <span class="post-nav-item">Prev posts</span>
                             </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/blog/2019/08/18/L005-%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E4%B8%80%E6%9C%AC%E4%B9%A6/"
-                        >
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/blog/2019/08/18/L005-%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BB%E4%B8%80%E6%9C%AC%E4%B9%A6/"
+                            >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">《如何阅读一本书》脉络整理与方法论总结</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
-                            <span class="right arrow-icon flex-center">
+                                <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
                             </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
+                            </a>
+                        </div>
+                    
+                </div>
+            
 
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E4%B9%A6%E8%B0%88%E8%AE%BA%E6%95%85%E4%BA%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%94%B1%E5%8E%9F%E7%90%86-%E6%95%85%E4%BA%8B%E8%87%B3%E6%96%B9%E6%B3%95-%E4%BD%9C%E8%80%85%E7%94%B1%E5%86%85%E8%80%8C%E5%A4%96%E7%9A%84%E5%B1%95%E5%BC%80%E8%AE%BA%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">1、本书谈论故事的基本原理，由原理-故事至方法-作者由内而外的展开论述。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%B8%8E%E7%BB%9F%E9%A2%86%E5%BA%8F%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">2、核心与统领：序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E9%99%84%E7%9D%80%E5%B1%82%E4%BD%9C%E5%AE%B6%E4%B8%8E%E6%95%85%E4%BA%8B"><span class="nav-number">3.</span> <span class="nav-text">3、核心附着层：作家与故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%B1%82%E6%95%85%E4%BA%8B%E7%9A%84%E8%A6%81%E7%B4%A0"><span class="nav-number">4.</span> <span class="nav-text">4、内层：故事的要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AC%A1%E5%A4%96%E5%B1%82%E6%95%85%E4%BA%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">5、次外层：故事设计原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%A4%96%E5%B1%82%E4%BD%9C%E8%80%85%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-number">6.</span> <span class="nav-text">6、最外层：作者的工作</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
         
     </div>
 </div>
@@ -535,22 +553,24 @@
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
+            
+<footer class="footer">
     <div class="info-container">
         
-        
             <div class="site-total-word-count">
-                Total Words:  213.3k |  
+                Total Words:  213.3k |
                 Total posts:  56
             </div>
         
         <div class="copyright-info info-item">
             &copy;
             
-              <span>2019</span>
-              -
+                <span>2019</span> -
             
-            2023&nbsp;&nbsp;<a href="/">Xilong Yang</a>
+            2023
+            
+                &nbsp;<a href="/blog">Xilong Yang</a>
+            
         </div>
         
         
@@ -568,8 +588,8 @@
     <ul class="tools-list">
         <!-- TOC aside toggle -->
         
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
             </li>
         
 
@@ -590,10 +610,6 @@
 
         <li class="tools-item tool-font-adjust-minus flex-center">
             <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
         </li>
 
         <li class="tools-item tool-dark-light-toggle flex-center">
@@ -624,18 +640,8 @@
 
     </div>
 
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E4%B9%A6%E8%B0%88%E8%AE%BA%E6%95%85%E4%BA%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E7%94%B1%E5%8E%9F%E7%90%86-%E6%95%85%E4%BA%8B%E8%87%B3%E6%96%B9%E6%B3%95-%E4%BD%9C%E8%80%85%E7%94%B1%E5%86%85%E8%80%8C%E5%A4%96%E7%9A%84%E5%B1%95%E5%BC%80%E8%AE%BA%E8%BF%B0"><span class="nav-text">1、本书谈论故事的基本原理，由原理-故事至方法-作者由内而外的展开论述。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E4%B8%8E%E7%BB%9F%E9%A2%86%E5%BA%8F%E8%A8%80"><span class="nav-text">2、核心与统领：序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E9%99%84%E7%9D%80%E5%B1%82%E4%BD%9C%E5%AE%B6%E4%B8%8E%E6%95%85%E4%BA%8B"><span class="nav-text">3、核心附着层：作家与故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%B1%82%E6%95%85%E4%BA%8B%E7%9A%84%E8%A6%81%E7%B4%A0"><span class="nav-text">4、内层：故事的要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AC%A1%E5%A4%96%E5%B1%82%E6%95%85%E4%BA%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86"><span class="nav-text">5、次外层：故事设计原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%A4%96%E5%B1%82%E4%BD%9C%E8%80%85%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-text">6、最外层：作者的工作</span></a></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
 </div>
 
 
@@ -656,7 +662,7 @@
                        class="search-input"
                 >
             </div>
-            <span class="popup-btn-close">
+            <span class="close-popup-btn">
                 <i class="fas fa-times"></i>
             </span>
         </div>
@@ -689,6 +695,8 @@
 
 
 
+
+
     
 <script src="/blog/js/local-search.js"></script>
 
@@ -696,7 +704,7 @@
 
 
     
-<script src="/blog/js/code-copy.js"></script>
+<script src="/blog/js/code-block.js"></script>
 
 
 
@@ -705,12 +713,18 @@
 <div class="post-scripts">
     
         
-<script src="/blog/js/left-side-toggle.js"></script>
+<script src="/blog/js/post-helper.js"></script>
 
+        
+            
 <script src="/blog/js/libs/anime.min.js"></script>
 
+        
+        
+            
 <script src="/blog/js/toc.js"></script>
 
+        
     
 </div>
 

@@ -18,13 +18,24 @@
 
     <link rel="shortcut icon" href="/blog/../res/favicon.ico">
     
-<link rel="stylesheet" href="/blog/css/font-awesome.min.css">
+<link rel="stylesheet" href="/blog/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/brands.min.css">
 
     <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#D31919","favicon":"/../res/favicon.ico","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"description":"To be or not to be, 这么着还是那么着。"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":false},"style":{"primary_color":"#D31919","logo":null,"favicon":"/../res/favicon.ico","avatar":null,"font_size":null,"font_family":null,"hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"header_transparent":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","font_color":null,"hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":false},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_avatar":{"enable":false},"author_label":{"enable":false,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":false},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
   </script>
 <meta name="generator" content="Hexo 6.2.0"></head>
 
@@ -44,13 +55,14 @@
     <div class="page-main-content">
 
         <div class="page-main-content-top">
-            <header class="header-wrapper">
+            
+<header class="header-wrapper">
 
     <div class="header-content">
         <div class="left">
             
-            <a class="logo-title" href='/blog/'>
-                Xilong&#39;s Blog
+            <a class="logo-title" href="/blog">
+               Xilong&#39;s Blog
             </a>
         </div>
 
@@ -160,26 +172,37 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="article-content-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-        <div class="article-title">
-            <span class="title-hover-animation">从零开始的Haskell（二）——ADT</span>
-        </div>
+            <div class="article-title">
+                <span class="title-hover-animation">从零开始的Haskell（二）——ADT</span>
+            </div>
 
-        
-            <div class="article-header">
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Xilong Yang</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
+            
+                <div class="article-header">
+                  
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Xilong Yang</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
         <span class="pc">2021-07-17 16:32:00</span>
         <span class="mobile">2021-07-17 16:32</span>
     </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2022-06-25 14:13:31</span>
+    </span>
+    
     
         <span class="article-categories article-meta-item">
             <i class="fas fa-folder"></i>&nbsp;
@@ -219,13 +242,15 @@
     
 </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        
+            
 
-        <div class="article-content markdown-body">
-            <blockquote>
+            <div class="article-content keep-markdown-body">
+                
+
+                <blockquote>
 <p>这是系列的第二篇，主题是ADT：代数数据类型。</p>
 </blockquote>
 <span id="more"></span>
@@ -279,76 +304,69 @@
 <p>数据结构可以是递归的，即自己可以是自己的组成部分。比如：</p>
 <figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 定义一个`Int`类型的列表</span></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">IntList</span> = <span class="type">Empty</span> | <span class="type">Cons</span> <span class="type">Int</span> <span class="type">IntList</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 定义一个二叉树</span></span><br><span class="line"><span class="class"><span class="keyword">data</span> <span class="type">Tree</span> = <span class="type">Leaf</span> <span class="type">Char</span></span></span><br><span class="line">          | <span class="type">Node</span> <span class="type">Tree</span> <span class="type">Int</span> <span class="type">Tree</span></span><br><span class="line">  <span class="keyword">deriving</span> <span class="type">Show</span></span><br><span class="line">  </span><br><span class="line"><span class="title">lst</span> :: <span class="type">IntList</span></span><br><span class="line"><span class="title">lst</span> = <span class="type">Cons</span> <span class="number">1</span> (<span class="type">Cons</span> <span class="number">2</span> <span class="type">Empty</span>)</span><br><span class="line"></span><br><span class="line"><span class="title">tree</span> :: <span class="type">Tree</span></span><br><span class="line"><span class="title">tree</span> = <span class="type">Node</span> (<span class="type">Leaf</span> &#x27;x&#x27;) <span class="number">1</span> (<span class="type">Node</span> (<span class="type">Leaf</span> &#x27;y&#x27;) <span class="number">2</span> (<span class="type">Leaf</span> &#x27;z&#x27;))</span><br></pre></td></tr></table></figure>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                
-<div class="article-copyright-info-container">
-    <ul>
-        <li>Post title：从零开始的Haskell（二）——ADT</li>
-        <li>Post author：Xilong Yang</li>
-        <li>Create time：2021-07-17 16:32:00</li>
-        <li>
-            Post link：https://xilong.site/blog/2021/07/17/0016-Re0:Haskell_02/
-        </li>
-        <li>
-            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
-        </li>
-    </ul>
-</div>
-
-
             </div>
-        
 
-        
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/Haskell/">#Haskell</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
+            
 
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/blog/2021/07/17/L013-%E7%99%BD%E5%B2%9B/"
-                        >
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/Haskell/">#Haskell</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/blog/2021/07/17/L013-%E7%99%BD%E5%B2%9B/"
+                            >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
-                            <span class="title flex-center">
+                                <span class="title flex-center">
                                 <span class="post-nav-title-item">白岛</span>
                                 <span class="post-nav-item">Prev posts</span>
                             </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/blog/2021/07/16/0015-Double_pollution_of_Github/"
-                        >
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/blog/2021/07/16/0015-Double_pollution_of_Github/"
+                            >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">Github之禁忌的双重污染</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
-                            <span class="right arrow-icon flex-center">
+                                <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
                             </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
+                            </a>
+                        </div>
+                    
+                </div>
+            
 
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80%E5%85%B3%E4%BA%8Ehaskell%E4%B8%8E%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">前言：关于Haskell与数学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">枚举类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%9E%9A%E4%B8%BE"><span class="nav-number">3.</span> <span class="nav-text">不只是枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%BD%A2%E5%BC%8F%E7%9A%84adt"><span class="nav-number">4.</span> <span class="nav-text">一般形式的ADT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="nav-number">5.</span> <span class="nav-text">模式匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">case表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">7.</span> <span class="nav-text">递归数据结构</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
         
     </div>
 </div>
@@ -360,22 +378,24 @@
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
+            
+<footer class="footer">
     <div class="info-container">
         
-        
             <div class="site-total-word-count">
-                Total Words:  213.3k |  
+                Total Words:  213.3k |
                 Total posts:  56
             </div>
         
         <div class="copyright-info info-item">
             &copy;
             
-              <span>2019</span>
-              -
+                <span>2019</span> -
             
-            2023&nbsp;&nbsp;<a href="/">Xilong Yang</a>
+            2023
+            
+                &nbsp;<a href="/blog">Xilong Yang</a>
+            
         </div>
         
         
@@ -393,8 +413,8 @@
     <ul class="tools-list">
         <!-- TOC aside toggle -->
         
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
             </li>
         
 
@@ -415,10 +435,6 @@
 
         <li class="tools-item tool-font-adjust-minus flex-center">
             <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
         </li>
 
         <li class="tools-item tool-dark-light-toggle flex-center">
@@ -449,18 +465,8 @@
 
     </div>
 
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80%E5%85%B3%E4%BA%8Ehaskell%E4%B8%8E%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">前言：关于Haskell与数学基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B"><span class="nav-text">枚举类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%9E%9A%E4%B8%BE"><span class="nav-text">不只是枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%BD%A2%E5%BC%8F%E7%9A%84adt"><span class="nav-text">一般形式的ADT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="nav-text">模式匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">case表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-text">递归数据结构</span></a></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
 </div>
 
 
@@ -481,7 +487,7 @@
                        class="search-input"
                 >
             </div>
-            <span class="popup-btn-close">
+            <span class="close-popup-btn">
                 <i class="fas fa-times"></i>
             </span>
         </div>
@@ -514,6 +520,8 @@
 
 
 
+
+
     
 <script src="/blog/js/local-search.js"></script>
 
@@ -521,7 +529,7 @@
 
 
     
-<script src="/blog/js/code-copy.js"></script>
+<script src="/blog/js/code-block.js"></script>
 
 
 
@@ -530,12 +538,18 @@
 <div class="post-scripts">
     
         
-<script src="/blog/js/left-side-toggle.js"></script>
+<script src="/blog/js/post-helper.js"></script>
 
+        
+            
 <script src="/blog/js/libs/anime.min.js"></script>
 
+        
+        
+            
 <script src="/blog/js/toc.js"></script>
 
+        
     
 </div>
 

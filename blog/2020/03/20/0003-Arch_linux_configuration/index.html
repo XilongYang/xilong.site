@@ -18,13 +18,24 @@
 
     <link rel="shortcut icon" href="/blog/../res/favicon.ico">
     
-<link rel="stylesheet" href="/blog/css/font-awesome.min.css">
+<link rel="stylesheet" href="/blog/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/blog/font/css/brands.min.css">
 
     <script id="hexo-configurations">
-    let KEEP = window.KEEP || {};
-    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"};
-    KEEP.theme_config = {"toc":{"enable":true,"number":false,"expand_all":true,"init_open":true},"style":{"primary_color":"#D31919","favicon":"/../res/favicon.ico","article_img_align":"left","left_side_width":"260px","content_max_width":"920px","hover":{"shadow":false,"scale":false},"first_screen":{"enable":true,"description":"To be or not to be, 这么着还是那么着。"},"scroll":{"progress_bar":{"enable":false},"percent":{"enable":false}}},"local_search":{"enable":true,"preload":false},"code_copy":{"enable":true,"style":"default"},"pjax":{"enable":false},"lazyload":{"enable":false},"version":"3.4.5"};
-    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"xilong.site","root":"/blog/","language":"en","path":"search.xml"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":false},"style":{"primary_color":"#D31919","logo":null,"favicon":"/../res/favicon.ico","avatar":null,"font_size":null,"font_family":null,"hover":{"shadow":false,"scale":false},"first_screen":{"enable":false,"header_transparent":false,"background_img":"/images/bg.svg","description":"Keep writing and Keep loving.","font_color":null,"hitokoto":false},"scroll":{"progress_bar":false,"percent":false}},"local_search":{"enable":true,"preload":false},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_avatar":{"enable":false},"author_label":{"enable":false,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":false},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
   </script>
 <meta name="generator" content="Hexo 6.2.0"></head>
 
@@ -44,13 +55,14 @@
     <div class="page-main-content">
 
         <div class="page-main-content-top">
-            <header class="header-wrapper">
+            
+<header class="header-wrapper">
 
     <div class="header-content">
         <div class="left">
             
-            <a class="logo-title" href='/blog/'>
-                Xilong&#39;s Blog
+            <a class="logo-title" href="/blog">
+               Xilong&#39;s Blog
             </a>
         </div>
 
@@ -160,26 +172,37 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="article-content-container">
+    <div class="post-page-container">
+        <div class="article-content-container">
 
-        <div class="article-title">
-            <span class="title-hover-animation">Arch Linux安装与配置</span>
-        </div>
+            <div class="article-title">
+                <span class="title-hover-animation">Arch Linux安装与配置</span>
+            </div>
 
-        
-            <div class="article-header">
-                <div class="info">
-                    <div class="author">
-                        <span class="name">Xilong Yang</span>
-                        
-                    </div>
-                    <div class="meta-info">
-                        <div class="article-meta-info">
+            
+                <div class="article-header">
+                  
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">Xilong Yang</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
     <span class="article-date article-meta-item">
-        <i class="fas fa-edit"></i>&nbsp;
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
         <span class="pc">2020-03-20 20:36:29</span>
         <span class="mobile">2020-03-20 20:36</span>
     </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2022-06-25 14:13:31</span>
+    </span>
+    
     
         <span class="article-categories article-meta-item">
             <i class="fas fa-folder"></i>&nbsp;
@@ -219,13 +242,15 @@
     
 </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        
+            
 
-        <div class="article-content markdown-body">
-            <blockquote>
+            <div class="article-content keep-markdown-body">
+                
+
+                <blockquote>
 <p>Arch Linux是GNU/Linux的众多发行版中相对小众的一个。相对Ubuntu等更加广为人知的发行版，Arch对新手并不是很友好。这篇文章旨在从零开始，一步一步帮助读者完成Arch Linux的安装与配置。</p>
 </blockquote>
 <span id="more"></span>
@@ -407,76 +432,69 @@
 <p><a class="link"   target="_blank" rel="noopener" href="https://i3wm.org/docs/userguide.html" >i3 User’s Guide<i class="fas fa-external-link-alt"></i></a></p>
 <p><a class="link"   target="_blank" rel="noopener" href="https://github.com/polybar/polybar/wiki" >polybar wiki<i class="fas fa-external-link-alt"></i></a></p>
 
-        </div>
-
-        
-            <div class="post-copyright-info">
-                
-<div class="article-copyright-info-container">
-    <ul>
-        <li>Post title：Arch Linux安装与配置</li>
-        <li>Post author：Xilong Yang</li>
-        <li>Create time：2020-03-20 20:36:29</li>
-        <li>
-            Post link：https://xilong.site/blog/2020/03/20/0003-Arch_linux_configuration/
-        </li>
-        <li>
-            Copyright Notice：All articles in this blog are licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> unless stating additionally.
-        </li>
-    </ul>
-</div>
-
-
             </div>
-        
 
-        
-            <ul class="post-tags-box">
-                
-                    <li class="tag-item">
-                        <a href="/blog/tags/Linux/">#Linux</a>&nbsp;
-                    </li>
-                
-            </ul>
-        
+            
 
-        
-            <div class="article-nav">
-                
-                    <div class="article-prev">
-                        <a class="prev"
-                           rel="prev"
-                           href="/blog/2020/04/24/0004-Binary_tree/"
-                        >
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/blog/tags/Linux/">#Linux</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/blog/2020/04/24/0004-Binary_tree/"
+                            >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
-                            <span class="title flex-center">
+                                <span class="title flex-center">
                                 <span class="post-nav-title-item">二叉树的存储结构及其非层序遍历</span>
                                 <span class="post-nav-item">Prev posts</span>
                             </span>
-                        </a>
-                    </div>
-                
-                
-                    <div class="article-next">
-                        <a class="next"
-                           rel="next"
-                           href="/blog/2020/02/26/0002-C++:Declaration_and_definition/"
-                        >
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/blog/2020/02/26/0002-C++:Declaration_and_definition/"
+                            >
                             <span class="title flex-center">
                                 <span class="post-nav-title-item">C++的声明与定义</span>
                                 <span class="post-nav-item">Next posts</span>
                             </span>
-                            <span class="right arrow-icon flex-center">
+                                <span class="right arrow-icon flex-center">
                               <i class="fas fa-chevron-right"></i>
                             </span>
-                        </a>
-                    </div>
-                
-            </div>
-        
+                            </a>
+                        </div>
+                    
+                </div>
+            
 
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D"><span class="nav-number">1.</span> <span class="nav-text">开始之前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E7%9A%84%E7%A1%AC%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">检查你的硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9arch-linux"><span class="nav-number">1.2.</span> <span class="nav-text">为什么选择Arch Linux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%9F%BA%E6%9C%AC%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">安装：基本系统的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9wiki%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A1%A5%E5%85%85"><span class="nav-number">2.2.</span> <span class="nav-text">对wiki的一些补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yay"><span class="nav-number">3.2.</span> <span class="nav-text">yay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">3.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-oh-my-zsh"><span class="nav-number">3.3.</span> <span class="nav-text">zsh &amp;&amp; oh-my-zsh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%AD%90"><span class="nav-number">3.4.</span> <span class="nav-text">梯子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#trojan"><span class="nav-number">3.4.1.</span> <span class="nav-text">Trojan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#privoxy"><span class="nav-number">3.4.2.</span> <span class="nav-text">Privoxy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BB%A3%E7%90%86"><span class="nav-number">3.4.3.</span> <span class="nav-text">配置命令行模式的代理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%86%9B%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="nav-number">3.5.</span> <span class="nav-text">进军图形界面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%89%8D%E5%87%86%E5%A4%87"><span class="nav-number">3.5.1.</span> <span class="nav-text">安装前准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#i3-gaps"><span class="nav-number">3.5.2.</span> <span class="nav-text">i3-gaps</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-1"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">附配置文件与官方文档</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+</div>
+
+            </div>
         
     </div>
 </div>
@@ -488,22 +506,24 @@
         </div>
 
         <div class="page-main-content-bottom">
-            <footer class="footer">
+            
+<footer class="footer">
     <div class="info-container">
         
-        
             <div class="site-total-word-count">
-                Total Words:  213.3k |  
+                Total Words:  213.3k |
                 Total posts:  56
             </div>
         
         <div class="copyright-info info-item">
             &copy;
             
-              <span>2019</span>
-              -
+                <span>2019</span> -
             
-            2023&nbsp;&nbsp;<a href="/">Xilong Yang</a>
+            2023
+            
+                &nbsp;<a href="/blog">Xilong Yang</a>
+            
         </div>
         
         
@@ -521,8 +541,8 @@
     <ul class="tools-list">
         <!-- TOC aside toggle -->
         
-            <li class="tools-item page-aside-toggle">
-                <i class="fas fa-outdent"></i>
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
             </li>
         
 
@@ -543,10 +563,6 @@
 
         <li class="tools-item tool-font-adjust-minus flex-center">
             <i class="fas fa-search-minus"></i>
-        </li>
-
-        <li class="tools-item tool-expand-width flex-center">
-            <i class="fas fa-arrows-alt-h"></i>
         </li>
 
         <li class="tools-item tool-dark-light-toggle flex-center">
@@ -577,18 +593,8 @@
 
     </div>
 
-    
-        <aside class="page-aside">
-            <div class="post-toc-wrap">
-    <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%B9%8B%E5%89%8D"><span class="nav-text">开始之前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BD%A0%E7%9A%84%E7%A1%AC%E4%BB%B6"><span class="nav-text">检查你的硬件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9arch-linux"><span class="nav-text">为什么选择Arch Linux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%9F%BA%E6%9C%AC%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%90%AD%E5%BB%BA"><span class="nav-text">安装：基本系统的搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9wiki%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A1%A5%E5%85%85"><span class="nav-text">对wiki的一些补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yay"><span class="nav-text">yay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-oh-my-zsh"><span class="nav-text">zsh &amp;&amp; oh-my-zsh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%AD%90"><span class="nav-text">梯子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#trojan"><span class="nav-text">Trojan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#privoxy"><span class="nav-text">Privoxy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BB%A3%E7%90%86"><span class="nav-text">配置命令行模式的代理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%86%9B%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="nav-text">进军图形界面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%89%8D%E5%87%86%E5%A4%87"><span class="nav-text">安装前准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#i3-gaps"><span class="nav-text">i3-gaps</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-1"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%99%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="nav-text">附配置文件与官方文档</span></a></li></ol></li></ol></li></ol></li></ol>
-    </div>
-</div>
-        </aside>
-    
-
-    <div class="image-viewer-container">
-    <img src="">
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
 </div>
 
 
@@ -609,7 +615,7 @@
                        class="search-input"
                 >
             </div>
-            <span class="popup-btn-close">
+            <span class="close-popup-btn">
                 <i class="fas fa-times"></i>
             </span>
         </div>
@@ -642,6 +648,8 @@
 
 
 
+
+
     
 <script src="/blog/js/local-search.js"></script>
 
@@ -649,7 +657,7 @@
 
 
     
-<script src="/blog/js/code-copy.js"></script>
+<script src="/blog/js/code-block.js"></script>
 
 
 
@@ -658,12 +666,18 @@
 <div class="post-scripts">
     
         
-<script src="/blog/js/left-side-toggle.js"></script>
+<script src="/blog/js/post-helper.js"></script>
 
+        
+            
 <script src="/blog/js/libs/anime.min.js"></script>
 
+        
+        
+            
 <script src="/blog/js/toc.js"></script>
 
+        
     
 </div>
 

@@ -1,19 +1,25 @@
 function PageChanged(e) {
-    var page_input = e.target;
+    var input = e.target;
+    var page_number = input.value;
 
-    var is_number = /^[0-9]+$/.test(page_input.value);
+    var is_number = /^[0-9]+$/.test(page_number);
 
-    var number = parseInt(page_input.value);
-    var out_of_range = number < page_input.min || number > page_input.max;
+    var number = parseInt(page_number);
+    var out_of_range = number < input.min || number > input.max;
 
     if (!is_number || out_of_range ) {
-        page_input.value = page_input.defaultValue;
+        input.value = input.defaultValue;
         return;
     }
 
+    var base_url = input.getAttribute('base_url');
+    if (!base_url.endsWith('/')) {
+      base_url += '/';
+    }
+
     if (number == 1) {
-        document.location.href = "/blog";
+        document.location.href = base_url;
     } else {
-        document.location.href = "/blog/page/" + number;
+        document.location.href = base_url + "page/" + number;
     }
 }
