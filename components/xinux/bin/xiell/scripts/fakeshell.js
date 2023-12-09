@@ -2,7 +2,11 @@ var cmd_his = [];
 var cmd_indx = 0;
 var complete = new Map();
 var cmd_set = ["ls", "cd", "cat", "screenfetch"
-    , "uname", "clear", "help", "exit"];
+    , "uname", "clear", "help", "exit", "reboot"];
+
+function init() {
+    
+}
 
 function read_cmd(event){
     var welcome = document.getElementById("welcome");
@@ -16,6 +20,7 @@ function read_cmd(event){
     if (event.keyCode == 38 && cmd_indx != 0) {
         cmd_indx--;
         cur_cmd.value = cmd_his[cmd_indx];
+        cur_cmd.setSelectionRange(cur_cmd.length, cur_cmd.length);
     } 
     // next_cmd
     if (event.keyCode == 40 && cmd_indx < cmd_his.length) {
@@ -62,23 +67,16 @@ function read_cmd(event){
     result = parse_cmd(cur_cmd.value);
     if (result == "--clr__clr") {
         msg.innerHTML = "";
-    } else if (result == "exit") {
+    } else if (result == "exit" || result == "reboot") {
         parse_cmd("cd /");
         welcome.style.display = "none";
         cur_msg.style.display = "none";
 
-        msg.innerHTML = "Good bye!";
+        msg.innerHTML = "Rebooting system...";
 
         setTimeout(() => {
-            msg.innerHTML = "";
-            msg.innerHTML = "Restarting...";
-        }, 1000);
-
-        setTimeout(() => {
-            welcome.style.display = "block";
-            cur_msg.style.display = "block";
-            msg.innerHTML = "";
-        }, 2000);
+            window.location.replace("/components/xinux/boot/bootloader");
+        }, 1500);
         
     } else {
         msg.innerHTML += result;
@@ -100,6 +98,8 @@ function parse_cmd(value) {
             return get_help();
         case "exit":
             return "exit";
+        case "reboot":
+            return "reboot";
         case "uname":
             if (args.length > 1) {
                 return "uname: invalid option: " + args[1];
