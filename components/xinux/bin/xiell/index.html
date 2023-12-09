@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Xinux</title>
+    <link rel="icon" href="/res/xinux.svg" type="image/svg">
+    <link href="./index.css" rel="stylesheet">
+    <script src="./scripts/fakeshell.js"></script>
+    <script src="./scripts/fakefs.js"></script>
+    <script src="./scripts/screenfetch.js"></script>
+</head>
+
+<body>
+    <div id="welcome">
+        <p>Welcome to Xinux, a Unix-like operating system simulation.<br>Input 'help' for a help message.</p>
+        <p>Author:<a target='_blank' href="mailto://xilong.yang@foxmail.com">Xilong Yang</a></p>
+    </div>
+    <div calss="message">
+        <p id="hismsg" class="message"></p>
+    </div>
+    <div class="message" id = "curmsg">
+        [<span id="pwd">/</span>]$&ensp;
+        <input class="cmd" class="message" id="cmd"
+        autofocus contenteditable="true" tabindex="-1" onkeydown="read_cmd(event)">
+    </div>
+    <div calss="message">
+        <p id="tipsmsg" class="message"></p>
+    </div>
+</body>

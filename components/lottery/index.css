@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 600px;
+    background: url("./bg.png"), #207f4c;
+    user-select: none;
+  }
+
+#header,#footer {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    background-color: #207f4caa;
+    padding-top: 20px;
+    font-weight: 900;
+    text-shadow: 0px 0px 5px 5px #207f4c;
+}
+#card {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: 500px;
+    background-color: #207f4caa;
+    font-weight: 900;
+    text-shadow: 0px 0px 5px 5px #207f4c;
+}
+
+#fill {
+  position: absolute;
+  transform: translateY(50px);
+  width: 90%;
+  height: 450px;
+}
+
+.rows {
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(4, 1fr); /* 将容器分成四等份 */
+    gap: 10px; /* 设置子元素之间的间隔 */
+  }
+  
+.number-box {
+  display: flex;
+  align-items: center; /* 在交叉轴上垂直居中 */
+  justify-content: center; /* 在主轴上水平居中 */
+  width: 50px;
+  height: 50px;
+  text-align: center;
+}
+
+#money {
+  color: #f0f0f0;
+}
+
+button {
+  background-color: #207f4c;
+  border-color: #207f4c;
+}

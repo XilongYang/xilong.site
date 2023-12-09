@@ -39,8 +39,8 @@ function appGenerate() {
     , '<iframe class="fake_window_contents" id="music-content" loading="lazy" src="/components/musicplayer/" frameborder="0"></iframe>'
     , "<i class='material-icons'>album</i>", "icons_tray_tools");
 
-    new Application("terminal", "Terminal"
-    , '<iframe class="fake_window_contents non_dark" id="terminal-content" loading="lazy" src="/components/Fe3OS/" frameborder="0"></iframe>'
+    new Application("xinux", "Xinux"
+    , '<iframe class="fake_window_contents non_dark" id="terminal-content" loading="lazy" src="/components/xinux/boot/bootloader" frameborder="0"></iframe>'
     , "<i class='material-icons'>terminal</i>", "icons_tray_tools");
 
     new Application("blog", "Xilong's Blog"
