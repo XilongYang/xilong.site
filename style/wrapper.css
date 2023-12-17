@@ -1,0 +1,9 @@
+@import url("/res/MaterialIcons/normal.css");
+@import url("/res/MaterialIcons/outlined.css");
+@import url("/res/MaterialIcons/round.css");
+@import url("/res/MaterialIcons/sharp.css");
+@import url("/res/MaterialIcons/twotone.css");
+@import url("/res/latex-css-1.10.0/style.css");
+
+@import url("./darkmode.css");
+@import url("./patches.css");
