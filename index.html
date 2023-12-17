@@ -1,89 +1,99 @@
 <!DOCTYPE html>
-<html onmousemove="updateMousePos(event)" onmouseup="dragEnd()" 
-onkeydown="dragMode(event)" onkeyup="clearDragMode(event)">
+<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>Xilong Yang</title>
         <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
-        <link href="/res/MaterialIcons/normal.css" rel="stylesheet">
-        <link href="/res/MaterialIcons/outlined.css" rel="stylesheet">
-        <link href="/res/MaterialIcons/round.css" rel="stylesheet">
-        <link href="/res/MaterialIcons/sharp.css" rel="stylesheet">
-        <link href="/res/MaterialIcons/twotone.css" rel="stylesheet">
-        <link href="/res/fontawesome-free-6.0.0-web/css/all.min.css" rel="stylesheet">
-        <link href="/default.css" rel="stylesheet">
-        <script src="/scripts/animation.js"></script>
-        <script src="/scripts/windowSimulator.js"></script>
-        <script src="/scripts/appGenerator.js"></script>
-        <script src="/scripts/darkmode.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-        <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
     </head>
-    <body id="body" onscroll="fade()" onload="appGenerate();fade()">
-        <div class="darkmode-mask" id="darkmode-mask"></div>
-        <div id="header">
-            <h1><a id="name" href="/">Xilong Yang</a></h1>
-            <span class="non_important" id="occupation">Programer</span><br>
-            <div id="icons_tray_contact" class="tray">
-                <div class="icon" id="mail"><a href="mailto:xilong.yang@foxmail.com"> 
-                    <abbr title="Mail">
-                        <i class="material-icons">
-                            alternate_email
-                        </i></a>
-                    </abbr>
-                </div>
-                <div class="icon" id="github"><a href="https://github.com/XilongYang"> 
-                    <abbr title="Github">
-                        <i class="fa-brands fa-github fa-fw" aria-hidden="true"></i></a>
-                    </abbr>
-                </div>
-            </div> 
-            <div id="icons_tray_tools" class="tray">
-                <div class="icon" id="darkmode" onclick="switchDarkmode()">
-                    <abbr title="Dark mode">
-                        <i class="material-icons">
-                            dark_mode
-                        </i>
-                    </abbr>
-                </div>
-            </div>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
         </div>
-        <div id="space"></div>
-        <div id="contents">
-            <div id="works">
-                <div class="work">
-                    <a href="https://github.com/XilongYang/littledb">LittleDB</a>
-                    <p id="stamp_intro">A simple C++ library provides an embedded K-V database and some encrypt/decrypt concerned functions.</p>
-                </div>
-                <div class="work">
-                    <a id="this_site" href="https://github.com/XilongYang/xilongyang.github.io">This site</a>
-                    <p id="this_site_intro">A static site that simulates a window manager and a terminal.</p>
-                </div>
-                <div class="work" id="misc">
-                    <a href="https://github.com/XilongYang?tab=repositories" id="misc">misc.</a>
-                </div>
-                <div id="fades">
-                    <div id="about">
-                        <p class="non_important" id="about_label">About</p>
-                        <p id="intro">I'm a programer with 3 years of experience about C++ and Linux.  </p>
-                        <p id="intro_site">I maintain a <a href="https://github.com/XilongYang">github account</a> and <a href="/blog">blog</a>. </p>
-                        <p id="intro_email">You can contact me through email <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>
-                    </div>
-                    <div id="link">
-                        <p class="non_important" id="links_label">Links</p>
-                        <a href="/blog/">Xilong's Blog</a><br>
-                        <br>
-                        <p class="non_important" id="friend_label">Friends</p>
-                        <a href="https://doerr33.github.io">Doeer's Blog</a><br>
-                        <a href="https://jingsong.site">Jingsong Xu</a><br>
-                    </div>
-                    <div id="booter">
-                        <p class="non_important" id="nomore">* no more info.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="header">
+            <h1>Xilong Yang</h1>
+            <p class="author">Programmer<br>Since 2019</p>
+        </div>
+        <div class="abstract">
+            <h2>About</h2>
+            <p>
+                Hi, here is Xilong, a programmer who strives to create things that are simple and elegant.
+                I have a soft spot for C, but these days, I am leaning on Java for my daily bread and water.
+                I matain a <a href="https://github.com/xilongyang">Github account</a>.
+                Feel free to contact me via email: <a href="mailto:xilong.yang@foxmail.com">xilong.yang@foxmail.com</a>.
+                <br>
+                My native language is Chinese, and I have a working knowledge of both English and Japanese at an 
+                intermediate level (about B2). However, for the purpose of practicing English, this website will exclusively 
+                publish content in English.
+            </p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>Contents</h2>
+            <ol>
+              <li><a href="#toys">Toys</a></li>
+              <li><a href="#posts">Posts</a></li>
+            </ol>
+        </nav>
+        <main>
+            <article>
+                <h2 id="toys">Toys</h2>
+                <ul>
+                    <li>
+                        <a href="https://github.com/XilongYang/littledb">LittleDB</a>: A simple C++ library that offers an embedded key-value database and various encryption/decryption functions.
+                    </li>
+                    <li>
+                        <a href="https://github.com/XilongYang/xinux">Xinux</a>: A web page that simulates a command line interface of a Unix-like operating system. <a href="">[ Try it ]</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/XilongYang/STAMP">STAMP</a>: IETF RFC8762: Simple Two-Way Active Measure Protocol. C++ Implementation.
+                    </li>
+                </ul>
+                <h2 id="posts">Posts</h2>
+                    <h3>2023</h3>
+                        <p>05-30 <a>[Ongoing] Dabble in Machine Learning (1): Prelude and Categories.</a></p>
+                    <h3>2022</h3>
+                        <p>01-13 <a>[Ongoing] Solution of the CF-R765-B</a></p>
+                        <p>01-10 <a>[Ongoing] Haskell from 0 to 1 (7): Flod and Monoids.</a></p>
+                        <p>01-08 <a>[Ongoing] Haskell: Gain an Understanding of Lazy Evaluation and Operator Precedence.</a></p>
+                    <h3>2021</h3>
+                        <p>12-11 <a>[Ongoing] String Matching Algorithms: AC Automaton.</a></p>
+                        <p>11-01 <a>[Ongoing] String Matching Algorithms: KMP.</a></p>
+                        <p>09-23 <a>[Ongoing] Conceptual Analysis of Red-Black Tree and a C++ Implementation.</a></p>
+                        <p>09-19 <a>[Ongoing] Quick Start with JAVA Base on C++.</a></p>
+                        <p>09-15 <a>[Ongoing] Haskell from 0 to 1 (6): Lazy Evaluation.</a></p>
+                        <p>09-10 <a>[Ongoing] Haskell from 0 to 1 (5): More Polymorphism and Type Classes.</a></p>
+                        <p>09-06 <a>[Ongoing] Haskell from 0 to 1 (4): Higher-order Programming and Type Inference.</a></p>
+                        <p>09-03 <a>[Ongoing] Haskell from 0 to 1 (3): Recursion patterns, polymorphism, and the Prelude.</a></p>
+                        <p>08-11 <a>[Ongoing] C++ Memory Alignment of Struct.</a></p>
+                        <p>08-02 <a>[Ongoing] Quick Start with CMakeLists.txt.</a></p>
+                        <p>07-21 <a>[Ongoing] STL Containers: Memo Summary.</a></p>
+                        <p>07-19 <a>[Ongoing] C++: Initializing Variables.</a></p>
+                        <p>07-18 <a>[Ongoing] C++: The Rule of Three/Five.</a></p>
+                        <p>07-18 <a>[Ongoing] The Level Order Iteration of Binary Tree.</a></p>
+                        <p>07-17 <a>[Ongoing] Haskell from 0 to 1 (2): ADT.</a></p>
+                        <p>06-27 <a>[Ongoing] Create a Local Git Storage with a Portable Hard Drive.</a></p>
+                        <p>06-10 <a>[Ongoing] Haskell from 0 to 1 (2): Basics.</a></p>
+                        <p>05-29 <a>[Ongoing] HMAC-SHA256: Algorithm Analysis and Implementation.</a></p>
+                        <p>05-17 <a>[Ongoing] C++: Using Random Numbers.</a></p>
+                        <p>05-15 <a>[Ongoing] Python: Deep Copy vs Shallow Copy.</a></p>
+                        <p>01-27 <a>[Ongoing] Haskell: Solving the Four Towers of Hanoi Puzzle.</a></p>
+                    <h3>2020</h3>
+                        <p>10-11 <a>[Ongoing] Solution of the NC15553.</a></p>
+                        <p>06-07 <a>[Ongoing] Generating and Using C++ Library in Linux.</a></p>
+                        <p>06-07 <a>[Ongoing] Quick Start with Python3 Base on C++.</a></p>
+                        <p>04-24 <a>[Ongoing] Memory Structure of Binary Tree and Its Non-Level Order Iteration.</a></p>
+                        <p>02-26 <a>[Ongoing] C++: Declaration and Definition.</a></p>
+                    <h3>2019</h3>
+                        <p>08-18 <a>[Ongoing] C: The Binary Representation of Float Numbers (IEEE 754).</a></p>
+            </article>
+        </main>
+        <div class="footnotes">
+            © 2019-2023 Xilong Yang
+            | Powered by <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>
+            | License: <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
         </div>
     </body>
 </html>
