@@ -6,32 +6,18 @@
     <title>404</title>
     <link rel="icon" href="/res/xinux.svg" type="image/svg">
     <link rel="shortcut icon" href="/res/xinux.svg" type="image/svg">
-    <style type="text/css">
-        body {
-            font-family:Helvetica,sans-serif;
-        }
-
-        a { 
-            color: #1c1c1c;
-            font-weight: bold;
-        }
-        a:visited { color: #1c1c1c}
-        a:hover { 
-            color: #078a07;
-        }
-
-    </style>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
 </head>
 <body>
-    <div id="container">
-        <h1 id="t404">
-            404 Not Found
-        </h1>
-        <div id="contents">
-            <p>That page seems to be missing. Maybe you can:</p>
-            <p><a href="/">Back home.</a></p>
-            <p><a href="mailto:xilong.yang@foxmail.com">Contact me: xilong.yang@foxmail.com.</a></p>
-        </div>
+    <div class="navbar" style="display: none;">
+        <i class="material-icons icon" id="darkmode">dark_mode</i>
     </div>
+    <h1>
+        404 Not Found
+    </h1>
+    <p>That page seems to be missing. Maybe you can:</p>
+    <p><a href="/">Back home.</a></p>
+    <p><a href="mailto:xilong.yang@foxmail.com">Contact me: xilong.yang@foxmail.com.</a></p>
 </body>
 </html>

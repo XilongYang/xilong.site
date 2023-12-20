@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>C: The Binary Representation of Float Numbers (IEEE
+754) - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/es5/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>C: The Binary Representation of Float Numbers (IEEE
+754)</h1>
+            <p class="author">Xilong Yang<br>2019-08-18</p>
+        </div>
+        <main>
+            <div class="abstract">
+            <h2>
+            Prelude
+            </h2>
+            <p>
+            Recently, I encountered precision issues with floating-point
+            arithmetic during my C language learning process. After
+            researching, I found that the issue was caused by the
+            storage method of floating-point numbers. Here is a record.
+            </p>
+            </div>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#issue">Issue</a>
+            </li>
+            <li>
+            <a href="#analysis">Analysis</a>
+            </li>
+            <li>
+            <a href="#result">Result</a>
+            </li>
+            </ol>
+            </nav>
+            <h2 id="issue">Issue</h2>
+            <p>Code for the issue:</p>
+            <pre class="language-c line-numbers match-braces"><code>  int main() {
+    return 0;
+  }</code></pre>
+            <h2 id="analysis">Analysis</h2>
+            <p><span class="math display">\[
+            \frac{\partial^2}{\partial x_1\partial x_2}y
+            \]</span></p>
+            <h2 id="result">Result</h2>
+        </main>
+        <div class="footnotes">
+            © 2019-2023 <a href="/">Xilong Yang</a>
+            | Powered by <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>
+            | License: <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+        </div>
+    </body>
+</html>
