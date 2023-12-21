@@ -51,13 +51,34 @@
             </nav>
             <h2 id="issue">Issue</h2>
             <p>Code for the issue:</p>
-            <pre class="language-c line-numbers match-braces"><code>  int main() {
-    return 0;
-  }</code></pre>
+            <pre class="language-c line-numbers match-braces"><code>#include &lt;stdio.h&gt;
+
+int main() {
+  int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+
+  // Calculate the mean of all the numbers in arr.
+  float a = 0;
+  for (int i = 0; i &lt; 10; ++i) {
+    a += (float)arr[i] / 10;   
+  }
+  for (int i = 0; i &lt; 10; ++i) {
+    if (arr[i] &gt; a) {
+        printf(&quot;%d &quot;, arr[i]);
+    }
+  }
+  return 0;
+}</code></pre>
+            <p>It’s evident that the above program theoretically
+            shouldn’t output any data. However, the actual execution
+            result is as follows:</p>
+            <pre><code>3 3 3 3 3 3 3 3 3 3 </code></pre>
             <h2 id="analysis">Analysis</h2>
-            <p><span class="math display">\[
-            \frac{\partial^2}{\partial x_1\partial x_2}y
-            \]</span></p>
+            <p>After some attempts, finally, I found the reason is that
+            the value of <code>a</code> in this program is not 3.0 but
+            2.9999.</p>
+            <p>After several attempts, I finally discovered that the
+            issue is caused by the value of ‘a’ in this program not
+            being 3.0, but rather 2.9999.</p>
             <h2 id="result">Result</h2>
         </main>
         <div class="footnotes">

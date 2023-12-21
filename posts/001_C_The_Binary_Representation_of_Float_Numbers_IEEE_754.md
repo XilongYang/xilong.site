@@ -23,14 +23,34 @@ Recently, I encountered precision issues with floating-point arithmetic during m
 ## Issue
 Code for the issue:
 ``` {.language-c .line-numbers .match-braces}
-  int main() {
-    return 0;
+#include <stdio.h>
+
+int main() {
+  int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+
+  // Calculate the mean of all the numbers in arr.
+  float a = 0;
+  for (int i = 0; i < 10; ++i) {
+    a += (float)arr[i] / 10;   
   }
+  for (int i = 0; i < 10; ++i) {
+    if (arr[i] > a) {
+        printf("%d ", arr[i]);
+    }
+  }
+  return 0;
+}
 ```
+It's evident that the above program theoretically shouldn't output any data. However, the actual execution result is as follows:
+
+```
+3 3 3 3 3 3 3 3 3 3 
+```
+
 ## Analysis
 
-$$
-\frac{\partial^2}{\partial x_1\partial x_2}y 
-$$
+After some attempts, finally, I found the reason is that the value of `a` in this program is not 3.0 but 2.9999.
+
+After several attempts, I finally discovered that the issue is caused by the value of 'a' in this program not being 3.0, but rather 2.9999.
 
 ## Result
