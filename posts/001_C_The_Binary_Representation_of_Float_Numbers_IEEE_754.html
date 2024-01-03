@@ -73,13 +73,207 @@ int main() {
             result is as follows:</p>
             <pre><code>3 3 3 3 3 3 3 3 3 3 </code></pre>
             <h2 id="analysis">Analysis</h2>
-            <p>After some attempts, finally, I found the reason is that
-            the value of <code>a</code> in this program is not 3.0 but
-            2.9999.</p>
             <p>After several attempts, I finally discovered that the
             issue is caused by the value of ‘a’ in this program not
-            being 3.0, but rather 2.9999.</p>
+            being 3.0, but rather 2.9999. This suggests that the problem
+            is probably linked to the precision of floating-point
+            arithmetic.</p>
+            <p>Floating-point numbers are storaged in memory according
+            to the IEEE 754 standard. That is, each number is allocated
+            4 bytes, comprising a sign bit, an 8-bit exponent bias and a
+            23-bit fraction. As shown in the diagram below:</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>EXP</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>0000 0000</td>
+            <td>000 0000 0000 0000 0000 0000</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>To represent a floating-point number by the struct, we
+            should transfer a number to the <strong>normalized
+            form</strong>, which looks like scientific notation for
+            binary numbers. A normalized number has a format like <span
+            class="math inline">\(\pm a.bbbb_2 \times 10_2^c\)</span>,
+            where the <span class="math inline">\(a\)</span> should not
+            be 0 (In a binary number, each digit is neither 0 or 1, so
+            the <span class="math inline">\(a\)</span> should always be
+            1).</p>
+            <p>For example,</p>
+            <ol type="1">
+            <li><p>The number <span class="math inline">\(1.0101_2
+            \times 10_2^0\)</span> is a normalized number.</p></li>
+            <li><p>The number <span class="math inline">\(0.01001_2
+            \times 10_2^0\)</span> is not a normalized number. We can
+            transfer it to normalized format by change the exponent:
+            <span class="math inline">\(1.001_2 \times 10_2^{-10_2}(in\
+            Dec:\ 2^{-2})\)</span>.</p></li>
+            <li><p>The number <span class="math inline">\(1001.01_2
+            \times 10_2^0\)</span> is also not a normalized number. We
+            can transfer it to normalized format by change the exponent:
+            <span class="math inline">\(1.00101_2 \times 10_2^{11_2}(in\
+            Dec:\ 2^{3})\)</span>.</p></li>
+            </ol>
+            <p>Let’s look back to the struct, the <strong>sign
+            bit</strong> determines whether the number is positive or
+            negative, with ‘0’ indicating positive and ‘1’ indicating
+            negative.</p>
+            <p><strong>Exponent bias</strong> represents the exponent of
+            the number, that is:</p>
+            <p><span class="math display">\[
+            EXP(Exponent\ bias) = e(exponent\ of\ the\ number) + 127.
+            \]</span></p>
+            <blockquote>
+            <p>Why don’t we use the exponent directly rather than plus a
+            suspicious ‘127’? The reason is for a easier machine compute
+            progress, which can transfer a signficated arithmetic to a
+            simpler unsignficated arithmetic. For example, consider the
+            compute progress:</p>
+            <p><span class="math display">\[
+            -123_{10}(1111\ 1011_2) + 123_{10}(0111\ 1011_2)
+            = 1000\ 0101_2 + 0111\ 1011_2
+            = 0000\ 0000_2
+            \]</span></p>
+            <p>It can be transfer to:</p>
+            <p><span class="math display">\[
+            4_{10}(0000\ 0100_2) + 250_{10}(1111 1010_2)
+            = 1111\ 1110_2
+            \]</span></p>
+            <p>Which can void calculating the two’s complement of
+            numbers.</p>
+            </blockquote>
+            <p><strong>Fraction</strong> represents the right part of
+            the point in the normalized number. That is, the <span
+            class="math inline">\(bbbb\)</span> part of a normalized
+            number <span class="math inline">\(1.bbbb \times
+            10_2^c\)</span>. The leading <span
+            class="math inline">\(1\)</span> is implicit, it will not be
+            storaged in memory, but when we compute the value of the
+            number, it should be consider.</p>
+            <p>For example, to represent a number <span
+            class="math inline">\(12.25_10\)</span> in IEEE 754
+            standard, we should deal the number with some step:</p>
+            <ol type="1">
+            <li><p>Transfer the number to binary representation: <span
+            class="math inline">\(1100.01_2\)</span>.</p></li>
+            <li><p>Transfer the number to normalized form: <span
+            class="math inline">\(1.10001_2 \times
+            10_2^{11}\)</span>.</p></li>
+            <li><p>The number is positive, so set the sign bit to
+            0:</p></li>
+            </ol>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>EXP</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>…. ….</td>
+            <td>… …. …. …. …. ….</td>
+            </tr>
+            </tbody>
+            </table>
+            <ol start="4" type="1">
+            <li>The exponent of the number is <span
+            class="math inline">\(11_2\)</span>, so set the EXP to <span
+            class="math inline">\(11_2 +
+            01111111_2(127_{10})\)</span></li>
+            </ol>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>EXP</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>10000010</td>
+            <td>… …. …. …. …. ….</td>
+            </tr>
+            </tbody>
+            </table>
+            <ol start="5" type="1">
+            <li>Set the fraction to <span
+            class="math inline">\(10001\)</span></li>
+            </ol>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>EXP</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>10000010</td>
+            <td>100 0100 0000 0000 0000 0000</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>So we get the IEEE 754 struct for the number.</p>
             <h2 id="result">Result</h2>
+            <p>Let’s back to the issue, get the IEEE 754 representation
+            of <span class="math inline">\(0.3_{10}\)</span>.</p>
+            <p>Transfer <span class="math inline">\(0.3_{10}\)</span> to
+            normalized binary representation:</p>
+            <p><span class="math display">\[
+            1.00110011001100110011001... \times 10_2^{-10}
+            \]</span></p>
+            <p>We can notice that the binary representation of <span
+            class="math inline">\(0.3_{10}\)</span> is a unfiniate
+            number. So it will be truncate when transfer to IEEE 754
+            representation:</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>EXP</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>01111101</td>
+            <td>001 1001 1001 1001 1001 1001</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>Translate the binary representation to hex, it should be
+            <span class="math inline">\(3E999999_{16}\)</span>. We can
+            validate it by the program:</p>
+            <pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
+
+int main()
+{
+    float a = 0.3;
+    printf(&quot;%x&quot;, *(int *)&amp;a);
+    return 0;
+}</code></pre>
+            <p>output:</p>
+            <pre><code>3e99999a</code></pre>
+            <p>The result is not actually <span
+            class="math inline">\(3E999999_{16}\)</span>, this is
+            because the float-point number arithmetic has some round
+            rules.</p>
         </main>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
