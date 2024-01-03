@@ -5,3 +5,11 @@ p {
 .footnotes {
     margin-top: 3.5rem;
 }
+
+blockquote {
+    margin-left: 0;
+    padding-left: 1rem;
+    margin-right: 0;
+    border-left-width: 0.3rem;
+    border-left-style: solid;
+}
