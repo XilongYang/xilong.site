@@ -1,7 +1,7 @@
 ---
 title: "C: The Binary Representation of Float Numbers (IEEE 754)"
 author: Xilong Yang
-date: 2019-08-18
+date: 2020-02-26
 ---
 
 <div class="abstract">
