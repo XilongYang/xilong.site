@@ -28,6 +28,9 @@ TOC_TEMPLATE = '''
 
 TOC_ITEM_TEMPLATE = '<li><a href="$$link$$">$$title$$</a></li>\n'
 
+def PL_OPTIONS(language):
+    PL_OPTIONS_TEMPLATE = '{.language-$$language$$ .line-numbers .match-braces}'
+    return '``` ' + PL_OPTIONS_TEMPLATE.replace('$$language$$', language[3:])
 
 def src2path(filename):
     return SRC_PATH + '/' + filename + SOURCE_SUFFIX
@@ -49,16 +52,24 @@ def outdate(src, post):
     return os.path.getmtime(src) > os.path.getmtime(post)
 
 def preprocessing(file):
-    # generate toc
     contents = ''
     with open(src2path(file), 'r') as src:
+        # Generate toc
         contents = src.read()
         titles = [x.split(' ', 1)[1] for x in re.findall('^## .*$', contents, flags=re.MULTILINE)]
         toc_items = [TOC_ITEM_TEMPLATE.replace('$$link$$', '#'+x.replace(' ','-').lower()).replace('$$title$$', x) for x in titles]
         toc = TOC_TEMPLATE.replace('$$items$$', ''.join(toc_items)) if len(toc_items) != 0 else ''
         contents = contents.replace('$$toc$$', toc)
+
+        # Replace programming language options
+        pl_options = set(re.findall('^```.+$', contents, flags=re.MULTILINE))
+        for option in pl_options:
+            contents = contents.replace(option, PL_OPTIONS(option))
+
+    # Write the temp file
     with open(temp2path(file), 'w') as temp:
         temp.write(contents)
+
 
 
 src_list  = list(set([file.split('.')[0] for file in os.listdir(SRC_PATH)]))
