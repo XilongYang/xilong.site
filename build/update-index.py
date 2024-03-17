@@ -29,19 +29,19 @@ def parse_meta(src_file_path):
     parse_on = False
     with open(src_file_path, "r") as file:
         for line in file:
-            clear_line = line.replace('\n', '').replace(' ', '')
+            clear_line = line.replace('\n', '')
             if clear_line == '---':
                 parse_on = not parse_on
             elif parse_on:
                 parse = clear_line.split(':', 1)
-                result[parse[0]] = parse[1]
+                result[parse[0].replace(' ','')] = parse[1]
     return result
 
 def post_html():
     post_map = {} 
     for src in list(set([file.split('.')[0] for file in os.listdir(LOCAL_SRC_PATH)])):
         meta = parse_meta(src2path(src))
-        title = meta['title']
+        title = meta['title'].replace('"','')
         date = meta['date'].split('-', 1)
         post_item = POST_HTML_TEMPLATE.replace("$date$", date[1]).replace("$link$", post2link(src)).replace("$title$", title)
 

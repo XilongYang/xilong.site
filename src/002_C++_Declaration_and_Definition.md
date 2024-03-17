@@ -1,5 +1,5 @@
 ---
-title: "C: The Binary Representation of Float Numbers (IEEE 754)"
+title: "C++: Declaration and Definition"
 author: Xilong Yang
 date: 2020-02-26
 ---

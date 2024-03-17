@@ -123,7 +123,7 @@
 .latex-dark {
   --body-color: hsl(0, 0%, 86%);
   --body-bg-color: hsl(0, 0%, 16%);
-  --link-visited: hsl(0, 100%, 33%);
+  --link-visited: rgb(200, 200, 255);
   --link-focus-outline: hsl(220, 90%, 52%);
   --pre-bg-color: hsl(0, 1%, 25%);
   --kbd-bg-color: hsl(0, 0%, 16%);
@@ -138,7 +138,7 @@
    .latex-dark-auto {
     --body-color: hsl(0, 0%, 86%);
     --body-bg-color: hsl(0, 0%, 16%);
-    --link-visited: hsl(0, 100%, 33%);
+    --link-visited: rgb(200, 200, 255);
     --link-focus-outline: hsl(220, 90%, 52%);
     --pre-bg-color: hsl(0, 1%, 25%);
     --kbd-bg-color: hsl(0, 0%, 16%);
