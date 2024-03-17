@@ -18,7 +18,7 @@ $$toc$$
 
 Code for the issue:
 
-``` {.language-c .line-numbers .match-braces}
+```c
 #include <stdio.h>
 
 int main() {
@@ -135,7 +135,7 @@ We can notice that the binary representation of $0.3_{10}$ is a unfiniate number
 
 Translate the binary representation to hex, it should be $3E999999_{16}$. We can validate it by the program:
 
-``` {.language-c .line-numbers .match-braces}
+```c
 #include<stdio.h>
 
 int main()

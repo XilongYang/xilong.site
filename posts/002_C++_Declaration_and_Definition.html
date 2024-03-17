@@ -22,13 +22,41 @@
         <main>
             <section id="prelude" class="abstract">
             <h3>Prelude</h3>
-            <p>Recently, I encountered precision issues with
-            floating-point arithmetic during my C language learning
-            process. After researching, I found that the issue was
-            caused by the storage method of floating-point numbers. Here
-            is a record.</p>
+            <p>I saw a declaration by chance, which is really confused
+            me. To make sense of such a complex declaration, I learned
+            more about it. Here is the summary. The declaration seems
+            like:</p>
+            <p><code>struct tm ((Pfunc)[3])(int()(int, int), float(*[])(float));</code></p>
             </section>
-            <p>i</p>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#the-difference-between-declaration-and-defination">The
+            Difference between Declaration and Defination</a>
+            </li>
+            </ol>
+            </nav>
+            <h2
+            id="the-difference-between-declaration-and-defination">The
+            Difference between Declaration and Defination</h2>
+            <h3 id="declaration">Declaration</h3>
+            <p>To the declaration in the C++, there is a general
+            description: A declaration statement is composed of a
+            <em>basic data type</em> and a list of <em>names</em> which
+            follows the data type. Each name designates a variable and
+            specifies its type, which is based on basic data type.</p>
+            <p>Declaration Statement: <span
+            class="math inline">\([basic\ data\ type]\ name_1\ (,
+            name_2, ... , name_n)\)</span></p>
+            <p>Consider the statement:</p>
+            <pre class="language-cpp line-numbers match-braces"><code>int a,b = 2;</code></pre>
+            <p>In fact, this is not a declaration statement, but a
+            definition statement. It declares two variables <em>a</em>
+            and <em>b</em>, and defines them with the dafault value to
+            <em>a</em> and the number 2 to <em>b</em>.</p>
         </main>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
