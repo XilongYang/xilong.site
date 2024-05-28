@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>The Binary Representation of Float Numbers (IEEE 754) - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>The Binary Representation of Float Numbers (IEEE 754)</h1>
+            <p class="author">Xilong Yang<br>2019-05-14</p>
+        </div>
+        <main>
+            <section id="prelude" class="abstract">
+            <h3>Prelude</h3>
+            <p>The binary representation of the floating numbers was makes me very confused. Here is some note for it.</p>
+            </section>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#issue">Issue</a>
+            </li>
+            <li>
+            <a href="#analysis">Analysis</a>
+            </li>
+            <li>
+            <a href="#result">Result</a>
+            </li>
+            </ol>
+            </nav>
+            <h2 id="issue">Issue</h2>
+            <p>Code for the issue:</p>
+            <pre class="language-c line-numbers match-braces"><code>#include &lt;stdio.h&gt;
+
+            int main() {
+              int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+
+              // Calculate the mean of all the numbers in arr.
+              float a = 0;
+              for (int i = 0; i &lt; 10; ++i) {
+                a += (float)arr[i] / 10;   
+              }
+              for (int i = 0; i &lt; 10; ++i) {
+                if (arr[i] &gt; a) {
+                    printf(&quot;%d &quot;, arr[i]);
+                }
+              }
+              return 0;
+            }</code></pre>
+            <p>It’s evident that the above program theoretically shouldn’t output any data. However, the actual execution result is as follows:</p>
+            <pre><code>3 3 3 3 3 3 3 3 3 3 </code></pre>
+            <h2 id="analysis">Analysis</h2>
+            <p>After several attempts, I finally found that the issue is caused by the value of ‘a’ in this program not being 3.0, but rather 2.9999. This suggests that the problem is probably linked to the precision of the floating-point arithmetic.</p>
+            <p>Here is a introduction to the <em>IEEE 754</em> floating-point number standard, which is followed by the C programming language.</p>
+            <p>A floating-point number which according to the IEEE 754 standard has a form comprising a single <strong>sign bit</strong>, followed by <em>k</em> bits for the <strong>exponent</strong>, and <em>n</em> bits for the <strong>fraction</strong>.</p>
+            <p>For example, when <em>k</em> = 8 and <em>n</em> = 23, the form is shown in the diagram below,</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>Exponent</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>x</td>
+            <td>xxxx xxxx</td>
+            <td>xxx xxxx xxxx xxxx xxxx xxxx</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>The <strong>sign bit</strong> determines whether the number is positive or negative. It will be set to ‘0’ when the number is positive. Otherwise it will be set to ‘1’.</p>
+            <p>The <em>k</em> bits in <strong>exponent</strong> area determine one of three categories for a floating-point number and represents its exponent. Furthermore, the value of <em>k</em> also determines a <strong>Bias</strong> value calculated as <span class="math inline">\(2^{k-1}-1\)</span>.</p>
+            <p>The <em>n</em> bits in <strong>fraction</strong> area determine a value of the number without exponent. Just like the coefficient of a number expressed in scientific notation.</p>
+            <p>Thus, the value of a floating-point number can be calculated by the expression:</p>
+            <p><span class="math display">\[
+            V = (-1)^S \times M \times 2^E
+            \]</span></p>
+            <p>Where S is the value of the <strong>sign bit</strong>, M is the value represented by the <strong>fraction</strong> and E is the value represented by the <strong>exponent</strong>.</p>
+            <h3 id="normalized-form">Normalized form</h3>
+            <p>When those k bits in the exponent area are neither all 0 nor all 1, the number is under the <strong>normalized</strong> form. In the form, the exponent of the number is calculated by the following expression.</p>
+            <p><span class="math display">\[
+            E = e - Bias.
+            \]</span></p>
+            <p>Where e is the unsigned number value of exponent area.</p>
+            <p>In this form, the fraction area has a implicit leadding 1 in the left of the point. That is:</p>
+            <p><span class="math display">\[
+            M = 1.fraction
+            \]</span></p>
+            <p>For example, a float-point number with <em>k</em> = 3 bits for exponent and <em>n</em> = 4 bits for fraction, which has a bit-level representation <code>0 001 1010</code>. It will yield a value:</p>
+            <p><span class="math display">\[
+            S = 0
+            \]</span> <span class="math display">\[
+            Bias = 2^{k-1} - 1 = 3
+            \]</span> <span class="math display">\[
+            E = 1 - Bias = -2
+            \]</span> <span class="math display">\[
+            M = 1.1010
+            \]</span> <span class="math display">\[
+            V = -1^0 \times 1.1010 \times 2^{-2} = 0.011010
+            \]</span></p>
+            <h3 id="denormalized-form">Denormalized form</h3>
+            <p>When the bits in the exponent area are all 0, the number is under the <strong>denormalized</strong> form. There are only 2 difference between the normalized form and the denormalized form.</p>
+            <ol type="1">
+            <li>The exponent of the number is calculated by the following expression.</li>
+            </ol>
+            <p><span class="math display">\[
+            E = 1 - Bias
+            \]</span></p>
+            <ol start="2" type="1">
+            <li>The fraction has no more implicit 1 in the head. That is:</li>
+            </ol>
+            <p><span class="math display">\[
+            M = 0.fraction
+            \]</span></p>
+            <p>For example, a float-point number with <em>k</em> = 3 bits for exponent and <em>n</em> = 4 bits for fraction, which has a bit-level representation <code>0 00 1010</code> will yield a value:</p>
+            <p><span class="math display">\[
+            S = 0 
+            \]</span> <span class="math display">\[
+            Bias = 2^{k-1} - 1 = 3 
+            \]</span> <span class="math display">\[
+            E = 1 - Bias = -2
+            \]</span> <span class="math display">\[
+            M = 0.1010 
+            \]</span> <span class="math display">\[
+            V = -1^0 \times 0.1010 \times 2^{-2} = 0.001010
+            \]</span></p>
+            <blockquote>
+            <p>Here are 2 questions about the Bias.</p>
+            <p>Question 1. Why don’t we use the exponent directly rather than minus a suspicious Bias?</p>
+            <p>The reason is to represent the negative exponent.</p>
+            <p>Question 2. Why don’t we use the <span class="math inline">\(2^{k - 1}\)</span> to be the value of the Bias, rather than <span class="math inline">\(2^{k - 1} - 1\)</span>?</p>
+            <p>For example, consider a number form which has <em>k</em> = 2 bit to represent the exponent and <em>n</em> = 4 bit for the fraction. The biggest <strong>denormalized</strong> number in the form has a bit-level represention:</p>
+            <p>0 00 1111</p>
+            <p>Increase it by 1 in the bit-level, we can get the smallest <strong>normalized</strong> number which has a bit-level represention:</p>
+            <p>0 01 0000</p>
+            </blockquote>
+            <h2 id="result">Result</h2>
+            <p>Let’s back to the issue, get the IEEE 754 representation of <span class="math inline">\(0.3_{10}\)</span>.</p>
+            <p>Transfer <span class="math inline">\(0.3_{10}\)</span> to normalized binary representation:</p>
+            <p><span class="math display">\[
+            1.00110011001100110011001... \times 10_2^{-10}
+            \]</span></p>
+            <p>We can notice that the binary representation of <span class="math inline">\(0.3_{10}\)</span> is a unfiniate number. So it will be truncate when transfer to IEEE 754 representation:</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Sign</th>
+            <th>EXP</th>
+            <th>Fraction</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>01111101</td>
+            <td>001 1001 1001 1001 1001 1001</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>Translate the binary representation to hex, it should be <span class="math inline">\(3E999999_{16}\)</span>. We can validate it by the program:</p>
+            <pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
+
+            int main()
+            {
+                float a = 0.3;
+                printf(&quot;%x&quot;, *(int *)&amp;a);
+                return 0;
+            }</code></pre>
+            <p>output:</p>
+            <pre><code>3e99999a</code></pre>
+            <p>The result is not actually <span class="math inline">\(3E999999_{16}\)</span>, this is because the float-point number arithmetic has some round rules.</p>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by 
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>
