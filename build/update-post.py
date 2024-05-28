@@ -70,30 +70,51 @@ def preprocessing(file):
     with open(temp2path(file), 'w') as temp:
         temp.write(contents)
 
+def postprocessing(file):
+    # Erase the unnecessary spaces in code blocks.
+    lines = ''
+    with open(post2path(file), 'r') as src:
+        lines = src.readlines()
+    
+    is_code = False
+    unnecessary_spaces = 0
+    for i in range(0, len(lines)):
+        cur_line = lines[i]
+        if "<code>" in cur_line:
+            is_code = True
+            unnecessary_spaces = len(cur_line) - len(cur_line.lstrip())
+        if is_code and len(cur_line) > unnecessary_spaces:
+            lines[i] = cur_line[unnecessary_spaces:]
+        if "</code>" in cur_line:
+            is_code = False
+    
+    with open(post2path(file), 'w') as src:
+        src.write(''.join(lines))
 
+if __name__ == "__main__":
+    src_list  = list(set([file.split('.')[0] for file in os.listdir(SRC_PATH)]))
+    post_list = list(set([file.split('.')[0] for file in os.listdir(POST_PATH)]))
 
-src_list  = list(set([file.split('.')[0] for file in os.listdir(SRC_PATH)]))
-post_list = list(set([file.split('.')[0] for file in os.listdir(POST_PATH)]))
+    non_source_list  = [post for post in post_list if src_list.count(post) == 0]
+    if len(non_source_list) > 0:
+        sys.stderr.write("[WARNING] Some files lack a source file; fix it in time.\n")
+        for non_source in non_source_list:
+            sys.stderr.write(non_source + "\n")
 
-non_source_list  = [post for post in post_list if src_list.count(post) == 0]
-if len(non_source_list) > 0:
-    sys.stderr.write("[WARNING] Some files lack a source file; fix it in time.\n")
-    for non_source in non_source_list:
-        sys.stderr.write(non_source + "\n")
+    need_update_list = [file for file in src_list if not is_file(post2path(file)) or outdate(src2path(file), post2path(file))]
+    try:
+        # Create Temp path
+        os.mkdir(TEMP_PATH)
+        if not os.path.exists(TEMP_PATH):
+            sys.stderr.write("[ERROR] Can not create temp folder.\n")
+            exit(-1)
 
-need_update_list = [file for file in src_list if not is_file(post2path(file)) or outdate(src2path(file), post2path(file))]
-try:
-    # Create Temp path
-    os.mkdir(TEMP_PATH)
-    if not os.path.exists(TEMP_PATH):
-        sys.stderr.write("[ERROR] Can not create temp folder.\n")
-        exit(-1)
-
-    # Compile posts
-    for file in need_update_list:
-        preprocessing(file)
-        subprocess.run(COMPILE_COMMAND.format(temp2path(file), post2path(file), POST_TEMPLATE), shell=True)
-        print("Build:" + file)
-finally:
-    # Delete Temp path
-    shutil.rmtree(TEMP_PATH)
+        # Compile posts
+        for file in need_update_list:
+            preprocessing(file)
+            subprocess.run(COMPILE_COMMAND.format(temp2path(file), post2path(file), POST_TEMPLATE), shell=True)
+            postprocessing(file)
+            print("Build:" + file)
+    finally:
+        # Delete Temp path
+        shutil.rmtree(TEMP_PATH)

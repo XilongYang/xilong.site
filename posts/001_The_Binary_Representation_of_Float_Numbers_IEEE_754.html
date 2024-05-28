@@ -42,25 +42,25 @@
             </nav>
             <h2 id="issue">Issue</h2>
             <p>Code for the issue:</p>
-            <pre class="language-c line-numbers match-braces"><code>#include &lt;stdio.h&gt;
+<pre class="language-c line-numbers match-braces"><code>#include &lt;stdio.h&gt;
 
-            int main() {
-              int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+int main() {
+  int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
 
-              // Calculate the mean of all the numbers in arr.
-              float a = 0;
-              for (int i = 0; i &lt; 10; ++i) {
-                a += (float)arr[i] / 10;   
-              }
-              for (int i = 0; i &lt; 10; ++i) {
-                if (arr[i] &gt; a) {
-                    printf(&quot;%d &quot;, arr[i]);
-                }
-              }
-              return 0;
-            }</code></pre>
+  // Calculate the mean of all the numbers in arr.
+  float a = 0;
+  for (int i = 0; i &lt; 10; ++i) {
+    a += (float)arr[i] / 10;   
+  }
+  for (int i = 0; i &lt; 10; ++i) {
+    if (arr[i] &gt; a) {
+        printf(&quot;%d &quot;, arr[i]);
+    }
+  }
+  return 0;
+}</code></pre>
             <p>It’s evident that the above program theoretically shouldn’t output any data. However, the actual execution result is as follows:</p>
-            <pre><code>3 3 3 3 3 3 3 3 3 3 </code></pre>
+<pre><code>3 3 3 3 3 3 3 3 3 3 </code></pre>
             <h2 id="analysis">Analysis</h2>
             <p>After several attempts, I finally found that the issue is caused by the value of ‘a’ in this program not being 3.0, but rather 2.9999. This suggests that the problem is probably linked to the precision of the floating-point arithmetic.</p>
             <p>Here is a introduction to the <em>IEEE 754</em> floating-point number standard, which is followed by the C programming language.</p>
@@ -91,7 +91,7 @@
             \]</span></p>
             <p>Where S is the value of the <strong>sign bit</strong>, M is the value represented by the <strong>fraction</strong> and E is the value represented by the <strong>exponent</strong>.</p>
             <h3 id="normalized-form">Normalized form</h3>
-            <p>When those k bits in the exponent area are neither all 0 nor all 1, the number is under the <strong>normalized</strong> form. In the form, the exponent of the number is calculated by the following expression.</p>
+            <p>When the k bits in the exponent area are neither all 0s nor all 1s, the number is in the <strong>normalized</strong> form. In this form, the exponent of the number is calculated by the following expression.</p>
             <p><span class="math display">\[
             E = e - Bias.
             \]</span></p>
@@ -100,7 +100,7 @@
             <p><span class="math display">\[
             M = 1.fraction
             \]</span></p>
-            <p>For example, a float-point number with <em>k</em> = 3 bits for exponent and <em>n</em> = 4 bits for fraction, which has a bit-level representation <code>0 001 1010</code>. It will yield a value:</p>
+<p>For example, a float-point number with <em>k</em> = 3 bits for exponent and <em>n</em> = 4 bits for fraction, which has a bit-level representation <code>0 001 1010</code>. It will yield a value:</p>
             <p><span class="math display">\[
             S = 0
             \]</span> <span class="math display">\[
@@ -113,7 +113,7 @@
             V = -1^0 \times 1.1010 \times 2^{-2} = 0.011010
             \]</span></p>
             <h3 id="denormalized-form">Denormalized form</h3>
-            <p>When the bits in the exponent area are all 0, the number is under the <strong>denormalized</strong> form. There are only 2 difference between the normalized form and the denormalized form.</p>
+            <p>When the bits in the exponent area are all 0s, the number is in the <strong>denormalized</strong> form. There are only 2 difference between the normalized form and the denormalized form.</p>
             <ol type="1">
             <li>The exponent of the number is calculated by the following expression.</li>
             </ol>
@@ -126,7 +126,7 @@
             <p><span class="math display">\[
             M = 0.fraction
             \]</span></p>
-            <p>For example, a float-point number with <em>k</em> = 3 bits for exponent and <em>n</em> = 4 bits for fraction, which has a bit-level representation <code>0 00 1010</code> will yield a value:</p>
+<p>For example, a float-point number with <em>k</em> = 3 bits for exponent and <em>n</em> = 4 bits for fraction, which has a bit-level representation <code>0 00 1010</code> will yield a value:</p>
             <p><span class="math display">\[
             S = 0 
             \]</span> <span class="math display">\[
@@ -143,11 +143,45 @@
             <p>Question 1. Why don’t we use the exponent directly rather than minus a suspicious Bias?</p>
             <p>The reason is to represent the negative exponent.</p>
             <p>Question 2. Why don’t we use the <span class="math inline">\(2^{k - 1}\)</span> to be the value of the Bias, rather than <span class="math inline">\(2^{k - 1} - 1\)</span>?</p>
+            <p>The reason is to take a naturally transform from denormalized form to normalized form.</p>
             <p>For example, consider a number form which has <em>k</em> = 2 bit to represent the exponent and <em>n</em> = 4 bit for the fraction. The biggest <strong>denormalized</strong> number in the form has a bit-level represention:</p>
             <p>0 00 1111</p>
             <p>Increase it by 1 in the bit-level, we can get the smallest <strong>normalized</strong> number which has a bit-level represention:</p>
             <p>0 01 0000</p>
             </blockquote>
+            <h3 id="special-form">Special form</h3>
+            <p>When the bits in the exponent area are set to all 1s, there are 2 special form depending on whether the bits in the fraction area are set to all 0s.</p>
+            <ol type="1">
+            <li><p>When the fraction area are not all 0s, the value is NaN which means Not a Number.</p></li>
+            <li><p>When the fraction area are all 0s, the value is infinity. The value is either <span class="math inline">\(+\infty\)</span> or <span class="math inline">\(-\infty\)</span> denpending on the sign bit.</p></li>
+            </ol>
+            <p>Here a some examples when <em>k</em> = 2 and <em>n</em> = 5:</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>Bit-level representaion</th>
+            <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0 11 00000</td>
+            <td><span class="math inline">\(+\infty\)</span></td>
+            </tr>
+            <tr class="even">
+            <td>1 11 00000</td>
+            <td><span class="math inline">\(-\infty\)</span></td>
+            </tr>
+            <tr class="odd">
+            <td>0 11 00100</td>
+            <td>NaN</td>
+            </tr>
+            <tr class="even">
+            <td>1 11 00100</td>
+            <td>NaN</td>
+            </tr>
+            </tbody>
+            </table>
             <h2 id="result">Result</h2>
             <p>Let’s back to the issue, get the IEEE 754 representation of <span class="math inline">\(0.3_{10}\)</span>.</p>
             <p>Transfer <span class="math inline">\(0.3_{10}\)</span> to normalized binary representation:</p>
@@ -172,16 +206,15 @@
             </tbody>
             </table>
             <p>Translate the binary representation to hex, it should be <span class="math inline">\(3E999999_{16}\)</span>. We can validate it by the program:</p>
-            <pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
-
-            int main()
-            {
-                float a = 0.3;
-                printf(&quot;%x&quot;, *(int *)&amp;a);
-                return 0;
-            }</code></pre>
+<pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
+int main()
+{
+    float a = 0.3;
+    printf(&quot;%x&quot;, *(int *)&amp;a);
+    return 0;
+}</code></pre>
             <p>output:</p>
-            <pre><code>3e99999a</code></pre>
+<pre><code>3e99999a</code></pre>
             <p>The result is not actually <span class="math inline">\(3E999999_{16}\)</span>, this is because the float-point number arithmetic has some round rules.</p>
         </main>
         <div class="footnotes">

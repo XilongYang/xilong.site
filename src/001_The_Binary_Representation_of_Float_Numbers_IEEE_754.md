@@ -74,7 +74,7 @@ Where S is the value of the **sign bit**, M is the value represented by the **fr
 
 ### Normalized form
 
- When those k bits in the exponent area are neither all 0 nor all 1, the number is under the **normalized** form. In the form, the exponent of the number is calculated by the following expression.
+ When the k bits in the exponent area are neither all 0s nor all 1s, the number is in the **normalized** form. In this form, the exponent of the number is calculated by the following expression.
 
 $$
 E = e - Bias.
@@ -108,7 +108,7 @@ $$
 
 ### Denormalized form
 
-When the bits in the exponent area are all 0, the number is under the **denormalized** form. There are only 2 difference between the normalized form and the denormalized form.
+When the bits in the exponent area are all 0s, the number is in the **denormalized** form. There are only 2 difference between the normalized form and the denormalized form.
 
 1. The exponent of the number is calculated by the following expression.
 
@@ -144,9 +144,11 @@ $$
 >
 > Question 1. Why don't we use the exponent directly rather than minus a suspicious Bias? 
 >
->The reason is to represent the negative exponent.
+> The reason is to represent the negative exponent.
 >
 > Question 2. Why don't we use the $2^{k - 1}$ to be the value of the Bias, rather than $2^{k - 1} - 1$?
+>
+> The reason is to take a naturally transform from denormalized form to normalized form.
 >
 > For example, consider a number form which has *k* = 2 bit to represent the exponent and *n* = 4 bit for the fraction. The biggest **denormalized** number in the form has a bit-level represention:
 >
@@ -157,6 +159,23 @@ $$
 > 0 01 0000
 >
 
+### Special form
+
+When the bits in the exponent area are set to all 1s, there are 2 special form depending on whether the bits in the fraction area are set to all 0s.
+
+1. When the fraction area are not all 0s, the value is NaN which means Not a Number.
+
+2. When the fraction area are all 0s, the value is infinity. The value is either $+\infty$ or $-\infty$ denpending on the sign bit.
+
+Here a some examples when *k* = 2 and *n* = 5:
+
+|Bit-level representaion|Value|
+|-|-|
+|0 11 00000|$+\infty$|
+|1 11 00000|$-\infty$|
+|0 11 00100|NaN|
+|1 11 00100|NaN|
+ 
 ## Result
 
 Let's back to the issue, get the IEEE 754 representation of $0.3_{10}$.
@@ -177,7 +196,6 @@ Translate the binary representation to hex, it should be $3E999999_{16}$. We can
 
 ```c
 #include<stdio.h>
-
 int main()
 {
     float a = 0.3;
