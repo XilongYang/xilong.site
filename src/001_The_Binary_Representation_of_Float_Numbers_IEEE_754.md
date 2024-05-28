@@ -1,14 +1,14 @@
 ---
 title: "The Binary Representation of Float Numbers (IEEE 754)"
 author: Xilong Yang
-date: 2019-05-14
+date: 2024-05-14
 ---
 
 <div class="abstract">
 
 ### Prelude
 
-The binary representation of the floating numbers was makes me very confused. Here is some note for it.
+The binary representation of the floating numbers was makes me very confused many years ago. Here is a introduction to the standard IEEE 754.
 
 </div>
 
@@ -72,9 +72,9 @@ $$
 
 Where S is the value of the **sign bit**, M is the value represented by the **fraction** and E is the value represented by the **exponent**.
 
-### Normalized form
+### Normalized Values
 
- When the k bits in the exponent area are neither all 0s nor all 1s, the number is in the **normalized** form. In this form, the exponent of the number is calculated by the following expression.
+ When the k bits in the exponent area are neither all 0s nor all 1s, the number is a **normalized** value. For a normalized value, the exponent of the number is calculated by the following expression.
 
 $$
 E = e - Bias.
@@ -106,9 +106,14 @@ $$
 V = -1^0 \times 1.1010 \times 2^{-2} = 0.011010
 $$
 
-### Denormalized form
+> Why don't we use the exponent value directly rather than minus a suspicious Bias? 
+>
+> The reason is to represent the negative exponent naturally. We can easily compare two exponent just by compare its unsigned value of the bit-level representation.
+>
 
-When the bits in the exponent area are all 0s, the number is in the **denormalized** form. There are only 2 difference between the normalized form and the denormalized form.
+### Denormalized Values
+
+When the bits in the exponent area are all 0s, the number is a **denormalized** value. There are only 2 difference between a normalized value and a denormalized value.
 
 1. The exponent of the number is calculated by the following expression.
 
@@ -140,26 +145,26 @@ $$
 V = -1^0 \times 0.1010 \times 2^{-2} = 0.001010
 $$
 
-> Here are 2 questions about the Bias.
+> Why don't we use the $-Bias$ to be the value of the exponent, rather than $1-Bias$?
 >
-> Question 1. Why don't we use the exponent directly rather than minus a suspicious Bias? 
+> The reason is to take a naturally transform from denormalized values to normalized values.
 >
-> The reason is to represent the negative exponent.
+> For example, consider a number which has *k* = 3 bit to represent the exponent and *n* = 4 bit for the fraction. The biggest **denormalized** values in the form has a bit-level represention:
 >
-> Question 2. Why don't we use the $2^{k - 1}$ to be the value of the Bias, rather than $2^{k - 1} - 1$?
->
-> The reason is to take a naturally transform from denormalized form to normalized form.
->
-> For example, consider a number form which has *k* = 2 bit to represent the exponent and *n* = 4 bit for the fraction. The biggest **denormalized** number in the form has a bit-level represention:
->
-> 0 00 1111
+> 0 000 1111, the values is: $0.1111 \times 2^{1-(2^{3-1}-1)}$ = $0.001111$
 > 
 > Increase it by 1 in the bit-level, we can get the smallest **normalized** number which has a bit-level represention:
 >
-> 0 01 0000
+> 0 001 0000, the values is: $1.0000 \times 2^{1-(2^{3-1}-1)}$ = $0.010000$
+>
+> If the exponent set to $-Bias$ directly, the value of the denormalized number will be: 
+> 
+> $0.1111 \times 2^{-(2^{3-1} - 1)} =  0.0001111$
+>
+> We can look the $1-Bias$ as $-Bias + 1$, it is a compensation for the lack of the leading 1 in a denormalized value. 
 >
 
-### Special form
+### Special Values
 
 When the bits in the exponent area are set to all 1s, there are 2 special form depending on whether the bits in the fraction area are set to all 0s.
 
@@ -175,7 +180,48 @@ Here a some examples when *k* = 2 and *n* = 5:
 |1 11 00000|$-\infty$|
 |0 11 00100|NaN|
 |1 11 00100|NaN|
- 
+
+### Precision and Rounding
+
+The C programming language is using 32 bits to represent a `float` type，and 64 bits to represent a `double` type. Here is the detail for the representation.
+
+|Type|Sign|Exponent|Fraction|
+|-|-|-|-|
+|float|1 bit|8 bit|23 bit|
+|double|1 bit|11 bit|52 bit|
+
+Limited by the memory space, there are 2 factors that can lead a lack of precision.
+
+1. The number is so large that the exponent can not be represent. For example, the number $2^{5000}$ can not be represented even by the type `double`, because a `double` can only represents a exponent between $1 - 2^{11 - 1} + 1 = -1022$ and $2^{12} - 2 - 2^{11 - 1} + 1 =1023$.
+
+2. The number has too many digit so that the fraction bits is not enough to represent it. For example, the number $0.1100110011001100110011000101_2$ needs 27 bit to represent its fraction (the leading 1 can be left out), but a `float` only has 23 bits to represent the fraction.
+
+> Note
+>
+> The effection of the exponent is to move the point to difference posiiton of a floating-point number (that's why it is called "floating-point"), that makes it possible to get a very large value. But since we can only set the value for a limited fraction, the precision of the possible value is also limited. 
+> 
+>For example, when *k* = 8 and *n* = 3 we can simply represent $2^{100}$ by the represention: 
+>
+>0 11100011 000
+>
+> But we can't represent $1.1111_2 \times 2^{100}$ since we can only control the first 3 bits actually in the hundred of 0s. 
+>
+
+When we face to the precision problem, the only way we can choose is make it rounding. The default rule of rounding is called "Round-to-even".
+
+To explain the rule, consider a number which has a form like $...xxx.xxyyyy...$. The position we want to round is between the least x and the most y. A value is on halfway between two possibilities only if it has a form like $xxx.xx1000...$, that is the most y is 1 and followed by all 0s.
+
+1. If the value is not on the halfway between two possibilities, round to the nearer one. For example, if we want to save 2 digit after the point, the number 1.01101 will round to 1.10 and the number 1.01001 will round to 1.01.
+
+2. If the value is on the halfway between two possibilities, we tend to make the least digit before the position we want to round to 0. For example, if we want to save 2 digit after the point, the number 1.01100 will round to 1.10 and the number 1.10100 will round to 1.10.
+
+Because the last digit of a rounded number is always 0 (so that the number is even), the rule is called "round-to-even".
+
+> Why it choose round-to-even instead round-to-zero?
+> 
+> Because a half of numbers is even, a number will round upward about 50% of the time and round downward about 50% of the time. It can balance the loss which caused by rounding.
+>
+
 ## Result
 
 Let's back to the issue, get the IEEE 754 representation of $0.3_{10}$.
@@ -186,13 +232,13 @@ $$
 1.00110011001100110011001... \times 10_2^{-10}
 $$ 
 
-We can notice that the binary representation of $0.3_{10}$ is a unfiniate number. So it will be truncate when transfer to IEEE 754 representation:
+We can notice that the binary representation of $0.3_{10}$ is a unfiniate number. So it will be rounding when transfer to IEEE 754 representation. Since it is bigger than halfway, it will round upward:
 
 |Sign|EXP|Fraction|
 |-|-|-|
-|0|01111101|001 1001 1001 1001 1001 1001|
+|0|01111101|001 1001 1001 1001 1001 1010|
 
-Translate the binary representation to hex, it should be $3E999999_{16}$. We can validate it by the program:
+Translate the binary representation to hex, it should be $3e99999a_{16}$. We can validate it by the following program:
 
 ```c
 #include<stdio.h>
@@ -210,4 +256,4 @@ output:
 3e99999a
 ```
 
-The result is not actually $3E999999_{16}$, this is because the float-point number arithmetic has some round rules.
+The result is met our expectations.
