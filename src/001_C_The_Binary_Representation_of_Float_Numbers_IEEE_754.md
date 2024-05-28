@@ -1,14 +1,14 @@
 ---
 title: "C: The Binary Representation of Float Numbers (IEEE 754)"
 author: Xilong Yang
-date: 2019-08-18
+date: 2019-05-14
 ---
 
 <div class="abstract">
 
 ### Prelude
 
-Recently, I encountered precision issues with floating-point arithmetic during my C language learning process. After researching, I found that the issue was caused by the storage method of floating-point numbers. Here is a record.
+The binary representation of the floating numbers was makes me very confused in many years ago.
 
 </div>
 

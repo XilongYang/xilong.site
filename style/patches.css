@@ -1,3 +1,8 @@
+html {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
 p {
     text-align: left;
 }
@@ -12,4 +17,9 @@ blockquote {
     margin-right: 0;
     border-left-width: 0.3rem;
     border-left-style: solid;
+}
+
+#posts_wrapper {
+    margin: 0;
+    padding-left: 1rem;
 }
