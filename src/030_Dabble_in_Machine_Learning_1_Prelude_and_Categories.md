@@ -1,5 +1,5 @@
 ---
-title: 机器学习浅尝（一）——序言与分类Haskell：理解惰性求值与运算符优先级
+title: 机器学习浅尝（一）——序言与分类
 author: Xilong Yang
 date: 2023-05-30 
 ---
