@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>C 结构体内存对齐 - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>C 结构体内存对齐</h1>
+            <p class="author">Xilong Yang<br>2021-08-11</p>
+        </div>
+        <main>
+            <section id="前言" class="abstract">
+            <h3>前言</h3>
+            <p>疏理一下结构体的内存对齐规则</p>
+            </section>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#内存对齐是什么？为什么要进行内存对齐？">内存对齐是什么？为什么要进行内存对齐？</a>
+            </li>
+            <li>
+            <a href="#内存对齐的规则">内存对齐的规则</a>
+            </li>
+            </ol>
+            </nav>
+            <h2
+            id="内存对齐是什么为什么要进行内存对齐">内存对齐是什么？为什么要进行内存对齐？</h2>
+            <p>现代计算机以字节为单位划分内存空间，但大多不是以字节为单位存取内存的。一次存取往往涉及多个字节，这个大小称为存取粒度。存取粒度通常与系统有关，如32位系统存取粒度大多为4字节，而64位系统的存取粒度大多为8字节。</p>
+            <p>对于这个结构体：</p>
+            <pre class="language-c line-numbers match-braces"><code>struct foo {
+    char c;
+    int  a; // 假定int占用4字节
+};</code></pre>
+            <p>可以看出，它的成员大小总和为5字节。但通常这个结构体的大小会被填充到8字节。原因如下：</p>
+            <p>考虑不对齐字节的情况，如果结构体地址为0x00，则c的地址为0x00，a的地址为0x01。此时一个存取粒度为4字节的机器要取出a，需要以下几步。</p>
+            <pre><code>┌─┬────┐        1.取地址0x00开始的4字节，并保留需要的数据0x01、0x02、0x03
+│c│a   │        2.取地址0x04开始的4字节，并保留需要的数据0x04
+└─┴────┘        3.将上两步获取的数据合并，计算出a的值
+ 0|1234</code></pre>
+            <p>这样的过程对计算机来说是很麻烦的，而如果进行字节对齐，则结构体地址和c的地址依然是0x00，而a的地址移到了0x04，此时一个存取粒度为4字节的机器可以直接取出a的值。</p>
+            <pre><code>┌───────┬───────┐    直接取地址0x04开始的4字节即可取出a的值。
+│c      │a      │
+└───────┴───────┘
+0 1 2 3 4 5 6 7</code></pre>
+            <p>由此不难看出，所谓的内存对齐就是为了便于机器存取而根据存储粒度对内存布局的调整。</p>
+            <h2 id="内存对齐的规则">内存对齐的规则</h2>
+            <h3
+            id="规则1结构体内部成员的地址一定是自身大小的整数倍否则就进行对齐">规则1：结构体内部成员的地址一定是自身大小的整数倍，否则就进行对齐。</h3>
+            <p>比如上面的例子中，int类型大小为4字节，而0x01并不是4字节的整数倍，因此对齐到0x04。</p>
+            <p>考虑下面结构体：</p>
+            <pre class="language-c line-numbers match-braces"><code>struct foo1 {
+    int  a; // 假定int为4字节
+    char c;
+};</code></pre>
+            <p>根据规则1：a的地址为0x00，不需对齐；c的地址为0x04，是char类型大小的整数倍，也不需对齐。于是该结构体的大小应当是5字节。</p>
+            <p>但此时，对于数组：</p>
+            <pre class="language-c line-numbers match-braces"><code>foo1 arr[2];</code></pre>
+            <p>其内存布局为如下，此时若想取出<code>arr[1].a</code>，则有：</p>
+            <pre><code>┌───────┬─┬──────┬─┐    1.由于arr[1].a的地址为0x05，则需要先取出0x04开始的4个字节，
+│a      │c│a     │c│      并保留0x05、0x06、0x07。
+└───────┴─┴──────┴─┘    2.然后取出0x08开始的4字节，并保留0x08
+0 1 2 3 4 5 6 7 8 9     3.将上两步数据合并计算出arr[1].a的值。</code></pre>
+            <p>这又回到了没有对齐的情况了，因此为了避免这种情况，引入了规则2：</p>
+            <h3
+            id="规则2结构体的大小为其最大成员大小的整数倍若基最大成员大小大于存取粒度则结构体的大小为存取粒度的整数倍否则就在结构体末尾补齐">规则2：结构体的大小为其最大成员大小的整数倍，若基最大成员大小大于存取粒度，则结构体的大小为存取粒度的整数倍，否则就在结构体末尾补齐。</h3>
+            <p>在此规则下，结构体foo1的大小应为8字节。需要注意，结构体中最大成员并不包括结构体成员，如：</p>
+            <pre class="language-c line-numbers match-braces"><code>// 假定int占4字节
+struct byte8 {
+    int a;
+    int b;
+};
+
+struct foo2 {
+    byte8 a;
+    char  b;
+};
+
+struct foo3 {
+    long long a;
+    char b;
+};</code></pre>
+            <p>此时foo2的最大成员并不是看做整体的byte8的8字节，而是byte8与foo2中的基础成员中的最大成员，此处为int。因此foo2对4字节对齐，大小为12字节。而foo3的最大成员为long
+            long，对8字节对齐，大小为16字节。</p>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>

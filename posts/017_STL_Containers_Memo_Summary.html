@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>STL容器备忘总结 - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>STL容器备忘总结</h1>
+            <p class="author">Xilong Yang<br>2021-07-21</p>
+        </div>
+        <main>
+            <section id="前言" class="abstract">
+            <h3>前言</h3>
+            <p>使用容器总有几个细节记不清，梳理一番以作备忘。</p>
+            </section>
+            <h2 id="容器类型">容器类型</h2>
+            <h3 id="顺序容器">顺序容器</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>顺序容器</th>
+            <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>vector</td>
+            <td>可变大小数组，快速随机访问，快速尾部增删。</td>
+            </tr>
+            <tr class="even">
+            <td>deque</td>
+            <td>双端队列，快速随机访问，快速头尾增删。</td>
+            </tr>
+            <tr class="odd">
+            <td>list</td>
+            <td>双向列表，双向顺序访问，快速任意增删。</td>
+            </tr>
+            <tr class="even">
+            <td>forward_list</td>
+            <td>单向列表，单向顺序访问，快速任意增删。</td>
+            </tr>
+            <tr class="odd">
+            <td>array</td>
+            <td>固定大小数组，快速随机访问，不可增删。</td>
+            </tr>
+            <tr class="even">
+            <td>string</td>
+            <td>与vector性质相似，专门保存字符。</td>
+            </tr>
+            </tbody>
+            </table>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>顺序容器适配器</th>
+            <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>stack</td>
+            <td>栈</td>
+            </tr>
+            <tr class="even">
+            <td>queue</td>
+            <td>队列</td>
+            </tr>
+            <tr class="odd">
+            <td>priority_queue</td>
+            <td>优先队列</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="关联容器">关联容器</h3>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>关联容器</th>
+            <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>map</td>
+            <td>关联数组，保存key-value对。</td>
+            </tr>
+            <tr class="even">
+            <td>unordered_map</td>
+            <td>map的无序版本。</td>
+            </tr>
+            <tr class="odd">
+            <td>set</td>
+            <td>只保存key的容器。</td>
+            </tr>
+            <tr class="even">
+            <td>unordered_set</td>
+            <td>set的无序版本。</td>
+            </tr>
+            <tr class="odd">
+            <td>multimap</td>
+            <td>key可重复出现的map。</td>
+            </tr>
+            <tr class="even">
+            <td>unordered_multimap</td>
+            <td>multimap的无序版本。</td>
+            </tr>
+            <tr class="odd">
+            <td>multiset</td>
+            <td>key可重复出现的set。</td>
+            </tr>
+            <tr class="even">
+            <td>unordered_multiset</td>
+            <td>multiset的无序版本。</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>有序关联容器要求key值类型必顺定义&lt;运算符。无序关联容器则要求key值定义==运算符。</p>
+            <h2 id="容器操作">容器操作</h2>
+            <h3 id="通用操作">通用操作</h3>
+            <h4 id="类型别名">类型别名</h4>
+            <p><code>iterator</code>: 容器的迭代器类型。</p>
+            <p><code>const_iterator</code>: 迭代器的只读版本。</p>
+            <p><code>size_type</code>:
+            无符号整数类型，保存最大容器大小。</p>
+            <p><code>differenct_type</code>:
+            带符号整数类型，保存两个迭代器间的距离。</p>
+            <p><code>value_type</code>: 元素类型。</p>
+            <p><code>reference</code>:
+            元素的左值类型，含义为value_type&amp;。</p>
+            <p><code>const_reference</code>:
+            元素的const左值类型，含义为const value_type&amp;。</p>
+            <h4 id="构造函数">构造函数</h4>
+            <p><code>C c;</code>：默认构造函数，构造一个空容器。</p>
+            <p><code>C c1(c2)</code>：构造c2的拷贝c1。</p>
+            <p><code>C c(b, e)</code>：构造c并将迭代器b和e之间的元素拷贝到c。</p>
+            <p><code>C c{a, b, c, d, e...}</code>：列表初始化c。</p>
+            <h4 id="赋值与swap">赋值与swap</h4>
+            <p><code>c1 = c2</code>：将c1中的元素替换为c2中的元素。</p>
+            <p><code>c = {a, b, c, d...}</code>：将c中的元素替换为列表中的元素（array不可用）。</p>
+            <p><code>a.swap(b)</code>,
+            <code>swap(a, b)</code>：交换a,b中的元素。</p>
+            <h4 id="大小">大小</h4>
+            <p><code>c.size()</code>：c中元素数目。</p>
+            <p><code>c.max_size()</code>：c最大可保存元素数目。</p>
+            <p><code>c.empty</code>：c是否为空。</p>
+            <h4 id="增删元素array不可用">增删元素（array不可用）</h4>
+            <p><code>c.insert(args)</code>：将args中的元素拷贝进c。</p>
+            <p><code>c.emplace(inits)</code>：使用inits构造c中的一个元素。inits必需与元素的构造函数匹配。</p>
+            <p><code>c.erase(args)</code>：删除c中的指定元素。</p>
+            <p><code>c.clear()</code>：删除c中所有元素，返回void。</p>
+            <h4 id="关系运算符">关系运算符</h4>
+            <p><code>==</code>，<code>!=</code>：所有容器都支持。</p>
+            <p><code>&lt;</code>，<code>&lt;=</code>，<code>&gt;</code>，<code>&gt;=</code>：除无序关联容器外都支持。</p>
+            <h4 id="获取迭代器">获取迭代器</h4>
+            <p><code>c.begin()</code>，<code>c.end()</code>：返回首迭代器和尾后迭代器。</p>
+            <p><code>c.cbegin()</code>，<code>c.cend()</code>：返回const迭代器。</p>
+            <h4
+            id="反向迭代器不支持forward_list">反向迭代器(不支持forward_list)</h4>
+            <p><code>reverse_iterator</code>：按逆序寻址元素的迭代器</p>
+            <p><code>const_reverse_iterator</code>：反向迭代器的只读版本。</p>
+            <p><code>c.rbegin()</code>，<code>c.rend()</code>：返回尾迭代器和首前迭代器。</p>
+            <p><code>c.crbegin()</code>，<code>c.crend()</code>：返回const反向迭代器。</p>
+            <h3 id="顺序容器操作">顺序容器操作</h3>
+            <p><strong>总是可以使用两个迭代器的范围表示多个已存在元素，用(n,
+            t)或{a, b,
+            c…}表示多个新元素。将这三种表示方法称为range</strong></p>
+            <h4 id="构造函数-1">构造函数</h4>
+            <p><code>C seq(n)</code>：一个包含n个元素的顺序容器。</p>
+            <p><code>C seq(range)</code>：一个元素为range的顺序容器。</p>
+            <h4 id="赋值">赋值</h4>
+            <p><code>seq.assign(range)</code>：将seq中元素替换为迭代器range中的元素，b的e不可指向seq中的元素。</p>
+            <h4 id="关系运算符-1">关系运算符</h4>
+            <p>两个大小相等且对位元素相等的顺序容器相等。</p>
+            <p>顺序容器a是另一个顺序容器b的前缀子序列时，a &lt; b。</p>
+            <p>否则，以两容器中第一对不相等的元素的大小关系作为结果。</p>
+            <h4 id="增删元素array不支持">增删元素（array不支持）</h4>
+            <ul>
+            <li>forward_list有专有的emplace、insert和erase操作。</li>
+            <li>forward_list不支持push_back、emplace_back和pop_back。</li>
+            <li>vector和string不支持push_front、emplace_front和pop_front。</li>
+            </ul>
+            <p><code>c.push_back(t)</code>，<code>c.emplace_back(inits)</code>：在尾部创建一个元素。</p>
+            <p><code>c.push_front(t)</code>，<code>c.emplace_front(inits)</code>：在首部创建一个元素。</p>
+            <p><code>c.insert(p, t)</code>，<code>c.emplace(p, inits)</code>：在迭代器p位置之前添加一个元素，返回新元素的迭代器。</p>
+            <p><code>c.insert(p, range)</code>：在p之前添加n个值为t的元素。返回第一个新元素的迭代器。</p>
+            <p><strong>任何添加操作都会导致指向容器内元素的迭代器、指针和引用失效。</strong></p>
+            <p><code>c.pop_back()</code>：删除c的尾元素，c为空时UB。</p>
+            <p><code>c.pop_front()</code>：删除c的首元素，c为空时UB。</p>
+            <p><code>c.erase(p)</code>：删除迭代器p指向的元素，返回下一个元素的迭代器。p为尾后迭代器时UB。</p>
+            <p><code>c.erase(b, e)</code>：删除迭代器b,
+            e范围内的所有元素，返回下一个元素的迭代器。</p>
+            <p><code>c.clear()</code>：删除所有元素，返回void。</p>
+            <p><strong>删除deque中除首尾元素的任何元素会导致迭代器、指针和引用失效。</strong></p>
+            <p><strong>删除vector或string中的元素会导致删除点之后的迭代器、指针和引用失效。</strong></p>
+            <h4 id="访问元素">访问元素</h4>
+            <ul>
+            <li>at和下标操作不适用于任何list。</li>
+            <li>back不适用forward_list。</li>
+            </ul>
+            <p><code>c.back()</code>：返回c中尾元素的引用。c为空时UB。</p>
+            <p><code>c.front()</code>：返回c中首元素的引用。c为空时UB。</p>
+            <p><code>c[n]</code>，<code>c.at(n)</code>：返回下标为n的元素的引用。[下标]越界UB。at(下标)越界抛出一个out_of_range异常。</p>
+            <h4 id="改变容器大小">改变容器大小</h4>
+            <p><code>c.resize(n)</code>：将容器大小调整为n，若缩小则丢弃多余元素，增大则添加新元素。</p>
+            <p><code>c.resize(n, t)</code>：若增大则添加值为t的新元素。</p>
+            <h4 id="forward_list特有操作">forward_list特有操作</h4>
+            <p><code>lst.before_begin()</code>：返回首前迭代器，不可解引用。</p>
+            <p><code>lst.cbefore_begin()</code>：返回首前迭代器的只读版本。</p>
+            <p><code>lst_insert_after(p, args)</code>，<code>emplace_after(p, inits)</code>：在p后添加元素，参数形式与通用的insert相同。</p>
+            <p><code>lst_erase_after(p)</code>，<code>lst_erase_after(p, e)</code>：删除p之后的一个或一段元素，返回下一个位置。</p>
+            <h4 id="缓存操作">缓存操作</h4>
+            <p><code>c.shrink_to_fit()</code>：将实际内存占用减少为与size()相同。只适用于vector，string和deque</p>
+            <p><code>c.capacity()</code>：已分配的实际内存可以保存多少元素。只适用于vector和string。</p>
+            <p><code>c.reserve(n)</code>：分配至少能容纳n个元素的空间。只适用于vector和string。</p>
+            <h4 id="string特有操作">string特有操作</h4>
+            <h5 id="截取">截取</h5>
+            <p><code>string s(cp, n)</code>：cp指向数组中前n个字符。</p>
+            <p><code>string s(s2, pos, len = 0)</code>：字符串s2从下标pos开始的len个字符。下标越界则UB。</p>
+            <p><code>s.sub_str(pos = 0, n = s.size() - pos)</code>：返回s从下标pos开始的n的字符的拷贝。</p>
+            <h5 id="搜索">搜索</h5>
+            <p>string提供了六个不同的搜索函数，每个函数又有4个重载版本。它们成功时返回匹配位置的下标，失败则返回<code>string::npos</code>。返回数类型都是<code>string::size_type</code>，是无符号整数类型。</p>
+            <p><code>s.find(args)</code>：args第一次出现的位置。</p>
+            <p><code>s.rfind(args)</code>：args最后一次出现的位置。</p>
+            <p><code>s.find_first_of(args)</code>：args中任一字符第一次出现的位置。</p>
+            <p><code>s.find_last_of(args)</code>：args中任一字符最后一次出现的位置。</p>
+            <p><code>s.find_first_not_of(args)</code>：第一次出现不属于args中的字符的位置。</p>
+            <p><code>s.find_last_not_of(args)</code>：最后一次出现不属于args中的字符的位置。</p>
+            <p>args为以下四种形式之一：</p>
+            <p><code>c, pos</code>：从pos处开始查找字符c，pos默认为0。</p>
+            <p><code>str, pos</code>：从pos处开始查找字符串str，pos默认为0。</p>
+            <p><code>cp, pos</code>：从pos处开始查找C风格字符串指针cp，pos默认为0。</p>
+            <p><code>cp, pos, n</code>：从pos开始查找指针cp指向的数组的前n个字符。pos和n皆无默认值。</p>
+            <h5 id="匹配">匹配</h5>
+            <p><code>s.compare(args)</code>：跟据比较结果等于，小于或大于args，返回0，负数或正数。</p>
+            <p>args为以下形式之一：</p>
+            <p><code>s2</code>：与字符串s2比较。</p>
+            <p><code>pos1, n1, s2</code>：从pos1开始的n1个字符与s2比较。</p>
+            <p><code>pos1, n1, s2, pos2, n2</code>：从pos1开始的n1人字符与s2中从pos2开始的n2的字符比较。</p>
+            <p><code>cp</code>：与C风格字符串cp比较。</p>
+            <p><code>pos1, n1, cp</code>：从pos1开始的n1个字符与cp比较。</p>
+            <p><code>pos1, n1, cp, n2</code>：从pos1开始的n1个字符与从cp开始的n2个字符比较。</p>
+            <h5 id="数值转换">数值转换</h5>
+            <p><code>to_string(val)</code>：返回val的string表示。</p>
+            <p><code>sto{type}(s, p, b)</code>：返回s起始的子串的数值，由type指定返回值类型。b表示进制，默认为10。p是size_t指针，用来保存第一个非数值字符的下标，默认为0，即不保存下标。type可以为：i
+            (int)、l (long)、ul (unsigned long)、ll (long long)、ull
+            (unsigned long long)。</p>
+            <p><code>sto{type}(s, p)</code>：基本同上，返回浮点数，不能指定进制。type可以为：f
+            (float)、d (double)、ld (long double)。</p>
+            <h4 id="容器适配器操作">容器适配器操作</h4>
+            <p><code>container_type</code>：实现适配器的底层容器类型。</p>
+            <ul>
+            <li><p>stack</p>
+            <p><code>s.pop</code>：删除栈顶元素。</p>
+            <p><code>s.push(item)</code>：压入元素item的拷贝或移动。</p>
+            <p><code>s.emplace(args)</code>：压入由args构造的元素。</p>
+            <p><code>s.top()</code>：返回栈顶元素。</p></li>
+            <li><p>queue &amp; priority_queue</p>
+            <p>// 通用</p>
+            <p><code>q.pop()</code>：删除queue的首元素或priority_queue最高优先级的元素。</p>
+            <p><code>s.push(item)</code>：加入元素item的拷贝或移动。</p>
+            <p><code>s.emplace(args)</code>：加入由args构造的元素。</p>
+            <p>// 仅适用于queue</p>
+            <p><code>q.front()</code>：返回首元素。</p>
+            <p><code>q.back()</code>：返回尾元素。</p>
+            <p>// 仅适用于priority_queue</p>
+            <p><code>q.top()</code>：返回最高优先级元素。</p></li>
+            </ul>
+            <h3 id="关联容器操作">关联容器操作</h3>
+            <p><code>key_type</code>：关键字类型。</p>
+            <p><code>mapped_type</code>：映射类型，仅适用于map。</p>
+            <p><code>value_type</code>：值类型，对于set与<code>key_type</code>等效，对于map等于<code>pair&lt;const key_type, mapped_type&gt;</code>。</p>
+            <h5 id="遍历">遍历</h5>
+            <p>可以通过<code>begin()</code>和<code>end()</code>获取对应的迭代器从而实现遍历。</p>
+            <h5 id="插入元素">插入元素</h5>
+            <p><code>c.insert(v)</code>：对于map和set，key值重复的插入会失败，返回一个bool表示是否成功。而multimap和multiset可以插入key值重复的元素，返回指向该元素的迭代器。</p>
+            <p><code>c.emplace(args)</code>：行为同上，使用args构建元素。</p>
+            <p><code>c.insert(b, e)</code>：插入迭代器范围内的元素。</p>
+            <p><code>c.insert(li)</code>：插入初始化列表中的元素。</p>
+            <p><code>c.insert(p, v)</code>：从迭代器位置开始插入元素。</p>
+            <p><code>c.emplace(p, args)</code>：同上。</p>
+            <h5 id="删除元素">删除元素</h5>
+            <p><code>c.erase(k)</code>：删除所有key值为k的元素。</p>
+            <p><code>c.erase(p)</code>：删除迭代器指向的元素。</p>
+            <p><code>c.erase(b, e)</code>：删除迭代器范围内的元素。</p>
+            <h5 id="map的下标操作">map的下标操作</h5>
+            <p><code>map[key]</code>：取得key对应的value，如果key不存在则创建新元素。</p>
+            <h5 id="访问元素-1">访问元素</h5>
+            <p><code>c.find(k)</code>：返回指向第一个key值为k的元素的迭代器。</p>
+            <p><code>c.count(k)</code>：返回key值为k的元素的数量。</p>
+            <p><code>c.lower_bound(k)</code>：返回指向第一个key值不小于k的元素的迭代器。</p>
+            <p><code>c.upper_bound(k)</code>：返回指向第一个key值大于k的元素的迭代器。</p>
+            <p><code>c.equal_range(k)</code>：返回一个迭代器pair，表示关键字等于k的元素的范围。</p>
+            <h5 id="无序容器">无序容器</h5>
+            <p>无序容器<code>unorderd_map</code>和<code>unordered_set</code>，在存储上组织为一组桶，每个桶保存0或多个元素。使用hash函数将元素映射到桶。因此，无序元素的性能依赖于hash函数的质量和桶的数量与大小。</p>
+            <p>适用于有序容器的操作也适用于无序容器，此外无序容器提供了一组管理桶的函数：</p>
+            <p><code>c.bucket_count()</code>：正在使用的桶的数目。</p>
+            <p><code>c.max_bucket_count()</code>：容器能容纳的最多的桶的数目。</p>
+            <p><code>c.bucket_size(n)</code>：第n个桶中有多少元素。</p>
+            <p><code>c.bucket(k)</code>：关键字为k的元素在哪个桶中。</p>
+            <p><code>local_iterator</code>：用来访问桶中元素的迭代器类型。</p>
+            <p><code>const_local_iterator</code>：迭代器的const版本。</p>
+            <p><code>c.begin(n)</code>、<code>c.end(n)</code>、<code>c.cbegin(n)</code>、<code>c.cend(n)</code>：桶n的对应迭代器。</p>
+            <p><code>c.load_factor()</code>：每个桶的平均元素数量，返回float值。</p>
+            <p><code>c.max_load_factor()</code>：c试图维护的平均桶大小，返回float值。c会在需要时添加新的桶，使load_factor
+            &lt;= max_load_factor。</p>
+            <p><code>c.rehash(n)</code>：重组存储，使bucket_count &gt;=
+            n且bucket_count &gt; size / max_load_factor。</p>
+            <p><code>c.reserve(n)</code>：重组存储，使c可以保存n个元素而不用rehash。</p>
+            <pre class="language-cpp line-numbers match-braces"><code>// 无序容器的使用
+T1 hash(args);
+bool equal(T2 a, T2 b);
+// 由于模版参数接受的是类型，使用decltype取得函数的类型。
+unordered_map&lt;T2, decltype(hash)*, decltype(equal)*&gt; foo;</code></pre>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>

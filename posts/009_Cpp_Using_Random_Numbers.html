@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>C++随机数的使用 - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>C++随机数的使用</h1>
+            <p class="author">Xilong Yang<br>2021-05-17</p>
+        </div>
+        <main>
+            <section id="前言" class="abstract">
+            <h3>前言</h3>
+            <p>整理一下STL中random库和cstdlib中随机数机制的用法区别。</p>
+            </section>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#cstdlib中的随机数用法">cstdlib中的随机数用法</a>
+            </li>
+            <li>
+            <a href="#stl中的随机数用法">STL中的随机数用法</a>
+            </li>
+            <li>
+            <a href="#为什么要使用stl的随机数">为什么要使用STL的随机数</a>
+            </li>
+            <li>
+            <a href="#一个非常常见的问题">一个非常常见的问题</a>
+            </li>
+            </ol>
+            </nav>
+            <h2 id="cstdlib中的随机数用法">cstdlib中的随机数用法</h2>
+            <pre class="language-cpp line-numbers match-braces"><code>#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+#include &lt;cstdio&gt;
+
+int main() {
+    srand(time(0));
+    for (int i = 0; i &lt; 10; ++i) {
+        print(&quot;%d\n&quot;, rand());
+    }
+    return 0;
+}</code></pre>
+            <p>这段程序使用系统当前时间作随机数种子，然后使用rand()生成10个随机数。</p>
+            <h2 id="stl中的随机数用法">STL中的随机数用法</h2>
+            <pre class="language-cpp line-numbers match-braces"><code>#include &lt;random&gt;
+#include &lt;ctime&gt;
+#include &lt;cstdio&gt;
+
+int main() {
+    default_random_engine e(time(0));
+    for (int i = 0; i &lt; 10; ++i) {
+        print(&quot;%d\n&quot;, e());
+    }
+    return 0;
+}</code></pre>
+            <p>这段程序也是使用系统当前时间作随机数种子，然后使用e()生成10个随机数。</p>
+            <p><del>好了，以上就是小编带来的关于如何在c++中使用随机数的全部内容了，你学会了吗？（逃</del></p>
+            <h2
+            id="为什么要使用stl的随机数">为什么要使用STL的随机数</h2>
+            <p>答：用法丰富，使用方便。直接上例子：</p>
+            <pre class="language-cpp line-numbers match-braces"><code>#include &lt;random&gt;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+
+int main() {
+    default_random_engine e;
+    // 设置种子
+    srand(time(0));
+    e.seed(time(0));
+    // 生成一个范围内的整数
+    int min = 0;
+    int max = 9;
+    rand() % (max - min) + min;
+    uniform_int_distribution&lt;unsigned&gt; u(min, max);
+    u(e);
+    // 生成随机实数，STL的方法精度高于使用rand() / double的方式生成的实数
+    uniform_real_distribution&lt;double&gt; u(min, max);
+    u(e);
+    // 生成随机布尔, 注意这个描述器不是模板
+    bernoulli_distribution b;
+    b(e);
+    // 生成不均匀分布的随机数, 均值4， 标准差1.5
+    normal_distribution&lt;&gt; n(4, 1.5);
+    n(e);
+    return 0;
+}</code></pre>
+            <p>相信大家已经看出来标准库的方便之处了。</p>
+            <h2 id="一个非常常见的问题">一个非常常见的问题</h2>
+            <pre class="language-cpp line-numbers match-braces"><code>#include &lt;cstdlib&gt;
+#include &lt;random&gt;
+#include &lt;ctime&gt;
+
+int main() {
+    for (int i = 0; i &lt; 10; ++i) {
+        srand(time(0));
+        rand();
+        default_random_engine e;
+        e();
+    }
+    return 0;
+}</code></pre>
+            <p>这种方式会生成一样的数字，原因是随机数种子被设置时会重置随机数生成器的状态（Engine
+            e初始化时同样设置了默认种子）。应避免在生成随机数时设置种子。</p>
+            <pre class="language-cpp line-numbers match-braces"><code>#include &lt;cstdlib&gt;
+#include &lt;random&gt;
+#include &lt;ctime&gt;
+
+int main() {
+    srand(time(0));
+    default_random_engine e;
+    for (int i = 0; i &lt; 10; ++i) {
+        rand();
+        e();
+    }
+    return 0;
+}</code></pre>
+            <p>这样就没问题了。</p>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>
