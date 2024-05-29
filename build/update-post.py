@@ -70,27 +70,6 @@ def preprocessing(file):
     with open(temp2path(file), 'w') as temp:
         temp.write(contents)
 
-def postprocessing(file):
-    # Erase the unnecessary spaces in code blocks.
-    lines = ''
-    with open(post2path(file), 'r') as src:
-        lines = src.readlines()
-    
-    is_code = False
-    unnecessary_spaces = 0
-    for i in range(0, len(lines)):
-        cur_line = lines[i]
-        if "<code>" in cur_line:
-            is_code = True
-            unnecessary_spaces = len(cur_line) - len(cur_line.lstrip())
-        if is_code and len(cur_line) > unnecessary_spaces:
-            lines[i] = cur_line[unnecessary_spaces:]
-        if "</code>" in cur_line:
-            is_code = False
-    
-    with open(post2path(file), 'w') as src:
-        src.write(''.join(lines))
-
 if __name__ == "__main__":
     src_list  = list(set([file.split('.')[0] for file in os.listdir(SRC_PATH)]))
     post_list = list(set([file.split('.')[0] for file in os.listdir(POST_PATH)]))
@@ -113,7 +92,6 @@ if __name__ == "__main__":
         for file in need_update_list:
             preprocessing(file)
             subprocess.run(COMPILE_COMMAND.format(temp2path(file), post2path(file), POST_TEMPLATE), shell=True)
-            postprocessing(file)
             print("Build:" + file)
     finally:
         # Delete Temp path

@@ -13,13 +13,9 @@ a, a:visited {
 }
 
 .footnotes {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
     margin-top: 3.5rem;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 blockquote {
