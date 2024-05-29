@@ -30,7 +30,7 @@ TOC_ITEM_TEMPLATE = '<li><a href="$$link$$">$$title$$</a></li>\n'
 
 def PL_OPTIONS(language):
     PL_OPTIONS_TEMPLATE = '{.language-$$language$$ .line-numbers .match-braces}'
-    return '``` ' + PL_OPTIONS_TEMPLATE.replace('$$language$$', language[3:])
+    return '``` ' + PL_OPTIONS_TEMPLATE.replace('$$language$$', language[3:].strip())
 
 def src2path(filename):
     return SRC_PATH + '/' + filename + SOURCE_SUFFIX

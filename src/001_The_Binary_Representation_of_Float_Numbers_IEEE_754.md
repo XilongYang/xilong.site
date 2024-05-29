@@ -1,5 +1,5 @@
 ---
-title: "The Binary Representation of Float Numbers (IEEE 754)"
+title: "The Binary Representation of Floating-Point Numbers (IEEE 754)"
 author: Xilong Yang
 date: 2024-05-14
 ---

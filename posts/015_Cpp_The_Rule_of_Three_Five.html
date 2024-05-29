@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>C++三/五法则 - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>C++三/五法则</h1>
+            <p class="author">Xilong Yang<br>2021-07-19</p>
+        </div>
+        <main>
+            <section id="前言" class="abstract">
+            <h3>前言</h3>
+            <p>本以为三/五法则作为一个基础知识早已烂熟于心，未想纸上得来终是浅，还是在这个地方翻了次车。</p>
+            </section>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#什么是三/五法则">什么是三/五法则</a>
+            </li>
+            <li>
+            <a href="#翻车实况">翻车实况</a>
+            </li>
+            <li>
+            <a href="#问题解决">问题解决</a>
+            </li>
+            <li>
+            <a href="#总结">总结</a>
+            </li>
+            </ol>
+            </nav>
+            <h2 id="什么是三五法则">什么是三/五法则</h2>
+            <ul>
+            <li>三法则：C++11之前，一个需要<code>析构函数</code>的类也需要<code>拷贝构造函数</code>和<code>拷贝赋值运算符</code>。这三个组件总是成套出现，因此叫三法则。</li>
+            <li>五法则：C++11以后，一个需要<code>析构函数</code>的类同时需要<code>拷贝构造函数</code>、<code>拷贝赋值运算符</code>和<code>移动构造函数</code>以及<code>移动赋值运算符</code>。成套出现的组件数量变成了五，因此叫五法则。</li>
+            </ul>
+            <p>对于这两个法则，虽然内容在添加移动语义后有一些变化，但核心思想都是一样的。即类的基础组件应该成套构成。因此合称为三/五法则。</p>
+            <h2 id="翻车实况">翻车实况</h2>
+            <p>也许你会疑惑，这么浅显的地方怎么会翻车，看了这个翻车实况或许就会发现你也可能犯这样的错误。</p>
+            <p>起因是昨天写<a
+            href="/posts/014_The_Level_Order_Iteration_of_Binary_Tree.html">二叉树的层序遍历</a>时，需要一个C++的实现，方便起见，我定义了一个非常简单的二叉链表结构来构造二叉树：</p>
+            <pre class="language-cpp line-numbers match-braces"><code>struct Tree {
+    Tree() : left(nullptr), data(0), right(nullptr) {}
+    Tree *left;
+    char data;
+    Tree *right;
+};</code></pre>
+            <p>以及不可忽视的两点：</p>
+            <ol type="1">
+            <li><p>我的遍历函数使用了<strong><em>常量引用传递</em></strong>的方式接收树</p></li>
+            <li><p>遍历函数内部用到了<code>std::queue</code>作为遍历队列。存储相关语句为：</p></li>
+            </ol>
+            <pre class="language-cpp line-numbers match-braces"><code>// std::queue&lt;Tree&gt; nodeQueue;
+// cur = nodeQueue.front();
+nodeQueue.push(T);
+if (cur.left)  nodeQueue.push(*cur.left);
+if (cur.right) nodeQueue.push(*cur.right);</code></pre>
+            <p>函数签名：<code>void View(const Tree&amp; T);</code></p>
+            <p>同样是方便起见，我手动构造了一棵树用于测试：</p>
+            <pre class="language-cpp line-numbers match-braces"><code>Tree *GetTree() {
+    auto T = new Tree;
+    T-&gt;data = &#39;A&#39;;
+    T-&gt;left = new Tree;
+    T-&gt;left-&gt;data = &#39;B&#39;;
+    T-&gt;right = new Tree;
+    T-&gt;right-&gt;data = &#39;C&#39;;
+    T-&gt;right-&gt;left = new Tree;
+    T-&gt;right-&gt;left-&gt;data = &#39;D&#39;;
+    T-&gt;right-&gt;right = new Tree;
+    T-&gt;right-&gt;right-&gt;data = &#39;E&#39;;
+    return T;
+}
+
+int main() {
+    auto T = GetTree();
+    // 正常情况下应该输出&quot;ABCDE&quot;
+    View(*T);
+    return 0;
+}</code></pre>
+            <p>注意这里没有<code>delete T</code>，内存是全部泄露的，不过这种简单程序反正有操作系统回收，可以先不用关心。</p>
+            <p>于是问题来了，在我用这个版本的程序完成算法的测试后，出于习惯给这个<code>Tree</code>加上了一个简单的析构函数：</p>
+            <pre class="language-cpp line-numbers match-braces"><code>struct Tree {
+    Tree() : left(nullptr), data(0), right(nullptr) {}
+    ~Tree() {
+        if (left) delete left;
+        if (right) delete right;
+    }
+    Tree *left;
+    char data;
+    Tree *right;
+};</code></pre>
+            <p>并且在<code>main</code>函数内释放了内存：</p>
+            <pre class="language-cpp line-numbers match-braces"><code>int main() {
+    auto T = GetTree();
+    View(*T);
+    delete T;
+    return 0;
+}</code></pre>
+            <p>这时运行程序就可以喜提一个<code>Segment Error</code>了。</p>
+            <h2 id="问题解决">问题解决</h2>
+            <p>因为没有添加析构函数时并没有出现问题，所以总是怀疑自己对析构过程的理解有问题。难道析构函数不是自已理解的”死前抖擞精神，完成最后的任务，然后安详赴死“？对象在调用析构函数时最已经销毁了？不可能啊。</p>
+            <p>几经查阅后，发现我对析构过程的理解没有问题，对象在析构函数之后才被销毁。更离谱的是，我为了简化问题写的只存在树的构建的析构的程序运行起来完全没有出现问题。</p>
+            <p>于是我把目光投向了看起来安全的不能再安全的，接收<code>const Tree&amp;</code>类型参数的<code>View</code>函数。在出现问题的代码中将<code>View(*T);</code>注释掉，发现还真是这个函数的问题。</p>
+            <p>说来奇怪，还没有对问题做具体的分析，就直觉地想到改一下传参方式或许可以解决，于是我将<code>View</code>改成如下形式：</p>
+            <p>函数签名：<code>void View(const Tree *T)</code></p>
+            <p>存储语句：</p>
+            <pre class="language-cpp line-numbers match-braces"><code>// std::queue&lt;const Tree*&gt; nodeQueue;
+// cur = nodeQueue.front();
+if (T) nodeQueue.push(T);
+if (cur-&gt;left)  nodeQueue.push(cur-&gt;left);
+if (cur-&gt;right) nodeQueue.push(cur-&gt;right);</code></pre>
+            <p>然后果真没有问题了，这弄得我很疑惑。于是分析可能是<code>std::queue</code>相关的问题，但它也不会直接释放掉资源啊。一番思索，发现原因如下：</p>
+            <ul>
+            <li>对于<code>std::queue&lt;const Tree&gt;</code>，它在每一次<code>push(T)</code>时创建一个<code>T</code>的拷贝，并存储，由于<code>Tree</code>没有定义拷贝相关操作，会使用默认拷贝方式，即简单复制其中的指针。</li>
+            <li><code>std::queue</code>在<code>pop()</code>操作时会销毁临时对象。</li>
+            <li>当没有为<code>Tree</code>创建析构函数时，临时对象的销毁仅仅是简单销毁自身，因此没有出现问题。</li>
+            <li>而对于已经创建了析构函数的<code>Tree</code>，临时对象会递归地销毁其指针指向的子节点，此时再显式地<code>delete T</code>就会导致重复delete。从而引发<code>Segment Error</code>。</li>
+            </ul>
+            <p>因此，像上面那样使用指针传递的方式就解决了问题，这样临时对象的类型就变成了指针，从而不会对树本身产生影响。但这种方式本质上只是在逃避，并没有解决问题。</p>
+            <p>真正要解决这个问题，那还得是为<code>Tree</code>添加正确的拷贝构造函数、拷贝赋值运算符、移动构造函数和移动赋值运算符。</p>
+            <h2 id="总结">总结</h2>
+            <p>遵循三/五法则是一个类正常运行的基础，绝不能偷懒省略其中的组件。还好我以这样低的成本——一个测试算法用的临时程序——完成了三/五法则的试错。</p>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>

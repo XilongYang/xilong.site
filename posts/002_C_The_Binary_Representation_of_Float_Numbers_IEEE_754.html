@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>C语言中浮点数的二进制表示（IEEE754） - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>C语言中浮点数的二进制表示（IEEE754）</h1>
+            <p class="author">Xilong Yang<br>2019-08-18</p>
+        </div>
+        <main>
+            <section id="前言" class="abstract">
+            <h3>前言</h3>
+            <p>最近在C语言学习中遇到了浮点运算精度的问题，
+            在查找资料后发现是浮点数的储存方式引起的问题，在此做一个记录。</p>
+            </section>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#问题代码：">问题代码：</a>
+            </li>
+            <li>
+            <a href="#分析：">分析：</a>
+            </li>
+            <li>
+            <a href="#结论：">结论：</a>
+            </li>
+            </ol>
+            </nav>
+            <h2 id="问题代码">问题代码：</h2>
+            <pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
+
+int main()
+{
+    int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+    int i;
+    float a = 0;
+    for (i = 0; i &lt; 10; i++)
+        a += (float)arr[i] / 10.0;  //求arr中所有数的平均数
+    for (i = 0; i &lt; 10; i++)
+        if(arr[i] &gt; a) printf(&quot;%d &quot;, arr[i]); //将arr中大于平均数的数打印出来
+    return 0;
+}
+</code></pre>
+            <p>不难看出，以上程序理论上不应该输出任何数据，可是实际运行结果如下:</p>
+            <pre><code>3 3 3 3 3 3 3 3 3 3 3</code></pre>
+            <h2 id="分析">分析：</h2>
+            <p>经过一番尝试，最后发现是由于本代码中a的值并非3.0而是2.99999，由此判断应该是浮点数的运算精度问题。</p>
+            <p>浮点数在内存中是按照IEEE754标准进行储存的，
+            即一个float类型的数据占用8Byte内存，其中包括符号位1位，阶码8位和尾数23位。图示如下：</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th style="text-align: center;">S(符号位)</th>
+            <th style="text-align: center;">E(阶码)</th>
+            <th style="text-align: center;">M(尾数)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td style="text-align: center;">0</td>
+            <td style="text-align: center;">0000 0000</td>
+            <td style="text-align: center;">0000 0000 0000 0000 0000
+            000</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>其中符号位决定该浮点数的正负，正值为0，负值为1。</p>
+            <p>阶码用以表示该浮点数的指数，其值为</p>
+            <p><code>E = e(指数值) + 127</code></p>
+            <p>这样可以保证E不为负数，方便机器运算。其中127为float类型的偏移值，其它浮点类型的有其它偏移值。</p>
+            <p>按照浮点规格化表示，尾数的最高有效位应为1，这意味着M表示的值为1.M。</p>
+            <p>以遇到的问题中的值0.3为例， 其转化过程如下。</p>
+            <ol type="1">
+            <li>将十进制数转换为二进制，小数点前除2取余，小数点后乘2取整
+            <span class="math display">\[(0.3)_{10} =
+            (0.0100110011001100110011001)_2 \]</span></li>
+            </ol>
+            <p>此时可以发现0.3的二进制是无限循环的，故而只能截取到精度对应的位数。</p>
+            <ol start="2" type="1">
+            <li><p>规格化表示 <span
+            class="math display">\[0.100110011001100110011001=+1.00110011001100110011001\times2^{-2}\]</span></p></li>
+            <li><p>计算相应的值 S=0, E = 127 - 2 = 125 = 0111 1101, M =
+            0011 0011 0011 0011 0011 001</p></li>
+            </ol>
+            <p>所以0.3在内存中应该为</p>
+            <table>
+            <thead>
+            <tr class="header">
+            <th>S</th>
+            <th>E</th>
+            <th>M</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="odd">
+            <td>0</td>
+            <td>0111 1101</td>
+            <td>0011 0011 0011 0011 0011 001</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>转化为16进制数为：3E999999</p>
+            <p>可以用以下程序验证</p>
+            <pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
+
+int main()
+{
+    float a = 0.3;
+    printf(&quot;%x&quot;, *(int *)&amp;a);
+    return 0;
+}</code></pre>
+            <h2 id="结论">结论：</h2>
+            <p>得到结果：3E99999A，
+            与理论计算值3E999999相差1，应该是计算机处理过程中对末位进行了四舍五入。</p>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>CMakeLists.txt编写入门 - Xilong Yang</title>
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+        <link href="/style/wrapper.css" rel="stylesheet">
+        <script src="/scripts/init.js" defer type="module"></script>
+        <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+        <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+    </head>
+    <body>
+        <div class="navbar">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>
+        <div class="header">
+            <h1>CMakeLists.txt编写入门</h1>
+            <p class="author">Xilong Yang<br>2021-08-02</p>
+        </div>
+        <main>
+            <section id="前言" class="abstract">
+            <h3>前言</h3>
+            <p>整理一下CMakeLists的相关知识。</p>
+            </section>
+            <nav role="navigation" class="toc">
+            <h2>
+            Contents
+            </h2>
+            <ol>
+            <li>
+            <a href="#语法">语法</a>
+            </li>
+            <li>
+            <a href="#基础命令与变量">基础命令与变量</a>
+            </li>
+            <li>
+            <a href="#控制流命令">控制流命令</a>
+            </li>
+            <li>
+            <a href="#常用命令">常用命令</a>
+            </li>
+            <li>
+            <a href="#常用变量">常用变量</a>
+            </li>
+            </ol>
+            </nav>
+            <h2 id="语法">语法</h2>
+            <p>听说CMake已经被证明图灵完备了，不过它的语法还是很简单的，由命令、变量和注释组成。</p>
+            <p>注释：以<code>#</code>开头的行即为注释。</p>
+            <p>命令：包括命令名和一个括号括起来的参数列表。形式如下：</p>
+            <pre class="language-Cmake line-numbers match-braces"><code>command(arg1 arg2 ...) # 参数以空格分隔</code></pre>
+            <p>变量：由命令生成或CMake环境定义，使用<code>$</code>和<code>{}</code>来引用变量：</p>
+            <pre class="language-cmake line-numbers match-braces"><code>${SOMEVAR} # 变量的值
+SOMEVAR    # 字面值</code></pre>
+            <p>CMakeList.txt是逐行解析的，因此变量的定义应在使用之前。</p>
+            <p>好了，现在你已经学会CMake了。了解几个常用命令和变量就可以使用了。</p>
+            <h2 id="基础命令与变量">基础命令与变量</h2>
+            <p><code>cmake_minimum_required(&lt;version&gt;)</code>：指定CMake的最小版本号。</p>
+            <p><code>project(&lt;name&gt;)</code>：指定工程名称。</p>
+            <p><code>include_directories(&lt;dir1&gt; &lt;dir2&gt; ...)</code>：指定include目录。</p>
+            <ul>
+            <li>变量<code>CMAKE_SOURCE_DIR</code>：表示工程顶层目录。</li>
+            </ul>
+            <p><code>aux_source_directory(&lt;dir&gt; &lt;var&gt;)</code>：将一个目录中所有源文件赋予一个变量。</p>
+            <p><code>add_executable(&lt;target&gt; &lt;source1&gt; &lt;source2&gt; ...)</code>：构建可执行文件，第一个参数为文件名称，后面的参数为源文件列表。</p>
+            <p>有了这几条命令，我们就可以编写一个能用的CMakeList.txt文件了：</p>
+            <pre class="language-cmake line-numbers match-braces"><code>cmake_minimun_required(3.1)
+project(HelloWorld)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+aux_source_dirctory(${CMAKE_SOURCE_DIR}/src DIR_SRC)
+add_executable(helloworld ${DIR_SRC})</code></pre>
+            <h2 id="控制流命令">控制流命令</h2>
+            <ul>
+            <li>if</li>
+            </ul>
+            <pre class="language-cmake line-numbers match-braces"><code>if(conditon)
+...
+elseif(condition)
+...
+else()
+...
+endif()</code></pre>
+            <ul>
+            <li>while</li>
+            </ul>
+            <pre class="language-cmake line-numbers match-braces"><code>while(condition)
+...
+endwhile()</code></pre>
+            <ul>
+            <li>foreach</li>
+            </ul>
+            <pre class="language-cmake line-numbers match-braces"><code>foreach(var arg1 arg2 ...)
+...
+endforeach(var)</code></pre>
+            <h2 id="常用命令">常用命令</h2>
+            <p><code>set(var value)</code>：为变量赋值。</p>
+            <p><code>add_definitions(-Dxxxx1 -Dxxxx2 ...)</code>：向编译器添加-D定义，此时代码内的<code>#ifdef xxxx ... #endif</code>代码块生效。</p>
+            <p><code>add_dependencies(target-name depend-target1 ...)</code>：添加依赖目标。</p>
+            <p><code>add_library(name [STATIC|SHARED] src1 src2...)</code>：创建库，如果未指定库类型则默认构建STATIC库，可以通过定义变量<code>BUILD_SHARED_LIBS</code>改为默认构建SHARED库。</p>
+            <p><code>target_link_library(target-name lib1 lib2 ...)</code>：为taget链接库。</p>
+            <p><code>add_subdirectory(subdir1 subdir2 ...)</code>：添加子目录，使用子目录的CMakeLists.txt构建子目录中的文件。</p>
+            <p><code>add_test(testname execname arg1 arg2...)</code>：添加测试，execname可以是任何可执行文件的名称。在生成makefile后可以使用<code>make test</code>来进行测试。</p>
+            <p><code>ebable_test()</code>：开启测试开关，没有这条指令则任何add_test指令都是无效的。</p>
+            <p><code>find_library(var NAMES name1 name2 ... PATHS path1 path2 ...)</code>：在path中查找基础名称为name的库，并将其完整路径赋予变量var。</p>
+            <p><code>file_path(var file path1 path2 ...)</code>：在path中查找file，并将path路径赋予变量var。</p>
+            <h2 id="常用变量">常用变量</h2>
+            <p><code>CMAKE_BINARY_DIR</code> =
+            <code>PROJECT_BINARY_DIR</code> =
+            <code>&lt;projectname&gt;_BINARY_DIR</code>：可执行文件生成目录。</p>
+            <p><code>CMAKE_SOURCE_DIR</code> =
+            <code>PROJECT_SOURCE_DIR</code> =
+            <code>&lt;projectname&gt;_SOURCE_DIR</code>：工程顶层目录。</p>
+            <p><code>CMAKE_CURRENT_SOURCE_DIR</code>：当前文件（可以是子文件夹的CMakeLists.txt）所在目录。</p>
+            <p><code>CMAKE_CURRENT_BINARY_DIR</code>：当前文件产生的可执行文件目录。</p>
+            <p><code>CMAKE_CURRENT_LIST_FILE</code>：调用此变量的CMakeLists.txt的完整路径。</p>
+            <p><code>CMAKE_CURRENT_LIST_LINE</code>：此变量所在的行。</p>
+            <p><code>CMAKE_MODULE_PATH</code>：模块的路径。</p>
+            <p><code>EXECUTABLE_OUTPUT_PATH</code>：可执行文件的存放路径。</p>
+            <p><code>LIBRARY_OUTPUT_PATH</code>：库文件的存放路径。</p>
+            <p><code>CMAKE_MAJOR_VERSION</code>：主版本号。</p>
+            <p><code>CMAKE_MINOR_VERSION</code>：次版本号。</p>
+            <p><code>CMAKE_PATCH_VERSION</code>：补丁等级。</p>
+            <p><code>CMAKE_SYSTEM</code>：系统名称。</p>
+            <p><code>CMAKE_SYSTEM_NAME</code>：不含版本的系统名。</p>
+            <p><code>CMAKE_SYSTEM_PROCESSOR</code>：处理器名称。</p>
+            <p><code>UNIX</code>：在unix环境下为TRUE。</p>
+            <p><code>WIN32</code>：在win32环境下为TRUE。</p>
+        </main>
+        <div class="footnotes">
+            © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+            | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+            | Powered by
+            <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>, 
+            <a href="https://github.com/PrismJS/prism/">Prism</a>,
+            <a href="https://github.com/mathjax/MathJax">MathJax</a>
+        </div>
+    </body>
+</html>
