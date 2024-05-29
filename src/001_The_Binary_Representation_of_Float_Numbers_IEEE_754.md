@@ -19,7 +19,7 @@ $$toc$$
 Code for the issue:
 
 ```c
-#include <stdio.h>
+#include <stdio.h> 
 
 int main() {
   int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
