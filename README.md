@@ -34,7 +34,7 @@ This repo is the source code of my personal site (xilong.site).
 │   ├── darkmode.css
 │   ├── patches.css
 │   └── wrapper.css
-└── template // template files for post generating
+└── template // template files for generating
     ├── index.html
     └── post.html
 ```
@@ -43,11 +43,11 @@ This repo is the source code of my personal site (xilong.site).
 
 ### 1. Edit Source Files
 
-To create new posts, just put files in the `src` folder. 
+To create new posts, just put `.md` files in the `src` folder. 
 
-The meta data is surrounded by '---' and has a structure as `"key":value` per line.
+The metadata is surrounded by '---' and it has a structure such as `"key":value` per line.
 
-Use the `$$toc$$` for a automatic generated TOC, which just include the level 2 title(`##`).
+Use the `$$toc$$` for an automatic generated TOC, which just include the level 2 title(`##`).
 
 ### 2. Generate Posts
 
@@ -72,6 +72,6 @@ Run:
 build/update-index.py
 ```
 
-Updates the post list, which is sorted by created date and grouped by create year.
+Updates the post list, which is sorted by creation date and grouped by creation year.
 
-The info of title and date of a post is from the meta info of the source files.
+The title and creation date of a post are parse from the metadata of the source files.
