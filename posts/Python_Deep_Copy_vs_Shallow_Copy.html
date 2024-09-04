@@ -113,7 +113,7 @@ print(id(list1), &quot; &quot; ,id(list2), &quot; &quot;, id（list3)</code></pr
             <p>可以看出它们的地址相同，即为同一个对象。那么理所应当地，我们通过哪一个引用改变变量的值都会更改这唯一的地址空间。</p>
             <p>这里你可能对一切皆引用这个说法有所质疑，并提出如下例子：</p>
             <pre
-            class="language-Python line-numbers match-braces"><code>a = 5
+            class="language-python line-numbers match-braces"><code>a = 5
 b = a
 b = 3
 print(a, id(a))

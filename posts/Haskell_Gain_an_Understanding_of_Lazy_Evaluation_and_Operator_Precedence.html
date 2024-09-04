@@ -33,7 +33,7 @@
             </h2>
             <ol>
             <li>
-            <a href="#引言：fibonacci数列">引言：Fibonacci数列</a>
+            <a href="#引言fibonacci数列">引言：Fibonacci数列</a>
             </li>
             <li>
             <a href="#fib函数的递推实现">fib函数的递推实现</a>
@@ -45,7 +45,7 @@
             <a href="#谈谈运算符优先级">谈谈运算符优先级</a>
             </li>
             <li>
-            <a href="#附：运算符优先级表">附：运算符优先级表</a>
+            <a href="#附运算符优先级表">附：运算符优先级表</a>
             </li>
             </ol>
             </nav>
@@ -106,7 +106,7 @@ list fibs() {
 }</code></pre>
             <p>可以发现一个很明显的问题，这个函数没有递归终止条件。而在C++这样的直接求值语言中，这会导致传参时无限递归，计算不出任何结果。然而对于惰性求值的Haskell而言，就不存在这个问题了，首先看看<code>zipWith</code>的定义：</p>
             <pre
-            class="language-Haskell line-numbers match-braces"><code>zipWith :: (a-&gt;b-&gt;c) -&gt; [a] -&gt; [b] -&gt; [c]
+            class="language-haskell line-numbers match-braces"><code>zipWith :: (a-&gt;b-&gt;c) -&gt; [a] -&gt; [b] -&gt; [c]
 zipWith f = go
   where
     go [] _ = []
