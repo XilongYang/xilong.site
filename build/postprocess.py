@@ -27,9 +27,14 @@ def part_toc(contents, level):
     items = [template.format(x[0], x[1], part_toc(x[2], level + 1)) for x in item_pair]
     return '<ol>{}</ol>'.format(''.join(items))
 
+def is_chinese_post(contents):
+    title = ''.join(re.findall(r'<title.*/title>', contents))
+    return len([c for c in title if '\u4e00' <= c <= '\u9fff']) > 0
 
-def generate_toc(contents):   
+def generate_toc(contents):
     toc_template = '<nav role="navigation" class="toc">\n<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>\n<div id="toc-items">\n{}\n</div>\n</nav>'
+    if is_chinese_post(contents):
+        toc_template = toc_template.replace('Contents', '目录')
     toc = toc_template.format(part_toc(contents, 2))
 
     return ''.join(contents).replace('<p>[[toc]]</p>', toc)
