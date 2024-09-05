@@ -33,16 +33,16 @@
             </h2>
             <ol>
             <li>
-            <a href="#回顾：汉诺塔是什么？">回顾：汉诺塔是什么？</a>
+            <a href="#回顾汉诺塔是什么">回顾：汉诺塔是什么？</a>
             </li>
             <li>
             <a href="#haskell求解汉诺塔">Haskell求解汉诺塔</a>
             </li>
             <li>
-            <a href="#再来一根：四柱汉诺塔问题">再来一根：四柱汉诺塔问题</a>
+            <a href="#再来一根四柱汉诺塔问题">再来一根：四柱汉诺塔问题</a>
             </li>
             <li>
-            <a href="#你的时间非常值钱：四柱汉诺塔最优解">你的时间非常值钱：四柱汉诺塔最优解</a>
+            <a href="#你的时间非常值钱四柱汉诺塔最优解">你的时间非常值钱：四柱汉诺塔最优解</a>
             </li>
             </ol>
             </nav>
@@ -125,7 +125,7 @@ hanoiPlus n a b c d = hanoiPlus (left - k) a c b d
             id="你的时间非常值钱四柱汉诺塔最优解">你的时间非常值钱：四柱汉诺塔最优解</h2>
             <p>平分是无法达到最优效率的，因为3柱移动比4柱移动耗时，要达到最优效率，需要加一个分割函数。</p>
             <pre
-            class="language-Haskell line-numbers match-braces"><code>hanoiPlus :: Integer-&gt;Peg-&gt;Peg-&gt;Peg-&gt;Peg-&gt;[Move]
+            class="language-haskell line-numbers match-braces"><code>hanoiPlus :: Integer-&gt;Peg-&gt;Peg-&gt;Peg-&gt;Peg-&gt;[Move]
 hanoiPlus 0 _ _ _ _ = []
 hanoiPlus n a b c d = hanoiPlus (left - k) a c b d
             ++ hanoi k a d b
