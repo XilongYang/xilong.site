@@ -6,7 +6,6 @@ date: 2021-11-01
 
 <div class="abstract">
 
-### 前言
 
 字符串匹配算法半壁江山之KMP算法。
 

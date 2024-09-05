@@ -6,7 +6,6 @@ date: 2020-02-26
 
 <div class="abstract">
 
-### 前言
 
 偶然间看见一个声明:
 

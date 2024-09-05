@@ -6,7 +6,6 @@ date: 2021-05-17
 
 <div class="abstract">
 
-### 前言
 
 整理一下STL中random库和cstdlib中随机数机制的用法区别。
 

@@ -6,7 +6,6 @@ date: 2021-01-27
 
 <div class="abstract">
 
-### 前言
 
 初学Haskell，在做[CIS 194 HomeWork1](https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf)时遇到的四柱汉渃塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。
 
