@@ -31,17 +31,17 @@
             </h2>
             <ol>
             <li>
-            <a href="#问题代码：">问题代码：</a>
+            <a href="#问题代码">问题代码</a>
             </li>
             <li>
-            <a href="#分析：">分析：</a>
+            <a href="#分析">分析</a>
             </li>
             <li>
-            <a href="#结论：">结论：</a>
+            <a href="#结论">结论</a>
             </li>
             </ol>
             </nav>
-            <h2 id="问题代码">问题代码：</h2>
+            <h2 id="问题代码">问题代码</h2>
             <pre class="language-c line-numbers match-braces"><code>#include&lt;stdio.h&gt;
 
 int main()
@@ -58,7 +58,7 @@ int main()
 </code></pre>
             <p>不难看出，以上程序理论上不应该输出任何数据，可是实际运行结果如下:</p>
             <pre><code>3 3 3 3 3 3 3 3 3 3 3</code></pre>
-            <h2 id="分析">分析：</h2>
+            <h2 id="分析">分析</h2>
             <p>经过一番尝试，最后发现是由于本代码中a的值并非3.0而是2.99999，由此判断应该是浮点数的运算精度问题。</p>
             <p>浮点数在内存中是按照IEEE754标准进行储存的，
             即一个float类型的数据占用8Byte内存，其中包括符号位1位，阶码8位和尾数23位。图示如下：</p>
@@ -124,7 +124,7 @@ int main()
     printf(&quot;%x&quot;, *(int *)&amp;a);
     return 0;
 }</code></pre>
-            <h2 id="结论">结论：</h2>
+            <h2 id="结论">结论</h2>
             <p>得到结果：3E99999A，
             与理论计算值3E999999相差1，应该是计算机处理过程中对末位进行了四舍五入。</p>
         </main>
