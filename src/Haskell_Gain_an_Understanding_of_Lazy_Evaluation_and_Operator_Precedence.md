@@ -11,7 +11,7 @@ date: 2022-01-08
 
 </div>
 
-$$toc$$
+[[toc]]
 
 ## 引言：Fibonacci数列
 

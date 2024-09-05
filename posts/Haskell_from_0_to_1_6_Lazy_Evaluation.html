@@ -25,27 +25,23 @@
             <p>经过了前几篇的折磨，是时候介绍惰性求值了。</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#直接求值">直接求值</a>
-            </li>
-            <li>
-            <a href="#副作用和纯净">副作用和纯净</a>
-            </li>
-            <li>
-            <a href="#惰性求值">惰性求值</a>
-            </li>
-            <li>
-            <a href="#模式匹配驱动计算">模式匹配驱动计算</a>
-            </li>
-            <li>
-            <a href="#惰性求值带来的影响">惰性求值带来的影响</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#直接求值">直接求值</a><ol></ol></li>
+<li><a href="#副作用和纯净">副作用和纯净</a><ol></ol></li>
+<li><a href="#惰性求值">惰性求值</a><ol></ol></li>
+<li><a href="#模式匹配驱动计算">模式匹配驱动计算</a><ol></ol></li>
+<li><a href="#惰性求值带来的影响">惰性求值带来的影响</a><ol><li><a href="#纯净">纯净</a><ol></ol></li>
+<li><a href="#理解空间消耗">理解空间消耗</a><ol></ol></li>
+<li><a href="#短路运算符">短路运算符</a><ol></ol></li>
+<li><a href="#用户定义的控制结构">用户定义的控制结构</a><ol></ol></li>
+<li><a href="#无限数据结构">无限数据结构</a><ol></ol></li>
+<li><a href="#管道全麦编程">管道/全麦编程</a><ol></ol></li>
+<li><a href="#动态规划">动态规划</a><ol></ol></li>
+</ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="直接求值">直接求值</h2>
             <p>在讨论惰性求值之前首先来了解一下直接求值。在直接求值方式下，参数在传入函数之前就已经计算过了，传入函数的是计算结果。考虑如下函数：</p>
             <pre

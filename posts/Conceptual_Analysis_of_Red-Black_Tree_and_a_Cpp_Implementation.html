@@ -24,30 +24,26 @@
             <p>整理了红黑树的性质与基本操作的C++实现</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#基本概念">基本概念</a>
-            </li>
-            <li>
-            <a href="#存储结构">存储结构</a>
-            </li>
-            <li>
-            <a href="#基本操作旋转">基本操作：旋转</a>
-            </li>
-            <li>
-            <a href="#基本操作插入">基本操作：插入</a>
-            </li>
-            <li>
-            <a href="#基本操作删除">基本操作：删除</a>
-            </li>
-            <li>
-            <a href="#总结">总结</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#基本概念">基本概念</a><ol></ol></li>
+<li><a href="#存储结构">存储结构</a><ol></ol></li>
+<li><a href="#基本操作旋转">基本操作：旋转</a><ol><li><a href="#概念">概念</a><ol></ol></li>
+<li><a href="#实现">实现</a><ol></ol></li>
+</ol></li>
+<li><a href="#基本操作插入">基本操作：插入</a><ol><li><a href="#情况一叔节点是红色">情况一：叔节点是红色</a><ol></ol></li>
+<li><a href="#情况二叔节点是黑色且z与父节点异侧">情况二：叔节点是黑色，且z与父节点异侧</a><ol></ol></li>
+<li><a href="#情况三叔节点是黑色且z与父节点同侧">情况三：叔节点是黑色，且z与父节点同侧</a><ol></ol></li>
+</ol></li>
+<li><a href="#基本操作删除">基本操作：删除</a><ol><li><a href="#情况1x的兄弟节点m为红色">情况1：x的兄弟节点m为红色</a><ol></ol></li>
+<li><a href="#情况2x的兄弟节点m为黑色且m的两个子节点都为黑色">情况2：x的兄弟节点m为黑色，且m的两个子节点都为黑色</a><ol></ol></li>
+<li><a href="#情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</a><ol></ol></li>
+<li><a href="#情况4x的兄弟节点为黑色且m的同侧孩子为红色">情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。</a><ol></ol></li>
+</ol></li>
+<li><a href="#总结">总结</a><ol></ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="基本概念">基本概念</h2>
             <p>红黑树（Red Black Tree，简称R-B
             Tree）是一种特殊的二叉查找树([[二叉树的存储结构及其非层序遍历|二叉树]])。它的特殊性体现在：</p>

@@ -25,60 +25,36 @@
             <p>这是第一篇，主题是Haskell的介绍和基础语法。</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#给其它语言学习者的忠告">给其它语言学习者的忠告</a>
-            </li>
-            <li>
-            <a href="#什么是haskell">什么是Haskell</a>
-            </li>
-            <li>
-            <a href="#三个主题">三个主题</a>
-            </li>
-            <li>
-            <a href="#文档化的haskell">文档化的Haskell</a>
-            </li>
-            <li>
-            <a href="#声明与变量">声明与变量</a>
-            </li>
-            <li>
-            <a href="#基本类型">基本类型</a>
-            </li>
-            <li>
-            <a href="#ghci">GHCi</a>
-            </li>
-            <li>
-            <a href="#算术运算">算术运算</a>
-            </li>
-            <li>
-            <a href="#布尔运算">布尔运算</a>
-            </li>
-            <li>
-            <a href="#定义基础函数">定义基础函数</a>
-            </li>
-            <li>
-            <a href="#序对">序对</a>
-            </li>
-            <li>
-            <a href="#接受多个参数的函数">接受多个参数的函数</a>
-            </li>
-            <li>
-            <a href="#列表">列表</a>
-            </li>
-            <li>
-            <a href="#处理列表的函数">处理列表的函数</a>
-            </li>
-            <li>
-            <a href="#组合函数">组合函数</a>
-            </li>
-            <li>
-            <a href="#关于错误信息">关于错误信息</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#给其它语言学习者的忠告">给其它语言学习者的忠告</a><ol></ol></li>
+<li><a href="#什么是haskell">什么是Haskell</a><ol><li><a href="#函数式">函数式：</a><ol></ol></li>
+<li><a href="#纯">纯：</a><ol></ol></li>
+<li><a href="#惰性求值">惰性求值：</a><ol></ol></li>
+<li><a href="#静态强类型">静态强类型：</a><ol></ol></li>
+</ol></li>
+<li><a href="#三个主题">三个主题</a><ol><li><a href="#类型">类型</a><ol></ol></li>
+<li><a href="#抽象">抽象</a><ol></ol></li>
+<li><a href="#全麦编程">全麦编程</a><ol></ol></li>
+</ol></li>
+<li><a href="#文档化的haskell">文档化的Haskell</a><ol></ol></li>
+<li><a href="#声明与变量">声明与变量</a><ol></ol></li>
+<li><a href="#基本类型">基本类型</a><ol></ol></li>
+<li><a href="#ghci">GHCi</a><ol></ol></li>
+<li><a href="#算术运算">算术运算</a><ol></ol></li>
+<li><a href="#布尔运算">布尔运算</a><ol></ol></li>
+<li><a href="#定义基础函数">定义基础函数</a><ol></ol></li>
+<li><a href="#序对">序对</a><ol></ol></li>
+<li><a href="#接受多个参数的函数">接受多个参数的函数</a><ol></ol></li>
+<li><a href="#列表">列表</a><ol><li><a href="#构建列表">构建列表</a><ol></ol></li>
+<li><a href="#操作列表">操作列表</a><ol></ol></li>
+</ol></li>
+<li><a href="#处理列表的函数">处理列表的函数</a><ol></ol></li>
+<li><a href="#组合函数">组合函数</a><ol></ol></li>
+<li><a href="#关于错误信息">关于错误信息</a><ol></ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="给其它语言学习者的忠告">给其它语言学习者的忠告</h2>
             <p>如果你之前学习了一大票主流语言，比如C、C++、JAVA、Python、Shell、JS、PHP、汇编等等。我的建议是：<strong>忘记它们</strong>。</p>
             <p>之前为C++选手写过一篇入门Python的文章，本来也想写一篇基于C++基础入门Haskell的文章。但一上手发现，使用C++的思维还不如完全失忆更好接受Haskell。</p>
