@@ -6,7 +6,6 @@ date: 2021-05-15
 
 <div class="abstract">
 
-### 前言
 
 自从上次略略学习了一些python基础就没怎么用过python了，这次遇到了深浅拷贝问题，在此记录。
 

@@ -6,8 +6,6 @@ date: 2024-05-14
 
 <div class="abstract">
 
-### Prelude
-
 The binary representation of the floating numbers was makes me very confused many years ago. Here is a introduction to the standard IEEE 754.
 
 </div>

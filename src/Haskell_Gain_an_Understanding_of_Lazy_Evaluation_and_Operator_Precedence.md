@@ -6,7 +6,6 @@ date: 2022-01-08
 
 <div class="abstract">
 
-### 前言
 
 做 [CIS 194 HomeWork6](https://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf)时遇到了各种思维方面的困难。试图通过梳理它们加深对运算符优先级和惰性求值的理解。
 

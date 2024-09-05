@@ -6,7 +6,6 @@ date: 2021-07-18
 
 <div class="abstract">
 
-### 前言
 
 对之前的文章：[二叉树的存储结构及其非层序遍历](/posts/004_Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration.html)的一点小补充。
 
