@@ -24,24 +24,28 @@
             <p>学习C++也有一段时间了，却一直不太了解库相关的知识，今天得空学习了一些基础用法，在此记录。</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#什么是库">什么是库</a>
-            </li>
-            <li>
-            <a href="#静态库的生成与使用">静态库的生成与使用</a>
-            </li>
-            <li>
-            <a href="#动态库的生成与使用">动态库的生成与使用</a>
-            </li>
-            <li>
-            <a href="#总结">总结</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#什么是库">什么是库</a><ol><li><a href="#编译连接从源码到程序">编译连接：从源码到程序</a><ol></ol></li>
+<li><a href="#库目标文件的打包">库：目标文件的打包</a><ol><li><a href="#静态库">静态库</a></li>
+<li><a href="#动态库">动态库</a></li>
+<li><a href="#小结">小结</a></li>
+</ol></li>
+</ol></li>
+<li><a href="#静态库的生成与使用">静态库的生成与使用</a><ol><li><a href="#编写静态库源码并生成目标代码">编写静态库源码并生成目标代码</a><ol></ol></li>
+<li><a href="#将目标代码打包成库文件">将目标代码打包成库文件</a><ol></ol></li>
+<li><a href="#为使用者提供接口">为使用者提供接口</a><ol></ol></li>
+<li><a href="#使用静态库">使用静态库</a><ol></ol></li>
+</ol></li>
+<li><a href="#动态库的生成与使用">动态库的生成与使用</a><ol><li><a href="#编写动态库源码并生成目标代码">编写动态库源码并生成目标代码</a><ol></ol></li>
+<li><a href="#制作动态库">制作动态库</a><ol></ol></li>
+<li><a href="#为使用者提供接口-1">为使用者提供接口</a><ol></ol></li>
+<li><a href="#使用动态库">使用动态库</a><ol></ol></li>
+</ol></li>
+<li><a href="#总结">总结</a><ol></ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="什么是库">什么是库</h2>
             <h3 id="编译连接从源码到程序">编译连接：从源码到程序</h3>
             <figure>

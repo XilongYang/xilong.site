@@ -30,24 +30,18 @@
             <p>于是放了一首歌，戴上耳机，哼着小曲开始了这次折腾。</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#制备硬盘">制备硬盘</a>
-            </li>
-            <li>
-            <a href="#自动挂载">自动挂载</a>
-            </li>
-            <li>
-            <a href="#在硬盘上创建仓库">在硬盘上创建仓库</a>
-            </li>
-            <li>
-            <a href="#后记">后记</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#制备硬盘">制备硬盘</a><ol></ol></li>
+<li><a href="#自动挂载">自动挂载</a><ol><li><a href="#使用udev">使用udev</a><ol><li><a href="#udev规则简介">udev规则简介</a></li>
+<li><a href="#编写自动挂载规则">编写自动挂载规则</a></li>
+</ol></li>
+</ol></li>
+<li><a href="#在硬盘上创建仓库">在硬盘上创建仓库</a><ol></ol></li>
+<li><a href="#后记">后记</a><ol></ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="制备硬盘">制备硬盘</h2>
             <p>使用fdisk将这块硬盘上的分区全部删除，然后创建一个新的分区，具体步骤这里略过。</p>
             <p>现在是时候格式化分区了，就决定是你了Ext4……等等，既然这个分区只是用来托管代码，为什么不试试没用过的文件系统呢？就决定是你了——Btrfs！</p>

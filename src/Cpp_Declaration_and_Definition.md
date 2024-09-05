@@ -15,7 +15,7 @@ struct tm *(*(*Pfunc)[3])(int(*)(int, int), float(*[])(float));
 
 </div>
 
-$$toc$$
+[[toc]]
 
 ## 声明与定义的区别
 

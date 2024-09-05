@@ -13,6 +13,7 @@ from common import post_path
 
 from preprocess import preprocess
 from compile import compile
+from postprocess import postprocess
 
 def process_files(operation, src_path, target_path, list):
     for file in [{'src': src_path(f), 'target': target_path(f)} for f in list]:
@@ -42,6 +43,9 @@ def update_post():
 
         # Compile posts
         process_files(compile, temp_path, post_path, need_update_list)
+
+        # Postprocess posts
+        process_files(postprocess, post_path, post_path, need_update_list)
 
     finally:
         # Delete Temp path

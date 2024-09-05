@@ -24,30 +24,17 @@
             <p>AC自动机是一种综合了Tire树与KMP算法思想的字符串匹配算法，特点是同时进行多个模式串的匹配。</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#ac自动机介绍">AC自动机介绍</a>
-            </li>
-            <li>
-            <a href="#tire树">Tire树</a>
-            </li>
-            <li>
-            <a href="#多模式匹配">多模式匹配</a>
-            </li>
-            <li>
-            <a href="#失配指针">失配指针</a>
-            </li>
-            <li>
-            <a href="#匹配过程">匹配过程</a>
-            </li>
-            <li>
-            <a href="#c实现">C++实现</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#ac自动机介绍">AC自动机介绍</a><ol></ol></li>
+<li><a href="#tire树">Tire树</a><ol></ol></li>
+<li><a href="#多模式匹配">多模式匹配</a><ol></ol></li>
+<li><a href="#失配指针">失配指针</a><ol></ol></li>
+<li><a href="#匹配过程">匹配过程</a><ol></ol></li>
+<li><a href="#c实现">C++实现</a><ol></ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="ac自动机介绍">AC自动机介绍</h2>
             <p>AC自动机利用KMP([[字符串匹配之KMP]])的最长成功匹配思想对Tire树进行改造，使得搜索效率大副提高，并且可以对多个模式串进行匹配。缺点是效大的空间复杂度，是一种空间换时间的算法。</p>
             <h2 id="tire树">Tire树</h2>

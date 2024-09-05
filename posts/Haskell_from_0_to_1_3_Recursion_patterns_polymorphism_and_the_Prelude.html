@@ -26,24 +26,21 @@
             <p>为什么会这样呢？因为递归函数实质上是对递归模式的反复处理。通过将这些递归的模式抽象出来，封装成库，就使得程序员免于过多的与底层细节纠缠，从而在更高的层次进行思考——这就是全麦编程思想的目标。</p>
             </div>
             <nav role="navigation" class="toc">
-            <h2>
-            Contents
-            </h2>
-            <ol>
-            <li>
-            <a href="#递归模式">递归模式</a>
-            </li>
-            <li>
-            <a href="#多态">多态</a>
-            </li>
-            <li>
-            <a href="#prelude">Prelude</a>
-            </li>
-            <li>
-            <a href="#全函数与偏函数">全函数与偏函数</a>
-            </li>
-            </ol>
-            </nav>
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#递归模式">递归模式</a><ol><li><a href="#映射map">映射（Map）</a><ol></ol></li>
+<li><a href="#筛选filter">筛选（Filter）</a><ol></ol></li>
+<li><a href="#折叠fold">折叠（Fold）</a><ol></ol></li>
+</ol></li>
+<li><a href="#多态">多态</a><ol><li><a href="#多态的数据类型">多态的数据类型</a><ol></ol></li>
+<li><a href="#多态函数">多态函数</a><ol></ol></li>
+</ol></li>
+<li><a href="#prelude">Prelude</a><ol></ol></li>
+<li><a href="#全函数与偏函数">全函数与偏函数</a><ol><li><a href="#偏函数转化为全函数">偏函数转化为全函数</a><ol></ol></li>
+</ol></li>
+</ol>
+</div>
+</nav>
             <h2 id="递归模式">递归模式</h2>
             <p>一个关于<code>Int</code>类型的列表可以定义为：</p>
             <pre
