@@ -14,12 +14,7 @@ Insert a `[[toc]]` into source files for an automatic generated TOC.
 
 ### 2. Generate Posts
 
-Dependencies:
-
-```
-python3
-pandoc
-```
+Dependencies: `python3`, `pandoc`
 
 Run `make` to build posts.
 
