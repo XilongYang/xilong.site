@@ -9,7 +9,9 @@ if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').match
 }
 
 var toc = document.getElementById('toc-control');
-toc.addEventListener('click', switchTocMode);
+if (toc != null) {
+    toc.addEventListener('click', switchTocMode);
+}
 
 var currentYear = document.getElementById('current-year');
 currentYear.innerText = getCurrentYear();
