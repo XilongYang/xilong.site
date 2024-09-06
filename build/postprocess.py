@@ -10,7 +10,7 @@ MAX_LEVEL = 4
 def part_toc(contents, level):
     if contents == '' or level > MAX_LEVEL:
         return ''
-     
+
     title_pattern = '<h%d *id=".*">.*</h%d>' % (level, level)
     indexs = [i for i in range(0, len(contents)) if re.match(title_pattern, contents[i:]) != None]
     indexs.append(len(contents))
@@ -30,10 +30,11 @@ def is_chinese_post(contents):
     return len([c for c in title if '\u4e00' <= c <= '\u9fff']) > 0
 
 def generate_toc(contents):
-    toc_template = '<nav role="navigation" class="toc">\n<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>\n<div id="toc-items">\n{}\n</div>\n</nav>'
+    toc_template = ('<nav role="navigation" class="toc">\n<h2>Contents<i class="material-icons icon" '
+                    'id="toc-control">remove</i></h2>\n<div id="toc-items">\n{}\n</div>\n</nav>')
     if is_chinese_post(''.join(contents)):
         toc_template = toc_template.replace('Contents', '目录')
-    
+
     serialized_contents = ''.join([x.strip() for x in contents]).replace('\n', '')
     toc = toc_template.format(part_toc(serialized_contents, 2))
 

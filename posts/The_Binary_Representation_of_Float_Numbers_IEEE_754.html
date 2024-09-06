@@ -81,14 +81,14 @@ int main() {
             form is shown in the diagram below,</p>
             <table>
             <thead>
-            <tr class="header">
+            <tr>
             <th>Sign</th>
             <th>Exponent</th>
             <th>Fraction</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="odd">
+            <tr>
             <td>x</td>
             <td>xxxx xxxx</td>
             <td>xxx xxxx xxxx xxxx xxxx xxxx</td>
@@ -215,7 +215,7 @@ int main() {
             class="math inline">\(-Bias\)</span> directly, the value of
             the denormalized number will be:</p>
             <p><span class="math inline">\(0.1111 \times 2^{-(2^{3-1} -
-            1)} = 0.0001111\)</span></p>
+            1)} =  0.0001111\)</span></p>
             <p>We can look the <span
             class="math inline">\(1-Bias\)</span> as <span
             class="math inline">\(-Bias + 1\)</span>, it is a
@@ -239,25 +239,25 @@ int main() {
             5:</p>
             <table>
             <thead>
-            <tr class="header">
+            <tr>
             <th>Bit-level representaion</th>
             <th>Value</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="odd">
+            <tr>
             <td>0 11 00000</td>
             <td><span class="math inline">\(+\infty\)</span></td>
             </tr>
-            <tr class="even">
+            <tr>
             <td>1 11 00000</td>
             <td><span class="math inline">\(-\infty\)</span></td>
             </tr>
-            <tr class="odd">
+            <tr>
             <td>0 11 00100</td>
             <td>NaN</td>
             </tr>
-            <tr class="even">
+            <tr>
             <td>1 11 00100</td>
             <td>NaN</td>
             </tr>
@@ -270,7 +270,7 @@ int main() {
             representation.</p>
             <table>
             <thead>
-            <tr class="header">
+            <tr>
             <th>Type</th>
             <th>Sign</th>
             <th>Exponent</th>
@@ -278,13 +278,13 @@ int main() {
             </tr>
             </thead>
             <tbody>
-            <tr class="odd">
+            <tr>
             <td>float</td>
             <td>1 bit</td>
             <td>8 bit</td>
             <td>23 bit</td>
             </tr>
-            <tr class="even">
+            <tr>
             <td>double</td>
             <td>1 bit</td>
             <td>11 bit</td>
@@ -376,14 +376,14 @@ int main() {
             round upward:</p>
             <table>
             <thead>
-            <tr class="header">
+            <tr>
             <th>Sign</th>
             <th>EXP</th>
             <th>Fraction</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="odd">
+            <tr>
             <td>0</td>
             <td>01111101</td>
             <td>001 1001 1001 1001 1001 1010</td>
