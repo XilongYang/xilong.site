@@ -1,6 +1,8 @@
 all: src/*
-	build/refresh.py
+	build/update_post.py
+	build/update_index.py
 
 .PHONY : clean
 clean:
 	-rm posts/*
+
