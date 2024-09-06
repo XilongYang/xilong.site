@@ -369,9 +369,9 @@ int LRD(BinTree T)
 
 #### 图解：以前序-中序构建为例
 
-![image-20200424000842475](https://os.xilong.site/root/image/20200424/image-20200424000842475.png)
+![前序-中序 序列](https://img.xilong.site/20200424/image-20200424000842475.png)
 
-![build](https://img.xilong.site/20200424/Build.jpg)
+![构建过程](https://img.xilong.site/20200424/Build.jpg)
 
 
 
