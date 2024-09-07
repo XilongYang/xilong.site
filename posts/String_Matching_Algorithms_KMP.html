@@ -8,6 +8,7 @@
         <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
         <link href="/style/wrapper.css" rel="stylesheet">
         <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+        <link id="img-invert" href="" rel="stylesheet">
         <script src="/scripts/init.js" defer type="module"></script>
         <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
         <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
@@ -45,7 +46,7 @@
             <p>从位置0开始匹配，结果如下：</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101183430703.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101183430703.png"
             alt="image-20211101183430703" />
             <figcaption
             aria-hidden="true">image-20211101183430703</figcaption>
@@ -53,7 +54,7 @@
             <p>成功匹配的位数是3，查询匹配表项<code>next[3] = 1</code>。也就是已匹配部分的末位与首位相等，因此可以直接将首位移到末位位置开始下一轮匹配：</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101191242087.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101191242087.png"
             alt="image-20211101191242087" />
             <figcaption
             aria-hidden="true">image-20211101191242087</figcaption>
@@ -61,7 +62,7 @@
             <p>成功匹配的位数是6，注意匹配并不是从位置2开始的，而是从位置3——上次匹配失败的位置开始，查询匹配表项<code>next[6] = 3</code>。说明已匹配部分前3位与后3位相等，将前3位移到后3位的位置开始下一轮匹配：</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101190744058.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101190744058.png"
             alt="image-20211101190744058" />
             <figcaption
             aria-hidden="true">image-20211101190744058</figcaption>
@@ -117,7 +118,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>例P=“ABCDABA”</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101211913745.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101211913745.png"
             alt="image-20211101211913745" />
             <figcaption
             aria-hidden="true">image-20211101211913745</figcaption>
@@ -125,7 +126,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>因为严格前/后缀不能等于自身，因此从第2位开始匹配，并将第一位结果置0。可见匹配失败，且<code>k=0</code>，将此位结果置0，进入下一位。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101212012168.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212012168.png"
             alt="image-20211101212012168" />
             <figcaption
             aria-hidden="true">image-20211101212012168</figcaption>
@@ -133,7 +134,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>依然不匹配，且<code>k=0</code>，置0进入下一位。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101212117026.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212117026.png"
             alt="image-20211101212117026" />
             <figcaption
             aria-hidden="true">image-20211101212117026</figcaption>
@@ -141,7 +142,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>还是不匹配，且<code>k=0</code>，置0进入下一位。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101212427058.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212427058.png"
             alt="image-20211101212427058" />
             <figcaption
             aria-hidden="true">image-20211101212427058</figcaption>
@@ -149,7 +150,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>匹配，<code>++k</code>，并置<code>结果=k=1</code>。由于下一步比较时<code>k=1</code>增量与比较步长相同，看起来好像没有移动。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101212506554.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212506554.png"
             alt="image-20211101212506554" />
             <figcaption
             aria-hidden="true">image-20211101212506554</figcaption>
@@ -157,7 +158,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>匹配，<code>++k</code>，并置<code>结果=k=2</code>。进入下一步。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101212649204.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212649204.png"
             alt="image-20211101212649204" />
             <figcaption
             aria-hidden="true">image-20211101212649204</figcaption>
@@ -165,7 +166,7 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
             <p>不匹配，且<code>k &gt; 0</code>试图取<code>next[k - 1] = next[1] = 0</code>与该位比较。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20211101/image-20211101212832132.png"
+            src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212832132.png"
             alt="image-20211101212832132" />
             <figcaption
             aria-hidden="true">image-20211101212832132</figcaption>

@@ -8,6 +8,7 @@
         <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
         <link href="/style/wrapper.css" rel="stylesheet">
         <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+        <link id="img-invert" href="" rel="stylesheet">
         <script src="/scripts/init.js" defer type="module"></script>
         <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
         <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
@@ -95,7 +96,8 @@ R_BNode *R_BNode::Nil = new R_BNode(0, R_BNode::BLACK);</code></pre>
             </ol>
             <p>而右旋是左旋的镜像操作。两种旋转如下图所示：</p>
             <figure>
-            <img src="https://img.xilong.site/20210923/rotate.png"
+            <img
+            src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/rotate.png"
             alt="rotate" />
             <figcaption aria-hidden="true">rotate</figcaption>
             </figure>
@@ -230,7 +232,8 @@ void R_BTree::RightRotate(R_BNode *x) {
             <p>此时对祖父节点进行一次与情况二反向的旋转即可修复红黑树。</p>
             <p>以一个不同侧且父节点为左孩子的情况为例：</p>
             <figure>
-            <img src="https://img.xilong.site/20210923/insert.png"
+            <img
+            src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/insert.png"
             alt="insert" />
             <figcaption aria-hidden="true">insert</figcaption>
             </figure>
@@ -355,7 +358,8 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             id="情况1x的兄弟节点m为红色">情况1：x的兄弟节点m为红色</h3>
             <p>此时由于m的两个子节点都为黑色，可以改变m和父节点的颜色，然后对父节点进行一次旋转。并令x的新兄弟节点为新的m，这样情况就转移到了2、3或4。</p>
             <figure>
-            <img src="https://img.xilong.site/20210923/delete1.png"
+            <img
+            src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete1.png"
             alt="delete1" />
             <figcaption aria-hidden="true">delete1</figcaption>
             </figure>
@@ -391,7 +395,8 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             id="情况2x的兄弟节点m为黑色且m的两个子节点都为黑色">情况2：x的兄弟节点m为黑色，且m的两个子节点都为黑色</h3>
             <p>此时由于x是双重黑色，而m与其两个子节点构成了两层黑色，因此可以从x与m上分别消去一层黑色，使得x为黑色，而m为红色。并令x-&gt;parent_为新的x，并对其进行<code>DeleteFixup</code>。</p>
             <figure>
-            <img src="https://img.xilong.site/20210923/delete2.png"
+            <img
+            src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete2.png"
             alt="delete2" />
             <figcaption aria-hidden="true">delete2</figcaption>
             </figure>
@@ -440,7 +445,8 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             id="情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</h3>
             <p>此时交换m与异侧孩子的颜色，并进行旋转。使m的异侧孩子成为x新的兄弟节点，m成为新m的同侧孩子。这样就转化成了情况4。</p>
             <figure>
-            <img src="https://img.xilong.site/20210923/delete3.png"
+            <img
+            src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete3.png"
             alt="delete3" />
             <figcaption aria-hidden="true">delete3</figcaption>
             </figure>
@@ -504,7 +510,8 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             id="情况4x的兄弟节点为黑色且m的同侧孩子为红色">情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。</h3>
             <p>使m为父节点的颜色，并将父节点与m的同侧孩子设为黑色。对父节点进行旋转，使m成为新的取代父节点的位置，并设x为根节点。即可修复红黑树。</p>
             <figure>
-            <img src="https://img.xilong.site/20210923/delete4.png"
+            <img
+            src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete4.png"
             alt="delete4" />
             <figcaption aria-hidden="true">delete4</figcaption>
             </figure>

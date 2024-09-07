@@ -72,7 +72,7 @@ struct R_BTree {
 
 而右旋是左旋的镜像操作。两种旋转如下图所示：
 
-![rotate](https://img.xilong.site/20210923/rotate.png)
+![rotate](../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/rotate.png)
 
 ### 实现
 
@@ -228,7 +228,7 @@ void R_BTree::InsertFixup(R_BNode *z) {
 
 以一个不同侧且父节点为左孩子的情况为例：
 
-![insert](https://img.xilong.site/20210923/insert.png)
+![insert](../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/insert.png)
 
 如上图，对c而言，叔节点是Nil，为黑色。且c是b的右孩子，而b是a的左孩子，因此c与父节点不同侧，即为情况2。
 
@@ -373,7 +373,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
 
 此时由于m的两个子节点都为黑色，可以改变m和父节点的颜色，然后对父节点进行一次旋转。并令x的新兄弟节点为新的m，这样情况就转移到了2、3或4。
 
-![delete1](https://img.xilong.site/20210923/delete1.png)
+![delete1](../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete1.png)
 
 此时可以实现为：
 
@@ -411,7 +411,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
 
 此时由于x是双重黑色，而m与其两个子节点构成了两层黑色，因此可以从x与m上分别消去一层黑色，使得x为黑色，而m为红色。并令x->parent_为新的x，并对其进行`DeleteFixup`。
 
-![delete2](https://img.xilong.site/20210923/delete2.png)
+![delete2](../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete2.png)
 
 此时由于重复调用，改变之前的程序结构：
 
@@ -462,7 +462,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
 
 此时交换m与异侧孩子的颜色，并进行旋转。使m的异侧孩子成为x新的兄弟节点，m成为新m的同侧孩子。这样就转化成了情况4。
 
-![delete3](https://img.xilong.site/20210923/delete3.png)
+![delete3](../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete3.png)
 
 实现为：
 
@@ -528,7 +528,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
 
 使m为父节点的颜色，并将父节点与m的同侧孩子设为黑色。对父节点进行旋转，使m成为新的取代父节点的位置，并设x为根节点。即可修复红黑树。
 
-![delete4](https://img.xilong.site/20210923/delete4.png)
+![delete4](../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete4.png)
 
 此时得出了最终实现：
 
