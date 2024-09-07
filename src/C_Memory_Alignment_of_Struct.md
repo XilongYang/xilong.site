@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-08-11 
 ---
 
-<div class="abstract">
-
-
 疏理一下结构体的内存对齐规则 
-
-</div>
-
-[[toc]]
 
 ## 内存对齐是什么？为什么要进行内存对齐？
 

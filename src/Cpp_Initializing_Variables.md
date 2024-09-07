@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-07-19 
 ---
 
-<div class="abstract">
-
-
 使用列表初始化时发现记忆很模糊，写下来备忘顺便总结一下。
-
-</div>
-
-[[toc]]
 
 ## 初始化的概念
 

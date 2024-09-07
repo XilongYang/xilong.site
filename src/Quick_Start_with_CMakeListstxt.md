@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-08-02 
 ---
 
-<div class="abstract">
-
-
 整理一下CMakeLists的相关知识。
-
-</div>
-
-[[toc]]
 
 ## 语法
 

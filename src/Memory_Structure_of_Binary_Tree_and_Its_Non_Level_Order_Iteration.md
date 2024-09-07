@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2020-04-24 
 ---
 
-<div class="abstract">
-
-
 二叉树是我接触的第一个非线性数据结构。在对它进行操作前，如何对其进行构建与遍历很自然地成为了首先要关心的问题。
-
-</div>
-
-[[toc]]
 
 ## 二叉树的五个性质
 
@@ -372,8 +365,6 @@ int LRD(BinTree T)
 ![前序-中序 序列](https://img.xilong.site/20200424/image-20200424000842475.png)
 
 ![构建过程](https://img.xilong.site/20200424/Build.jpg)
-
-
 
 ### 代码实现
 

@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-09-06 
 ---
 
-<div class="abstract">
-
-
 不幸遭遇飞机延误，候机室写下系列第四篇，主题是高阶编程与类型接口。
-
-</div>
-
-[[toc]]
 
 ## 匿名函数（lambda表达式）
 

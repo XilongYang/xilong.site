@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-09-19
 ---
 
-<div class="abstract">
-
-
 Java的语法和C++实在是很相似，这一方面方便了C++选手们上手Java，另一方面也使得我们在使用Java的时候总是串语法。不得不写篇文章总结一下Java的语法差异。
-
-</div>
-
-[[toc]]
 
 ## 基本概念
 

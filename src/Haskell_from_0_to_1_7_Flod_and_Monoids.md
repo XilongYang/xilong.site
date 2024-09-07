@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2022-01-10
 ---
 
-<div class="abstract">
-
-
 系列第七篇，介绍了更一般性的折叠以及幺半群。
-
-</div>
-
-[[toc]]
 
 ## 折叠，又见折叠
 

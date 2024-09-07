@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-05-17 
 ---
 
-<div class="abstract">
-
-
 整理一下STL中random库和cstdlib中随机数机制的用法区别。
-
-</div>
-
-[[toc]]
 
 ## cstdlib中的随机数用法
 
