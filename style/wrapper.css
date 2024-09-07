@@ -1,7 +1,6 @@
 @import url("/res/MaterialIcons/normal.css");
 @import url("/res/latex-css-1.10.0/style.css");
 @import url("/res/latex-css-1.10.0/prism/prism.css");
-@import url("/res/latex-css-1.10.0/prism/prism-solarized-dark-atom.css");
 
 @import url("./darkmode.css");
 @import url("./patches.css");

@@ -7,6 +7,7 @@
         <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
         <link href="/style/wrapper.css" rel="stylesheet">
+        <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
         <script src="/scripts/init.js" defer type="module"></script>
         <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
         <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
@@ -56,14 +57,14 @@ int main()
             即一个float类型的数据占用8Byte内存，其中包括符号位1位，阶码8位和尾数23位。图示如下：</p>
             <table>
             <thead>
-            <tr class="header">
+            <tr>
             <th style="text-align: center;">S(符号位)</th>
             <th style="text-align: center;">E(阶码)</th>
             <th style="text-align: center;">M(尾数)</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="odd">
+            <tr>
             <td style="text-align: center;">0</td>
             <td style="text-align: center;">0000 0000</td>
             <td style="text-align: center;">0000 0000 0000 0000 0000
@@ -92,14 +93,14 @@ int main()
             <p>所以0.3在内存中应该为</p>
             <table>
             <thead>
-            <tr class="header">
+            <tr>
             <th>S</th>
             <th>E</th>
             <th>M</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="odd">
+            <tr>
             <td>0</td>
             <td>0111 1101</td>
             <td>0011 0011 0011 0011 0011 001</td>
