@@ -10,7 +10,7 @@ date: 2020-06-07
 
 ### 编译连接：从源码到程序
 
-![image-20200607222237087](https://img.xilong.site/20200607/image-20200607222237087.png)
+![compile](../res/post-imgs/Generating_and_Using_Cpp_Library_in_Linux/compile.png)
 
 上图展示了C++程序的生成过程。可以看到库文件和目标代码一起被处理，可见库文件与目标代码之间应该具有某种联系。
 

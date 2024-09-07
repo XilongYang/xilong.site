@@ -20,7 +20,7 @@ date: 2020-04-24
 
 	完全二叉树：每一结点按层的编号都与对应的满二叉树一一对应
 
-	![image-20200422231103355](https://img.xilong.site/20200424/image-20200422231103355.png)
+	![Binary-Tree-0](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-0.png)
 
 	*a.满二叉树	b.完全二叉树*
 
@@ -38,11 +38,11 @@ date: 2020-04-24
 
 将完全二叉树上序号为i的结点存在数组中标号为i - 1的地址中，如非完全二叉树，则空出来的地址留空。此时子结点用性质5即可得到。
 
-![image-20200422233319114](https://img.xilong.site/20200424/image-20200422233319114.png)
+![Binary-Tree-1](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-1.png)
 
 上面三个二叉树的存储结构分别为：
 
-![image-20200422233546201](https://img.xilong.site/20200424/image-20200422233546201.png)
+![Binary-Tree-2](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-2.png)
 
 *(用0表示结点不存在)*
 
@@ -56,9 +56,7 @@ date: 2020-04-24
 
 二叉链表的组织形式：
 
-![image-20200422234628192](https://img.xilong.site/20200424/image-20200422234628192.png)
-
-![image-20200422234844999](https://img.xilong.site/20200424/image-20200422234844999.png)
+![Binary-Tree-3](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-3.png)
 
 #### 三叉链表
 
@@ -66,9 +64,7 @@ date: 2020-04-24
 
 三叉链表的组织形式：
 
-![image-20200422235517745](https://img.xilong.site/20200424/image-20200422235517745.png)
-
-![image-20200422235734363](https://img.xilong.site/20200424/image-20200422235734363.png)
+![Binary-Tree-4](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-4.png)
 
 #### 代码实现
 
@@ -231,7 +227,7 @@ int LRD(BinTree T)
 
 在遍历过程中，每个结点有三次访问机会，即指针从父结点指向自身，从左孩子退回，从右孩子退回。这里我们不妨规定没有左/右孩子的结点仍能获得空指针退回的访问机会（即将空指针看做一个无法进入的孩子结点）。
 
-![image-20200423090748670](https://img.xilong.site/20200424/image-20200423090748670.png)
+![Binary-Tree-5](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-5.png)
 
 由于我们规定了左子树一定在右子树之前遍历，整个树的遍历顺序就如上图所示(a->b)。我们在每个结点的左侧、下侧和右侧分别设定一个触发点，并将它们在遍历路径中出现的顺序记录下来。
 
@@ -340,7 +336,7 @@ int LRD(BinTree T)
 
 ### 图解后序遍历的非递归算法
 
-![LRD](https://img.xilong.site/20200424/LRD.gif)
+![Binary-Tree-6](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-6.gif)
 
 精力有限，只好挑一个难度最大的做图解。
 
@@ -362,9 +358,7 @@ int LRD(BinTree T)
 
 #### 图解：以前序-中序构建为例
 
-![前序-中序 序列](https://img.xilong.site/20200424/image-20200424000842475.png)
-
-![构建过程](https://img.xilong.site/20200424/Build.jpg)
+![Binary-Tree-7](../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-7.gif)
 
 ### 代码实现
 

@@ -8,6 +8,7 @@
         <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
         <link href="/style/wrapper.css" rel="stylesheet">
         <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+        <link id="img-invert" href="" rel="stylesheet">
         <script src="/scripts/init.js" defer type="module"></script>
         <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
         <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
@@ -73,10 +74,9 @@
             <p>完全二叉树：每一结点按层的编号都与对应的满二叉树一一对应</p>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200422231103355.png"
-            alt="image-20200422231103355" />
-            <figcaption
-            aria-hidden="true">image-20200422231103355</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-0.png"
+            alt="Binary-Tree-0" />
+            <figcaption aria-hidden="true">Binary-Tree-0</figcaption>
             </figure>
             <p><em>a.满二叉树 b.完全二叉树</em></p></li>
             <li><p>对一颗有n个结点的完全二叉树，将其结点按层序编号i，有</p>
@@ -93,18 +93,16 @@
             1的地址中，如非完全二叉树，则空出来的地址留空。此时子结点用性质5即可得到。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200422233319114.png"
-            alt="image-20200422233319114" />
-            <figcaption
-            aria-hidden="true">image-20200422233319114</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-1.png"
+            alt="Binary-Tree-1" />
+            <figcaption aria-hidden="true">Binary-Tree-1</figcaption>
             </figure>
             <p>上面三个二叉树的存储结构分别为：</p>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200422233546201.png"
-            alt="image-20200422233546201" />
-            <figcaption
-            aria-hidden="true">image-20200422233546201</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-2.png"
+            alt="Binary-Tree-2" />
+            <figcaption aria-hidden="true">Binary-Tree-2</figcaption>
             </figure>
             <p><em>(用0表示结点不存在)</em></p>
             <p>可以看出，当二叉树不是完全二叉树时，这种结构非常浪费存储空间。因此仅适合用作完全二叉树的存储。</p>
@@ -114,34 +112,18 @@
             <p>二叉链表的组织形式：</p>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200422234628192.png"
-            alt="image-20200422234628192" />
-            <figcaption
-            aria-hidden="true">image-20200422234628192</figcaption>
-            </figure>
-            <figure>
-            <img
-            src="https://img.xilong.site/20200424/image-20200422234844999.png"
-            alt="image-20200422234844999" />
-            <figcaption
-            aria-hidden="true">image-20200422234844999</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-3.png"
+            alt="Binary-Tree-3" />
+            <figcaption aria-hidden="true">Binary-Tree-3</figcaption>
             </figure>
             <h4 id="三叉链表">三叉链表</h4>
             <p>三叉链表在二叉链表的基础上添加了指向父结点的指针，与二叉链表大同小异。</p>
             <p>三叉链表的组织形式：</p>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200422235517745.png"
-            alt="image-20200422235517745" />
-            <figcaption
-            aria-hidden="true">image-20200422235517745</figcaption>
-            </figure>
-            <figure>
-            <img
-            src="https://img.xilong.site/20200424/image-20200422235734363.png"
-            alt="image-20200422235734363" />
-            <figcaption
-            aria-hidden="true">image-20200422235734363</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-4.png"
+            alt="Binary-Tree-4" />
+            <figcaption aria-hidden="true">Binary-Tree-4</figcaption>
             </figure>
             <h4 id="代码实现">代码实现</h4>
             <pre class="language-cpp line-numbers match-braces"><code>typedef struct Node
@@ -276,10 +258,9 @@ int Visit(Bintree T)
             <p>在遍历过程中，每个结点有三次访问机会，即指针从父结点指向自身，从左孩子退回，从右孩子退回。这里我们不妨规定没有左/右孩子的结点仍能获得空指针退回的访问机会（即将空指针看做一个无法进入的孩子结点）。</p>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200423090748670.png"
-            alt="image-20200423090748670" />
-            <figcaption
-            aria-hidden="true">image-20200423090748670</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-5.png"
+            alt="Binary-Tree-5" />
+            <figcaption aria-hidden="true">Binary-Tree-5</figcaption>
             </figure>
             <p>由于我们规定了左子树一定在右子树之前遍历，整个树的遍历顺序就如上图所示(a-&gt;b)。我们在每个结点的左侧、下侧和右侧分别设定一个触发点，并将它们在遍历路径中出现的顺序记录下来。</p>
             <p>对于左触发点：ABDECFG</p>
@@ -374,9 +355,10 @@ int Visit(Bintree T)
             <h3
             id="图解后序遍历的非递归算法">图解后序遍历的非递归算法</h3>
             <figure>
-            <img src="https://img.xilong.site/20200424/LRD.gif"
-            alt="LRD" />
-            <figcaption aria-hidden="true">LRD</figcaption>
+            <img
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-6.gif"
+            alt="Binary-Tree-6" />
+            <figcaption aria-hidden="true">Binary-Tree-6</figcaption>
             </figure>
             <p>精力有限，只好挑一个难度最大的做图解。</p>
             <h2
@@ -397,14 +379,9 @@ int Visit(Bintree T)
             id="图解以前序-中序构建为例">图解：以前序-中序构建为例</h4>
             <figure>
             <img
-            src="https://img.xilong.site/20200424/image-20200424000842475.png"
-            alt="前序-中序 序列" />
-            <figcaption aria-hidden="true">前序-中序 序列</figcaption>
-            </figure>
-            <figure>
-            <img src="https://img.xilong.site/20200424/Build.jpg"
-            alt="构建过程" />
-            <figcaption aria-hidden="true">构建过程</figcaption>
+            src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-7.gif"
+            alt="Binary-Tree-7" />
+            <figcaption aria-hidden="true">Binary-Tree-7</figcaption>
             </figure>
             <h3 id="代码实现-1">代码实现</h3>
             <p>前序-中序构建二叉树</p>

@@ -10,7 +10,7 @@ date: 2021-01-27
 
 > The Towers of Hanoi is a classic puzzle with a solution that can be described recursively. Disks of different sizes are stacked on three pegs; the goal is to get from a starting configuration with all disks stacked on the first peg to an ending configuration with all disks stacked on the last peg, as shown in Figure 1. 
 >
-> <img src="https://img.xilong.site/20210415/image-20210127013232812.png" alt="image-20210127013232812" style="zoom:33%;" />
+> <img src="../res/post-imgs/Haskell_Solving_the_Four_Towers_of_Hanoi_Puzzle/image-20210127013232812.png" alt="image-20210127013232812" style="zoom:33%;" />
 >
 > ​	Figure 1: The Towers of Hanoi 
 > The only rules are
@@ -18,12 +18,12 @@ date: 2021-01-27
 > • a larger disk may never be stacked on top of a smaller one. 
 > For example, as the first move all you can do is move the topmost, smallest disk onto a different peg, since only one disk may be moved at a time. 
 >
-> <img src="https://img.xilong.site/20210415/image-20210127013307704.png" alt="image-20210127013307704" style="zoom:50%;" />
+> <img src="../res/post-imgs/Haskell_Solving_the_Four_Towers_of_Hanoi_Puzzle/image-20210127013307704.png" alt="image-20210127013307704" style="zoom:33%;" />
 >
 > ​	Figure 2: A valid first move. 
 > From this point, it is illegal to move to the configuration shown in Figure 3, because you are not allowed to put the green disk on top of the smaller blue one. 
 >
-> <img src="https://img.xilong.site/20210415/image-20210127013331098.png" alt="image-20210127013331098" style="zoom:50%;" />
+> <img src="../res/post-imgs/Haskell_Solving_the_Four_Towers_of_Hanoi_Puzzle/image-20210127013331098.png" alt="image-20210127013331098" style="zoom:33%;" />
 >
 > ​	Figure 3: An illegal configuration.
 > To move n discs (stacked in increasing size) from peg a to peg b using peg c as temporary storage, 
