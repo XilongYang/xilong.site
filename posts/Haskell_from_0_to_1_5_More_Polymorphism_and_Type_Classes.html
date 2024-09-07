@@ -45,7 +45,7 @@
             class="language-haskell line-numbers match-braces"><code>f :: a -&gt; a -&gt; a
 f x y = x &amp;&amp; y</code></pre>
             <p>这个函数是无法工作的，即使它符合语法。因为无法通过类型检查。我们可以获取以下报错信息：</p>
-            <pre><code>• Couldn&#39;t match expected type ‘Bool’ with actual type ‘a’
+            <pre class="language-none line-numbers match-braces"><code>• Couldn&#39;t match expected type ‘Bool’ with actual type ‘a’
   ‘a’ is a rigid type variable bound by
     the type signature for:
       f :: forall a. a -&gt; a -&gt; a
@@ -55,7 +55,7 @@ f x y = x &amp;&amp; y</code></pre>
   In an equation for ‘f’: f x y = x &amp;&amp; y</code></pre>
             <p>无法工作的原因是多态函数的调用者可以选择类型，而这个我们——函数的实现者——已经选择了一个特定的类型（Bool），但我们仍可能接收到一个<code>String</code>，或<code>Int</code>甚至是一个用户自定义类型。因此这个函数无法工作，换言之，你可以将类型声明视为一个保证，<code>a-&gt;a-&gt;a</code>保证这个函数无论接收了什么类型的参数都可以正常工作。</p>
             <p>为了处理这种情况，我们或许为想到类似这样的处理方式：</p>
-            <pre><code>f a1 a2 = case (typeOf a1) of
+            <pre class="language-none line-numbers match-braces"><code>f a1 a2 = case (typeOf a1) of
    Int  -&gt; a1 + a2
    Bool -&gt; a1 &amp;&amp; a2
    _    -&gt; a1</code></pre>

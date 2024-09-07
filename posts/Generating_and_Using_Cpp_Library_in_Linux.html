@@ -108,7 +108,7 @@ int main()
 g++ -o main main.cc -L./static -ltest
 ./main</code></pre>
             <p>运行结果</p>
-            <pre><code>Hello Static Library!</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>Hello Static Library!</code></pre>
             <h2 id="动态库的生成与使用">动态库的生成与使用</h2>
             <h3
             id="编写动态库源码并生成目标代码">编写动态库源码并生成目标代码</h3>
@@ -139,7 +139,7 @@ int main()
 g++ -o main main.cc -L./dynamic -ltest
 ./main</code></pre>
             <p>运行结果</p>
-            <pre><code>./main: error while loading shared libraries: libtest.so: cannot open shared object file: No such file or directory</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>./main: error while loading shared libraries: libtest.so: cannot open shared object file: No such file or directory</code></pre>
             <p>找不到<code>libtest.so</code>，这是因为linux是通过<code>/etc/ld.so.config</code>文件中的路径搜寻动态库的。解决方法：</p>
             <ol type="1">
             <li>把<code>libtest.so</code>所在的路径添加进<code>/etc/ld.so.config</code>，再运行<code>idconfig</code>更新目录，程序就可以正常运行了。</li>
@@ -150,7 +150,7 @@ g++ -o main main.cc -L./dynamic -ltest
             <pre class="language-bash line-numbers match-braces"><code>export LD_LIBRARY_PATH=./dynamic
 ./main</code></pre>
             <p>运行结果</p>
-            <pre><code>Hello Dynamic Library!</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>Hello Dynamic Library!</code></pre>
             <h2 id="总结">总结</h2>
             <p>库是将源码打包而形成的，以链接进其它程序的方式进行使用的文件形式。分为静态库和动态库。静态库具有链接慢，空间成本高，不易更新的缺点，优点是能够生成独立的可执行文件。动态库易于更新扩展，链接快，空间成本低，但生成的文件必需依赖库运行。</p>
         </main>

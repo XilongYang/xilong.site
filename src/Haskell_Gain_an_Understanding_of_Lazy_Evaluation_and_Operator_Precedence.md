@@ -10,7 +10,7 @@ date: 2022-01-08
 
 斐波那契数列，相信大家都很熟悉了，每个人刚接触递归与动态规划的思想时候都会看到它的身影。其定义为：
 
-```
+``` none
 fib(1) = 1
 fib(2) = 1
 fib(n) = fib(n - 1) + fib(n - 2), n > 2
@@ -191,7 +191,7 @@ f.g $ x == ($) (f.g) (x) == ($) ((.) f g) (x)
 
 ## 附：运算符优先级表
 
-```
+``` none
 +--------+----------------------+-----------------------+-------------------+
 | Prec-  |   Left associative   |    Non-associative    | Right associative |
 | edence |      operators       |       operators       |    operators      |

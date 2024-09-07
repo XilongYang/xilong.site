@@ -103,7 +103,7 @@ g++ -o main main.cc -L./static -ltest
 
 运行结果
 
-```
+``` none
 Hello Static Library!
 ```
 
@@ -160,7 +160,7 @@ g++ -o main main.cc -L./dynamic -ltest
 
 运行结果
 
-```
+```none
 ./main: error while loading shared libraries: libtest.so: cannot open shared object file: No such file or directory
 ```
 
@@ -179,7 +179,7 @@ export LD_LIBRARY_PATH=./dynamic
 
 运行结果
 
-```
+```none
 Hello Dynamic Library!
 ```
 

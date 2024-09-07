@@ -68,7 +68,7 @@
             <p><code>discard=async</code>：使用SSD TRIM。</p>
             <h2 id="自动挂载">自动挂载</h2>
             <p>首先简单实现一个通过UUID挂载分区的脚本：</p>
-            <pre class="language-shell line-numbers match-braces"><code>#! /bin/sh
+            <pre class="language-bash line-numbers match-braces"><code>#! /bin/sh
 # /usr/local/bin/mount_repo
 # 挂载点
 readonly target_dir=&quot;/mnt/Repo&quot;
@@ -102,9 +102,9 @@ fi</code></pre>
             <p>也就是说，我们可以通过编写规则文件的方式让udev在加载硬盘时进行挂载处理。</p>
             <h4 id="udev规则简介">udev规则简介</h4>
             <p>udev规则文件中的一行就是一条规则，一条规则包括了匹配部分和动作部分，各部分通过逗号<code>,</code>分隔。具有如下形式：</p>
-            <pre><code>cond1,cond2,cond3,...,action1, action2, action3</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>cond1,cond2,cond3,...,action1, action2, action3</code></pre>
             <p>可以使用换行符<code>\</code>将一条规则分成几行编写。比如，对于以下规则：</p>
-            <pre><code>KERNEL==&quot;video[0-9]*&quot; \
+            <pre class="language-none line-numbers match-braces"><code>KERNEL==&quot;video[0-9]*&quot; \
   , SUBSYSTEM==&quot;video4linux&quot; \
   , SUBSYSTEMS==&quot;usb&quot; \
   , ATTRS{idVendor}==&quot;05a9&quot; \
@@ -118,7 +118,7 @@ fi</code></pre>
             </ul>
             <h4 id="编写自动挂载规则">编写自动挂载规则</h4>
             <p>根据这个例子，摸着石头过河，编写一个使用脚本自动挂载硬盘的规则：</p>
-            <pre><code>KERNEL==&quot;sd[a-z][0-9]&quot; \
+            <pre class="language-none line-numbers match-braces"><code>KERNEL==&quot;sd[a-z][0-9]&quot; \
   , ACTION==&quot;remove&quot; \
   , ATTRS{idVendor}==&quot;08e4&quot; \
   , ATTRS{idProduct}==&quot;01e8&quot; \
@@ -153,7 +153,7 @@ KERNEL==&quot;sd[a-z][0-9]&quot; \
             </blockquote>
             <p>试图更改systemd-udevd.service，发现没效果。几经辗转，发现使用systemd可以解决这个问题。不再需要折腾systemd-udevd.service了。</p>
             <p>首先创建一个service，repo.service：</p>
-            <pre><code>[Unit]
+            <pre class="language-none line-numbers match-braces"><code>[Unit]
 Description=Mount Repository Device on /mnt/Repo
 
 [Service]
@@ -163,7 +163,7 @@ ExecStart=/usr/local/bin/mount_repo
 ExecStop=/usr/local/bin/mount_repo</code></pre>
             <p>使用<code>systemctl daemon-reload</code>重新加载服务。</p>
             <p>然后将规则文件改写为：</p>
-            <pre><code>KERNEL==&quot;sd[a-z][0-9]&quot; \
+            <pre class="language-none line-numbers match-braces"><code>KERNEL==&quot;sd[a-z][0-9]&quot; \
   , ACTION==&quot;remove&quot; \
   , ATTRS{idVendor}==&quot;08e4&quot; \
   , ATTRS{idProduct}==&quot;01e8&quot; \
@@ -178,12 +178,12 @@ KERNEL==&quot;sd[a-z][0-9]&quot; \
             <p>到这里，自动挂载就可以正常工作了。</p>
             <h2 id="在硬盘上创建仓库">在硬盘上创建仓库</h2>
             <p>在使用<code>git --bare init</code>创建一个远程仓库：</p>
-            <pre><code>cd /mnt/Repo
+            <pre class="language-bash line-numbers match-braces"><code>cd /mnt/Repo
 mkdir test.git
 cd test.git
 git --bare init</code></pre>
             <p>为本地git仓库添加这个远程仓库：</p>
-            <pre><code>cd ~/someprojects
+            <pre class="language-bash line-numbers match-braces"><code>cd ~/someprojects
 git remote add Repo /mnt/Repo/test.git
 git push remote master</code></pre>
             <h2 id="后记">后记</h2>
