@@ -10,7 +10,7 @@ To create new posts, just put `.md` files in the `src` folder.
 
 The metadata is surrounded by '---' and it has a structure such as `"key":value` per line.
 
-Insert a `[[toc]]` into source files for an automatic generated TOC.
+The content between the metadata and the first level 2 title (`## title`) will be considered as a abstract.  An auto-generated TOC will be placed after the abstract.
 
 ### 2. Generate Posts
 
