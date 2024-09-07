@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-09-23 
 ---
 
-<div class="abstract">
-
-
 整理了红黑树的性质与基本操作的C++实现
-
-</div>
-
-[[toc]]
 
 ## 基本概念
 
@@ -530,8 +523,6 @@ void R_BTree::DeleteFixup(R_BNode *x) {
      x->color_ = R_BNode::BLACK;
 }
 ```
-
-
 
 ### 情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。
 

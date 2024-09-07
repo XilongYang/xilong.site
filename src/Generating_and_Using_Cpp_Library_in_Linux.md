@@ -4,15 +4,7 @@ author: Xilong Yang
 date: 2020-06-07 
 ---
 
-
-<div class="abstract">
-
-
 学习C++也有一段时间了，却一直不太了解库相关的知识，今天得空学习了一些基础用法，在此记录。
-
-</div>
-
-[[toc]]
 
 ## 什么是库
 

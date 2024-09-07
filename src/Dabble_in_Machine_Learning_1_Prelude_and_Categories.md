@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2023-05-30 
 ---
 
-<div class="abstract">
-
-
 随着ChatGPT的出世，最近几年火得一塌糊涂的AI似乎终于掀开了历史书页的一角。身为一个技术人，我觉得是时候普及一些基础的AI知识了。
-
-</div>
-
-[[toc]]
 
 ## 序言：这个系列在做什么
 

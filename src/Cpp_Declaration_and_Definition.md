@@ -4,18 +4,11 @@ author: Xilong Yang
 date: 2020-02-26 
 ---
 
-<div class="abstract">
-
-
 偶然间看见一个声明:
 
 struct tm *(*(*Pfunc)[3])(int(*)(int, int), float(*[])(float));
 
 一时间感到云里雾里。为了弄懂此类复杂的声明学习一些相关的知识，在此总结。
-
-</div>
-
-[[toc]]
 
 ## 声明与定义的区别
 

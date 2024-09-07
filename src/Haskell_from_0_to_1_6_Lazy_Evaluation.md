@@ -4,16 +4,9 @@ author: Xilong Yang
 date: 2021-09-15 
 ---
 
-<div class="abstract">
-
-
 系列第六篇，介绍惰性求值。
 
 经过了前几篇的折磨，是时候介绍惰性求值了。
-
-</div>
-
-[[toc]]
 
 ## 直接求值
 

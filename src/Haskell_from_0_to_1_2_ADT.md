@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-07-17 
 ---
 
-<div class="abstract">
-
-
 这是系列的第二篇，主题是ADT：代数数据类型。
-
-</div>
-
-[[toc]]
 
 ## 前言：关于Haskell与数学基础
 
@@ -190,6 +183,4 @@ lst = Cons 1 (Cons 2 Empty)
 tree :: Tree
 tree = Node (Leaf 'x') 1 (Node (Leaf 'y') 2 (Leaf 'z'))
 ```
-
-
 

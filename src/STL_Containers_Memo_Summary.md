@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2021-07-21 
 ---
 
-<div class="abstract">
-
-
 使用容器总有几个细节记不清，梳理一番以作备忘。
-
-</div>
-
-[[toc]]
 
 ## 容器类型
 

@@ -4,14 +4,7 @@ author: Xilong Yang
 date: 2020-06-07 
 ---
 
-<div class="abstract">
-
-
 虽然Python与C++有众多区别，但基本上同属命令式语言（甚至Python的解释器是C++实现的），因此在不求深入学习Python时记住一些基础语法差异即可大概使用。
-
-</div>
-
-[[toc]]
 
 ## 基本区别 
 
@@ -48,8 +41,6 @@ f = 'change to string'
 ```
 
 ### 字符串
-
-
 
 ```python
 # 单引号
@@ -128,8 +119,6 @@ for x in l:
 while condition:
     psss
 ```
-
-
 
 ## 函数
 
