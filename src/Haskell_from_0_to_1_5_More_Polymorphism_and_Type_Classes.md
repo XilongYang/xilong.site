@@ -25,7 +25,7 @@ f x y = x && y
 
 这个函数是无法工作的，即使它符合语法。因为无法通过类型检查。我们可以获取以下报错信息：
 
-```
+```none
 • Couldn't match expected type ‘Bool’ with actual type ‘a’
   ‘a’ is a rigid type variable bound by
     the type signature for:
@@ -40,7 +40,7 @@ f x y = x && y
 
 为了处理这种情况，我们或许为想到类似这样的处理方式：
 
-```
+```none
 f a1 a2 = case (typeOf a1) of
    Int  -> a1 + a2
    Bool -> a1 && a2

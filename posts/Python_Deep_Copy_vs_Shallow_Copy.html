@@ -77,7 +77,7 @@ if (f(list3) &lt; f(list2)):
 print(&quot;final:&quot;)
 print(list3)</code></pre>
             <p>令人匪夷所思的事情出现了，输出结果居然是：</p>
-            <pre><code>[aaaaaaaaa]
+            <pre class="language-none line-numbers match-braces"><code>[aaaaaaaaa]
 [bbbbbbbbb]
 [ccccccccc]
 ....
@@ -110,7 +110,7 @@ b = 3
 print(a, id(a))
 print(b, id(b))</code></pre>
             <p>输出：</p>
-            <pre><code>5 139656604350896
+            <pre class="language-none line-numbers match-braces"><code>5 139656604350896
 3 139656604350832</code></pre>
             <p>这输出似乎与一切皆引用有出入，因为更改b的值既没有影响a的值，a和b的地址也不一样。这里的核心是：语句<code>b = 3</code>的语义真的是更改b的值吗？我们对这个例子稍作改动：</p>
             <pre
@@ -120,7 +120,7 @@ print(id(a), &quot; &quot;, id(b))
 b = 3
 print(id(b), &quot; &quot;, id(3))</code></pre>
             <p>输出：</p>
-            <pre><code>140143427922352   140143427922352
+            <pre class="language-none line-numbers match-braces"><code>140143427922352   140143427922352
 140143427922288   140143427922288</code></pre>
             <p>没错，常量3也是一个引用。只不过无法改变它的指向。这里一个事实已经呼之欲出，赋值运算符（=）只改变引用的指向。即只能用作浅拷贝。</p>
             <h2 id="如何进行深拷贝">如何进行深拷贝</h2>

@@ -38,7 +38,7 @@ date: 2021-06-27
 
 首先简单实现一个通过UUID挂载分区的脚本：
 
-```shell
+```bash
 #! /bin/sh
 # /usr/local/bin/mount_repo
 # 挂载点
@@ -77,13 +77,13 @@ ArchWiki对udev的介绍如下：
 
 udev规则文件中的一行就是一条规则，一条规则包括了匹配部分和动作部分，各部分通过逗号`,`分隔。具有如下形式：
 
-```
+```none
 cond1,cond2,cond3,...,action1, action2, action3
 ```
 
 可以使用换行符`\`将一条规则分成几行编写。比如，对于以下规则：
 
-```
+```none
 KERNEL=="video[0-9]*" \
   , SUBSYSTEM=="video4linux" \
   , SUBSYSTEMS=="usb" \
@@ -101,7 +101,7 @@ KERNEL=="video[0-9]*" \
 
 根据这个例子，摸着石头过河，编写一个使用脚本自动挂载硬盘的规则：
 
-```
+```none
 KERNEL=="sd[a-z][0-9]" \
   , ACTION=="remove" \
   , ATTRS{idVendor}=="08e4" \
@@ -131,7 +131,7 @@ KERNEL=="sd[a-z][0-9]" \
 
 首先创建一个service，repo.service：
 
-```
+```none
 [Unit]
 Description=Mount Repository Device on /mnt/Repo
 
@@ -146,7 +146,7 @@ ExecStop=/usr/local/bin/mount_repo
 
 然后将规则文件改写为：
 
-```
+```none
 KERNEL=="sd[a-z][0-9]" \
   , ACTION=="remove" \
   , ATTRS{idVendor}=="08e4" \
@@ -168,7 +168,7 @@ KERNEL=="sd[a-z][0-9]" \
 
 在使用`git --bare init`创建一个远程仓库：
 
-```
+```bash
 cd /mnt/Repo
 mkdir test.git
 cd test.git
@@ -177,7 +177,7 @@ git --bare init
 
 为本地git仓库添加这个远程仓库：
 
-```
+```bash
 cd ~/someprojects
 git remote add Repo /mnt/Repo/test.git
 git push remote master

@@ -305,7 +305,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
 
  删除一个节点的操作与二叉搜索树相似，当目标节点只有两个以下孩子时，使用它的孩子替换它自身。当目标节点存在两个孩子时则比较麻烦，需要找出目标节点的后继，并使用这个后继替换自身。
 
-``` c++
+``` cpp
 void R_BTree::Delete(R_BNode *z) {
     auto y = z;
     auto y_origin_color = z->color_;

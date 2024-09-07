@@ -96,7 +96,7 @@
             <h2 id="失配指针">失配指针</h2>
             <p>上一节中的匹配方式就构成了AC自动机。AC自动机算法即是在Tire树的基础上加入了匹配失败的处理，使其达成了很高的多次匹配效率，主要用于匹配子串中各模式串出现的位置与次数。其中匹配失败处理就是通过失配指针实现的，即在每个节点中加入一个指针指向匹配失败后转移的节点。</p>
             <p>失配指针可以使用如下方法得到：</p>
-            <pre><code>// queue: 一个队列，保存节点指针
+            <pre class="language-none line-numbers match-braces"><code>// queue: 一个队列，保存节点指针
 // root: 根节点
 // 将根节点的fail指针设为null，并将其所有子节点入队
 root-&gt;fail = null
@@ -120,7 +120,7 @@ while !queue.empty():
                 cur-&gt;fail = p
         fail = fail-&gt;fail</code></pre>
             <h2 id="匹配过程">匹配过程</h2>
-            <pre><code>// str:待匹配串
+            <pre class="language-none line-numbers match-braces"><code>// str:待匹配串
 // root:自动机根节点
 // 令cur指向根节点，并对str逐位匹配
 cur = root

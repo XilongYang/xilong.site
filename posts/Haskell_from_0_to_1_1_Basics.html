@@ -120,13 +120,13 @@
             <p>这词太离谱，总之就是在更整体的层面去思考问题。比如思考对一整个列表的操作，而不是列表里的一个个元素。开发一个解集而不是某个特定的解。想像一整个图，而不是某条路径。</p>
             <p>在工程中体现为，先解决一个更普遍的问题，然后思考如何将普遍问题变换为一个特殊的问题。</p>
             <p>举个例子，在C++或Java中，以下代码：</p>
-            <pre><code>int acc = 0;
+            <pre class="language-none line-numbers match-braces"><code>int acc = 0;
 for (int i = 0; i &lt; lst.length; ++i) {
     acc = acc + 3 * lst[i];
 }</code></pre>
             <p>这段代码的目的其实就是：将lst中的所有元素乘以3，再计算它们的总和。</p>
             <p>在Haskell中，可以写成：</p>
-            <pre><code>sum (map (3*) lst)</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>sum (map (3*) lst)</code></pre>
             <p>Haskell需要我们将思维转变成一种更加高屋建瓴的方式，而这种思维方式可以帮助我们写出更便于理解的代码。比如，在C++中：</p>
             <pre class="language-cpp line-numbers match-braces"><code>// 先定义出两个基础函数，如果大量使用的话，这样看似繁琐的写法是值得的。因为它提供了更强大的抽象。
 // 简单起见，暂不实现泛型的map和sum。
@@ -405,9 +405,9 @@ hailstoneLen n = intListLength (hailstoneSeq n) - 1</code></pre>
             <p>在这个函数中通过之前的例子定义的函数组合起来达成目的，其实这些函数本身也是由简单的函数组合成的，这样层层抽象将使得我们的心智负担更小。</p>
             <h2 id="关于错误信息">关于错误信息</h2>
             <p>不要害怕错误信息，它可以很好地帮助我们找出并改正代码中的错误。比如,在GHCi中：</p>
-            <pre><code>Prelude&gt; &#39;x&#39; ++ &quot;foo&quot;</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>Prelude&gt; &#39;x&#39; ++ &quot;foo&quot;</code></pre>
             <p>将导致以下报错:</p>
-            <pre><code>&lt;interactive&gt;:1:1:
+            <pre class="language-none line-numbers match-braces"><code>&lt;interactive&gt;:1:1:
   Coundn&#39;t match expected type &#39;[a0]&#39; with actual type &#39;Char&#39;
   In the first argument of &#39;(++)&#39;, namely &#39;x&#39;
   In the expression: &#39;x&#39; ++ &quot;foo&quot;

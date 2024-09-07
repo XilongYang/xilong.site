@@ -295,7 +295,37 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
     v-&gt;parent_ = u-&gt;parent_;
 }</code></pre>
             <p>删除一个节点的操作与二叉搜索树相似，当目标节点只有两个以下孩子时，使用它的孩子替换它自身。当目标节点存在两个孩子时则比较麻烦，需要找出目标节点的后继，并使用这个后继替换自身。</p>
-            <p><code>{.language-c++ .line-numbers .match-braces} void R_BTree::Delete(R_BNode *z) {     auto y = z;     auto y_origin_color = z-&gt;color_;     R_BNode *x = nullptr;     if (z-&gt;left_ == R_BNode::Nil) {         x = z-&gt;right_;         Transplant(z, z-&gt;right_);     } else if (z-&gt;right_ == R_BNode::Nil) {         x = z-&gt;left_;         Transplant(z, z-&gt;left_);     } else {         y = z-&gt;right_;         while (y-&gt;left_ != R_BNode::Nil) {             y = y-&gt;left_;         }         y_origin_color = y-&gt;color_;         x = y-&gt;right_;         if (y-&gt;parent_ != z) {             Transplant(y, y-&gt;right_);             y-&gt;right_ = z-&gt;right_;             y-&gt;right_-&gt;parent_ = y;         }          Transplant(z, y);         y-&gt;left_ = z-&gt;left_;         y-&gt;left_-&gt;parent_ = y;         y-&gt;color_ = z-&gt;color_;     }     if (y_origin_color == R_BNode::BLACK) {         DeleteFixup(x);     } }</code></p>
+            <pre class="language-cpp line-numbers match-braces"><code>void R_BTree::Delete(R_BNode *z) {
+    auto y = z;
+    auto y_origin_color = z-&gt;color_;
+    R_BNode *x = nullptr;
+    if (z-&gt;left_ == R_BNode::Nil) {
+        x = z-&gt;right_;
+        Transplant(z, z-&gt;right_);
+    } else if (z-&gt;right_ == R_BNode::Nil) {
+        x = z-&gt;left_;
+        Transplant(z, z-&gt;left_);
+    } else {
+        y = z-&gt;right_;
+        while (y-&gt;left_ != R_BNode::Nil) {
+            y = y-&gt;left_;
+        }
+        y_origin_color = y-&gt;color_;
+        x = y-&gt;right_;
+        if (y-&gt;parent_ != z) {
+            Transplant(y, y-&gt;right_);
+            y-&gt;right_ = z-&gt;right_;
+            y-&gt;right_-&gt;parent_ = y;
+        } 
+        Transplant(z, y);
+        y-&gt;left_ = z-&gt;left_;
+        y-&gt;left_-&gt;parent_ = y;
+        y-&gt;color_ = z-&gt;color_;
+    }
+    if (y_origin_color == R_BNode::BLACK) {
+        DeleteFixup(x);
+    }
+}</code></pre>
             <p>这段程序中，y用来标记删除或移动的节点。x用来标记y在移动或删除之前的位置。如果y是红色节点，那么移动或删除y并不会破坏红黑树的性质。因为：</p>
             <ol type="1">
             <li>树的黑高（只计算黑色节点时的高度）没有改变。</li>

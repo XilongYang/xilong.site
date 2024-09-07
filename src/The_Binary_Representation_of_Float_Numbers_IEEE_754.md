@@ -32,7 +32,7 @@ int main() {
 
 It's evident that the above program theoretically shouldn't output any data. However, the actual execution result is as follows:
 
-```
+``` none
 3 3 3 3 3 3 3 3 3 3 
 ```
 
@@ -244,7 +244,7 @@ int main()
 
 output:
 
-```
+``` none
 3e99999a
 ```
 

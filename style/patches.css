@@ -30,3 +30,9 @@ blockquote {
     margin: 0;
     padding-left: 1rem;
 }
+
+code[class*=language-], pre[class*=language-] { 
+    font-size: 0.8rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--kbd-border-color) var(--body-bg-color);
+}

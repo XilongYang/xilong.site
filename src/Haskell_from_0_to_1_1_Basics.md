@@ -102,7 +102,7 @@ Haskell非常擅长抽象：像多态参数，高级函数和类型类这样的�
 
 举个例子，在C++或Java中，以下代码：
 
-```
+```none
 int acc = 0;
 for (int i = 0; i < lst.length; ++i) {
 	acc = acc + 3 * lst[i];
@@ -113,7 +113,7 @@ for (int i = 0; i < lst.length; ++i) {
 
 在Haskell中，可以写成：
 
-```
+```none
 sum (map (3*) lst)
 ```
 
@@ -494,13 +494,13 @@ hailstoneLen n = intListLength (hailstoneSeq n) - 1
 
 不要害怕错误信息，它可以很好地帮助我们找出并改正代码中的错误。比如,在GHCi中：
 
-```
+```none
 Prelude> 'x' ++ "foo"
 ```
 
 将导致以下报错:
 
-```
+```none
 <interactive>:1:1:
   Coundn't match expected type '[a0]' with actual type 'Char'
   In the first argument of '(++)', namely 'x'

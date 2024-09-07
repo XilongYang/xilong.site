@@ -49,14 +49,14 @@
             <h4 id="回归">回归</h4>
             <p>例如要预测房价，我们已经有一些房产的特征，如面积，楼层等，以及对应的结果，即价格。回归算法使我们可以利用这些已知的信息建立一个模型，从而可以根据新房产的特征来预测其价格。</p>
             <p>举一个极端理想化的例子。设想在某地存在一个小镇。小镇有一条秘密法律：任何房产的价格为其面积的两倍。由于这个规定被严格保密，外界无法获知。但小镇的房产信息是公开的，我们可以获取如下信息：</p>
-            <pre><code>房产1：面积2，价格4
+            <pre class="language-none line-numbers match-braces"><code>房产1：面积2，价格4
 房产2：面积4，价格8</code></pre>
             <p>假设现在我们知道一处还未标价的房产A，面积为10，要猜测它的价格。</p>
             <p>此时可以根据已知信息发现，房产的价格似乎总是面积的两倍，因此我们建立一个模型：</p>
-            <pre><code>Price(space) = 2 * space</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>Price(space) = 2 * space</code></pre>
             <p>从而预测出房产A的价格为20。对这个例子而言，<strong>特征</strong>即为面积，<strong>结果</strong>就是价格。</p>
             <p>同时我们发现，由于并不知道小镇的秘密法律，我们只能根据已知信息给出猜测模型，这使得我们预测的结果并不一定准确，如果我建立的模型为：</p>
-            <pre><code>Price(space) = space^2 - 4 * space + 8</code></pre>
+            <pre class="language-none line-numbers match-braces"><code>Price(space) = space^2 - 4 * space + 8</code></pre>
             <p>它仍然符合我们已知的数据，但预测值将变为：68，相距甚远。</p>
             <p>这里引出两个问题：</p>
             <ol type="1">
