@@ -5,4 +5,5 @@ all: src/*
 .PHONY : clean
 clean:
 	-rm posts/*
+	-rm index.html
 
