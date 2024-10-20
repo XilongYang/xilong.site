@@ -36,3 +36,7 @@ code[class*=language-], pre[class*=language-] {
     scrollbar-width: thin;
     scrollbar-color: var(--kbd-border-color) var(--body-bg-color);
 }
+
+.icon {
+    cursor: pointer;
+}

@@ -3,4 +3,5 @@
 @import url("/res/latex-css-1.10.0/prism/prism.css");
 
 @import url("./darkmode.css");
+@import url("./navigator.css");
 @import url("./patches.css");
