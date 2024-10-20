@@ -3,12 +3,11 @@ function refreshDarkMode() {
     var icon = document.getElementById('darkmode')
     var codeStyle = document.getElementById('code-style')
     var imgInvert = document.getElementById('img-invert')
-    var currentMode = sessionStorage.getItem("darkmode")
-    if (currentMode == "Dark") {
+    if (sessionStorage.getItem("darkmode") == "true") {
         classList.add("latex-dark")
         icon.innerText = 'light_mode'
         codeStyle.href = '/res/latex-css-1.10.0/prism/prism-dracula.css'
-        imgInvert.href = '/style/img-invert.css'
+        imgInvert.href = '/style/img-dark.css'
     } else {
         classList.remove("latex-dark")
         icon.innerText = 'dark_mode'
@@ -18,11 +17,10 @@ function refreshDarkMode() {
 }
 
 function switchDarkMode() {
-    var currentMode = sessionStorage.getItem("darkmode")
-    if (currentMode == "Dark") {
-        sessionStorage.setItem("darkmode", "Light")
+    if (sessionStorage.getItem("darkmode") == "true") {
+        sessionStorage.setItem("darkmode", "false")
     } else {
-        sessionStorage.setItem("darkmode", "Dark")
+        sessionStorage.setItem("darkmode", "true")
     }
     refreshDarkMode()
 }

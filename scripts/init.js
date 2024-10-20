@@ -2,15 +2,10 @@ import {refreshDarkMode, switchDarkMode} from "./darkmode.js"
 import {getCurrentYear} from "./datetime.js"
 import {switchTocMode} from "./toc.js"
 
+refreshDarkMode()
+
 var darkmode = document.getElementById('darkmode')
 darkmode.addEventListener('click', switchDarkMode)
-
-var perferDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-var savedDarkMode = sessionStorage.getItem("darkmode")
-if (savedDarkMode == null && perferDarkMode) {
-    sessionStorage.setItem("darkmode", "Dark")
-}
-refreshDarkMode()
 
 var toc = document.getElementById('toc-control')
 if (toc != null) {
@@ -19,3 +14,6 @@ if (toc != null) {
 
 var currentYear = document.getElementById('current-year')
 currentYear.innerText = getCurrentYear()
+
+var antiFlash = document.getElementById("anti-flash")
+antiFlash.parentNode.removeChild(antiFlash)
