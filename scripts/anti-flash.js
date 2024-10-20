@@ -1,5 +1,5 @@
 var perferDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-if (sessionStorage.getItem("darkmode") == "" && perferDarkMode) {
+if (sessionStorage.getItem("darkmode") == null && perferDarkMode) {
     sessionStorage.setItem("darkmode", "true")
 }
 
