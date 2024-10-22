@@ -1,4 +1,4 @@
-all: src/*
+all: src/* template/*
 	build/update_post.py
 	build/update_index.py
 
