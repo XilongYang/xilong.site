@@ -10,6 +10,7 @@ from common import TEMP_PATH
 from common import src_path
 from common import temp_path
 from common import post_path
+from common import POST_TEMPLATE
 
 from preprocess import preprocess
 from compile import compile
@@ -29,8 +30,10 @@ def update_post():
         sys.stderr.write('\n'.join(non_source_list))
 
     is_file = lambda path : os.path.exists(path) and os.path.isfile(path)
-    need_update = lambda src, post : (not is_file(post)) or (is_file(src) and os.path.getmtime(src) > os.path.getmtime(post))
+    is_changed_after = lambda path1, path2 : os.path.getmtime(path1) > os.path.getmtime(path2)
+    need_update = lambda src, post : (not is_file(post)) or (is_file(src) and is_changed_after(src, post)) or is_changed_after(POST_TEMPLATE, post)
     need_update_list = [f for f in src_list if need_update(src_path(f), post_path(f))]
+
     try:
         # Create Temp path
         os.mkdir(TEMP_PATH)
