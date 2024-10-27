@@ -87,8 +87,21 @@
             <p>你可能注意到了，我对分类算法与聚类算法的介绍比对回归算法的介绍简略的多。这其实是因为我写这篇文章时已经学习了回归算法的一些内容，因此理解比其它两个类别更多一些。</p>
         </main>
         <div class="navigator">
+            <i class="material-icons icon" id="search-button">search</i>
             <i class="material-icons icon" id="back-top">arrow_upward</i>
             <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+        </div>
+        <div id="search-panel" tabindex="0">
+            <div id="search-bar">
+                <i class="material-icons" id="search-hint">search</i>
+                <input type="text" id="search-box">
+                <button id="search-close">
+                    <i class="material-icons icon">close</i>
+                </button>
+            </div>
+            <div id="search-result">
+                <div id="search-loading" class="material-icons">autorenew</div>
+            </div>
         </div>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>

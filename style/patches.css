@@ -40,3 +40,8 @@ code[class*=language-], pre[class*=language-] {
 .icon {
     cursor: pointer;
 }
+
+.icon:hover {
+    color: #ee5555;
+    transition: all 0.5s;
+}

@@ -1,7 +1,7 @@
 .navigator {
     position: fixed;
     width: 24px;
-    height: 60px;
+    height: 90px;
     right: 2%;
     bottom: 2%;
 }
@@ -10,9 +10,4 @@
     border-radius: 6px;
     width: 24px;
     height: 24px;
-}
-
-#back-top:hover, #go-bottom:hover{
-    color: red;
-    transition: all 0.5s;
 }

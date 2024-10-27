@@ -163,8 +163,21 @@ g++ -o main main.cc -L./dynamic -ltest
             <p>库是将源码打包而形成的，以链接进其它程序的方式进行使用的文件形式。分为静态库和动态库。静态库具有链接慢，空间成本高，不易更新的缺点，优点是能够生成独立的可执行文件。动态库易于更新扩展，链接快，空间成本低，但生成的文件必需依赖库运行。</p>
         </main>
         <div class="navigator">
+            <i class="material-icons icon" id="search-button">search</i>
             <i class="material-icons icon" id="back-top">arrow_upward</i>
             <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+        </div>
+        <div id="search-panel" tabindex="0">
+            <div id="search-bar">
+                <i class="material-icons" id="search-hint">search</i>
+                <input type="text" id="search-box">
+                <button id="search-close">
+                    <i class="material-icons icon">close</i>
+                </button>
+            </div>
+            <div id="search-result">
+                <div id="search-loading" class="material-icons">autorenew</div>
+            </div>
         </div>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
