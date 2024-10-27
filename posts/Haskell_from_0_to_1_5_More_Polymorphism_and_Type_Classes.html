@@ -234,8 +234,21 @@ sumL x = sum (toList x)</code></pre>
             <p>只要类型变量在函数定义中，我们就可以为它指定类型类。注意，这个函数并不是递归函数，调用的<code>toList x</code>与<code>toList y</code>是其它类型的实例，而不是该函数本身。</p>
         </main>
         <div class="navigator">
+            <i class="material-icons icon" id="search-button">search</i>
             <i class="material-icons icon" id="back-top">arrow_upward</i>
             <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+        </div>
+        <div id="search-panel" tabindex="0">
+            <div id="search-bar">
+                <i class="material-icons" id="search-hint">search</i>
+                <input type="text" id="search-box">
+                <button id="search-close">
+                    <i class="material-icons icon">close</i>
+                </button>
+            </div>
+            <div id="search-result">
+                <div id="search-loading" class="material-icons">autorenew</div>
+            </div>
         </div>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>

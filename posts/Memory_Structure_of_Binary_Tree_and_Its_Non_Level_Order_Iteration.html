@@ -493,8 +493,21 @@ int main()
 }</code></pre>
         </main>
         <div class="navigator">
+            <i class="material-icons icon" id="search-button">search</i>
             <i class="material-icons icon" id="back-top">arrow_upward</i>
             <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+        </div>
+        <div id="search-panel" tabindex="0">
+            <div id="search-bar">
+                <i class="material-icons" id="search-hint">search</i>
+                <input type="text" id="search-box">
+                <button id="search-close">
+                    <i class="material-icons icon">close</i>
+                </button>
+            </div>
+            <div id="search-result">
+                <div id="search-loading" class="material-icons">autorenew</div>
+            </div>
         </div>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>

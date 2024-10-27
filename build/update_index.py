@@ -8,25 +8,8 @@ from common import INDEX_TEMPLATE
 from common import src_path
 from common import read_file
 from common import write_file
-
-WEB_ROOT_PATH = ''
-WEB_POST_PATH= WEB_ROOT_PATH + '/posts'
-
-def post2link(file_name):
-    return WEB_POST_PATH+ '/' + file_name.rstrip('\n') + '.html'
-
-def parse_meta(src):
-    result = {}
-    parse_on = False
-    contents = read_file(src)
-    for line in contents:
-        clear_line = line.replace('\n', '')
-        if clear_line == '---':
-            parse_on = not parse_on
-        elif parse_on:
-            parse = clear_line.split(':', 1)
-            result[parse[0].replace(' ','')] = parse[1]
-    return result
+from common import post2link
+from common import parse_meta
 
 def post_html():
     post_map = {}

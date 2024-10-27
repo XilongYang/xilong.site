@@ -136,8 +136,21 @@ if (cur-&gt;right) nodeQueue.push(cur-&gt;right);</code></pre>
             <p>遵循三/五法则是一个类正常运行的基础，绝不能偷懒省略其中的组件。还好我以这样低的成本——一个测试算法用的临时程序——完成了三/五法则的试错。</p>
         </main>
         <div class="navigator">
+            <i class="material-icons icon" id="search-button">search</i>
             <i class="material-icons icon" id="back-top">arrow_upward</i>
             <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+        </div>
+        <div id="search-panel" tabindex="0">
+            <div id="search-bar">
+                <i class="material-icons" id="search-hint">search</i>
+                <input type="text" id="search-box">
+                <button id="search-close">
+                    <i class="material-icons icon">close</i>
+                </button>
+            </div>
+            <div id="search-result">
+                <div id="search-loading" class="material-icons">autorenew</div>
+            </div>
         </div>
         <div class="footnotes">
             © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
