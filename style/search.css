@@ -85,6 +85,7 @@
     background-color: var(--body-bg-color);
     padding-left: 1rem;
     padding-right: 1rem;
+    margin-top: 1rem;
 }
 
 .search-result-item-title {

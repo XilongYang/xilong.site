@@ -35,6 +35,7 @@ function loadDb(callback) {
 }
 
 function openPanel() {
+    document.getElementById("search-box").value = ""
     document.body.style.overflow = "hidden"
     var panel = document.getElementById("search-panel")
     panel.style.display = "flex"
@@ -65,7 +66,7 @@ function show(title, content) {
 
     var contentDiv = document.createElement('div')
     contentDiv.classList = "search-result-item-content"
-    contentDiv.innerHTML = content
+    contentDiv.innerHTML = content + '<br>---'
 
     var result = document.createElement('div')
     result.classList = "search-result-item"
@@ -89,13 +90,13 @@ function search() {
         var pos = content.indexOf(text)
         if (pos != -1) {
             title = '<a href="' + url + '">' + title + '</a>'
-            if (pos != 0) {
-                content = '...' + content.slice(pos)
+            if (pos > 10) {
+                content = '...' + content.slice(pos - 10)
             }
             if (content.length > 100) {
                 content = content.slice(0, 100) + '...'
             }
-            content = content.replace(text, '<span class="search-key">'+text+'</span>')
+            content = content.replaceAll(text, '<span class="search-key">'+text+'</span>')
             show(title, content)
         }
     }
