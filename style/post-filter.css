@@ -1,0 +1,25 @@
+#post-filter {
+    vertical-align: middle;
+}
+
+#post-filter-input {
+    display: none;
+    height: 24px;
+    vertical-align: middle;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: var(--body-bg--color);
+    color: var(--body--color);
+}
+
+#post-filter-info {
+    display: none;
+    position: absolute;
+    height: 24px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 100%;
+    padding-left: 7.2rem;
+}

@@ -4,6 +4,7 @@ import {switchTocMode} from "./toc.js"
 import { backTop, goBottom } from "./navigator.js"
 import { closePanel, openPanel, search } from "./search.js"
 import {adobeLoad} from "./adobe-font.js"
+import { refreshFilter, toggleInput } from "./post-filter.js"
 
 refreshDarkMode()
 
@@ -35,6 +36,12 @@ searchBox.addEventListener('input', search)
 
 var antiFlash = document.getElementById("anti-flash")
 antiFlash.parentNode.removeChild(antiFlash)
+
+var postFilter = document.getElementById("post-filter")
+postFilter.addEventListener('click', toggleInput)
+
+var postFilterInput = document.getElementById("post-filter-input")
+postFilterInput.addEventListener('input', refreshFilter)
 
 adobeLoad()
 
