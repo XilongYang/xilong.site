@@ -35,7 +35,7 @@ blockquote {
     padding-left: 1rem;
 }
 
-code[class*=language-], pre[class*=language-] { 
+code[class*=language-], pre[class*=language-] {
     font-size: 0.8rem;
     scrollbar-width: thin;
     scrollbar-color: var(--kbd-border-color) var(--body-bg-color);
@@ -48,4 +48,14 @@ code[class*=language-], pre[class*=language-] {
 .icon:hover {
     color: #ee5555;
     transition: all 0.5s;
+}
+
+.icon-active {
+    cursor: pointer;
+    color: #ee5555;
+}
+
+.error {
+    color: #ee5555;
+    font-weight: bold;
 }
