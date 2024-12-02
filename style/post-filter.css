@@ -4,13 +4,23 @@
 
 #post-filter-input {
     display: none;
-    height: 24px;
-    vertical-align: middle;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    align-self: flex-end;
     font-size: 16px;
+    line-height: 150%;
     border: none;
+    border-bottom-style: solid;
     outline: none;
-    background-color: var(--body-bg--color);
-    color: var(--body--color);
+    background-color: var(--body-bg-color);
+    color: var(--body-color);
+}
+
+#post-filter-input:empty::before {
+    content: "Input to filter posts, opts: & | ~ ()";
+    color: gray;
+    pointer-events: none;
 }
 
 #post-filter-info {

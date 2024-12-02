@@ -4,7 +4,7 @@ import {switchTocMode} from "./toc.js"
 import { backTop, goBottom } from "./navigator.js"
 import { closePanel, openPanel, search } from "./search.js"
 import {adobeLoad} from "./adobe-font.js"
-import { refreshFilter, toggleInput } from "./post-filter.js"
+import { clearErrorMsg, inputFilter, refreshFilter, toggleInput } from "./post-filter.js"
 
 refreshDarkMode()
 
@@ -41,7 +41,10 @@ var postFilter = document.getElementById("post-filter")
 postFilter.addEventListener('click', toggleInput)
 
 var postFilterInput = document.getElementById("post-filter-input")
-postFilterInput.addEventListener('input', refreshFilter)
+postFilterInput.addEventListener('keypress', inputFilter)
+postFilterInput.addEventListener('input', inputFilter)
+postFilterInput.addEventListener('focus', clearErrorMsg)
+postFilterInput.addEventListener('focusout', refreshFilter)
 
 adobeLoad()
 

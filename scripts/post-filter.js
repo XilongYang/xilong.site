@@ -2,53 +2,105 @@
 const ST = {
     INIT   : 0,
     NORMAL : 1,
-    LOGIC  : 2,
-    PL     : 3,
-    PR     : 4,
-    ESC    : 5
+    AND_OR : 2,
+    NOT    : 3,
+    PL     : 4,
+    PR     : 5,
+    ESC    : 6
 };
 
-const OPT_MISS      = "operator missing"
-const OPT_DUPL      = "duplidate operator"
-const EMP_FIELD     = "empty field"
-const INVALID_TRANS = "invalid transfer"
+const OPT_MISS      = "Operator Missing"
+const OPT_DUPL      = "Duplidate Operator"
+const EMP_FIELD     = "Empty Field"
+const INVALID_ESC   = "Invalid Escape"
+const UNMATCH_P     = "Unmatched Parenthesis"
 
-const PRE_ST        = "move to previous"
+//             [init   , normal     , and or   , not   , left parenthesis, right parenthesis, escape   ]
+const init   = [ST.INIT, ST.NORMAL  , EMP_FIELD, ST.NOT   , ST.PL           , ST.PR            , ST.ESC   ]
+const normal = [ST.INIT, ST.NORMAL  , ST.AND_OR, OPT_MISS , OPT_MISS        , ST.PR            , ST.ESC   ]
+const andOr  = [ST.INIT, ST.NORMAL  , OPT_DUPL , ST.NOT   , ST.PL           , EMP_FIELD        , ST.ESC   ]
+const not    = [ST.INIT, ST.NORMAL  , EMP_FIELD, ST.NOT   , ST.PL           , EMP_FIELD        , ST.ESC   ]
+const pl     = [ST.INIT, ST.NORMAL  , EMP_FIELD, ST.NOT   , ST.PL           , EMP_FIELD        , ST.ESC   ]
+const pr     = [ST.INIT, OPT_MISS   , ST.AND_OR, OPT_MISS , OPT_MISS        , ST.PR            , ST.ESC   ]
+const esc    = [ST.INIT, INVALID_ESC, ST.NORMAL, ST.NORMAL, ST.NORMAL       , ST.NORMAL        , ST.NORMAL]
 
-//             [init   , normal       , logic    , left parenthesis, right parenthesis, escape]
-const init   = [ST.INIT, ST.NORMAL    , EMP_FIELD, ST.PL           , ST.PR            , ST.ESC]
-const normal = [ST.INIT, ST.NORMAL    , ST.LOGIC , OPT_MISS        , ST.PR            , ST.ESC]
-const logic  = [ST.INIT, ST.NORMAL    , OPT_DUPL , ST.PL           , EMP_FIELD        , ST.ESC]
-const pl     = [ST.INIT, ST.NORMAL    , EMP_FIELD, ST.PL           , EMP_FIELD        , ST.ESC]
-const pr     = [ST.INIT, OPT_MISS     , ST.LOGIC , OPT_MISS        , ST.PR            , ST.ESC]
-const esc    = [ST.INIT, INVALID_TRANS, PRE_ST   , PRE_ST          , PRE_ST           , PRE_ST]
+class JudgeNode {
+    exp;
+    successNext;
+    failureNext;
+    constructor() {
+        this.exp = ""
+        this.successNext = true
+        this.failureNext = false
+    }
+}
 
 function toggleInput() {
     var filterIcon = document.getElementById("post-filter")
     var input = document.getElementById("post-filter-input")
-    var info = document.getElementById("post-filter-info")
     if(filterIcon.classList.contains("icon-active")) {
         filterIcon.classList.add("icon")
         filterIcon.classList.remove("icon-active")
         input.style.display = "none"
-        info.style.display = "none"
-        input.value = ""
-        info.innerHTML = ""
+        input.innerHTML = ""
     } else {
         filterIcon.classList.add("icon-active")
         filterIcon.classList.remove("icon")
         input.style.display = "inline-block"
-        info.style.display = "block"
     }
+}
+
+function moveCursorToEnd(target) {
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.selectNodeContents(target);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+}
+
+function inputFilter(e) {
+    if (e.type == "keypress" && e.key == "enter") {
+        e.preventDefault();
+        moveCursorToEnd(e.target)
+    }
+
+    if (e.type == "input") {
+        const input = e.target
+        if (input.innerText.includes('\n')) {
+            input.innerText = input.innerText.replace(/\n/g, '');
+            moveCursorToEnd(input)
+        }
+    }
+}
+
+function clearErrorMsg() {
+    var input = document.getElementById("post-filter-input")
+    var errs = input.getElementsByClassName('error')
+    for (var err of errs) {
+        var msgs = err.getElementsByClassName('error-msg')
+        for (var msg of msgs) {
+            err.removeChild(msg)
+        }
+    }
+    var exp = input.innerText.replace("\n", "")
+    input.innerHTML = exp
 }
 
 function refreshFilter() {
     var input = document.getElementById("post-filter-input")
-    if (!expressionValidate(input.value)) {
+    var exp = input.innerText.replace("\n", "")
+    if (exp == "") {
+        input.innerHTML = ""
         return
     }
 
-    var matchExp = expressionParse(input.value)
+    if (!expressionValidate(exp)) {
+        return
+    }
+
+    var matchTree = expressionParse(exp)
 
 
 }
@@ -59,12 +111,8 @@ function expressionValidate(exp) {
         return false
     }
 
-    var info = document.getElementById("post-filter-info")
-    info.innerHTML = ""
-
-    var states = [init, normal, logic, pl, pr, esc]
+    var states = [init, normal, andOr, not, pl, pr, esc]
     var curST = ST.INIT
-    var preST = ST.INIT
 
     var openParenthesisIndex = []
 
@@ -77,7 +125,10 @@ function expressionValidate(exp) {
                 continue
             case "&":
             case "|":
-                result = states[curST][ST.LOGIC]
+                result = states[curST][ST.AND_OR]
+                break
+            case "~":
+                result = states[curST][ST.NOT]
                 break
             case "(":
                 result = states[curST][ST.PL]
@@ -88,7 +139,7 @@ function expressionValidate(exp) {
             case ")":
                 result = states[curST][ST.PR]
                 if (curST != ST.ESC && undefined == openParenthesisIndex.pop()) {
-                    result = "unmatched parentheses"
+                    result = UNMATCH_P
                 }
                 break
             case "\\":
@@ -98,26 +149,21 @@ function expressionValidate(exp) {
                 result = states[curST][ST.NORMAL]
         }
 
-        if (result == PRE_ST) {
-            result = preST
-        }
-
         if (typeof(result) == "string") {
-            info.innerHTML = errorMsg(result, exp, i)
+            errorMsg(result, exp, i)
             return false
         }
 
-        preST = curST
         curST = result
     }
 
-    if (curST == ST.LOGIC) {
-        info.innerHTML = errorMsg(EMP_FIELD, exp, exp.length - 1)
+    if (curST == ST.AND_OR || curST == ST.NOT) {
+        errorMsg(EMP_FIELD, exp, exp.length - 1)
         return false
     }
 
     if (openParenthesisIndex.length > 0) {
-        info.innerHTML = errorMsg("unmatched parentheses", exp, openParenthesisIndex.pop())
+        errorMsg(UNMATCH_P, exp, openParenthesisIndex.pop())
         return false
     }
 
@@ -131,7 +177,9 @@ function expressionParse(exp) {
 }
 
 function errorMsg(msg, exp, index) {
-    return "Error: " + msg + ": " + exp.slice(0, index) + "<span class='error'>" + exp[index] + "</span>" + exp.slice(index + 1)
+    var errorMsg = "Error: " + msg
+    var markedInput = exp.slice(0, index) + "<span class='error'>" + exp[index] + "<span class='error-msg'>" + errorMsg + "</span></span><span class = 'invalid-expression'>" + exp.slice(index + 1) + "</span>"
+    document.getElementById("post-filter-input").innerHTML = markedInput
 }
 
-export {toggleInput, refreshFilter}
+export {toggleInput, refreshFilter, clearErrorMsg, inputFilter}
