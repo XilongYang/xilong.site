@@ -30,6 +30,10 @@ blockquote {
     border-left-style: solid;
 }
 
+#posts {
+    display: flex;
+}
+
 #posts_wrapper {
     margin: 0;
     padding-left: 1rem;
@@ -56,6 +60,33 @@ code[class*=language-], pre[class*=language-] {
 }
 
 .error {
+    position: relative;
+    display: inline-block;
     color: #ee5555;
     font-weight: bold;
+}
+
+.error .error-msg {
+    visibility: hidden;
+    background-color: var(--body-color);
+    color: var(--body-bg-color);
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    width: 300px;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -150px;
+
+    position: absolute;
+    z-index: 1;
+}
+
+.error:hover .error-msg {
+    visibility: visible;
+}
+
+.invalid-expression {
+    color: var(--pre-bg-color)
 }
