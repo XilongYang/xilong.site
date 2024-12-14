@@ -38,13 +38,15 @@ var antiFlash = document.getElementById("anti-flash")
 antiFlash.parentNode.removeChild(antiFlash)
 
 var postFilter = document.getElementById("post-filter")
-postFilter.addEventListener('click', toggleInput)
+if (postFilter != null) {
+    postFilter.addEventListener('click', toggleInput)
 
-var postFilterInput = document.getElementById("post-filter-input")
-postFilterInput.addEventListener('keypress', inputFilter)
-postFilterInput.addEventListener('input', inputFilter)
-postFilterInput.addEventListener('focus', clearErrorMsg)
-postFilterInput.addEventListener('focusout', refreshFilter)
+    var postFilterInput = document.getElementById("post-filter-input")
+    postFilterInput.addEventListener('keypress', inputFilter)
+    postFilterInput.addEventListener('input', inputFilter)
+    postFilterInput.addEventListener('focus', clearErrorMsg)
+    postFilterInput.addEventListener('focusout', refreshFilter)
+}
 
 adobeLoad()
 
