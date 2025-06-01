@@ -3,7 +3,6 @@ import {getCurrentYear} from "./datetime.js"
 import {switchTocMode} from "./toc.js"
 import { backTop, goBottom } from "./navigator.js"
 import { closePanel, openPanel, search } from "./search.js"
-import {adobeLoad} from "./adobe-font.js"
 import { clearErrorMsg, inputFilter, refreshFilter, toggleInput } from "./post-filter.js"
 
 refreshDarkMode()
@@ -47,6 +46,3 @@ if (postFilter != null) {
     postFilterInput.addEventListener('focus', clearErrorMsg)
     postFilterInput.addEventListener('focusout', refreshFilter)
 }
-
-adobeLoad()
-

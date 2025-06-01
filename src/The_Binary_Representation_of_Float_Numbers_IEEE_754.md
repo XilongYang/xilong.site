@@ -4,14 +4,14 @@ author: Xilong Yang
 date: 2024-05-14
 ---
 
-The binary representation of the floating numbers was makes me very confused many years ago. Here is a introduction to the standard IEEE 754. 
+The binary representation of the floating numbers was makes me very confused many years ago. Here is a introduction to the standard IEEE 754.
 
 ## Issue
 
 Code for the issue:
 
 ```c
-#include <stdio.h> 
+#include <stdio.h>
 
 int main() {
   int arr[10] = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
@@ -19,7 +19,7 @@ int main() {
   // Calculate the mean of all the numbers in arr.
   float a = 0;
   for (int i = 0; i < 10; ++i) {
-    a += (float)arr[i] / 10;   
+    a += (float)arr[i] / 10;
   }
   for (int i = 0; i < 10; ++i) {
     if (arr[i] > a) {
@@ -33,18 +33,18 @@ int main() {
 It's evident that the above program theoretically shouldn't output any data. However, the actual execution result is as follows:
 
 ``` none
-3 3 3 3 3 3 3 3 3 3 
+3 3 3 3 3 3 3 3 3 3
 ```
 
 ## Analysis
 
-After several attempts, I finally found that the issue is caused by the value of 'a' in this program not being 3.0, but rather 2.9999. This suggests that the problem is probably linked to the precision of the floating-point arithmetic. 
+After several attempts, I finally found that the issue is caused by the value of 'a' in this program not being 3.0, but rather 2.9999. This suggests that the problem is probably linked to the precision of the floating-point arithmetic.
 
 Here is a introduction to the *IEEE 754* floating-point number standard, which is followed by the C programming language.
 
-A floating-point number which according to the IEEE 754 standard has a form comprising a single **sign bit**, followed by *k* bits for the **exponent**, and *n* bits for the **fraction**. 
+A floating-point number which according to the IEEE 754 standard has a form comprising a single **sign bit**, followed by *k* bits for the **exponent**, and *n* bits for the **fraction**.
 
-For example, when *k* = 8 and *n* = 23, the form is shown in the diagram below, 
+For example, when *k* = 8 and *n* = 23, the form is shown in the diagram below,
 
 |Sign|Exponent|Fraction|
 |-|-|-|
@@ -98,7 +98,7 @@ $$
 V = -1^0 \times 1.1010 \times 2^{-2} = 0.011010
 $$
 
-> Why don't we use the exponent value directly rather than minus a suspicious Bias? 
+> Why don't we use the exponent value directly rather than minus a suspicious Bias?
 >
 > The reason is to represent the negative exponent naturally. We can easily compare two exponent just by compare its unsigned value of the bit-level representation.
 >
@@ -122,16 +122,16 @@ $$
 For example, a float-point number with *k* = 3 bits for exponent and *n* = 4 bits for fraction, which has a bit-level representation `0 00 1010` will yield a value:
 
 $$
-S = 0 
+S = 0
 $$
 $$
-Bias = 2^{k-1} - 1 = 3 
+Bias = 2^{k-1} - 1 = 3
 $$
 $$
 E = 1 - Bias = -2
 $$
 $$
-M = 0.1010 
+M = 0.1010
 $$
 $$
 V = -1^0 \times 0.1010 \times 2^{-2} = 0.001010
@@ -144,16 +144,16 @@ $$
 > For example, consider a number which has *k* = 3 bit to represent the exponent and *n* = 4 bit for the fraction. The biggest **denormalized** values in the form has a bit-level represention:
 >
 > 0 000 1111, the values is: $0.1111 \times 2^{1-(2^{3-1}-1)}$ = $0.001111$
-> 
+>
 > Increase it by 1 in the bit-level, we can get the smallest **normalized** number which has a bit-level represention:
 >
 > 0 001 0000, the values is: $1.0000 \times 2^{1-(2^{3-1}-1)}$ = $0.010000$
 >
-> If the exponent set to $-Bias$ directly, the value of the denormalized number will be: 
-> 
+> If the exponent set to $-Bias$ directly, the value of the denormalized number will be:
+>
 > $0.1111 \times 2^{-(2^{3-1} - 1)} =  0.0001111$
 >
-> We can look the $1-Bias$ as $-Bias + 1$, it is a compensation for the lack of the leading 1 in a denormalized value. 
+> We can look the $1-Bias$ as $-Bias + 1$, it is a compensation for the lack of the leading 1 in a denormalized value.
 >
 
 ### Special Values
@@ -190,13 +190,13 @@ Limited by the memory space, there are 2 factors that can lead a lack of precisi
 
 > Note
 >
-> The effection of the exponent is to move the point to difference posiiton of a floating-point number (that's why it is called "floating-point"), that makes it possible to get a very large value. But since we can only set the value for a limited fraction, the precision of the possible value is also limited. 
-> 
->For example, when *k* = 8 and *n* = 3 we can simply represent $2^{100}$ by the represention: 
+> The effection of the exponent is to move the point to difference posiiton of a floating-point number (that's why it is called "floating-point"), that makes it possible to get a very large value. But since we can only set the value for a limited fraction, the precision of the possible value is also limited.
+>
+>For example, when *k* = 8 and *n* = 3 we can simply represent $2^{100}$ by the represention:
 >
 >0 11100011 000
 >
-> But we can't represent $1.1111_2 \times 2^{100}$ since we can only control the first 3 bits actually in the hundred of 0s. 
+> But we can't represent $1.1111_2 \times 2^{100}$ since we can only control the first 3 bits actually in the hundred of 0s.
 >
 
 When we face to the precision problem, the only way we can choose is make it rounding. The default rule of rounding is called "Round-to-even".
@@ -210,7 +210,7 @@ To explain the rule, consider a number which has a form like $...xxx.xxyyyy...$.
 Because the last digit of a rounded number is always 0 (so that the number is even), the rule is called "round-to-even".
 
 > Why it choose round-to-even instead round-to-zero?
-> 
+>
 > Because a half of numbers is even, a number will round upward about 50% of the time and round downward about 50% of the time. It can balance the loss which caused by rounding.
 >
 
@@ -218,11 +218,11 @@ Because the last digit of a rounded number is always 0 (so that the number is ev
 
 Let's back to the issue, get the IEEE 754 representation of $0.3_{10}$.
 
-Transfer $0.3_{10}$ to normalized binary representation: 
+Transfer $0.3_{10}$ to normalized binary representation:
 
 $$
 1.00110011001100110011001... \times 10_2^{-10}
-$$ 
+$$
 
 We can notice that the binary representation of $0.3_{10}$ is a unfiniate number. So it will be rounding when transfer to IEEE 754 representation. Since it is bigger than halfway, it will round upward:
 

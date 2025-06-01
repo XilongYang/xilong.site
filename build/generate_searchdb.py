@@ -40,7 +40,7 @@ def gen_searchdb():
 
         parser = MyHTMLParser()
         parser.feed(''.join(valid_lines))
-        content = ' '.join(parser.data).replace('\n',' ').replace('目录 remove', '目录').replace('Contents remove', 'Contents')
+        content = ' '.join(parser.data).replace('\n',' ').replace('Contents remove', 'Contents')
 
         posts.append({"title": title, "url": url, "content": content})
 

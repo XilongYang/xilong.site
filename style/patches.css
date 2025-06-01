@@ -1,10 +1,12 @@
 html {
     font-size: 1.2rem;
     font-weight: 400;
+    height: 100%;
 }
 
 body {
     font-family: 'Latin Modern', "source-han-serif-cn-subset", Georgia, Cambria, 'Times New Roman', Times, serif;
+    transition: 0.5s ease;
 }
 
 p {
@@ -14,6 +16,7 @@ p {
 a, a:visited {
     font-weight: bold;
     color: var(--body-color);
+    transition: 0.5s ease;
 }
 
 .footnotes {
@@ -89,4 +92,9 @@ code[class*=language-], pre[class*=language-] {
 
 .invalid-expression {
     color: var(--pre-bg-color)
+}
+
+.slogan {
+    text-align: center;
+    font-style: italic;
 }

@@ -6,7 +6,7 @@ import {expressionValidate, expressionParse, expressionMatch} from './express-ma
 function showErrorMsg(msg, exp, index) {
     var errorMsg = "Error: " + msg
     var htmlMsg = exp.slice(0, index)
-                + "<span class='error'>" + exp[index] 
+                + "<span class='error'>" + exp[index]
                 + "<span class='error-msg'>" + errorMsg + "</span>"
                 + "</span>"
                 + "<span class = 'invalid-expression'>" + exp.slice(index + 1) + "</span>"

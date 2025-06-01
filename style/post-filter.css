@@ -15,6 +15,7 @@
     outline: none;
     background-color: var(--body-bg-color);
     color: var(--body-color);
+    transition: 0.5s ease;
 }
 
 #post-filter-input:empty::before {

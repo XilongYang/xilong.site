@@ -1,4 +1,5 @@
 import os
+import re
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC_PATH = ROOT_PATH + '/src'
@@ -8,8 +9,9 @@ INDEX_PATH = ROOT_PATH + '/index.html'
 SEARCHDB_PATH = ROOT_PATH + '/searchdb.json'
 WEB_ROOT_PATH = ''
 WEB_POST_PATH= WEB_ROOT_PATH + '/posts'
-INDEX_TEMPLATE = ROOT_PATH + '/template/index.html'
-POST_TEMPLATE  = ROOT_PATH + '/template/post.html'
+TEMPLATE_PATH = ROOT_PATH + '/template'
+TEMPLATE_COMPONENT_PATH = TEMPLATE_PATH + '/component'
+TEMPLATE_COMPONENT_PATTERN = '<!--<.*>-->'
 
 def src_path(file_name):
     return SRC_PATH + '/' + file_name.rstrip('\n') + '.md'
@@ -43,3 +45,25 @@ def parse_meta(src):
             parse = clear_line.split(':', 1)
             result[parse[0].replace(' ','')] = parse[1]
     return result
+
+def gen_template(path):
+    template = read_file(path)
+    result = ''
+    for line in template:
+        line = line.strip()
+        if re.match(TEMPLATE_COMPONENT_PATTERN, line):
+            component_name = line.replace('<!--<', '').replace('>-->', '')
+            component_file = TEMPLATE_COMPONENT_PATH + '/' + component_name + '.html'
+            line = ''.join(read_file(component_file))
+        result += line + '\n'
+    return result
+
+def gen_index_template():
+    return gen_template(TEMPLATE_PATH + '/index.html')
+
+def gen_post_template():
+    return gen_template(TEMPLATE_PATH + '/post.html')
+
+def template_last_modify_time():
+    get_mtimes = lambda path : [os.path.getmtime(path + '/' + f) for f in os.listdir(path) if os.path.isfile(path + '/' + f)]
+    return max(get_mtimes(TEMPLATE_PATH) + get_mtimes(TEMPLATE_COMPONENT_PATH))
