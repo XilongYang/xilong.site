@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Some Tricks at the Bit-level - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>Some Tricks at the Bit-level</h1>
+<p class="author">Xilong Yang<br>2024-10-28</p>
+</div>
+<main>
+<div class="abstract">
+<p>On my journey through Chapter 2 of CSAPP, some magical tricks
+appeared intermittently. So I am trying to catch them by writing this
+article.</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#fold-bits">Fold bits</a><ol></ol></li>
+<li><a href="#count-bits">Count bits</a><ol></ol></li>
+</ol>
+</div>
+</nav>
+<h2 id="fold-bits">Fold bits</h2>
+<p>Consider that we get a mission to check if all the odd-numbered bits
+in a int are set to 1. What is the faster way?</p>
+<p>The answer is: to fold it.</p>
+<pre class="language-c line-numbers match-braces"><code>/*
+ * allOddBits - return 1 if all odd-numbered bits in word set to 1
+ *   where bits are numbered from 0 (least significant) to 31 (most significant)
+ *   Examples allOddBits(0xFFFFFFFD) = 0, allOddBits(0xAAAAAAAA) = 1
+ *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;
+ *   Max ops: 12
+ *   Rating: 2
+ */
+int allOddBits(int x) {
+  x = x &amp; (x &gt;&gt; 16);
+  x = x &amp; (x &gt;&gt; 8);
+  x = x &amp; (x &gt;&gt; 4);
+  x = x &amp; (x &gt;&gt; 2);
+  return (x &gt;&gt; 1) &amp; 1;
+}</code></pre>
+<p>By using the fold technic, We can implement logical not without
+operator <code>!</code> by folding the ‘or’ operation:</p>
+<pre class="language-c line-numbers match-braces"><code>/*
+ * logicalNeg - implement the ! operator, using all of
+ *              the legal operators except !
+ *   Examples: logicalNeg(3) = 0, logicalNeg(0) = 1
+ *   Legal ops: ~ &amp; ^ | + &lt;&lt; &gt;&gt;
+ *   Max ops: 12
+ *   Rating: 4
+ */
+int logicalNeg(int x) {
+  x = (x &gt;&gt; 16) | x;
+  x = (x &gt;&gt; 8) | x;
+  x = (x &gt;&gt; 4) | x;
+  x = (x &gt;&gt; 2) | x;
+  x = (x &gt;&gt; 1) | x;
+  return ~x &amp; 1;
+}</code></pre>
+<p>Furthermore, we can fill all the bits in the right ( left ) side of
+the most ( least ) significant bit to 1 by a inverse way (the shift
+number’s order is reversal):</p>
+<pre class="language-c line-numbers match-braces"><code>// All of the bits in the right side of the most significant 1 should set to 1.
+compare = compare | (compare &gt;&gt; 1);
+compare = compare | (compare &gt;&gt; 2);
+compare = compare | (compare &gt;&gt; 4);
+compare = compare | (compare &gt;&gt; 8);
+compare = compare | (compare &gt;&gt; 16);</code></pre>
+<p>By combining those technic, it is possible to compare two integer
+number x and y without any arithmetic operator or compare operator:</p>
+<pre class="language-c line-numbers match-braces"><code>/*
+ * isLessOrEqual - if x &lt;= y  then return 1, else return 0
+ *   Example: isLessOrEqual(4,5) = 1.
+ *   Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;
+ *   Max ops: 24
+ *   Rating: 3
+ */
+int isLessOrEqual(int x, int y) {
+  // Check the sign bits.
+  // x &lt;= y is possible if any of following condition is satisfied:
+  // 1. The sign bits of x and y is same.
+  // 2. The sign bits are not same but the x&#39;s sign bit is set to 1
+  //    (which means x is negative and y is positive).
+  // If any of those condition is satisfied, the sign_check will be set to 0.
+  int sign_x = (x &gt;&gt; 31) &amp; 1;
+  int sign_y = (y &gt;&gt; 31) &amp; 1;
+  int diff_sign = sign_x ^ sign_y;
+  int sign_check = diff_sign &amp; (!sign_x);
+
+  // Compare x and y.
+  // For both positive number and negative number, the number which
+  // contains the most significant 1 will be the greater one.
+  // Get the different bits between x and y.
+  int compare = x ^ y;
+  // Transfer the compare result to the form &#39;00..011..1&#39;, which means
+  // all of the bits in the right of the most significant 1 should set to 1.
+  compare = compare | (compare &gt;&gt; 1);
+  compare = compare | (compare &gt;&gt; 2);
+  compare = compare | (compare &gt;&gt; 4);
+  compare = compare | (compare &gt;&gt; 8);
+  compare = compare | (compare &gt;&gt; 16);
+  // Erase all but the most significant 1.
+  // For example, the formalized number 00001111 will turn to 00001000
+  //   (compare &gt;&gt; 1): 00000111
+  //   (compare &amp;  1): 1
+  //   (compare &gt;&gt; 1) + (compare &amp; 1): 00001000
+  // There are two special cases:
+  // 1. When x == y, compare will be 0 and the result of the expression (compare &amp; 1) will also be 0.
+  //    Thus the result of the expression (compare &gt;&gt; 1) + (compare &amp; 1) will be 0.
+  //
+  // 2. When the sign bit is difference, the result of the express (compare &gt;&gt; 1) will be 0xFFFFFFFFFFFFFFFF.
+  //    Thus the result of the expression (compare &gt;&gt; 1) + (compare &amp; 1) will be 0.
+  //    That is, the expression is invalid in this case, but at least it will not interference the sign check.
+  //    So it still works.
+  compare = (compare &gt;&gt; 1) + (compare &amp; 1);
+  // If the most significant bit is contained by x, result will be 0.
+  // Otherwise it will be 1.
+  compare = compare &amp; x;
+
+  // The x &lt;= y if and only if
+  // the most significant different bit is contained by x
+  // and the sign_check is passed.
+  return !(compare + sign_check);
+}</code></pre>
+<h2 id="count-bits">Count bits</h2>
+<p>Consider that we need to find the minimum number of bits required to
+represent x in two’s component. And all of the operators that allowed to
+use are: <code>! ~ &amp; ^ | + &lt;&lt; &gt;&gt;</code>.</p>
+<p>First at all, the minimum number of bits is only decided by the
+position of the most significant 1 in the number’s two’s component
+representation. That is, consider we have <code>x = 00001010</code>, the
+most significant 1 is located at the 4th position from the right. So we
+can represent x by using 5 bits (don’t forget the sign bit).</p>
+<p>Wait a minute. How about the negative number? Consider if the x is
+equals to <code>11110101</code>, what is the minimum number of bits to
+represent it? The answer is also 5 bits. In this situation, we need to
+find the position of the most significant 0 instead 1. However, it is
+unnecessary to distinct if the x is negative or positive. Just inverse
+all of the bits in a negative number, so that we can consider it as a
+same way to positive numbers.</p>
+<pre class="language-c line-numbers match-braces"><code>// Inverse negative numbers
+x = (x &gt;&gt; 31) ^ x;</code></pre>
+<p>It seems hard to find a easy way to find the position of the most
+significant 1. So we can fill all of the bits located in the right side
+of the most significant 1 by using the fold technic, so that the problem
+that find the most significant 1 is converted to the problem that count
+the number of bits which is set to 1.</p>
+<pre class="language-c line-numbers match-braces"><code>// Set the bits in the right side of most significant 1 to 1.
+x |= x &gt;&gt; 1;
+x |= x &gt;&gt; 2;
+x |= x &gt;&gt; 4;
+x |= x &gt;&gt; 8;
+x |= x &gt;&gt; 16;</code></pre>
+<p>For a number which represented by 2 bits, it is possible to count the
+number of bits which is set to 1 by using a mask.</p>
+<pre class="language-c line-numbers match-braces"><code>mask = 01b;
+// count the numbers of 1s by adding the two bits.
+x = (x &amp; mask) + ((x &gt;&gt; 1) &amp; mask);</code></pre>
+<p>By using a longer mask, we can count the number of 1s for each 2 bits
+in a number:</p>
+<pre class="language-c line-numbers match-braces"><code>int mask = 0x55555555; // 01010101....
+x = (x &amp; mask) + ((x &gt;&gt; 1) &amp; mask)</code></pre>
+<p>After this, the number can be considered as a list of 2 bits numbers.
+Each 2 bits number in the list saves the number of 1 in those 2 bits.
+For example:</p>
+<pre class="language-bash line-numbers match-braces"><code>x                              = 0x01001110
+mask                           = 0x01010101
+x &amp; mask                       = 0x01000100
+(x &gt;&gt; 1) &amp; mask                = 0x00000101
+(x &amp; mask) + ((x &gt;&gt; 1) &amp; mask) = 0x01001101
+2 bits group of x              = 01 00 11 10
+2 bits group of result         = 01 00 11 01 (numbers of 1s of the 2 bits group of x)</code></pre>
+<p>So we can simply count the 1s for each 4 bits and so far by using a
+similar way, so that we can implement a function to find the minimum
+number of bits required to represent x in two’s component.:</p>
+<pre class="language-c line-numbers match-braces"><code>/* howManyBits - return the minimum number of bits required to represent x in
+ *             two&#39;s complement
+ *  Examples: howManyBits(12) = 5
+ *            howManyBits(298) = 10
+ *            howManyBits(-5) = 4
+ *            howManyBits(0)  = 1
+ *            howManyBits(-1) = 1
+ *            howManyBits(0x80000000) = 32
+ *  Legal ops: ! ~ &amp; ^ | + &lt;&lt; &gt;&gt;
+ *  Max ops: 90
+ *  Rating: 4
+ */
+int howManyBits(int x) {
+  int mask_2bit = 0x55;
+  int mask_4bit = 0x33;
+  int mask_8bit = 0x0f;
+  int mask_16bit = 0xff;
+  int mask_32bit = 0xff;
+
+  // Inverse negative
+  x = (x &gt;&gt; 31) ^ x;
+
+  // Set the bits in the right of most significant 1 to 1.
+  x |= x &gt;&gt; 1;
+  x |= x &gt;&gt; 2;
+  x |= x &gt;&gt; 4;
+  x |= x &gt;&gt; 8;
+  x |= x &gt;&gt; 16;
+
+  // Count 1s
+  // Generate a 2 bit mask 0x55555555(0101....)
+  mask_2bit += mask_2bit &lt;&lt; 8;
+  mask_2bit += mask_2bit &lt;&lt; 16;
+
+  // Group each 2 bits to present the sum of 1s in those bits.
+  x = (x &amp; mask_2bit) + ((x &gt;&gt; 1) &amp; mask_2bit);
+
+  // Generate a 4 bit mask 0x33333333(00110011....)
+  mask_4bit += mask_4bit &lt;&lt; 8;
+  mask_4bit += mask_4bit &lt;&lt; 16;
+
+  // Group each 4 bits to present the sum of 1s in those bits.
+  x = (x &amp; mask_4bit) + ((x &gt;&gt; 2) &amp; mask_4bit);
+
+  // Generate a 8 bit mask 0x0f0f0f0f(0000111100001111....)
+  mask_8bit += mask_8bit &lt;&lt; 8;
+  mask_8bit += mask_8bit &lt;&lt; 16;
+
+  // Group each 8 bits to present the sum of 1s in those bits.
+  x = (x &amp; mask_8bit) + ((x &gt;&gt; 4) &amp; mask_8bit);
+
+  // Generate a 16 bit mask 0x00ff00ff(00000000111111110000000011111111)
+  mask_16bit += mask_16bit &lt;&lt; 16;
+
+  // Group each 16 bits to present the sum of 1s in those bits.
+  x = (x &amp; mask_16bit) + ((x &gt;&gt; 8) &amp; mask_16bit);
+
+  // Generate a 32 bit mask 0x00ff00ff(00000000000000001111111111111111)
+  mask_32bit += mask_32bit &lt;&lt; 8;
+
+  // Group each 32 bits to present the sum of 1s in those bits.
+  x = (x &amp; mask_32bit) + ((x &gt;&gt; 16) &amp; mask_32bit);
+
+  // Minimum bits to present the number should be numbers of 1s + 1.
+  return x + 1;
+}</code></pre>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2024-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+</body>
+</html>
