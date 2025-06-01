@@ -4,7 +4,7 @@ import os
 
 from common import SRC_PATH
 from common import INDEX_PATH
-from common import INDEX_TEMPLATE
+from common import gen_index_template
 from common import src_path
 from common import read_file
 from common import write_file
@@ -37,7 +37,7 @@ def post_html():
     return post_html
 
 def update_index():
-    write_file(INDEX_PATH, ''.join(read_file(INDEX_TEMPLATE)).replace("$posts$", post_html()))
+    write_file(INDEX_PATH, gen_index_template().replace("$posts$", post_html()))
 
 if __name__ == "__main__":
     update_index()

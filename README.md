@@ -6,7 +6,7 @@ This repo is the source code of my personal site (xilong.site).
 
 ### 1. Edit Source Files
 
-To create new posts, just put `.md` files in the `src` folder. 
+To create new posts, just put `.md` files in the `src` folder.
 
 The metadata is surrounded by '---' and it has a structure such as `"key":value` per line.
 

@@ -18,7 +18,7 @@ def preprocess(src_file, target_file):
 
     # Replace programming language options
     contents = ''.join(contents)
-    
+
     pl_template = '``` {.language-%s .line-numbers .match-braces}'
     pl_options = set(re.findall('```.+$', contents, flags=re.MULTILINE))
     for option in pl_options:

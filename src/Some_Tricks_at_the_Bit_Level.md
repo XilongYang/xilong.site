@@ -1,7 +1,7 @@
 ---
 title: Some Tricks at the Bit-level
 author: Xilong Yang
-date: 2024-10-28 
+date: 2024-10-28
 ---
 
 On my journey through Chapter 2 of CSAPP, some magical tricks appeared intermittently. So I am trying to catch them by writing this article.
@@ -125,11 +125,11 @@ int isLessOrEqual(int x, int y) {
 
 Consider that we need to find the minimum number of bits required to represent x in two's component. And all of the operators that allowed to use are: `! ~ & ^ | + << >>`.
 
-First at all, the minimum number of bits is only decided by the position of the most significant 1 in the number's two's component representation. That is, consider we have `x = 00001010`, the most significant 1 is located at the 4th position from the right. So we can represent x by using 5  bits (don't forget the sign bit). 
+First at all, the minimum number of bits is only decided by the position of the most significant 1 in the number's two's component representation. That is, consider we have `x = 00001010`, the most significant 1 is located at the 4th position from the right. So we can represent x by using 5  bits (don't forget the sign bit).
 
 Wait a minute. How about the negative number? Consider if the x is equals to `11110101`, what is the minimum number of bits to represent it? The answer is also 5 bits. In this situation, we need to find the position of the most significant 0 instead 1. However, it is unnecessary to distinct if the x is negative or positive. Just inverse all of the bits in a negative number, so that we can consider it as a same way to positive numbers.
 
-```C 
+```C
 // Inverse negative numbers
 x = (x >> 31) ^ x;
 ```
