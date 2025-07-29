@@ -7,63 +7,63 @@ POST_PATH = ROOT_PATH + '/posts'
 TEMP_PATH = ROOT_PATH + '/temp'
 INDEX_PATH = ROOT_PATH + '/index.html'
 SEARCHDB_PATH = ROOT_PATH + '/searchdb.json'
+
 WEB_ROOT_PATH = ''
-WEB_POST_PATH= WEB_ROOT_PATH + '/posts'
+WEB_POST_PATH = WEB_ROOT_PATH + '/posts'
+
 TEMPLATE_PATH = ROOT_PATH + '/template'
+TEMPLATE_INDEX_PATH = TEMPLATE_PATH + '/index.html'
+TEMPLATE_POST_PATH = TEMPLATE_PATH + '/post.html'
 TEMPLATE_COMPONENT_PATH = TEMPLATE_PATH + '/component'
 TEMPLATE_COMPONENT_PATTERN = '<!--<.*>-->'
 
-def src_path(file_name):
-    return SRC_PATH + '/' + file_name.rstrip('\n') + '.md'
 
-def temp_path(name):
-    return '{}/{}.md'.format(TEMP_PATH, name)
+def abs_path(path, name):
+    isHtml = path in [POST_PATH, WEB_POST_PATH, TEMPLATE_COMPONENT_PATH]
+    ext = '.html' if isHtml else '.md'
+    return os.path.join(path, name + ext)
 
-def post_path(name):
-    return '{}/{}.html'.format(POST_PATH, name)
 
-def read_file(file_path):
-    with open(file_path, 'r') as file:
+def read_file_in_lines(abs_path):
+    with open(abs_path, 'r') as file:
         return file.readlines()
 
-def write_file(file_path, contents):
-    with open(file_path, 'w') as file:
+
+def write_file(abs_path, contents):
+    with open(abs_path, 'w') as file:
         file.write(contents)
 
-def post2link(file_name):
-    return WEB_POST_PATH+ '/' + file_name.rstrip('\n') + '.html'
 
-def parse_meta(src):
+def parse_meta(abs_src_path):
     result = {}
-    parse_on = False
-    contents = read_file(src)
-    for line in contents:
+    lines = read_file_in_lines(abs_src_path)
+
+    is_parsing = False
+    for line in lines:
         clear_line = line.replace('\n', '')
         if clear_line == '---':
-            parse_on = not parse_on
-        elif parse_on:
-            parse = clear_line.split(':', 1)
-            result[parse[0].replace(' ','')] = parse[1]
+            is_parsing = not is_parsing
+        elif is_parsing:
+            kv_pair = clear_line.split(':', 1)
+            key = kv_pair[0].strip()
+            val = kv_pair[1].strip()
+            result[key] = val
     return result
 
+
 def gen_template(path):
-    template = read_file(path)
+    template = read_file_in_lines(path)
     result = ''
     for line in template:
         line = line.strip()
         if re.match(TEMPLATE_COMPONENT_PATTERN, line):
             component_name = line.replace('<!--<', '').replace('>-->', '')
-            component_file = TEMPLATE_COMPONENT_PATH + '/' + component_name + '.html'
-            line = ''.join(read_file(component_file))
+            component_file = abs_path(TEMPLATE_COMPONENT_PATH, component_name)
+            line = ''.join(read_file_in_lines(component_file))
         result += line + '\n'
     return result
 
-def gen_index_template():
-    return gen_template(TEMPLATE_PATH + '/index.html')
 
-def gen_post_template():
-    return gen_template(TEMPLATE_PATH + '/post.html')
+def unique_file_list(path):
+    return list(set([os.path.splitext(f)[0] for f in os.listdir(path)]))
 
-def template_last_modify_time():
-    get_mtimes = lambda path : [os.path.getmtime(path + '/' + f) for f in os.listdir(path) if os.path.isfile(path + '/' + f)]
-    return max(get_mtimes(TEMPLATE_PATH) + get_mtimes(TEMPLATE_COMPONENT_PATH))
