@@ -1,7 +1,7 @@
 ---
 title: Some Tricks at the Bit-level
 author: Xilong Yang
-date: 2024-10-28
+date: 2025-05-28
 ---
 
 On my journey through Chapter 2 of CSAPP, some magical tricks appeared intermittently. So I am trying to catch them by writing this article.

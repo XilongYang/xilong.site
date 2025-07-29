@@ -4,7 +4,7 @@ author: Xilong Yang
 date: 2024-05-14
 ---
 
-The binary representation of the floating numbers was makes me very confused many years ago. Here is a introduction to the standard IEEE 754.
+The binary representation of floating-point numbers confused me greatly many years ago. Here is an introduction to the IEEE 754 standard.
 
 ## Issue
 
