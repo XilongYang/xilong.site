@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>从零开始的Haskell（五）——更多多态与类型类 - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>从零开始的Haskell（五）——更多多态与类型类</h1>
+<p class="author">Xilong Yang<br>2021-09-10</p>
+</div>
+<main>
+<div class="abstract">
+<p>系列第五篇，介绍更强的多态性和类型类。</p>
+<p>Haskell关于多态性的一个广为人知的特点是参数多态，即一个多态函数对任何类型的输入都应该有一个一致的行为。这个特性导致了许多有趣的隐患，对程序开发者和多态函数的使用者皆有影响。</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#参数化">参数化</a></li>
+<li><a href="#类型类">类型类</a></li>
+</ol>
+</div>
+</nav>
+<h2 id="参数化">参数化</h2>
+<p>考虑如下类型：</p>
+<pre class="language-haskell line-numbers match-braces"><code>a -&gt; a -&gt; a</code></pre>
+<p>记住<code>a</code>是一个能代表任何类型的类型变量。哪些函数是这种类型？下面这个函数怎么样？</p>
+<pre class="language-haskell line-numbers match-braces"><code>f :: a -&gt; a -&gt; a
+f x y = x &amp;&amp; y</code></pre>
+<p>这个函数是无法工作的，即使它符合语法。因为无法通过类型检查。我们可以获取以下报错信息：</p>
+<pre class="language-none line-numbers match-braces"><code>• Couldn&#39;t match expected type ‘Bool’ with actual type ‘a’
+  ‘a’ is a rigid type variable bound by
+    the type signature for:
+      f :: forall a. a -&gt; a -&gt; a
+    at test.hs:1:1-12
+• In the first argument of ‘(&amp;&amp;)’, namely ‘x’
+  In the expression: x &amp;&amp; y
+  In an equation for ‘f’: f x y = x &amp;&amp; y</code></pre>
+<p>无法工作的原因是多态函数的调用者可以选择类型，而这个我们——函数的实现者——已经选择了一个特定的类型（Bool），但我们仍可能接收到一个<code>String</code>，或<code>Int</code>甚至是一个用户自定义类型。因此这个函数无法工作，换言之，你可以将类型声明视为一个保证，<code>a-&gt;a-&gt;a</code>保证这个函数无论接收了什么类型的参数都可以正常工作。</p>
+<p>为了处理这种情况，我们或许为想到类似这样的处理方式：</p>
+<pre class="language-none line-numbers match-braces"><code>f a1 a2 = case (typeOf a1) of
+   Int  -&gt; a1 + a2
+   Bool -&gt; a1 &amp;&amp; a2
+   _    -&gt; a1</code></pre>
+<p>这里<code>f</code>为特定类型定义特定的行为，我们可以使用C++实现出一个这样的函数：</p>
+<pre class="language-cpp line-numbers match-braces"><code>#include &lt;type_traits&gt;
+#include &lt;iostream&gt;
+
+using std::is_same;
+using std::cout;
+using std::endl;
+
+template &lt;typename T&gt;
+T f(T a1, T a2) {
+    if (is_same&lt;T, int&gt;::value) {
+        return a1 + a2;
+    } else if (is_same&lt;T, bool&gt;::value) {
+        return a1 &amp;&amp; a2;
+    }
+    return a1;
+}
+
+int main() {
+    cout &lt;&lt; f(2, 3) &lt;&lt; &quot; &quot;;
+    cout &lt;&lt; f(true, false) &lt;&lt; &quot; &quot;;
+    cout &lt;&lt; f(2.1, 3.0) &lt;&lt; endl;
+    return 0;
+}
+
+// 运行结果为： 5 0 2.1</code></pre>
+<p>但这种方式在Haskell中是行不通的，Haskell并没有类似<code>is_same</code>的类型检查函数，这主要是因为Haskell是一种静态强类型语言，在通过编译期类型检查后Haskell就不再保留任何类型信息了。同时我们即将看到一个更好的理由。</p>
+<p>C++与Java中对多态的支持主要是通过泛型提供的，而泛型编程这一思想正是受到Haskell的启发而诞生的。言归正传，什么样的函数可以是<code>a -&gt; a -&gt; a</code>类型的？其实只有两个函数可以：</p>
+<pre class="language-haskell line-numbers match-braces"><code>f1 :: a -&gt; a -&gt; a
+f1 x y = x
+
+f2 :: a -&gt; a -&gt; a
+f2 x y = y</code></pre>
+<p>来做一个参数化游戏！考虑以下的多态类型，确定每种类型可能具有的行为方式。</p>
+<ul>
+<li><p><code>a -&gt; a</code></p>
+<p>这类型的函数仅可能是接受一个参数并返回参数本身的函数。</p></li>
+<li><p><code>a -&gt; b</code></p>
+<p>这类型的函数很难写出来，因为它的含义不是“接受一个任意类型的参数并<strong>任意返回一个类型</strong>的值”，而是“接受一个任意类型的参数并<strong>返回一个任意类型</strong>的值”。也就是说这个返回值必须能被视作任意类型。</p>
+<p>可能只有<code>f _ = undefined</code>与<code>f x = f x</code>符合这个要求。</p></li>
+<li><p><code>a -&gt; b -&gt; a</code></p>
+<p>这个函数可以是一个返回第一个参数并抛弃第二个参数的的函数，如<code>const</code>。</p></li>
+<li><p><code>[a] -&gt; [a]</code></p>
+<p>操作列表但不操作元素的函数皆可，比如<code>f xs = [head xs]</code>。</p></li>
+<li><p><code>(b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</code></p>
+<p><code>f g h = \x -&gt; g(h x)</code>，即<code>.</code>运算符。也就是对函数进行操作，但不对具体类型进行操作即可。</p></li>
+<li><p><code>(a -&gt; a) -&gt; a -&gt; a</code></p>
+<p>由于函数的返回类型和参数类型相同，符合要求的函数可以是一个自已定义自己的函数，如：<code>f = f</code>。</p></li>
+</ul>
+<p>经过这几个例子的思考，你可能会发现，想要实现多态性，就不要对元素进行任何操作。因为你要接受一个任意类型的参数，而无论什么操作，总会有不支持的类型。这并不只是一个约束，同时是一个非常强大的保护。这样严格的类型系统使得函数的使用者可以更放心的调用函数，同时也使得一个函数的类型说明包含了足够大致了解一个函数的信息。</p>
+<p>比如你看到一个<code>a -&gt; a</code>类型的函数就可以肯定这个函数接受任意接收一个类型的值并返回一个同类型的值，而无需担心其它影响。而一个函数签名为<code>T func(T)</code>的C++函数则无法提供如此担保，你可能会担心这个函数对全局状态产生影响，或是传入的类型不对导致程序崩溃。</p>
+<p>等等，既然如此，<code>+</code>是怎么实现的？对<code>Integer</code>的加法和对<code>Double</code>的加法完全是两回事，难道不需要判断类型吗？事实上确实不需要判断类型，但也并非什么魔法，看一下<code>+</code>的定义：</p>
+<pre class="language-haskell line-numbers match-braces"><code>(+) :: Num a =&gt; a -&gt; a -&gt; a</code></pre>
+<p>又见<code>=&gt;</code>，还有前面看起来像一个ADT的奇怪符号<code>Num a</code>。还有其它几个函数：</p>
+<pre class="language-haskell line-numbers match-braces"><code>(==) :: Eq a   =&gt; a -&gt; a -&gt; Bool
+(&lt;)  :: Ord a  =&gt; a -&gt; a -&gt; Bool
+show :: Show a =&gt; a -&gt; String</code></pre>
+<p>所以这些符号是什么意思？</p>
+<h2 id="类型类">类型类</h2>
+<p>揭晓答案的时候到了，<code>Num</code>、<code>Eq</code>、<code>Ord</code>和<code>Show</code>都是类型类，并且使用了类型类的函数称为“类型类多态”。类型类是对函数接受的类型的约束，它表示定义了指定操作的类型的集合。同时类型类多态函数仅为符合类型类定义的类型工作。</p>
+<p>通俗点说，C++等语言中的函数无论什么参数都得先请进来看看，不合适再请出去，或者一个想不开就崩溃了。而Haskell的函数做为一等公民比较霸道，可以事先对参数类型作一个要求，并且让那些达不到要求的参数爬。这个要求就是类型类，例如<code>Eq</code>的定义如下：</p>
+<pre class="language-haskell line-numbers match-braces"><code>class Eq a where
+  (==) :: a -&gt; a -&gt; Bool
+  (/=) :: a -&gt; a -&gt; Bool</code></pre>
+<p>这个定义可以这么理解：一个接受一个参数的类型类<code>Eq</code>，符合<code>Eq</code>要求的类型必须定义两个操作：<code>==</code>和<code>/=</code>。比如要使<code>Int</code>成为<code>Eq</code>的实例，就必须定义函数<code>(==) :: Int -&gt; Int -&gt; Bool</code>和<code>(/=) :: Int -&gt; Int -&gt; Bool</code>。再看看<code>(==)</code>的定义：</p>
+<pre class="language-haskell line-numbers match-braces"><code>(==) :: Eq a =&gt; a -&gt; a -&gt; Bool</code></pre>
+<p>这个定义理解为：一个类型如果是<code>Eq</code>的实例，那么对两个参数进行比较并返回比较结果，如果参数不是<code>Eq</code>的实例则解释期报错。一个普通多态函数保证对任何类型生效，而一个类型类多态函数仅保证对类型类实例类生效。</p>
+<p>需要注意的是，当调用<code>(==)</code>时，编译器根据类型选择使用哪个实例。这个机制与C++中的多态比较类似，即根据类型选择合适的实例。</p>
+<p>为了更好的掌握类型类的概念，我们来构建一个ADT并使其成为<code>Eq</code>的实例。</p>
+<pre class="language-haskell line-numbers match-braces"><code>data Foo = F Int | G Char
+
+instance Eq Foo where
+  (F i1) == (F i2) = i1 == i2
+  (G c1) == (G c2) = c1 == c2
+  _ == _ = False
+
+  foo1 /= foo2 = not (foo1 == foo2)</code></pre>
+<p>定义了<code>==</code>还要定义<code>/=</code>。我们可以修改一下<code>Eq</code>的定义，来为<code>/=</code>定义一个默认实现模式。</p>
+<pre class="language-haskell line-numbers match-braces"><code>class Eq a where
+  (==) :: a -&gt; a -&gt; Bool
+  (/=) :: a -&gt; a -&gt; Bool
+  x /= y = not (x == y)</code></pre>
+<p>这样就可以仅定义<code>==</code>，由默认实现模式去生成<code>/=</code>的定义。实际上<code>Eq</code>的定义如下：</p>
+<pre class="language-haskell line-numbers match-braces"><code>class Eq a where
+  (==), (/=) :: a -&gt; a -&gt; Bool
+  x == y = not (x /= y)
+  x /= y = x == y</code></pre>
+<p>这个定义可以使我们只用定义<code>==</code>与<code>/=</code>中的任意一个，但要小心，如果我们一个也没定义就会导致一个无限循环。</p>
+<p>对于<code>Eq</code>与其它几个比较特殊的类型类，GHC可以为我们自动生成它们的实例，就像我们之前使用过的那样：</p>
+<pre class="language-haskell line-numbers match-braces"><code>data Foo&#39; = F&#39; Int | G&#39; Char
+  deriving (Eq, Ord, Show)</code></pre>
+<h3 id="类型类与面向对象接口">类型类与面向对象接口</h3>
+<p>类型类可能看起来与面向对象语言中的接口比较相似，但它更为强大，体现在：</p>
+<ol type="1">
+<li><p>接口的实例类一但定义就必须实现所有接口，而类型类可以被每个类型自由组合。</p></li>
+<li><p>类型类在处理多类型时更为强大，目前Java没有简单的方法可以做到：</p>
+<pre class="language-haskell line-numbers match-braces"><code>class Blerg a b where
+  blerg :: a -&gt; b -&gt; Bool</code></pre></li>
+<li><p>并且类型类可以更方便的处理多元运算，如：</p>
+<pre class="language-haskell line-numbers match-braces"><code>class Num a where
+  (+) :: a -&gt; a -&gt; a</code></pre>
+<p>而在Java或C++中，对多元运算符的重载总是以某一个类型为主，比较尴尬。</p></li>
+</ol>
+<h3 id="其它标准类型类">其它标准类型类</h3>
+<p><code>Ord</code>：确保类型可以被完全排序，在C++中的常见做法是实现<code>&lt;</code>运算符。</p>
+<p><code>Num</code>：数字类型，使得类型可以进行加减法等运算。一个非常重要的事情是，数字常量也是类型类多态：</p>
+<pre class="language-haskell line-numbers match-braces"><code>Prelude&gt; :t 5
+5 :: Num a =&gt; a</code></pre>
+<p>这意味着5可以被用作任何数字类型，包括自己定义的类型。</p>
+<p><code>Show</code>：定义模式show，将值转换为<code>String</code>类型。</p>
+<p><code>Read</code>：<code>Show</code>的逆运算。</p>
+<p><code>Integal</code>：表示整数类型，如<code>Int</code>和<code>Integer</code>。</p>
+<h3 id="类型类实例">类型类实例</h3>
+<p>这一节我们来定义一个自己的类型类，如下：</p>
+<pre class="language-haskell line-numbers match-braces"><code>class Listable a where
+  toList :: a -&gt; [Int]</code></pre>
+<p><code>Listable</code>类型类表示可以转换为<code>Int</code>列表的类型。首先，<code>Int</code>和<code>Bool</code>都可以简单的转换为一个只有一个元素的列表：</p>
+<pre class="language-haskell line-numbers match-braces"><code>instance Listable Int where
+  toList x = [x]
+
+instance Listable Bool where
+  toList True = [1]
+  toList False = [0]</code></pre>
+<p>我们无需对<code>[Int]</code>类型进行转换：</p>
+<pre class="language-haskell line-numbers match-braces"><code>instance Listable [Int] where
+  toList = id</code></pre>
+<p>最后，我们也可以将一个自定义类型转换为<code>[Int]</code>列表：</p>
+<pre class="language-haskell line-numbers match-braces"><code>data Tree a = Empty | Node a (Tree a) (Tree a)
+
+instance Listable (Tree Int) where
+  toList Empty = []
+  toList (Node x l r) = toList l ++ [x] ++ toList r</code></pre>
+<p>我们可以使用<code>Listable</code>的特性定义其它函数，如：</p>
+<pre class="language-haskell line-numbers match-braces"><code>sumL :: Listable a =&gt; a -&gt; Int
+sumL x = sum (toList x)</code></pre>
+<p><code>sumL</code>只为<code>Listable</code>类型工作，那么下面的函数呢？</p>
+<pre class="language-haskell line-numbers match-braces"><code>foo x y = sum (toList x) == sum (toList y) || x &lt; y</code></pre>
+<p><code>foo</code>的类型为：</p>
+<pre class="language-haskell line-numbers match-braces"><code>foo :: (Listable a, Ord a) =&gt; a -&gt; a -&gt; Bool</code></pre>
+<p>即它的参数类型必须同时是<code>Listable</code>和<code>Ord</code>的实例。</p>
+<p>最后，来看一个复杂点的实例：</p>
+<pre class="language-haskell line-numbers match-braces"><code>instance (Listable a, Listable b) =&gt; Listable (a, b) where
+  toList (x, y) = toList x ++ toList y</code></pre>
+<p>只要类型变量在函数定义中，我们就可以为它指定类型类。注意，这个函数并不是递归函数，调用的<code>toList x</code>与<code>toList y</code>是其它类型的实例，而不是该函数本身。</p>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+</body>
+</html>

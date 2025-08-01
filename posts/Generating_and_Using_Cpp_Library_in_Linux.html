@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Linux平台下C++库的生成与使用 - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>Linux平台下C++库的生成与使用</h1>
+<p class="author">Xilong Yang<br>2020-06-07</p>
+</div>
+<main>
+<div class="abstract">
+<p>学习C++也有一段时间了，却一直不太了解库相关的知识，今天得空学习了一些基础用法，在此记录。</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#什么是库">什么是库</a><ol><li><a href="#编译连接从源码到程序">编译连接：从源码到程序</a></li>
+<li><a href="#库目标文件的打包">库：目标文件的打包</a></li>
+</ol>
+</li>
+<li><a href="#静态库的生成与使用">静态库的生成与使用</a><ol><li><a href="#编写静态库源码并生成目标代码">编写静态库源码并生成目标代码</a></li>
+<li><a href="#将目标代码打包成库文件">将目标代码打包成库文件</a></li>
+<li><a href="#为使用者提供接口">为使用者提供接口</a></li>
+<li><a href="#使用静态库">使用静态库</a></li>
+</ol>
+</li>
+<li><a href="#动态库的生成与使用">动态库的生成与使用</a><ol><li><a href="#编写动态库源码并生成目标代码">编写动态库源码并生成目标代码</a></li>
+<li><a href="#制作动态库">制作动态库</a></li>
+<li><a href="#为使用者提供接口-1">为使用者提供接口</a></li>
+<li><a href="#使用动态库">使用动态库</a></li>
+</ol>
+</li>
+<li><a href="#总结">总结</a></li>
+</ol>
+</div>
+</nav>
+<h2 id="什么是库">什么是库</h2>
+<h3 id="编译连接从源码到程序">编译连接：从源码到程序</h3>
+<figure>
+<img
+src="../res/post-imgs/Generating_and_Using_Cpp_Library_in_Linux/compile.png"
+alt="compile" />
+<figcaption aria-hidden="true">compile</figcaption>
+</figure>
+<p>上图展示了C++程序的生成过程。可以看到库文件和目标代码一起被处理，可见库文件与目标代码之间应该具有某种联系。</p>
+<h3 id="库目标文件的打包">库：目标文件的打包</h3>
+<p>事实上，库文件就是将一些目标文件打包而成的文件。这些文件往往与作为接口的头文件一起提供给程序使用。程序在使用库文件时不需要对文件中实现的内容进行重复编译，可以提高开发效率。</p>
+<p>库又分为静态库与动态库。</p>
+<h4 id="静态库">静态库</h4>
+<p>静态库在Linix系统中通常以.a作为后缀，而在Windows中以.lib作为后缀。</p>
+<p>静态库在链接过程中将自身拷贝到最终的可执行文件中，因此可执行文件运行时并不需要该库参与。即使用静态库生成的文件是独立的，并不依赖于它所使用的静态库。这无疑为软件的分发提供了很大的方便。</p>
+<p>另一方面，这样的使用方式令生成程序所需时间大大增加，同时大幅增加了可执行文件的体积。且每当库发生改动时就要重新生成整个程序。不利于开发。</p>
+<h4 id="动态库">动态库</h4>
+<p>动态库在Linux系统中通常以.so作为后缀，在Windows中以.dll作为后缀。</p>
+<p>动态库在链接过程中不把自身拷贝到可执行文件中，而是写入一些重定位和符号表信息。这样生成的可执行文件运行时必需要有库的存在，否则无法运行。这给分发软件造成了一些目标机器环境配置的麻烦。</p>
+<p>然而，动态库大大缩减了链接所需时间和可执行程序的体积，在接口没有改动时即使改动了库文件也无需重新生成可执行文件，实现了增量修改。给开发带来了很大的便利。</p>
+<h4 id="小结">小结</h4>
+<ol type="1">
+<li>静态链接的可执行文件可以独立运行，而动态链接不可以。</li>
+<li>静态链接的可执行文件体积通常大于动态链接。</li>
+<li>静态链接的链接速度小于动态链接</li>
+<li>静态链接的可执行文件运行效率略高于动态链接</li>
+<li>库文件发生改动时，静态链接生成的可执行文件必需重新生成，而动态链接不用。</li>
+</ol>
+<h2 id="静态库的生成与使用">静态库的生成与使用</h2>
+<h3 id="编写静态库源码并生成目标代码">编写静态库源码并生成目标代码</h3>
+<p>创建静态库文件夹static，并新建静态库源代码./static/test.cc</p>
+<pre class="language-cpp line-numbers match-braces"><code>// ./static/test.cc
+#include &lt;iostream&gt;
+void Say_Hello()
+{
+    std::cout &lt;&lt; &quot;Hello Static Library!&quot; &lt;&lt; std::endl;
+}</code></pre>
+<p>编译源码，生成目标文件test.o</p>
+<pre class="language-bash line-numbers match-braces"><code>g++ -c ./static/test.cpp -o ./static/test.o</code></pre>
+<h3 id="将目标代码打包成库文件">将目标代码打包成库文件</h3>
+<pre class="language-bash line-numbers match-braces"><code># 库通常以libxxx.a命名
+ar -rcs ./static/libtest.a ./static/test.o</code></pre>
+<h3 id="为使用者提供接口">为使用者提供接口</h3>
+<pre class="language-cpp line-numbers match-braces"><code>// ./static/test.h
+void Say_Hello();</code></pre>
+<h3 id="使用静态库">使用静态库</h3>
+<p>创建main.cc</p>
+<pre class="language-cpp line-numbers match-braces"><code>// ./main.cc
+#include &quot;./static/test.h&quot;
+int main()
+{
+    Say_Hello();
+    return 0;
+}</code></pre>
+<p>生成并运行可执行文件</p>
+<pre class="language-bash line-numbers match-braces"><code># -L指定库所在路径，-l指定库名称无需lib与后缀
+g++ -o main main.cc -L./static -ltest
+./main</code></pre>
+<p>运行结果</p>
+<pre class="language-none line-numbers match-braces"><code>Hello Static Library!</code></pre>
+<h2 id="动态库的生成与使用">动态库的生成与使用</h2>
+<h3 id="编写动态库源码并生成目标代码">编写动态库源码并生成目标代码</h3>
+<p>创建静态库文件夹dynamic，并新建静态库源代码./dynamic/test.cc</p>
+<pre class="language-cpp line-numbers match-braces"><code>// ./dynamic/test.cc
+#include &lt;iostream&gt;
+void Say_Hello()
+{
+    std::cout &lt;&lt; &quot;Hello Dynamic Library!&quot; &lt;&lt; std::endl;
+}</code></pre>
+<h3 id="制作动态库">制作动态库</h3>
+<pre class="language-bash line-numbers match-braces"><code># 动态库通常以libxxx.so命名
+g++ ./dynamic/test.cc -fPIC -shared -o libtest.so</code></pre>
+<h3 id="为使用者提供接口-1">为使用者提供接口</h3>
+<pre class="language-cpp line-numbers match-braces"><code>// ./dynamic/test.h
+void Say_Hello();</code></pre>
+<h3 id="使用动态库">使用动态库</h3>
+<p>创建main.cc</p>
+<pre class="language-cpp line-numbers match-braces"><code>// ./main.cc
+#include &quot;./dynamic/test.h&quot;
+int main()
+{
+    Say_Hello();
+    return 0;
+}</code></pre>
+<p>生成并运行可执行文件</p>
+<pre class="language-bash line-numbers match-braces"><code># -L指定库所在路径，-l指定库名称
+g++ -o main main.cc -L./dynamic -ltest
+./main</code></pre>
+<p>运行结果</p>
+<pre class="language-none line-numbers match-braces"><code>./main: error while loading shared libraries: libtest.so: cannot open shared object file: No such file or directory</code></pre>
+<p>找不到<code>libtest.so</code>，这是因为linux是通过<code>/etc/ld.so.config</code>文件中的路径搜寻动态库的。解决方法：</p>
+<ol type="1">
+<li>把<code>libtest.so</code>所在的路径添加进<code>/etc/ld.so.config</code>，再运行<code>idconfig</code>更新目录，程序就可以正常运行了。</li>
+<li>把<code>libtest.so</code>复制到<code>/usr/lib</code>，再运行程序。</li>
+<li>改变坏境变量<code>export LD_LIBRARY_PATH=./dynamic</code>，再运行程序。</li>
+</ol>
+<p>由于这个程序仅作实验用，故不推荐用前两种方式改动系统设置。此处用方法3:</p>
+<pre class="language-bash line-numbers match-braces"><code>export LD_LIBRARY_PATH=./dynamic
+./main</code></pre>
+<p>运行结果</p>
+<pre class="language-none line-numbers match-braces"><code>Hello Dynamic Library!</code></pre>
+<h2 id="总结">总结</h2>
+<p>库是将源码打包而形成的，以链接进其它程序的方式进行使用的文件形式。分为静态库和动态库。静态库具有链接慢，空间成本高，不易更新的缺点，优点是能够生成独立的可执行文件。动态库易于更新扩展，链接快，空间成本低，但生成的文件必需依赖库运行。</p>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+</body>
+</html>

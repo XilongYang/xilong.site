@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>红黑树概念解析与C++实现 - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>红黑树概念解析与C++实现</h1>
+<p class="author">Xilong Yang<br>2021-09-23</p>
+</div>
+<main>
+<div class="abstract">
+<p>整理了红黑树的性质与基本操作的C++实现</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#基本概念">基本概念</a></li>
+<li><a href="#存储结构">存储结构</a></li>
+<li><a href="#基本操作旋转">基本操作：旋转</a><ol><li><a href="#概念">概念</a></li>
+<li><a href="#实现">实现</a></li>
+</ol>
+</li>
+<li><a href="#基本操作插入">基本操作：插入</a><ol><li><a href="#情况一叔节点是红色">情况一：叔节点是红色</a></li>
+</ol>
+</li>
+<li><a href="#基本操作删除">基本操作：删除</a><ol><li><a href="#情况1x的兄弟节点m为红色">情况1：x的兄弟节点m为红色</a></li>
+</ol>
+</li>
+<li><a href="#总结">总结</a></li>
+</ol>
+</div>
+</nav>
+<h2 id="基本概念">基本概念</h2>
+<p>红黑树（Red Black Tree，简称R-B
+Tree）是一种特殊的二叉查找树([[二叉树的存储结构及其非层序遍历|二叉树]])。它的特殊性体现在：</p>
+<ol type="1">
+<li>每个节点都有颜色，可以是红色或黑色。</li>
+<li>根节点是黑色。</li>
+<li>每个叶子节点（NULL）是黑色。尤其注意这里的结子节点指的是NULL。</li>
+<li>红色节点的子节点必为黑色。</li>
+<li>任一结点到其所有后代叶节点的路径中具有相同数目的黑色节点。</li>
+</ol>
+<p><em>特性5保证了任一路径不会超过最短路径的两倍，因而红黑树是接近平衡的二叉树。</em></p>
+<h2 id="存储结构">存储结构</h2>
+<p>一个红黑树节点可以使用三叉链表的形式实现为：</p>
+<pre class="language-cpp line-numbers match-braces"><code>struct R_BNode {
+    enum COLOR {BLACK = 0, RED = 1};
+
+    explicit R_BNode(int data = 0, R_BNode::COLOR color = RED)
+        : left_(Nil), right_(Nil), parent_(Nil)
+        , color_(color), data_(data)  {}
+
+    R_BNode *left_;
+    R_BNode *right_;
+    R_BNode *parent_;
+    COLOR color_;
+    int data_;
+
+    static R_BNode *Nil;
+};
+
+R_BNode *R_BNode::Nil = new R_BNode(0, R_BNode::BLACK);</code></pre>
+<p>这里为简化问题将data定为int类型，这并不会影响对红黑树的研究。如有需要可以使用类模板或<code>void*</code>等方式来实现泛型的红黑树。</p>
+<p>定义红黑树类型为指向红黑树节点的指针。并创建一个静态变量<code>Nil</code>作为所有叶子节点的指代，这样做就可以把本不存在的叶子节点视为普通节点来处理了。</p>
+<p>红黑树可以实现如下：</p>
+<pre class="language-cpp line-numbers match-braces"><code>struct R_BTree {
+    explicit R_BTree() : root_(R_BNODE::Nil) {}
+
+    R_BNode *root_;
+};</code></pre>
+<h2 id="基本操作旋转">基本操作：旋转</h2>
+<h3 id="概念">概念</h3>
+<p>当修改红黑树上的节点时，可能会破坏树的性质，使得树不再是红黑树。此时需要调整一些节点的颜色与指针结构，使树重新成为红黑树。</p>
+<p>其中对指针结构的调整就需要借助旋转操作，这是一种能保持二叉搜索树性质的局部操作。旋转分为左旋与右旋，下面以左旋为例介绍旋转操作：</p>
+<p>任一右孩子不为Nil的结点x都可进行左旋操作，设其右孩子是y，则左旋后：</p>
+<ol type="1">
+<li>y成为子树新的根节点。</li>
+<li>x在新子树中成为y的左孩子。</li>
+<li>上述变化后，x的右孩子变成双亲了，空出一个位置，而y原来的左孩子无家可归，由此让y原来的左孩子成为x新的右孩子。</li>
+</ol>
+<p>而右旋是左旋的镜像操作。两种旋转如下图所示：</p>
+<figure>
+<img
+src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/rotate.png"
+alt="rotate" />
+<figcaption aria-hidden="true">rotate</figcaption>
+</figure>
+<h3 id="实现">实现</h3>
+<pre class="language-cpp line-numbers match-braces"><code>// 仅给出实现，声明可以自行添加到对应的类中
+void R_BTree::LeftRotate(R_BNode *x) {
+    if (x-&gt;right_ == R_BNode::Nil) throw &quot;Error while left rotate&quot;;
+
+    auto y = x-&gt;right_;
+    x-&gt;right_ = y-&gt;left_;
+    if (y-&gt;left_ != R_BNode::Nil) {
+        y-&gt;left_-&gt;parent_ = x;
+    }
+
+    y-&gt;parent_ = x-&gt;parent_;
+    if (x-&gt;parent_ == R_BNode::Nil) {
+        root_ = y;
+    } else if (x == x-&gt;parent_-&gt;left_) {
+        x-&gt;parent_-&gt;left_ = y;
+    } else {
+        x-&gt;parent_-&gt;right_ = y;
+    }
+
+    y-&gt;left_ = x;
+    x-&gt;parent_ = y;
+}
+
+void R_BTree::RightRotate(R_BNode *x) {
+    if (x-&gt;left_ == R_BNode::Nil) throw &quot;Error while right rotate&quot;;
+
+    auto y = x-&gt;left_;
+    x-&gt;left_ = y-&gt;right_;
+    if (y-&gt;right_ != R_BNode::Nil) {
+        y-&gt;right_-&gt;parent_ = x;
+    }
+
+    y-&gt;parent_ = x-&gt;parent_;
+    if (x-&gt;parent_ == R_BNode::Nil) {
+        root_ = y;
+    } else if (x == x-&gt;parent_-&gt;left_) {
+        x-&gt;parent_-&gt;left_ = y;
+    } else {
+        x-&gt;parent_-&gt;right_ = y;
+    }
+
+    y-&gt;right_ = x;
+    x-&gt;parent_ = y;
+}</code></pre>
+<h2 id="基本操作插入">基本操作：插入</h2>
+<p>红黑树是一种特殊的二叉查找树，因此插入节点时先按照二叉查找树的方法进行插入：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::Insert(int value) {
+    auto y = R_BNode::Nil;
+    auto x = root_;
+    auto z = new R_BNode(value, R_BNode::RED);
+    while (x != R_BNode::Nil) {
+        y = x;
+        if (value &lt; x-&gt;data_) {
+            x = x-&gt;left_;
+        } else {
+            x = x-&gt;right_;
+        }
+    }
+    z-&gt;parent_ = y;
+    if (y = R_BNode::Nil) {
+        root_ = z;
+    } else if (z-&gt;data_ &lt; y-&gt;data_) {
+        y-&gt;left_ = z;
+    } else {
+        y-&gt;right_ = z;
+    }
+    InsertFixup(z);
+}</code></pre>
+<p>这样一来我们可能破坏了树的结构，因此，我们寄希望于最后调用的<code>InsertFixup</code>函数。</p>
+<p>如何实现<code>InsertFixup</code>函数呢？这就得慢慢分析：</p>
+<blockquote>
+<p>规则1：节点有颜色，且是红色或黑色。</p>
+<p>规则3：叶子节点是黑色节点。</p>
+</blockquote>
+<p>这两条显然是不会违反的。</p>
+<blockquote>
+<p>规则5：任一结点到其所有后代叶节点的路径中具有相同数目的黑色节点。</p>
+</blockquote>
+<p>这就是我们插入的节点总是红色的原因，插入红色的结点并不影响树中原有路径中的黑色节点数目。因此不会违反规则5。</p>
+<blockquote>
+<p>规则2：根节点是黑色节点。</p>
+</blockquote>
+<p>当我们插入的节点作为根节点时，就违反了规则2。此时只要改变节点的颜色就可以修复红黑树。此时可以实现出：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::InsertFixup(R_BNode *z) {
+    ...
+    root_-&gt;color = R_BNode::BLACK;
+}</code></pre>
+<blockquote>
+<p>规则4：红色节点的孩子一定是黑色节点。</p>
+</blockquote>
+<p>当插入节点的父节点是红色时，违反规则4。总共存在三种可能的情况：</p>
+<h3 id="情况一叔节点是红色">情况一：叔节点是红色</h3>
+<p>此时将叔节点与父节点都设为黑色，并把祖父节点设为红色。然后对祖父节点使用<code>InsertFixup</code>函数即可。因为对祖父节点的任何子孙节点，都必然途径祖父节点，以及父节点、叔节点中的一个。将父节点与叔节点都设成黑色等于所有路径的黑色节点数加一，而将祖父节点设为红色等于所有路径的黑色节点数减一。因此不会违反规则5。同时这样将规则4的违反提升到了更高的层次去处理，这样至多处理log(h)（h为树高）次。</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::InsertFixup(R_BNode *z) {
+    while (z-&gt;parent-&gt;color == R_BNode::RED) {
+        if (z-&gt;parent_ = z-&gt;parent_-&gt;parent_-&gt;left_) {
+            auto y = z-&gt;parent_-&gt;parent_-&gt;right_;
+            // case 1
+            if (y-&gt;color_ = R_BNode::RED) {
+                z-&gt;parent_-&gt;color_ == R_BNode::BLACK;
+                y-&gt;color_ = R_BNode::BLACK;
+                z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
+                z = z-&gt;parent_-&gt;parent_;
+                continue;
+            }
+            ...
+        } else {
+            auto y = z-&gt;parent_-&gt;parent_-&gt;left_;
+            // case 1
+            if (y-&gt;color_ = R_BNode::RED) {
+                z-&gt;parent_-&gt;color_ == R_BNode::BLACK;
+                y-&gt;color_ = R_BNode::BLACK;
+                z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
+                z = z-&gt;parent_-&gt;parent_;
+                continue;
+            }
+            ...
+        }
+    }
+    root_-&gt;color = R_BNode::BLACK;
+}</code></pre>
+<h3
+id="情况二叔节点是黑色且z与父节点异侧">情况二：叔节点是黑色，且z与父节点异侧</h3>
+<p>所谓同侧，就是说z相对于父节点的方向和父节点相对于祖父节点的方向相同。如都是左孩子或都是右孩子。异侧则反之。</p>
+<p>此时可以通过对父节点的一次旋转将情况二转化为情况三。</p>
+<h3
+id="情况三叔节点是黑色且z与父节点同侧">情况三：叔节点是黑色，且z与父节点同侧</h3>
+<p>此时对祖父节点进行一次与情况二反向的旋转即可修复红黑树。</p>
+<p>以一个不同侧且父节点为左孩子的情况为例：</p>
+<figure>
+<img
+src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/insert.png"
+alt="insert" />
+<figcaption aria-hidden="true">insert</figcaption>
+</figure>
+<p>如上图，对c而言，叔节点是Nil，为黑色。且c是b的右孩子，而b是a的左孩子，因此c与父节点不同侧，即为情况2。</p>
+<p>此时要想使bc同侧，只需对b进行左旋，并将b当做插入节点重新考虑。显然一次左旋过后，b的叔节点为Nil，为黑色。且与父节点c同侧。即为情况3。</p>
+<p>此时只需交换父节点与祖父节点的颜色，并对祖父节点进行右旋，即可完成对红黑树的修复。</p>
+<p><strong>注意：上述旋转方向是父节点为左孩子时的情况，对于父节点为右孩子的情况，需要进行镜像操作，即左右互换。</strong></p>
+<p>最终实现为：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::InsertFixup(R_BNode *z) {
+    while (z-&gt;parent_-&gt;color_ == R_BNode::RED) {
+        if (z-&gt;parent_ == z-&gt;parent_-&gt;parent_-&gt;left_) {
+            auto y = z-&gt;parent_-&gt;parent_-&gt;right_;
+            // case 1
+            if (y-&gt;color_ == R_BNode::RED) {
+                z-&gt;parent_-&gt;color_ = R_BNode::BLACK;
+                y-&gt;color_ = R_BNode::BLACK;
+                z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
+                z = z-&gt;parent_-&gt;parent_;
+                continue;
+            } else if (z == z-&gt;parent_-&gt;right_) {
+                //case 2
+                z = z-&gt;parent_;
+                LeftRotate(z);
+            }
+            // case 3
+            z-&gt;parent_-&gt;color_ = R_BNode::BLACK;
+            z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
+            RightRotate(z-&gt;parent_-&gt;parent_);
+        } else {
+            auto y = z-&gt;parent_-&gt;parent_-&gt;left_;
+            // case 1
+            if (y-&gt;color_ == R_BNode::RED) {
+                z-&gt;parent_-&gt;color_ = R_BNode::BLACK;
+                y-&gt;color_ = R_BNode::BLACK;
+                z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
+                z = z-&gt;parent_-&gt;parent_;
+                continue;
+            } else if (z == z-&gt;parent_-&gt;left_) {
+                //case 2
+                z = z-&gt;parent_;
+                RightRotate(z);
+            }
+            // case 3
+            z-&gt;parent_-&gt;color_ = R_BNode::BLACK;
+            z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
+            LeftRotate(z-&gt;parent_-&gt;parent_);
+        }
+    }
+    root_-&gt;color_ = R_BNode::BLACK;
+}</code></pre>
+<h2 id="基本操作删除">基本操作：删除</h2>
+<p>要删除一个节点，首先要定义一个辅助操作，用以使用一个节点去替换另一个节点的位置。</p>
+<pre class="language-cpp line-numbers match-braces"><code>// 使用v去替换u
+void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
+    if (u-&gt;parent_ == R_BNode::Nil) {
+        root_ = v;
+    } else if (u == u-&gt;parent_-&gt;left_) {
+        u-&gt;parent_-&gt;left_ = v;
+    } else {
+        u-&gt;parent_-&gt;right_ = v;
+    }
+    v-&gt;parent_ = u-&gt;parent_;
+}</code></pre>
+<p>删除一个节点的操作与二叉搜索树相似，当目标节点只有两个以下孩子时，使用它的孩子替换它自身。当目标节点存在两个孩子时则比较麻烦，需要找出目标节点的后继，并使用这个后继替换自身。</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::Delete(R_BNode *z) {
+    auto y = z;
+    auto y_origin_color = z-&gt;color_;
+    R_BNode *x = nullptr;
+    if (z-&gt;left_ == R_BNode::Nil) {
+        x = z-&gt;right_;
+        Transplant(z, z-&gt;right_);
+    } else if (z-&gt;right_ == R_BNode::Nil) {
+        x = z-&gt;left_;
+        Transplant(z, z-&gt;left_);
+    } else {
+        y = z-&gt;right_;
+        while (y-&gt;left_ != R_BNode::Nil) {
+            y = y-&gt;left_;
+        }
+        y_origin_color = y-&gt;color_;
+        x = y-&gt;right_;
+        if (y-&gt;parent_ != z) {
+            Transplant(y, y-&gt;right_);
+            y-&gt;right_ = z-&gt;right_;
+            y-&gt;right_-&gt;parent_ = y;
+        }
+        Transplant(z, y);
+        y-&gt;left_ = z-&gt;left_;
+        y-&gt;left_-&gt;parent_ = y;
+        y-&gt;color_ = z-&gt;color_;
+    }
+    if (y_origin_color == R_BNode::BLACK) {
+        DeleteFixup(x);
+    }
+}</code></pre>
+<p>这段程序中，y用来标记删除或移动的节点。x用来标记y在移动或删除之前的位置。如果y是红色节点，那么移动或删除y并不会破坏红黑树的性质。因为：</p>
+<ol type="1">
+<li>树的黑高（只计算黑色节点时的高度）没有改变。</li>
+<li>y移动到z的位置并继承了z的颜色，而z的位置与颜色在删除操作前是合法的，因此y不会改变该位置合法性。</li>
+<li>如果y为红色，则y不是根结点，因此根结点仍为黑色。</li>
+</ol>
+<p>现在考虑对破坏的修复，如果y黑色，将导致3个问题：</p>
+<ol type="1">
+<li>如果y是原来的节结点，而继承它位置的节点是红色，则违反了性质2。</li>
+<li>如果x和x.p是红色的，则违反了性质4。</li>
+<li>移动y导致先前树中所有包含y的简单路径中黑色节点的数目减一，导致了所有y的祖先节点都不符合性质5。</li>
+</ol>
+<p>解决办法是将占有了y原来位置的节点x视为还有一层额外的黑色，这使得性质5成立，但因为现在的x要么是红黑色（颜色属性为红）要么是双重黑色（颜色属性为黑），又违反了性质1。注意这里所说的额外黑色是针对x节点的，并不反应在节点的颜色属性上。</p>
+<p>对于x，如果：</p>
+<ol type="1">
+<li>x是红黑色，则可以将x着为黑色。</li>
+<li>x是根结点，则可以简单的消去一层黑色，什么也不做。</li>
+</ol>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::DeleteFixup(R_BNode *x) {
+    if(x == root_ || x-&gt;color_ == R_BNode::RED) {
+        x-&gt;color_ = R_BNode::BLACK;
+        return;
+    }
+}</code></pre>
+<p>此时要修复红黑树，需要分成4种情况：</p>
+<h3 id="情况1x的兄弟节点m为红色">情况1：x的兄弟节点m为红色</h3>
+<p>此时由于m的两个子节点都为黑色，可以改变m和父节点的颜色，然后对父节点进行一次旋转。并令x的新兄弟节点为新的m，这样情况就转移到了2、3或4。</p>
+<figure>
+<img
+src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete1.png"
+alt="delete1" />
+<figcaption aria-hidden="true">delete1</figcaption>
+</figure>
+<p>此时可以实现为：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::DeleteFixup(R_BNode *x) {
+    if(x == root_ || x-&gt;color_ == R_BNode::RED) {
+        x-&gt;color_ = R_BNode::BLACK;
+        return;
+    }
+    if (x == x-&gt;parent_-&gt;left_) {
+        auto m = x-&gt;parent_-&gt;right_;
+        // case 1
+        if (m-&gt;color_ == R_BNode::RED) {
+            m-&gt;color_ = R_BNode::BLACK;
+            x-&gt;parent_-&gt;color_ = R_BNode::RED;
+            LeftRotate(x-&gt;parent_);
+            m = x-parent_-&gt;right_;
+        }
+        ...
+    } else {
+        auto m = x-&gt;parent_-&gt;left_;
+        // case 1
+        if (m-&gt;color_ == R_BNode::RED) {
+            m-&gt;color_ = R_BNode::BLACK;
+            x-&gt;parent_-&gt;color_ = R_BNode::RED;
+            RightRotate(x-&gt;parent_);
+            m = x-parent_-&gt;left_;
+        }
+        ...
+    }
+}</code></pre>
+<h3
+id="情况2x的兄弟节点m为黑色且m的两个子节点都为黑色">情况2：x的兄弟节点m为黑色，且m的两个子节点都为黑色</h3>
+<p>此时由于x是双重黑色，而m与其两个子节点构成了两层黑色，因此可以从x与m上分别消去一层黑色，使得x为黑色，而m为红色。并令x-&gt;parent_为新的x，并对其进行<code>DeleteFixup</code>。</p>
+<figure>
+<img
+src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete2.png"
+alt="delete2" />
+<figcaption aria-hidden="true">delete2</figcaption>
+</figure>
+<p>此时由于重复调用，改变之前的程序结构：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::DeleteFixup(R_BNode *x) {
+    while(x != root_ &amp;&amp; x-&gt;color_ != R_BNode::RED) {
+       if (x == x-&gt;parent_-&gt;left_) {
+           auto m = x-&gt;parent_-&gt;right_;
+           // case 1
+           if (m-&gt;color_ == R_BNode::RED) {
+               m-&gt;color_ = R_BNode::BLACK;
+               x-&gt;parent_-&gt;color_ = R_BNode::RED;
+               LeftRotate(x-&gt;parent_);
+               m = x-parent_-&gt;right_;
+           }
+           // case 2
+           if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
+               &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               m-&gt;color_ = R_BNode::RED;
+               x = x-&gt;parent_;
+               continue;
+           }
+           ...
+        } else {
+           auto m = x-&gt;parent_-&gt;left_;
+           // case 1
+           if (m-&gt;color_ == R_BNode::RED) {
+               m-&gt;color_ = R_BNode::BLACK;
+               x-&gt;parent_-&gt;color_ = R_BNode::RED;
+               RightRotate(x-&gt;parent_);
+               m = x-parent_-&gt;left_;
+           }
+           // case 2
+           if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
+               &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               m-&gt;color_ = R_BNode::RED;
+               x = x-&gt;parent_;
+               continue;
+           }
+           ...
+        }
+    }
+     x-&gt;color_ = R_BNode::Black;
+}</code></pre>
+<h3
+id="情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</h3>
+<p>此时交换m与异侧孩子的颜色，并进行旋转。使m的异侧孩子成为x新的兄弟节点，m成为新m的同侧孩子。这样就转化成了情况4。</p>
+<figure>
+<img
+src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete3.png"
+alt="delete3" />
+<figcaption aria-hidden="true">delete3</figcaption>
+</figure>
+<p>实现为：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::DeleteFixup(R_BNode *x) {
+    while(x != root_ &amp;&amp; x-&gt;color_ != R_BNode::RED) {
+       if (x == x-&gt;parent_-&gt;left_) {
+           auto m = x-&gt;parent_-&gt;right_;
+           // case 1
+           if (m-&gt;color_ == R_BNode::RED) {
+               m-&gt;color_ = R_BNode::BLACK;
+               x-&gt;parent_-&gt;color_ = R_BNode::RED;
+               LeftRotate(x-&gt;parent_);
+               m = x-parent_-&gt;right_;
+           }
+           // case 2
+           if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
+               &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               m-&gt;color_ = R_BNode::RED;
+               x = x-&gt;parent_;
+               continue;
+           } else if (m-&gt;left_-&gt;color_ == R_BNode::RED
+                     &amp;&amp; m-&gt;right_color_ == R_BNode::BLACK) {
+               // case 3
+               m-&gt;color_ = R_BNode::RED;
+               m-&gt;left_-&gt;color_ = R_BNode::BLACK;
+               RightRotate(m);
+               m = x-&gt;parent_-&gt;right_;
+           }
+
+           ...
+        } else {
+           auto m = x-&gt;parent_-&gt;left_;
+           // case 1
+           if (m-&gt;color_ == R_BNode::RED) {
+               m-&gt;color_ = R_BNode::BLACK;
+               x-&gt;parent_-&gt;color_ = R_BNode::RED;
+               RightRotate(x-&gt;parent_);
+               m = x-parent_-&gt;left_;
+           }
+           // case 2
+           if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
+               &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               m-&gt;color_ = R_BNode::RED;
+               x = x-&gt;parent_;
+               continue;
+           } else if (m-&gt;right_-&gt;color_ == R_BNode::RED
+                     &amp;&amp; m-&gt;left_color_ == R_BNode::BLACK) {
+               // case 3
+               m-&gt;color_ = R_BNode::RED;
+               m-&gt;right_-&gt;color_ = R_BNode::BLACK;
+               LeftRotate(m);
+               m = x-&gt;parent_-&gt;left_;
+           }
+           ...
+        }
+    }
+     x-&gt;color_ = R_BNode::BLACK;
+}</code></pre>
+<h3
+id="情况4x的兄弟节点为黑色且m的同侧孩子为红色">情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。</h3>
+<p>使m为父节点的颜色，并将父节点与m的同侧孩子设为黑色。对父节点进行旋转，使m成为新的取代父节点的位置，并设x为根节点。即可修复红黑树。</p>
+<figure>
+<img
+src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete4.png"
+alt="delete4" />
+<figcaption aria-hidden="true">delete4</figcaption>
+</figure>
+<p>此时得出了最终实现：</p>
+<pre class="language-cpp line-numbers match-braces"><code>void R_BTree::DeleteFixup(R_BNode *x) {
+    while(x != root_ &amp;&amp; x-&gt;color_ != R_BNode::RED) {
+       if (x == x-&gt;parent_-&gt;left_) {
+           auto m = x-&gt;parent_-&gt;right_;
+           // case 1
+           if (m-&gt;color_ == R_BNode::RED) {
+               m-&gt;color_ = R_BNode::BLACK;
+               x-&gt;parent_-&gt;color_ = R_BNode::RED;
+               LeftRotate(x-&gt;parent_);
+               m = x-&gt;parent_-&gt;right_;
+           }
+           // case 2
+           if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
+               &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               m-&gt;color_ = R_BNode::RED;
+               x = x-&gt;parent_;
+               continue;
+           } else if (m-&gt;left_-&gt;color_ == R_BNode::RED
+                     &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               // case 3
+               m-&gt;color_ = R_BNode::RED;
+               m-&gt;left_-&gt;color_ = R_BNode::BLACK;
+               RightRotate(m);
+               m = x-&gt;parent_-&gt;right_;
+           }
+           // case 4
+           m-&gt;color_ = x-&gt;parent_-&gt;color_;
+           x-&gt;parent_-&gt;color_ = R_BNode::BLACK;
+           m-&gt;right_-&gt;color_ = R_BNode::BLACK;
+           LeftRotate(x-&gt;parent_);
+           x = root_;
+        } else {
+           auto m = x-&gt;parent_-&gt;left_;
+           // case 1
+           if (m-&gt;color_ == R_BNode::RED) {
+               m-&gt;color_ = R_BNode::BLACK;
+               x-&gt;parent_-&gt;color_ = R_BNode::RED;
+               RightRotate(x-&gt;parent_);
+               m = x-&gt;parent_-&gt;left_;
+           }
+           // case 2
+           if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
+               &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
+               m-&gt;color_ = R_BNode::RED;
+               x = x-&gt;parent_;
+               continue;
+           } else if (m-&gt;right_-&gt;color_ == R_BNode::RED
+                     &amp;&amp; m-&gt;left_-&gt;color_ == R_BNode::BLACK) {
+               // case 3
+               m-&gt;color_ = R_BNode::RED;
+               m-&gt;right_-&gt;color_ = R_BNode::BLACK;
+               LeftRotate(m);
+               m = x-&gt;parent_-&gt;left_;
+           }
+           // case 4
+           m-&gt;color_ = x-&gt;parent_-&gt;color_;
+           x-&gt;parent_-&gt;color_ = R_BNode::BLACK;
+           m-&gt;left_-&gt;color_ = R_BNode::BLACK;
+           LeftRotate(x-&gt;parent_);
+           x = root_;
+        }
+    }
+     x-&gt;color_ = R_BNode::BLACK;
+}</code></pre>
+<h2 id="总结">总结</h2>
+<p>红黑树是一种特殊的二叉搜索树，因此适用二叉搜索树的所有不改变树结构的操作。而对于改变了红黑树结构的操作则需要牢记，主要分为旋转、插入和删除。</p>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+</body>
+</html>

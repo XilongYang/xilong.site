@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>二叉树的层序遍历 - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>二叉树的层序遍历</h1>
+<p class="author">Xilong Yang<br>2021-07-18</p>
+</div>
+<main>
+<div class="abstract">
+<p>对之前的文章：<a
+href="/posts/004_Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration.html">二叉树的存储结构及其非层序遍历</a>的一点小补充。</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#原理">原理</a></li>
+<li><a href="#c实现">C++实现</a></li>
+<li><a href="#haskell实现">Haskell实现</a></li>
+</ol>
+</div>
+</nav>
+<h2 id="原理">原理</h2>
+<p>使用一个队列来对每个节点进行<code>入队-加入子节点-访问-出队</code>的操作即可，非常简单。</p>
+<p>伪码表示：</p>
+<pre class="language-none line-numbers match-braces"><code>输入：待访问的二叉树Tree
+输出：对节点的层序访问
+View:
+  queue.push Tree
+  while !queue.empty:
+    if (Tree.left) queue.push Tree.left
+    if (Tree.right) queue.push Tree.right
+    Tree.show
+    queue.pop</code></pre>
+<h2 id="c实现">C++实现</h2>
+<pre class="language-cpp line-numbers match-braces"><code>#include &lt;iostream&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+// 简单实现一个二叉树
+struct Tree {
+    Tree() : left(nullptr), data(0), right(nullptr) {}
+    Tree *left;
+    char data;
+    Tree *right;
+};
+
+// 层序遍历
+void View(const Tree &amp;T) {
+    queue&lt;Tree&gt; nodeQueue;
+    nodeQueue.push(T);
+    while (!nodeQueue.empty()) {
+        auto cur = nodeQueue.front();
+        if (cur.left) nodeQueue.push(*cur.left);
+        if (cur.right) nodeQueue.push(*cur.right);
+        nodeQueue.pop();
+        cout &lt;&lt; cur.data;
+    }
+    cout &lt;&lt; endl;
+}</code></pre>
+<h2 id="haskell实现">Haskell实现</h2>
+<pre class="language-haskell line-numbers match-braces"><code>-- 二叉树
+data Tree = Empty | Node Tree String Tree
+  deriving (Eq, Show)
+
+-- 将树转变为层序遍历序列
+view :: Tree -&gt; String
+view = view&#39;.view&#39;&#39;
+    where
+    -- 将一个树的列表转变为对应的值的列表
+    view&#39; :: [Tree] -&gt; String
+    view&#39; [] = &quot;&quot;
+    view&#39; ((Node _ str _):xs) = str ++ view&#39; xs
+    -- 将一个树转变为其层序遍历的列表
+    view&#39;&#39; :: Tree -&gt; [Tree]
+    view&#39;&#39; Empty = []
+    view&#39;&#39; t = extend [t] 0
+        where
+        extend :: [Tree] -&gt; Int -&gt; [Tree]
+        extend ts n = if(n &gt;= length ts) then ts
+            else case (ts!!n) of
+                (Node left _ right) -&gt; extend (ts
+                    ++ (if (left == Empty) then [] else [left])
+                    ++ (if (right == Empty) then [] else [right]))
+                    (n + 1)</code></pre>
+<p>Haskell学艺不精，写得挺丑，留待日后优化吧。</p>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+</body>
+</html>

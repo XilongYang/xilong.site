@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HMAC-SHA256算法解析与实现 - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>HMAC-SHA256算法解析与实现</h1>
+<p class="author">Xilong Yang<br>2021-05-29</p>
+</div>
+<main>
+<div class="abstract">
+<p>对HMAC-SHA256算法做的整理。</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#hmac算法">HMAC算法</a></li>
+<li><a href="#sha256-算法">SHA256 算法</a></li>
+<li><a href="#hmac_sha256算法实现">HMAC_SHA256算法实现</a></li>
+</ol>
+</div>
+</nav>
+<h2 id="hmac算法">HMAC算法</h2>
+<p>HMAC是Hash-based Message Authentication
+Code的缩写，意为基于哈希运算的消息认证码。基诞生目的是为了确保网络中报文的完整性以及信息来源的身份验证。其中有几个关键组成部分：</p>
+<ul>
+<li>哈希函数(Hash)：用以将任意长度的消息映射成为定长的哈希值。</li>
+<li>密钥(key)：与原始消息组合后通过哈希函数，以起到身份验证功能。</li>
+<li>原始消息(message)：将被处理的消息。</li>
+<li>ipad：值为00110110(0x36)的循环，长度为Hash函数的分组长度。</li>
+<li>opad：值为01011100(0x5c)的循环，长度为Hash函数的分组长度。</li>
+</ul>
+<p>HMAC算法描述为：</p>
+<ol type="1">
+<li>对key值进行填充，形成padded-key，填充方法如下：
+<ol type="1">
+<li>若key的长度小于Hash函数的分组长度，在其后用0填充至Hash函数分组长度。</li>
+<li>若key的长度大于Hash函数的分组长度，使用Hash(key)生成padded-key。</li>
+</ol></li>
+<li>将生成的padded-key分别与ipad/opad进行XOR运算，得到ipad-key和opan-key。</li>
+<li>将ipad-key与message首尾相接（ipad-key在message前），进行Hash(ipad-key+message)运算，得到hash1。</li>
+<li>将得到的opad-key与hash1首尾相接，进行Hash(opad-key+hash1)运算，就得到了HMAC值。</li>
+</ol>
+<p>伪码描述：</p>
+<pre class="language-none line-numbers match-braces"><code>input: key, message, Hash
+output:hmac
+
+chunk_size = Hash.chunk_size
+ipad(chunk_size, 0x36)
+opad(chunk_size, 0x5c)
+
+padded_key = if (key.size &lt;= chunk_size)
+             then key + pading(chunk_size - key.size, 0)
+             else Hash(key)
+
+ipad_key = XOR(padded_key, ipad)
+opad_key = XOR(padded_key, opad)
+
+hash1 = Hash(ipad_key + message)
+hmac = Hash(opad_key + hash1)</code></pre>
+<h2 id="sha256-算法">SHA256 算法</h2>
+<p>SHA是Secure Hash
+Algorithm的缩写，是一个由美国国家安全局研发的算法族。这些算法大体结构相似，但在性能，数值范围与安全性上存在差别。SHA256算法是其中较为广为人知的一个算法，接受一个最大长度为(2^64
+-
+1)bit的消息，输出一个256bit长的哈希值。SHA256算法非常安全，目前还没有对SHA256算法的成功碰撞记录。</p>
+<p>这个算法有几个关键组成部分：</p>
+<ul>
+<li>8个哈希初值：对自然界中前8个质数的平方根小数部分取前32个bit取得。</li>
+</ul>
+<pre class="language-none line-numbers match-braces"><code> 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a
+,0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19</code></pre>
+<ul>
+<li>64个常数：对自然界中前64个质数的立方根小数部分取前32个bit取得。</li>
+</ul>
+<pre class="language-none line-numbers match-braces"><code> 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b
+,0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01
+,0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7
+,0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc
+,0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152
+,0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147
+,0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc
+,0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85
+,0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819
+,0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08
+,0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f
+,0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208
+,0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2</code></pre>
+<ul>
+<li>原始消息(message)：将被处理的消息。</li>
+<li>分段长度(chunk_size)：512bit</li>
+<li>运算字数(word_count)：64</li>
+<li>函数CROR(x, n) = x循环右移n位</li>
+<li>函数S0(x) = CROR(x, 7) ^ CROR(x, 18) ^ (x &gt;&gt; 3)</li>
+<li>函数S1(x) = CROR(x, 17) ^ CROR(x, 19) ^ (x &gt;&gt; 10)</li>
+<li>函数EP0(x) = CROR(x, 2) ^ CROR(x, 13) ^ CROR(x, 22)</li>
+<li>函数EP1(x) = CROR(x, 6) ^ CROR(x, 11) ^ CROR(x, 25)</li>
+<li>函数CH(x, y, z) = (x &amp; y) ^ ((~x) &amp; z)</li>
+<li>函数MAJ(x, y, z) = ((x &amp; y) ^ (x &amp; z) ^ (y &amp; z))</li>
+</ul>
+<p>算法描述如下：</p>
+<ol type="1">
+<li><p>对message进行预处理：</p>
+<ol type="1">
+<li><p>在message后填充1位1，然后填充若干位0，直到message的长度(bit)对512取模等于448（message.size
+% chunk_size = 448）。</p>
+<ul>
+<li>不管message本来长度是多少，都要先填充1位1。也就是说即使message的长度对512取模已经等于448了，还是要填充1位1，之后再填充511位0使其长度重新符合要求。</li>
+<li>为什么是448？因为下一步要填充一个64bit的数，448+64等于分段长度512。</li>
+</ul></li>
+<li><p>使用一个64bit长的无符号整型数以大端字节序在message后填充原始message的长度。</p>
+<ul>
+<li><p>字节序，对于长度超过1字节的数据，在内存中的存储有两种顺序：</p>
+<ol type="1">
+<li>低地址存储低位字节，高地址存储高位字节，称为大端字节序。</li>
+<li>低地址存储高位字节，高地址存储低信字节，称为小端字节序。</li>
+</ol>
+<p>例如，对于0x1234，若使用内存地址0x01,
+0x02存储这两个字节，表现为：</p>
+<pre class="language-none line-numbers match-braces"><code>// 大端序
+0x01: 0x12
+0x02: 0x34
+
+// 小端序
+0x01: 0x34
+0x02: 0x12</code></pre>
+<p>值得一提的是，对无论大端序还是小端序，对0x1234取地址都将得到0x01。</p></li>
+</ul></li>
+</ol></li>
+<li><p>使用一个长度为8的数组H[]保存8个哈希初值。</p></li>
+<li><p>使用一个长度为64的数组k[]保存64个常数。</p></li>
+<li><p>将预处理后的message分割为若干长度为chunk_size的chunk。</p></li>
+<li><p>依序对每个chunk进行下列处理：</p>
+<ol type="1">
+<li><p>建立一个大小为word_count(64)的数组w[]</p></li>
+<li><p>将chunk分割为16个长度为32bit的word，存储在w[0]-w[15]中。</p>
+<ul>
+<li>注意将每一个word转换为机器字节序，否则位运算会出问题。</li>
+</ul></li>
+<li><p>对i从16到63进行循环：</p>
+<ul>
+<li>w[i] = w[i - 16] + S0(w[i - 15]) + w[i - 7] + S1(w[i - 2])</li>
+</ul></li>
+<li><p>使用创建H[]的拷贝h[]</p></li>
+<li><p>对i从0到63进行循环，根据w[]和k[]计算h[]中的hash值：</p>
+<ul>
+<li><p>t1 = h[7] + EP1(h[4]) + CH(h[4], h[5], h[6]) + k[i] +
+w[i]</p></li>
+<li><p>t2 = EP0(h[0]) + MAJ(h[0], h[1], h[2])</p></li>
+<li><p>对i从7到1循环：</p>
+<ul>
+<li>if (i == 4) then h[i] = h[i - 1] + t1 else h[i] = h[i - 1]</li>
+</ul></li>
+<li><p>h[0] = t1 + t2</p></li>
+</ul></li>
+<li><p>更改H[]供下一个chunk使用：</p>
+<ul>
+<li>H[] += h[]</li>
+</ul></li>
+</ol></li>
+<li><p>将最终得到的H[]按大端字节序首尾相接，即形成最终的256bit哈希值。</p></li>
+</ol>
+<p>伪码描述：</p>
+<pre class="language-none line-numbers match-braces"><code>input: message
+output: hash
+
+H[8] = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a
+       ,0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19}
+
+k[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b
+        ,0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01
+        ,0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7
+        ,0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc
+        ,0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152
+        ,0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147
+        ,0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc
+        ,0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85
+        ,0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819
+        ,0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08
+        ,0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f
+        ,0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208
+        ,0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2}
+
+// 实际上处理以字节为单位，而不是bit
+chunk_size = 64;
+word_count = 64;
+
+CROR(x, n) = x循环右移n位
+S0(x) = CROR(x, 7) ^ CROR(x, 18) ^ (x &gt;&gt; 3)
+S1(x) = CROR(x, 17) ^ CROR(x, 19) ^ (x &gt;&gt; 10)
+EP(x) = CROR(x, 2) ^ CROR(x, 13) ^ CROR(x, 22)
+EP1(x) = CROR(x, 6) ^ CROR(x, 11) ^ CROR(x, 25)
+CH(x, y, z) = (x &amp; y) ^ ((~x) &amp; z)
+MAJ(x, y, z) = ((x &amp; y) ^ (x &amp; z) ^ (y &amp; z))
+
+// 预处理部分
+unit_byte = 64
+target_size = 56
+// 第一个填充字节，值为10000000
+first_append = 0x80
+
+// 大小信息以bit为单位
+length = message.size * 8
+
+need_size = taget_byte - (messaage.size % chunk_size)
+need_size += if (need_size &lt;= 0) then chunk_size else 0;
+
+// zero构造一个长度为need_size - 1字节的串，big_endian保证返回一个数的大端序格式
+message += first_append + zero(need_size - 1) + big_endian(length)
+
+// 分块并计算hash值
+chunk_count = message.size / chunk_size
+for i in (0, chunk_count):
+    // divide将chunk分解为16个机器字节序的word
+    w[word_count] = divide(chunk[i])
+    // 生成剩下的word
+    for i in (16, word_count):
+        w[i] = w[i - 16] + S0(w[i - 15]) + w[i - 7] + S1(w[i - 2])
+    h = H
+    for i in (0, word_count):
+        t1 = h[7] + EP1(h[4]) + CH(h[4], h[5], h[6]) + k[i] + w[i]
+        t2 = EP0(h[0]) + MAJ(h[0], h[1], h[2])
+        for i in (7, 0):
+            h[i] = h[i - 1]
+            if (i == 4):
+                h[i] += t1
+        h[0] = t1 + t2
+    for i in (0, 8):
+        H[i] += h[i]
+
+// 生成hash值，将H中每个值以大端格式组合
+hash = big_endian_combine(H)</code></pre>
+<h2 id="hmac_sha256算法实现">HMAC_SHA256算法实现</h2>
+<p>HMAC_SHA256算法就是将SHA256算法作为Hash函数的HMAC算法。简单组合就可得到。</p>
+<h3 id="c实现">C++实现</h3>
+<p>理解了上述内容后使用C++实现出来还是很简单的。</p>
+<pre class="language-cpp line-numbers match-braces"><code>/*********************************************
+ * 一个HMAC和SHA256算法的跨平台实现
+ * ******************************************/
+
+#include &lt;cstdio&gt;
+#include &lt;cstdint&gt;
+#include &lt;string&gt;
+#include &lt;array&gt;
+#include &lt;functional&gt;
+
+using std::array;
+using std::function;
+using std::pair;
+using std::size_t;
+
+/*********************************************
+ * 字节序相关运算
+ * ******************************************/
+
+// 判定机器字节序，大端返回true，小端返回false
+inline bool big_endian() {
+    uint16_t test = 0x1234;
+    uint8_t first = *reinterpret_cast&lt;uint8_t*&gt;(&amp;test);
+    return first == 0x12;
+}
+
+// 对字节序进行转换
+template&lt;typename T&gt;
+inline T order_switch(const T &amp;input) {
+    T output(0);
+    constexpr std::size_t size = sizeof(input);
+    uint8_t *data = reinterpret_cast&lt;uint8_t*&gt;(&amp;output);
+
+    for (size_t i = 0; i &lt; size; ++i) {
+        data[i] = input &gt;&gt; ((size - i - 1) * 8);
+    }
+
+    return output;
+}
+
+// 取一个数的大端表示，在大端机器上直接返回，小端机器上进行转换。
+template&lt;typename T&gt;
+inline T local2big(const T &amp;input) {
+    if (big_endian()) {
+        return input;
+    }
+    return order_switch(input);
+}
+
+// 取一个大端序数的机器表示，实际上与local2big等效。
+template&lt;typename T&gt;
+inline T big2local(const T &amp;input) {
+    return local2big(input);
+}
+
+/********************************
+ * 以字节方式查看变量
+ * *****************************/
+template&lt;typename T&gt;
+void print_byte(const T &amp;input) {
+    auto arr = reinterpret_cast&lt;const uint8_t*&gt;(&amp;input);
+    for (size_t i = 0; i &lt; sizeof(input); ++i) {
+        printf(&quot;%.2x &quot;, arr[i]);
+        if ((i + 1) % 8 == 0) {
+            putchar(&#39;\n&#39;);
+        }
+    }
+    putchar(&#39;\n&#39;);
+}
+
+/*********************************************
+ * SHA256算法实现
+ * ******************************************/
+
+using Packet = std::string;
+
+// 为Packet特化字节查看模板
+template&lt;&gt;
+void print_byte(const Packet &amp;packet) {
+    for (size_t i = 0; i &lt; packet.size(); ++i) {
+        printf(&quot;%.2x &quot;, static_cast&lt;unsigned char&gt;(packet[i]));
+        if ((i + 1) % 8 == 0) {
+            putchar(&#39;\n&#39;);
+        }
+    }
+    putchar(&#39;\n&#39;);
+}
+
+// 8个初始哈希值
+const array&lt;uint32_t, 8&gt; h_init =
+    {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a
+    ,0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
+
+// 64个常数
+const array&lt;uint32_t, 64&gt; k =
+    {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b
+    ,0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01
+    ,0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7
+    ,0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc
+    ,0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152
+    ,0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147
+    ,0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc
+    ,0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85
+    ,0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819
+    ,0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08
+    ,0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f
+    ,0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208
+    ,0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
+
+// 循环右移
+inline uint32_t CROR(uint32_t input, size_t bits) {
+    return ((input &gt;&gt; bits) | (input &lt;&lt; (32 - bits)));
+}
+
+// sha256中需要的一些运算
+inline uint32_t S0(uint32_t x) {
+    return CROR(x, 7) ^ CROR(x, 18) ^ (x &gt;&gt; 3);
+}
+
+inline uint32_t S1(uint32_t x) {
+    return CROR(x, 17) ^ CROR(x, 19) ^ (x &gt;&gt; 10);
+}
+
+inline uint32_t EP0(uint32_t x) {
+    return CROR(x, 2) ^ CROR(x, 13) ^ CROR(x, 22);
+}
+
+inline uint32_t EP1(uint32_t x) {
+    return CROR(x, 6) ^ CROR(x, 11) ^ CROR(x, 25);
+}
+
+inline uint32_t CH(uint32_t x, uint32_t y, uint32_t z) {
+        return ((x &amp; y) ^ ((~x) &amp; z));
+};
+
+inline uint32_t MAJ(uint32_t x, uint32_t y, uint32_t z) {
+    return ((x &amp; y) ^ (x &amp; z) ^ (y &amp; z));
+};
+
+Packet sha256(const Packet &amp;message) {
+    auto msg = message;
+    constexpr size_t chunk_size = 64;
+    constexpr size_t target_size = 56;
+    // 预处理
+    msg.push_back(0x80);
+    while (msg.size() % chunk_size != target_size) {
+        msg.push_back(0x00);
+    }
+    uint64_t length = local2big(message.size() * 8);
+    for (int i = 0; i &lt; 8; ++i) {
+        msg.push_back(reinterpret_cast&lt;uint8_t*&gt;(&amp;length)[i]);
+    }
+    // 分块并计算hash
+    auto chunk_count = msg.size() / chunk_size;
+    constexpr size_t word_count = 64;
+    auto H = h_init;
+    for (size_t i = 0; i &lt; chunk_count; ++i) {
+        // 初始化word数组
+        array&lt;uint32_t, word_count&gt; w;
+        constexpr size_t word_size = 4;
+        constexpr size_t word_per_chunk = chunk_size / word_size;
+        // 从Packet中分割出原始word
+        size_t pos = i * chunk_size;
+        for (size_t j = 0; j &lt; word_per_chunk; ++j) {
+            uint32_t value = *reinterpret_cast&lt;const uint32_t*&gt;(msg.c_str()
+                + pos + word_size * j);
+            w[j] = big2local(value);
+        }
+        // 根据原始word计算剩余word
+        for (size_t j = word_per_chunk; j &lt; word_count; ++j) {
+            w[j] = w[j - 16] + S0(w[j - 15]) + w[j - 7] + S1(w[j - 2]);
+        }
+        // 初始化hash值
+        auto h = H;
+        // 根据word值计算hash值
+        for (size_t i = 0; i &lt; word_count; ++i) {
+            auto t1 = h[7] + EP1(h[4]) + CH(h[4], h[5], h[6]) + k[i] + w[i];
+            auto t2 = EP0(h[0]) + MAJ(h[0], h[1], h[2]);
+            for (size_t j = 7; j &gt; 0; --j) {
+                h[j] = h[j - 1];
+                if (j == 4) {
+                    h[j] += t1;
+                }
+            }
+            h[0] = t1 + t2;
+        }
+        // 更新hash值供下一个chunk使用
+        for (size_t i = 0; i &lt; h.size(); ++i) {
+            H[i] += h[i];
+        }
+    }
+    // 拼接H得到结果
+    Packet result;
+    for (auto v : H) {
+        uint32_t value = local2big(v);
+        for (size_t i = 0; i &lt; 4; ++i) {
+            result.push_back(reinterpret_cast&lt;uint8_t*&gt;(&amp;value)[i]);
+        }
+    }
+    return result;
+}
+
+/*********************************************
+ * HMAC算法实现
+ * ******************************************/
+
+using Hash = pair&lt;size_t, function&lt;Packet(const Packet&amp;)&gt;&gt;;
+
+Packet hmac(const Packet &amp;message , const Packet &amp;key, const Hash &amp;hash) {
+    auto chunk_size = hash.first;
+    uint8_t ipad(0x36);
+    uint8_t opad(0x5C);
+
+    // 填充key
+    auto padded_key = key;
+    if (padded_key.size() &gt; chunk_size) {
+        padded_key = hash.second(padded_key);
+    } else {
+        while(padded_key.size() &lt; chunk_size) {
+            padded_key.push_back(0x00);
+        }
+    }
+
+    // 使用异或运算生成ipad_key和opad_key
+    auto XOR = [](const Packet &amp;packet, uint8_t pad) {
+        auto result = packet;
+        for (auto &amp;c : result) {
+            c ^= pad;
+        }
+        return result;
+    };
+    auto ipad_key = XOR(padded_key, ipad);
+    auto opad_key = XOR(padded_key, opad);
+
+    // 使用hash算法得到结果
+    return hash.second(opad_key + hash.second(ipad_key + message));
+}</code></pre>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+</body>
+</html>
