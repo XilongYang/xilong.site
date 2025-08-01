@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>基于C++的Python3入门笔记 - Xilong Yang</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/res/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/icon.jpeg">
+    <meta name="apple-mobile-web-app-title" content="Xilong Yang">
+    <link rel="bookmark" href="/res/icon.jpeg">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/res/icon.jpeg" >
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.10.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.10.0/prism/prism.js"></script>
+    <script src="/res/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+</head>
+<body>
+<div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+<div class="header">
+<h1>基于C++的Python3入门笔记</h1>
+<p class="author">Xilong Yang<br>2020-06-07</p>
+</div>
+<main>
+<div class="abstract">
+<p>虽然Python与C++有众多区别，但基本上同属命令式语言（甚至Python的解释器是C++实现的），因此在不求深入学习Python时记住一些基础语法差异即可大概使用。</p>
+</div>
+<nav role="navigation" class="toc">
+<h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
+<div id="toc-items">
+<ol><li><a href="#基本区别">基本区别</a><ol><li><a href="#注释">注释</a></li>
+</ol>
+</li>
+<li><a href="#变量">变量</a><ol><li><a href="#数值">数值</a></li>
+<li><a href="#字符串">字符串</a></li>
+<li><a href="#listtuple和dictset">list、tuple和dict、set</a></li>
+</ol>
+</li>
+<li><a href="#运算符">运算符</a></li>
+<li><a href="#分支与循环">分支与循环</a></li>
+<li><a href="#函数">函数</a></li>
+<li><a href="#类">类</a></li>
+<li><a href="#高级特性">高级特性</a></li>
+</ol>
+</div>
+</nav>
+<h2 id="基本区别">基本区别</h2>
+<p>python中以缩进（4个空格）而不是花括号区分代码块。</p>
+<p>python中以换行而不是分号区分语句</p>
+<p>python中不需要main函数，从代码第一行开始执行</p>
+<h3 id="注释">注释</h3>
+<pre class="language-python line-numbers match-braces"><code># 单行注释：井号+空格
+# 多行注释本质上是野生三引号字符串
+&#39;&#39;&#39;
+多行注释1:三个单引号
+&#39;&#39;&#39;
+&quot;&quot;&quot;
+多行注释2:三个双引号
+&quot;&quot;&quot;</code></pre>
+<h2 id="变量">变量</h2>
+<h3 id="数值">数值</h3>
+<p>python是动态类型语言，定义变量时无需指定类型，且程序运行过程中可改变类型。</p>
+<pre class="language-python line-numbers match-braces"><code>i = 1
+f = 2.3
+str = &#39;string&#39;
+f = &#39;change to string&#39;</code></pre>
+<h3 id="字符串">字符串</h3>
+<pre class="language-python line-numbers match-braces"><code># 单引号
+&#39;Hello&quot;&quot;Wo\&#39;\&#39;rld&#39; # Hello&quot;&quot;Wo&#39;&#39;rld
+# 双引号
+&quot;Hello&#39;&#39;Wo\&quot;\&quot;rld&quot; #Hello&#39;&#39;Wo&quot;&quot;rld
+# 单双引号唯一的区别是其中包含哪种引号时需要转义
+# 三引号包含单双引号都不用转义，可作注释用</code></pre>
+<p>格式化</p>
+<pre class="language-python line-numbers match-braces"><code># 占位符
+&#39;Hello,%s %d %.2f, %02d&#39; % (&#39;World!&#39;, 123, 3.14159, 1) # Hello,World! 123 3.14 01
+# format(),用{0}{1}...当占位符
+&#39;Hello,{0}:{1:.1f}&#39;.format(&#39;World!&#39;, 3.14159) # Hello,World:3.1</code></pre>
+<h3 id="listtuple和dictset">list、tuple和dict、set</h3>
+<h4 id="定义">定义</h4>
+<pre class="language-python line-numbers match-braces"><code># []、()、{}、([])
+# list用[]定义, 可变长，可变元素值，可用下标位序取值
+l = [1, 2, 3, 4]
+# tuple用()定义，不可变长，不可变元素值，可用下标位序取值
+t = (1, 2, 3, 4)
+t1 = (1, ) # 若无逗号则为整数1
+# dict用{}定义， 类似c++的map; set用([])定义，类似set
+d = {a:1, 2:b, 3:c} # d[a] = 1, d[2] = b, d[3] = c
+s = ([1, 1, 2, 2, 3, 4]) # set自动去重，s = {1, 2, 3, 4}</code></pre>
+<h4 id="操作">操作</h4>
+<ol type="1">
+<li>list
+<ol type="1">
+<li>l.append(): push_back</li>
+<li>l.pop():pop_back</li>
+<li>l.pop(i):erase(i)</li>
+<li>l.insert(pos, vue)</li>
+</ol></li>
+<li>dict
+<ol type="1">
+<li>‘keyvalue’ in d //d中是否存在key值为‘keyvalue’</li>
+<li>d.get(‘keyvalue’, -1)
+//无’keyvalue’时返回-1，没有第二个参数则无返回值</li>
+<li>d.pop(‘keyvalue’) //删除keyvalue</li>
+</ol></li>
+<li>set
+<ol type="1">
+<li>add(key)</li>
+<li>remove(key)</li>
+</ol></li>
+</ol>
+<h2 id="运算符">运算符</h2>
+<ul>
+<li>算术运算符：+ - * / % **(幂) //(整除)</li>
+<li>比较运算符：== != &gt; &lt; &gt;= &lt;=</li>
+<li>赋值运算符：= 算术=</li>
+<li>位运算符：&amp; | ^ ~ &lt;&lt; &gt;&gt;</li>
+<li>逻辑运算符：and or not</li>
+<li>成员运算符：in not in</li>
+<li>身份运算符：is is not //判断两对象地址是否相同</li>
+</ul>
+<h2 id="分支与循环">分支与循环</h2>
+<pre class="language-python line-numbers match-braces"><code># if-else语句
+if condition:
+    pass # 占位用关键字，不执行任何操作
+elif condition:
+    pass
+else:
+    pass
+# 范围for
+for x in l:
+    pass
+# 可用range(10)生成0-9的列表
+# while
+while condition:
+    psss</code></pre>
+<h2 id="函数">函数</h2>
+<pre class="language-python line-numbers match-braces"><code>def Add(x, y):
+    return x+y
+
+def Dont_Do_Anything(x, y)
+    return x, y
+#隐式返回一个元组
+
+def Default_Function(x, y=2)
+    return x**y;
+#默认参数
+
+def Add_End(L)
+    L.append(&#39;End&#39;)
+    return L
+#多次调用会出现{End, End, End}，原因：参数并非临时变量，故而改进
+
+def Add_End_Fixed(L=None)
+    if L is None:
+        L = []
+    L.append(&#39;End&#39;)
+    return L
+
+def Calc(*numbers)
+    sum = 0
+    for x in numbers:
+        sum += x
+    return sum
+#可变数量参数，隐式生成一个tuple, 已有list或tuple可直接前加*传入
+
+def person(name, age, **kw)
+    if &#39;key&#39; in kw:
+        pass
+
+# 关键字参数，调用时连关键字一同写入，如person(&#39;Jack&#39;, 23, city=&#39;Heaven&#39;)
+def person(name, *, city, age)
+    pass
+
+def person(name, *age, city)
+    pass
+# 命名关键字参数，跟在可变数量参数或一个空*参数后，只能传入指定关键字</code></pre>
+<h2 id="类">类</h2>
+<pre class="language-python line-numbers match-braces"><code>class My_Class(object):
+    def __init__(self, name, score): # 前后各2下划线，类内任何函数首参数都为self
+        self.name = name
+        self.__score = score #前置2下划线则私有，仍可通过._My_Class__score访问
+    def Get_Name(self):
+        print(self.name)
+    Sex = &#39;Male&#39;
+# 括号内表示父类，object是python中的根基类；__init__()相当于构造函数
+# 构造函数外的属性相当于static成员
+
+mc = MyClass(&#39;Jack&#39;, 70)
+mc.age = 10
+# 通过构造函数来实例化类对象，可以给对象添加属性
+# 使用del mc.age删除属性
+
+class Mumei(My_Class):
+    def Get_Name(self):
+        print(self.__score)
+# 子类通过定义同名函数来重载基类函数
+# 用函数isinstance(a, type)判断对象的类型是否为type， 使用type(a)得到对象类型
+# 使用dir(a)获得对象的所有属性和方法
+# 使用hasattr(obj, &#39;sth&#39;)判断是否有属性sth
+# 使用getattr(obj, &#39;sth&#39;)取属性地址
+
+def Name(MC):
+    MC.Get_Name()
+
+mumei = Mumei(&#39;Tom&#39;, &#39;2&#39;)
+Name(mc)
+Name(mumei)
+# 对基类和子类通用
+
+other = Other_Class(&#39;Jerry&#39;)
+Name(other)
+# 任何有Get_Name的对象都可调用</code></pre>
+<h2 id="高级特性">高级特性</h2>
+<h3 id="切片">切片</h3>
+<p>取一个list或tuple的部分元素</p>
+<pre class="language-python line-numbers match-braces"><code>L = [1, 2, 3, 4, 5]
+L[0:2] # 取{1, 2}即下标范围[0,2)的元素
+L[:2] # 第一个参数为0时可省略
+L[-1] # 取倒数第一个元素
+L[-2:-1] # 取倒数两个元素
+L[-2:] #-1可省略</code></pre>
+<h3 id="列表生成式">列表生成式</h3>
+<p>用[express]生成一个列表</p>
+<pre class="language-python line-numbers match-braces"><code>[x * x for x in range(1, 11)] # 1x1,2x2...10x10
+[x * x for x in range(1, 11) if x % 2 == 0] # 2x2,4x4...10x10
+[m + n for m in &#39;ABC&#39; for n in &#39;DEF&#39;] # ABC与DEF的全排列
+# 当if出现在for后面时，不可带else
+# 当if出现在fot前面时，必须带else</code></pre>
+<h3 id="生成器">生成器</h3>
+<p>生成器仅存储一个生成方法而不是具体对象，有肋于节省空间。</p>
+<p>方法1: 用(express)生成一个生成器(generator)</p>
+<pre class="language-python line-numbers match-braces"><code>g = (x * x for x in range(10))
+for n in g:
+    print(n)</code></pre>
+<p>方法2: 用函数来生成一个生成器</p>
+<pre class="language-python line-numbers match-braces"><code># 输出斐波那契数列的函数如下
+# a, b = b, a + b =&gt; a, b = (b, a + b) =&gt; a = b  b = a + b(a与b的值同时改变)
+ def fib(max):
+    n, a, b = 0, 0, 1
+    while n &lt; max:
+        print(b)
+        a, b = b, a + b
+        n = n + 1
+    return &#39;done&#39;
+
+#把上述函数改成generator, 仅需将print(b)换成yield b
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n &lt; max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return &#39;done&#39;
+
+f = fib(6)
+for n in f:
+    print(n)</code></pre>
+</main>
+<div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+<div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+<div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+</body>
+</html>
