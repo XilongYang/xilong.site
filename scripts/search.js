@@ -35,6 +35,9 @@ function loadDb(callback) {
 }
 
 function openPanel() {
+    var scrollBarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.documentElement.style.paddingRight = scrollBarWidth + 'px'
+
     document.getElementById("search-box").value = ""
     document.body.style.overflow = "hidden"
     var panel = document.getElementById("search-panel")
@@ -51,6 +54,8 @@ function openPanel() {
 }
 
 function closePanel() {
+    document.documentElement.style.paddingRight = ''
+
     document.body.style.overflow = "auto"
     var panel = document.getElementById("search-panel")
     panel.style.display = "none"
