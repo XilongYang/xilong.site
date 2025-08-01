@@ -5,12 +5,16 @@
  * Ported for PrismJS by Albert Vallverdu [@byverdu]
  */
 
+@font-face {
+    font-family: 'Jetbrains Mono';
+    src: url('/res/JetBrainsMono-Regular.ttf');
+}
 code[class*="language-"],
 pre[class*="language-"] {
 	color: #f8f8f2;
 	background: none;
 	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-family: "Jetbrains Mono", Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 	text-align: left;
 	white-space: pre;
 	word-spacing: normal;

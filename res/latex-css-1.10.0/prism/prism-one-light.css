@@ -28,11 +28,15 @@
  * --syntax-cursor-line: hsla(230, 8%, 24%, 0.05);
  */
 
+@font-face {
+    font-family: 'Jetbrains Mono';
+    src: url('/res/JetBrainsMono-Regular.ttf');
+}
 code[class*="language-"],
 pre[class*="language-"] {
 	background: hsl(230, 1%, 98%);
 	color: hsl(230, 8%, 24%);
-	font-family: "Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+	font-family: "Jetbrains Mono", "Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 	direction: ltr;
 	text-align: left;
 	white-space: pre;
