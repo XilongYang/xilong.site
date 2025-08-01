@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    font-family: 'Latin Modern', "source-han-serif-cn-subset", Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-family: 'Latin Modern', Georgia, Cambria, 'Times New Roman', Times, serif;
     transition: 0.5s ease;
 }
 

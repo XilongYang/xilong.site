@@ -18,6 +18,8 @@ from common import gen_template
 from common import unique_file_list
 from common import read_file_in_lines
 from common import write_file
+from common import gen_subset
+from common import unique_text
 
 COMPILE_TEMPLATE = os.path.join(TEMP_PATH, 'compile_template.html')
 
@@ -148,9 +150,13 @@ def generate_toc(contents):
     return serialized_contents.replace('<p>[[toc]]</p>', toc_html)
 
 
-def postprocess(file):
+def postprocess(abs_post_path):
     # Generate TOC
-    write_file(file, generate_toc(read_file_in_lines(file)))
+    write_file(abs_post_path, generate_toc(read_file_in_lines(abs_post_path)))
+    # Generate subset of fonts
+    file_name = os.path.splitext(os.path.basename(abs_post_path))[0]
+    text = unique_text(abs_post_path)
+    gen_subset(file_name, text)
 
 
 def process_files(operation, src_path, target_path, list):

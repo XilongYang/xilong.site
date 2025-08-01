@@ -1,21 +1,25 @@
-import os
 import re
+import os
+from fontTools import subset
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC_PATH = ROOT_PATH + '/src'
-POST_PATH = ROOT_PATH + '/posts'
-TEMP_PATH = ROOT_PATH + '/temp'
-INDEX_PATH = ROOT_PATH + '/index.html'
-SEARCHDB_PATH = ROOT_PATH + '/searchdb.json'
+SRC_PATH = os.path.join(ROOT_PATH, 'src')
+POST_PATH = os.path.join(ROOT_PATH, 'posts')
+TEMP_PATH = os.path.join(ROOT_PATH, 'temp')
+INDEX_PATH = os.path.join(ROOT_PATH, 'index.html')
+SEARCHDB_PATH = os.path.join(ROOT_PATH, 'searchdb.json')
 
 WEB_ROOT_PATH = ''
-WEB_POST_PATH = WEB_ROOT_PATH + '/posts'
+WEB_POST_PATH = os.path.join(WEB_ROOT_PATH, 'posts')
 
-TEMPLATE_PATH = ROOT_PATH + '/template'
-TEMPLATE_INDEX_PATH = TEMPLATE_PATH + '/index.html'
-TEMPLATE_POST_PATH = TEMPLATE_PATH + '/post.html'
-TEMPLATE_COMPONENT_PATH = TEMPLATE_PATH + '/component'
+TEMPLATE_PATH = os.path.join(ROOT_PATH, 'template')
+TEMPLATE_INDEX_PATH = os.path.join(TEMPLATE_PATH, 'index.html')
+TEMPLATE_POST_PATH = os.path.join(TEMPLATE_PATH, 'post.html')
+TEMPLATE_COMPONENT_PATH = os.path.join(TEMPLATE_PATH, 'component')
 TEMPLATE_COMPONENT_PATTERN = '<!--<.*>-->'
+
+FONT_SOURCE = os.path.join(ROOT_PATH, "res", "SourceHanSerifCN-Regular.otf")
+FONT_SUBSET_PATH = os.path.join(ROOT_PATH, "res", "SourceHanSerifCN-Subset")
 
 
 def abs_path(path, name):
@@ -67,3 +71,29 @@ def gen_template(path):
 def unique_file_list(path):
     return list(set([os.path.splitext(f)[0] for f in os.listdir(path)]))
 
+
+def unique_text(path):
+    search_db_lines = read_file_in_lines(path)
+    search_db_text = ''.join(search_db_lines)
+    return search_db_text
+
+
+def gen_subset(file_name, text):
+    options = subset.Options()
+    options.set(layout_features='*')
+    options.set(glyph_names=True)
+    options.set(notdef_glyph=True)
+    options.set(recalc_bounds=True)
+    options.flavor = 'woff2'
+
+    subsetter = subset.Subsetter(options)
+    subsetter.populate(text=text)
+
+    font = subset.load_font(FONT_SOURCE, options)
+
+    font_name = os.path.splitext(file_name)[0]
+    font_path = os.path.join(FONT_SUBSET_PATH, font_name + ".woff2")
+
+    subsetter.subset(font)
+    subset.save_font(font, font_path, options)
+    print(font_path)
