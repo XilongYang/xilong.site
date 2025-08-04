@@ -11,8 +11,6 @@ from common import gen_template
 from common import abs_path
 from common import write_file
 from common import parse_meta
-from common import unique_text
-from common import gen_subset
 
 
 def split_post_by_year():
@@ -54,11 +52,6 @@ def update_index():
     index_template = gen_template(TEMPLATE_INDEX_PATH)
     index_html = index_template.replace("$posts$", post_html())
     write_file(INDEX_PATH, index_html)
-
-    # Generate Subset Font
-    text = unique_text(INDEX_PATH)
-    file_name = os.path.splitext(os.path.basename(INDEX_PATH))[0]
-    gen_subset(file_name, text)
 
 
 if __name__ == "__main__":
