@@ -1,5 +1,6 @@
 import re
 import os
+import sys
 from fontTools import subset
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -8,6 +9,7 @@ POST_PATH = os.path.join(ROOT_PATH, 'posts')
 TEMP_PATH = os.path.join(ROOT_PATH, 'temp')
 INDEX_PATH = os.path.join(ROOT_PATH, 'index.html')
 SEARCHDB_PATH = os.path.join(ROOT_PATH, 'searchdb.json')
+CACHE_PATH = os.path.join(ROOT_PATH, "build", "cache")
 
 WEB_ROOT_PATH = ''
 WEB_POST_PATH = os.path.join(WEB_ROOT_PATH, 'posts')
@@ -73,12 +75,31 @@ def unique_file_list(path):
 
 
 def unique_text(path):
-    search_db_lines = read_file_in_lines(path)
-    search_db_text = ''.join(search_db_lines)
-    return search_db_text
+    text_set = set(''.join(read_file_in_lines(path)))
+    return ''.join(x for x in sorted(text_set))
 
 
 def gen_subset(file_name, text):
+    if not os.path.exists(CACHE_PATH):
+        os.mkdir(CACHE_PATH)
+
+    if not os.path.exists(CACHE_PATH):
+        sys.stderr.write("[ERROR] Can not create cache folder.\n")
+        exit(-1)
+
+    font_name = os.path.splitext(file_name)[0]
+    font_path = os.path.join(FONT_SUBSET_PATH, font_name + ".woff2")
+    font_cache_path = os.path.join(CACHE_PATH, font_name + ".fontcache")
+
+    font_cache = ""
+    if os.path.exists(font_cache_path):
+        font_cache = ''.join(read_file_in_lines(font_cache_path))
+
+    if (font_cache == text):
+        return
+
+    write_file(font_cache_path, text)
+
     options = subset.Options()
     options.set(layout_features='*')
     options.set(glyph_names=True)
@@ -90,9 +111,6 @@ def gen_subset(file_name, text):
     subsetter.populate(text=text)
 
     font = subset.load_font(FONT_SOURCE, options)
-
-    font_name = os.path.splitext(file_name)[0]
-    font_path = os.path.join(FONT_SUBSET_PATH, font_name + ".woff2")
 
     subsetter.subset(font)
     subset.save_font(font, font_path, options)
