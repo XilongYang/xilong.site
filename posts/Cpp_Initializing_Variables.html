@@ -86,8 +86,7 @@ Whatever::Whatever() {
 std::string str(&quot;Hello&quot;);</code></pre>
 <p>注意，只有定义时调用构造函数才是初始化，通过构造函数修改已存在变量的值也是赋值操作。</p>
 <h2 id="列表初始化">列表初始化</h2>
-<p>在C++11之前，可以对POD（Plain Old
-Data，即可以使用memcpy拷贝的类型）类型和内置数组进行列表初始化，如：</p>
+<p>在C++11之前，可以对POD（Plain Old Data，即可以使用memcpy拷贝的类型）类型和内置数组进行列表初始化，如：</p>
 <pre class="language-cpp line-numbers match-braces"><code>int arr[3] = {1, 2, 3};
 struct A {
     int x;

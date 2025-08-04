@@ -95,7 +95,7 @@ def compile(file):
     src = abs_path(TEMP_PATH, file)
     target = abs_path(POST_PATH, file)
 
-    command = "pandoc {} -o {} --no-highlight --template={} --mathjax"
+    command = "pandoc {} -o {} --no-highlight --template={} --mathjax --wrap=none"
     subprocess.run(command.format(src, target, COMPILE_TEMPLATE), shell=True)
     print("Build:" + target)
 

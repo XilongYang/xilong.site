@@ -43,9 +43,14 @@
 </ol>
 </li>
 <li><a href="#基本操作插入">基本操作：插入</a><ol><li><a href="#情况一叔节点是红色">情况一：叔节点是红色</a></li>
+<li><a href="#情况二叔节点是黑色且z与父节点异侧">情况二：叔节点是黑色，且z与父节点异侧</a></li>
+<li><a href="#情况三叔节点是黑色且z与父节点同侧">情况三：叔节点是黑色，且z与父节点同侧</a></li>
 </ol>
 </li>
 <li><a href="#基本操作删除">基本操作：删除</a><ol><li><a href="#情况1x的兄弟节点m为红色">情况1：x的兄弟节点m为红色</a></li>
+<li><a href="#情况2x的兄弟节点m为黑色且m的两个子节点都为黑色">情况2：x的兄弟节点m为黑色，且m的两个子节点都为黑色</a></li>
+<li><a href="#情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</a></li>
+<li><a href="#情况4x的兄弟节点为黑色且m的同侧孩子为红色">情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。</a></li>
 </ol>
 </li>
 <li><a href="#总结">总结</a></li>
@@ -53,8 +58,7 @@
 </div>
 </nav>
 <h2 id="基本概念">基本概念</h2>
-<p>红黑树（Red Black Tree，简称R-B
-Tree）是一种特殊的二叉查找树([[二叉树的存储结构及其非层序遍历|二叉树]])。它的特殊性体现在：</p>
+<p>红黑树（Red Black Tree，简称R-B Tree）是一种特殊的二叉查找树([[二叉树的存储结构及其非层序遍历|二叉树]])。它的特殊性体现在：</p>
 <ol type="1">
 <li>每个节点都有颜色，可以是红色或黑色。</li>
 <li>根节点是黑色。</li>
@@ -102,9 +106,7 @@ R_BNode *R_BNode::Nil = new R_BNode(0, R_BNode::BLACK);</code></pre>
 </ol>
 <p>而右旋是左旋的镜像操作。两种旋转如下图所示：</p>
 <figure>
-<img
-src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/rotate.png"
-alt="rotate" />
+<img src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/rotate.png" alt="rotate" />
 <figcaption aria-hidden="true">rotate</figcaption>
 </figure>
 <h3 id="实现">实现</h3>
@@ -229,18 +231,14 @@ void R_BTree::RightRotate(R_BNode *x) {
     }
     root_-&gt;color = R_BNode::BLACK;
 }</code></pre>
-<h3
-id="情况二叔节点是黑色且z与父节点异侧">情况二：叔节点是黑色，且z与父节点异侧</h3>
+<h3 id="情况二叔节点是黑色且z与父节点异侧">情况二：叔节点是黑色，且z与父节点异侧</h3>
 <p>所谓同侧，就是说z相对于父节点的方向和父节点相对于祖父节点的方向相同。如都是左孩子或都是右孩子。异侧则反之。</p>
 <p>此时可以通过对父节点的一次旋转将情况二转化为情况三。</p>
-<h3
-id="情况三叔节点是黑色且z与父节点同侧">情况三：叔节点是黑色，且z与父节点同侧</h3>
+<h3 id="情况三叔节点是黑色且z与父节点同侧">情况三：叔节点是黑色，且z与父节点同侧</h3>
 <p>此时对祖父节点进行一次与情况二反向的旋转即可修复红黑树。</p>
 <p>以一个不同侧且父节点为左孩子的情况为例：</p>
 <figure>
-<img
-src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/insert.png"
-alt="insert" />
+<img src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/insert.png" alt="insert" />
 <figcaption aria-hidden="true">insert</figcaption>
 </figure>
 <p>如上图，对c而言，叔节点是Nil，为黑色。且c是b的右孩子，而b是a的左孩子，因此c与父节点不同侧，即为情况2。</p>
@@ -363,9 +361,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
 <h3 id="情况1x的兄弟节点m为红色">情况1：x的兄弟节点m为红色</h3>
 <p>此时由于m的两个子节点都为黑色，可以改变m和父节点的颜色，然后对父节点进行一次旋转。并令x的新兄弟节点为新的m，这样情况就转移到了2、3或4。</p>
 <figure>
-<img
-src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete1.png"
-alt="delete1" />
+<img src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete1.png" alt="delete1" />
 <figcaption aria-hidden="true">delete1</figcaption>
 </figure>
 <p>此时可以实现为：</p>
@@ -396,13 +392,10 @@ alt="delete1" />
         ...
     }
 }</code></pre>
-<h3
-id="情况2x的兄弟节点m为黑色且m的两个子节点都为黑色">情况2：x的兄弟节点m为黑色，且m的两个子节点都为黑色</h3>
+<h3 id="情况2x的兄弟节点m为黑色且m的两个子节点都为黑色">情况2：x的兄弟节点m为黑色，且m的两个子节点都为黑色</h3>
 <p>此时由于x是双重黑色，而m与其两个子节点构成了两层黑色，因此可以从x与m上分别消去一层黑色，使得x为黑色，而m为红色。并令x-&gt;parent_为新的x，并对其进行<code>DeleteFixup</code>。</p>
 <figure>
-<img
-src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete2.png"
-alt="delete2" />
+<img src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete2.png" alt="delete2" />
 <figcaption aria-hidden="true">delete2</figcaption>
 </figure>
 <p>此时由于重复调用，改变之前的程序结构：</p>
@@ -446,13 +439,10 @@ alt="delete2" />
     }
      x-&gt;color_ = R_BNode::Black;
 }</code></pre>
-<h3
-id="情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</h3>
+<h3 id="情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</h3>
 <p>此时交换m与异侧孩子的颜色，并进行旋转。使m的异侧孩子成为x新的兄弟节点，m成为新m的同侧孩子。这样就转化成了情况4。</p>
 <figure>
-<img
-src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete3.png"
-alt="delete3" />
+<img src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete3.png" alt="delete3" />
 <figcaption aria-hidden="true">delete3</figcaption>
 </figure>
 <p>实现为：</p>
@@ -511,13 +501,10 @@ alt="delete3" />
     }
      x-&gt;color_ = R_BNode::BLACK;
 }</code></pre>
-<h3
-id="情况4x的兄弟节点为黑色且m的同侧孩子为红色">情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。</h3>
+<h3 id="情况4x的兄弟节点为黑色且m的同侧孩子为红色">情况4：x的兄弟节点为黑色，且m的同侧孩子为红色。</h3>
 <p>使m为父节点的颜色，并将父节点与m的同侧孩子设为黑色。对父节点进行旋转，使m成为新的取代父节点的位置，并设x为根节点。即可修复红黑树。</p>
 <figure>
-<img
-src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete4.png"
-alt="delete4" />
+<img src="../res/post-imgs/Conceptual_Analysis_of_Red-Black_Tree_and_a_Cpp_Implementation/delete4.png" alt="delete4" />
 <figcaption aria-hidden="true">delete4</figcaption>
 </figure>
 <p>此时得出了最终实现：</p>

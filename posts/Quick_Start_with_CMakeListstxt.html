@@ -104,10 +104,8 @@ endforeach(var)</code></pre>
 <p><code>find_library(var NAMES name1 name2 ... PATHS path1 path2 ...)</code>：在path中查找基础名称为name的库，并将其完整路径赋予变量var。</p>
 <p><code>file_path(var file path1 path2 ...)</code>：在path中查找file，并将path路径赋予变量var。</p>
 <h2 id="常用变量">常用变量</h2>
-<p><code>CMAKE_BINARY_DIR</code> = <code>PROJECT_BINARY_DIR</code> =
-<code>&lt;projectname&gt;_BINARY_DIR</code>：可执行文件生成目录。</p>
-<p><code>CMAKE_SOURCE_DIR</code> = <code>PROJECT_SOURCE_DIR</code> =
-<code>&lt;projectname&gt;_SOURCE_DIR</code>：工程顶层目录。</p>
+<p><code>CMAKE_BINARY_DIR</code> = <code>PROJECT_BINARY_DIR</code> = <code>&lt;projectname&gt;_BINARY_DIR</code>：可执行文件生成目录。</p>
+<p><code>CMAKE_SOURCE_DIR</code> = <code>PROJECT_SOURCE_DIR</code> = <code>&lt;projectname&gt;_SOURCE_DIR</code>：工程顶层目录。</p>
 <p><code>CMAKE_CURRENT_SOURCE_DIR</code>：当前文件（可以是子文件夹的CMakeLists.txt）所在目录。</p>
 <p><code>CMAKE_CURRENT_BINARY_DIR</code>：当前文件产生的可执行文件目录。</p>
 <p><code>CMAKE_CURRENT_LIST_FILE</code>：调用此变量的CMakeLists.txt的完整路径。</p>

@@ -41,25 +41,31 @@
 <li><a href="#链式存储结构">2. 链式存储结构</a></li>
 </ol>
 </li>
-<li><a href="#二叉树的遍历">二叉树的遍历</a></li>
+<li><a href="#二叉树的遍历">二叉树的遍历</a><ol><li><a href="#前序遍历">前序遍历</a></li>
+<li><a href="#中序遍历">中序遍历</a></li>
+<li><a href="#后序遍历">后序遍历</a></li>
+<li><a href="#三种遍历的非递归实现">三种遍历的非递归实现</a></li>
+<li><a href="#图解后序遍历的非递归算法">图解后序遍历的非递归算法</a></li>
+</ol>
+</li>
+<li><a href="#通过中序序列前序后序序列构建二叉树">通过中序序列+前序/后序序列构建二叉树</a><ol><li><a href="#原理-1">原理</a></li>
+<li><a href="#代码实现-1">代码实现</a></li>
+</ol>
+</li>
+<li><a href="#计算一对先序序列和后序序列可能表示的二叉树个数">计算一对先序序列和后序序列可能表示的二叉树个数</a></li>
 </ol>
 </div>
 </nav>
 <h2 id="二叉树的五个性质">二叉树的五个性质</h2>
 <ol type="1">
-<li><p>二叉树的第i层上至多有<span class="math inline">\(2^{i -
-1}\)</span>个结点</p></li>
-<li><p>深度为k的二叉树至多有<span class="math inline">\(2^{k -
-1}\)</span>个结点</p></li>
+<li><p>二叉树的第i层上至多有<span class="math inline">\(2^{i - 1}\)</span>个结点</p></li>
+<li><p>深度为k的二叉树至多有<span class="math inline">\(2^{k - 1}\)</span>个结点</p></li>
 <li><p>对任何一棵二叉树T, 其终端结点数为度为2的结点数 + 1</p></li>
-<li><p>具有n个结点的完全二叉树深度为：<span class="math inline">\(log_2n
-+ 1\)</span></p>
+<li><p>具有n个结点的完全二叉树深度为：<span class="math inline">\(log_2n + 1\)</span></p>
 <p>满二叉树：每一层结点数都为最大</p>
 <p>完全二叉树：每一结点按层的编号都与对应的满二叉树一一对应</p>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-0.png"
-alt="Binary-Tree-0" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-0.png" alt="Binary-Tree-0" />
 <figcaption aria-hidden="true">Binary-Tree-0</figcaption>
 </figure>
 <p><em>a.满二叉树 b.完全二叉树</em></p></li>
@@ -72,19 +78,14 @@ alt="Binary-Tree-0" />
 </ol>
 <h2 id="二叉树的存储结构">二叉树的存储结构</h2>
 <h3 id="顺序存储结构">1. 顺序存储结构</h3>
-<p>将完全二叉树上序号为i的结点存在数组中标号为i -
-1的地址中，如非完全二叉树，则空出来的地址留空。此时子结点用性质5即可得到。</p>
+<p>将完全二叉树上序号为i的结点存在数组中标号为i - 1的地址中，如非完全二叉树，则空出来的地址留空。此时子结点用性质5即可得到。</p>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-1.png"
-alt="Binary-Tree-1" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-1.png" alt="Binary-Tree-1" />
 <figcaption aria-hidden="true">Binary-Tree-1</figcaption>
 </figure>
 <p>上面三个二叉树的存储结构分别为：</p>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-2.png"
-alt="Binary-Tree-2" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-2.png" alt="Binary-Tree-2" />
 <figcaption aria-hidden="true">Binary-Tree-2</figcaption>
 </figure>
 <p><em>(用0表示结点不存在)</em></p>
@@ -94,18 +95,14 @@ alt="Binary-Tree-2" />
 <h4 id="二叉链表">二叉链表</h4>
 <p>二叉链表的组织形式：</p>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-3.png"
-alt="Binary-Tree-3" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-3.png" alt="Binary-Tree-3" />
 <figcaption aria-hidden="true">Binary-Tree-3</figcaption>
 </figure>
 <h4 id="三叉链表">三叉链表</h4>
 <p>三叉链表在二叉链表的基础上添加了指向父结点的指针，与二叉链表大同小异。</p>
 <p>三叉链表的组织形式：</p>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-4.png"
-alt="Binary-Tree-4" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-4.png" alt="Binary-Tree-4" />
 <figcaption aria-hidden="true">Binary-Tree-4</figcaption>
 </figure>
 <h4 id="代码实现">代码实现</h4>
@@ -240,9 +237,7 @@ int Visit(Bintree T)
 <p>为了实现非递归遍历，先来看看遍历过程中发生了什么。</p>
 <p>在遍历过程中，每个结点有三次访问机会，即指针从父结点指向自身，从左孩子退回，从右孩子退回。这里我们不妨规定没有左/右孩子的结点仍能获得空指针退回的访问机会（即将空指针看做一个无法进入的孩子结点）。</p>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-5.png"
-alt="Binary-Tree-5" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-5.png" alt="Binary-Tree-5" />
 <figcaption aria-hidden="true">Binary-Tree-5</figcaption>
 </figure>
 <p>由于我们规定了左子树一定在右子树之前遍历，整个树的遍历顺序就如上图所示(a-&gt;b)。我们在每个结点的左侧、下侧和右侧分别设定一个触发点，并将它们在遍历路径中出现的顺序记录下来。</p>
@@ -337,14 +332,11 @@ alt="Binary-Tree-5" />
 <p>总结：一路向左，非空则进，遇空判定，有右则进，无右则出，不忘置零。</p>
 <h3 id="图解后序遍历的非递归算法">图解后序遍历的非递归算法</h3>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-6.gif"
-alt="Binary-Tree-6" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-6.gif" alt="Binary-Tree-6" />
 <figcaption aria-hidden="true">Binary-Tree-6</figcaption>
 </figure>
 <p>精力有限，只好挑一个难度最大的做图解。</p>
-<h2
-id="通过中序序列前序后序序列构建二叉树">通过中序序列+前序/后序序列构建二叉树</h2>
+<h2 id="通过中序序列前序后序序列构建二叉树">通过中序序列+前序/后序序列构建二叉树</h2>
 <h3 id="原理-1">原理</h3>
 <ul>
 <li><p>前序序列中任一子树以根结点-左子树-右子树的结构排列。</p></li>
@@ -359,9 +351,7 @@ id="通过中序序列前序后序序列构建二叉树">通过中序序列+前�
 </ol>
 <h4 id="图解以前序-中序构建为例">图解：以前序-中序构建为例</h4>
 <figure>
-<img
-src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-7.gif"
-alt="Binary-Tree-7" />
+<img src="../res/post-imgs/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration/Binary-Tree-7.gif" alt="Binary-Tree-7" />
 <figcaption aria-hidden="true">Binary-Tree-7</figcaption>
 </figure>
 <h3 id="代码实现-1">代码实现</h3>
@@ -428,8 +418,7 @@ BinTree Post_Mid_Build (SI p_begin, SI p_end, SI m_begin, SI m_end)
     }
     return boot;
 }</code></pre>
-<h2
-id="计算一对先序序列和后序序列可能表示的二叉树个数">计算一对先序序列和后序序列可能表示的二叉树个数</h2>
+<h2 id="计算一对先序序列和后序序列可能表示的二叉树个数">计算一对先序序列和后序序列可能表示的二叉树个数</h2>
 <h3 id="原理-2">原理</h3>
 <ul>
 <li><p>前序序列中任一子树以根结点-左子树-右子树的结构排列。</p></li>
@@ -437,8 +426,7 @@ id="计算一对先序序列和后序序列可能表示的二叉树个数">计�
 </ul>
 <p>可能混淆的情况有：根（左/右）+（左/右）根。</p>
 <p>可以知道，前序序列与后序序列中任何有两个子树的树都是确定的。而每一对仅一个子树的树将有两种可能结构。</p>
-<p>因此只要求出序列对中有多少对无法确定的子树即可，很容易发现这样的树对以AB
-&amp; BA的方式存在。只要搜索两个序列即可。</p>
+<p>因此只要求出序列对中有多少对无法确定的子树即可，很容易发现这样的树对以AB &amp; BA的方式存在。只要搜索两个序列即可。</p>
 <h3 id="代码">代码</h3>
 <pre class="language-cpp line-numbers match-braces"><code>//因为要用到位运算， 使用无符号类型
 using UL = unsigned long;

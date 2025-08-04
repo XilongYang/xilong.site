@@ -56,9 +56,7 @@
 <p>构造过程为从根节点开始，对每个串的字符逐位判断，若存在字符相同的子节点则转移到子节点。否则创建一个新节点，并令其字符为当前字符。将每个串遍历结束时停留的节点标记为接受节点。下一个串仍从根节点开始构造。</p>
 <p>比如字母表限定为“小写英文字母（a-z）”，模式串为{“she”,“he”,“her”,“his”,“is”}时，可以生成如下所示Tire树：</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102120835270.png"
-alt="image-20211102120835270" />
+<img src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102120835270.png" alt="image-20211102120835270" />
 <figcaption aria-hidden="true">image-20211102120835270</figcaption>
 </figure>
 <p>要判断一个串是否与某一模式串相同只需要从根节点开始，对待匹配串逐位判断，若存在与该位字符相同的子节点则转移，否则匹配失败。如果匹配结束时停留在接受节点则匹配成功。例如：</p>
@@ -95,9 +93,7 @@ alt="image-20211102120835270" />
 <p>如对”sher”而言，匹配到”she”模式的末尾时位于第4层的’e’节点。匹配’r’时，无对应子节点而匹配失败，此时不从头开始，而是转移到第3层的’e’节点，其对应的”he”为”she”在该图中的最长后缀，此时继续匹配’r’，发现对应子节点，并转移到’r’。匹配结束，路径上的共有3个接受节点，分别对应”she”、“he”、“her”，这三个模式的匹配次数分别+1。</p>
 <p>如果将每个节点的失败后转移节点标记出来，就形成了下图结构（蓝色箭头表示失败后转移节点，没有标记的则转移到根节点）：</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102130728715.png"
-alt="image-20211102130728715" />
+<img src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102130728715.png" alt="image-20211102130728715" />
 <figcaption aria-hidden="true">image-20211102130728715</figcaption>
 </figure>
 <h2 id="失配指针">失配指针</h2>

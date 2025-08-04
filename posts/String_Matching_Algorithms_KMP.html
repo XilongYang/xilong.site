@@ -46,30 +46,22 @@
 <p>KMP算法是一种利用模式串中的信息来尽可能减少与待匹配串的匹配次数从而大副提高效率的算法。它的核心是一个<code>next</code>表，用以记录一次匹配失败后，下次匹配开始的位置。</p>
 <h2 id="kmp匹配过程">KMP匹配过程</h2>
 <p>如何生成<code>next</code>表是KMP的核心内容，但在此之前，不妨先看看KMP算法是如何工作的。</p>
-<p>设模式串为”ABAABAC”，待匹配串为”ABABAABAABAC”。根据模式串生成的<code>next</code>表为：{0,
-0, 1, 1, 2, 3,
-0}。之后会介绍如何生成<code>next</code>表。这里先解释这个表的意义，<code>next[n] = k</code>意为<strong>在模式串前n位构成的子串中，其最长相等严格前后缀的长度为k。</strong></p>
+<p>设模式串为”ABAABAC”，待匹配串为”ABABAABAABAC”。根据模式串生成的<code>next</code>表为：{0, 0, 1, 1, 2, 3, 0}。之后会介绍如何生成<code>next</code>表。这里先解释这个表的意义，<code>next[n] = k</code>意为<strong>在模式串前n位构成的子串中，其最长相等严格前后缀的长度为k。</strong></p>
 <p>解释一下黑体字就是说，对于模式串“ABAABAC”而言，其前6位构成的子串是”ABAABA”。所谓的严格前/后缀就是指除了串本身的前/后缀：<code>{前/后缀} - {串本身}</code>。相等严格前后缀是指既是串的严格前缀也是串的严格后缀的子串，对于”ABAABA”而言，其相等严格前后缀有：“A”、“ABA”两个。最长相等严格前后缀显然就是”ABA”。</p>
 <p>上面这段话就可以表示为<code>next[6] = 3</code>。</p>
 <p>从位置0开始匹配，结果如下：</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101183430703.png"
-alt="image-20211101183430703" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101183430703.png" alt="image-20211101183430703" />
 <figcaption aria-hidden="true">image-20211101183430703</figcaption>
 </figure>
 <p>成功匹配的位数是3，查询匹配表项<code>next[3] = 1</code>。也就是已匹配部分的末位与首位相等，因此可以直接将首位移到末位位置开始下一轮匹配：</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101191242087.png"
-alt="image-20211101191242087" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101191242087.png" alt="image-20211101191242087" />
 <figcaption aria-hidden="true">image-20211101191242087</figcaption>
 </figure>
 <p>成功匹配的位数是6，注意匹配并不是从位置2开始的，而是从位置3——上次匹配失败的位置开始，查询匹配表项<code>next[6] = 3</code>。说明已匹配部分前3位与后3位相等，将前3位移到后3位的位置开始下一轮匹配：</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101190744058.png"
-alt="image-20211101190744058" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101190744058.png" alt="image-20211101190744058" />
 <figcaption aria-hidden="true">image-20211101190744058</figcaption>
 </figure>
 <p>匹配成功。</p>
@@ -122,51 +114,37 @@ vector&lt;int&gt; kmp(const string&amp; str, const string&amp; pattern) {
 <p>可以看出与kmp匹配过程的代码非常相似，图解如下：</p>
 <p>例P=“ABCDABA”</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101211913745.png"
-alt="image-20211101211913745" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101211913745.png" alt="image-20211101211913745" />
 <figcaption aria-hidden="true">image-20211101211913745</figcaption>
 </figure>
 <p>因为严格前/后缀不能等于自身，因此从第2位开始匹配，并将第一位结果置0。可见匹配失败，且<code>k=0</code>，将此位结果置0，进入下一位。</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212012168.png"
-alt="image-20211101212012168" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212012168.png" alt="image-20211101212012168" />
 <figcaption aria-hidden="true">image-20211101212012168</figcaption>
 </figure>
 <p>依然不匹配，且<code>k=0</code>，置0进入下一位。</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212117026.png"
-alt="image-20211101212117026" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212117026.png" alt="image-20211101212117026" />
 <figcaption aria-hidden="true">image-20211101212117026</figcaption>
 </figure>
 <p>还是不匹配，且<code>k=0</code>，置0进入下一位。</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212427058.png"
-alt="image-20211101212427058" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212427058.png" alt="image-20211101212427058" />
 <figcaption aria-hidden="true">image-20211101212427058</figcaption>
 </figure>
 <p>匹配，<code>++k</code>，并置<code>结果=k=1</code>。由于下一步比较时<code>k=1</code>增量与比较步长相同，看起来好像没有移动。</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212506554.png"
-alt="image-20211101212506554" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212506554.png" alt="image-20211101212506554" />
 <figcaption aria-hidden="true">image-20211101212506554</figcaption>
 </figure>
 <p>匹配，<code>++k</code>，并置<code>结果=k=2</code>。进入下一步。</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212649204.png"
-alt="image-20211101212649204" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212649204.png" alt="image-20211101212649204" />
 <figcaption aria-hidden="true">image-20211101212649204</figcaption>
 </figure>
 <p>不匹配，且<code>k &gt; 0</code>试图取<code>next[k - 1] = next[1] = 0</code>与该位比较。</p>
 <figure>
-<img
-src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212832132.png"
-alt="image-20211101212832132" />
+<img src="../res/post-imgs/String_Matching_Algorithms_KMP/image-20211101212832132.png" alt="image-20211101212832132" />
 <figcaption aria-hidden="true">image-20211101212832132</figcaption>
 </figure>
 <p>匹配，且<code>k=0</code>，<code>++k</code>置<code>结果=k=1</code>。结束匹配过程。</p>

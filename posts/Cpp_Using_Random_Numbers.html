@@ -113,8 +113,7 @@ int main() {
     }
     return 0;
 }</code></pre>
-<p>这种方式会生成一样的数字，原因是随机数种子被设置时会重置随机数生成器的状态（Engine
-e初始化时同样设置了默认种子）。应避免在生成随机数时设置种子。</p>
+<p>这种方式会生成一样的数字，原因是随机数种子被设置时会重置随机数生成器的状态（Engine e初始化时同样设置了默认种子）。应避免在生成随机数时设置种子。</p>
 <pre class="language-cpp line-numbers match-braces"><code>#include &lt;cstdlib&gt;
 #include &lt;random&gt;
 #include &lt;ctime&gt;

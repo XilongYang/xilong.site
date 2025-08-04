@@ -32,8 +32,7 @@
 <main>
 <div class="abstract">
 <p>偶然间看见一个声明:</p>
-<p>struct tm <em>(</em>(<em>Pfunc)[3])(int(</em>)(int, int),
-float(*[])(float));</p>
+<p>struct tm <em>(</em>(<em>Pfunc)[3])(int(</em>)(int, int), float(*[])(float));</p>
 <p>一时间感到云里雾里。为了弄懂此类复杂的声明学习一些相关的知识，在此总结。</p>
 </div>
 <nav role="navigation" class="toc">
@@ -62,14 +61,12 @@ float(*[])(float));</p>
 <h2 id="声明与定义的区别">声明与定义的区别</h2>
 <h3 id="声明">声明</h3>
 <p><strong>对于C++中的声明，比较通用的描述为：一条声明语句由一个基本数据类型和紧随其后的一个声明符列表组成。每个声明符命名一个变量并指定该变量为与基本数据类型有关的某种类型。</strong></p>
-<p><em>声明语句： 基本数据类型 声明符1&lt;, 声明符2, 声明符3
-…&gt;</em></p>
+<p><em>声明语句： 基本数据类型 声明符1&lt;, 声明符2, 声明符3 …&gt;</em></p>
 <p>例如：</p>
 <pre class="language-cpp line-numbers match-braces"><code>int a, b = 2;
 //int为基本数据类型， a,b为一个含有2个声明符的声明符列表，a与b都是声明符，分别声明（并定义）了名称为a, b的int型变量， 并把2赋值给b。</code></pre>
 <h3 id="定义">定义</h3>
-<p>可以看出，这条语句在声明了a,
-b的同时定义了它们。这里引出了声明和定义的关系：</p>
+<p>可以看出，这条语句在声明了a, b的同时定义了它们。这里引出了声明和定义的关系：</p>
 <p><strong>声明使得名字为程序所知，而定义负责建立名字与实体间的关系。</strong>声明规定了变量的类型与名字，而定义在此基础上为变量分配存储空间，还可能为其赋一个初始值。</p>
 <h2 id="extern关键字">extern关键字</h2>
 <p>extern关键字常用于表示一个变量已在其它文件中定义。</p>
@@ -78,8 +75,7 @@ b的同时定义了它们。这里引出了声明和定义的关系：</p>
 </ul>
 <pre class="language-cpp line-numbers match-braces"><code>extern int a; //声明int型变量a，但未定义
 extern int b = 2; //声明并定义int型变量b，并为其赋初始值2</code></pre>
-<p>​
-<strong><em>任何显式初始化的声明即成为定义</em></strong><em>。即使一个声明符已用extern标记，对其进行初始化仍会导致定义行为。</em></p>
+<p>​ <strong><em>任何显式初始化的声明即成为定义</em></strong><em>。即使一个声明符已用extern标记，对其进行初始化仍会导致定义行为。</em></p>
 <ul>
 <li><p>对于<strong>多文件</strong>程序，若要在多个文件中使用<strong>同一个变量</strong>，则必须在<strong>所有</strong>使用该变量的文件中<strong>声明</strong>它，但仅可在<strong>一个</strong>文件中<strong>定义</strong>该变量。</p></li>
 <li><p><strong>不可在函数体内部初始化</strong>一个含有extern标记的变量。</p></li>
@@ -182,8 +178,7 @@ a2.HW();//非法，即使非常量成员函数内没有改变对象的操作，�
 a2.HW_c();//合法</code></pre>
 <h2 id="constexpr关键字">constexpr关键字</h2>
 <p>常量表达式指在编译时就能得到值且不会改变的表达式。常见的有字面值与用常量表达式初始化的const对象。</p>
-<p>实际使用时往往很难确定一个表达式是否是常量表达式。此时可用constexpr声明该变量，
-以由编译器检查其是否为常量表达式。</p>
+<p>实际使用时往往很难确定一个表达式是否是常量表达式。此时可用constexpr声明该变量， 以由编译器检查其是否为常量表达式。</p>
 <p>constexpr在声明指针时，会将指针设为顶层const。</p>
 <p>constexpr函数需要满足：</p>
 <ul>
@@ -203,8 +198,7 @@ const int *const p3 = null; //p3是指向整数常量的常量指针</code></pre
 <ul>
 <li><em>字面值常量类型的constexpr静态数据成员（常量表达式并不一定是用constexpr关键字定义的）可在类内用const整数类型的初始值初始化。即便如此，仍应在类外定义该成员，否则任何编译器不能直接用该成员的值替换该成员的场景都会引起错误。且此时在类外的定义不能再提供初始值。</em></li>
 </ul></li>
-<li><p>对于在<strong>类</strong>作用域定义的<strong>函数成员</strong>，使用static标记使该成员为<strong>整个类共用</strong>。静态成员函数不与任何对象绑定，不包含<em>this</em>指针，因此不能声明为const类型
-。静态函数成员仅能使用其它静态成员。</p></li>
+<li><p>对于在<strong>类</strong>作用域定义的<strong>函数成员</strong>，使用static标记使该成员为<strong>整个类共用</strong>。静态成员函数不与任何对象绑定，不包含<em>this</em>指针，因此不能声明为const类型 。静态函数成员仅能使用其它静态成员。</p></li>
 </ol>
 <ul>
 <li>union的成员不能声明成static类型 。</li>

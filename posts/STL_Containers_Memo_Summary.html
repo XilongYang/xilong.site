@@ -152,12 +152,10 @@
 <p><code>iterator</code>: 容器的迭代器类型。</p>
 <p><code>const_iterator</code>: 迭代器的只读版本。</p>
 <p><code>size_type</code>: 无符号整数类型，保存最大容器大小。</p>
-<p><code>differenct_type</code>:
-带符号整数类型，保存两个迭代器间的距离。</p>
+<p><code>differenct_type</code>: 带符号整数类型，保存两个迭代器间的距离。</p>
 <p><code>value_type</code>: 元素类型。</p>
 <p><code>reference</code>: 元素的左值类型，含义为value_type&amp;。</p>
-<p><code>const_reference</code>: 元素的const左值类型，含义为const
-value_type&amp;。</p>
+<p><code>const_reference</code>: 元素的const左值类型，含义为const value_type&amp;。</p>
 <h4 id="构造函数">构造函数</h4>
 <p><code>C c;</code>：默认构造函数，构造一个空容器。</p>
 <p><code>C c1(c2)</code>：构造c2的拷贝c1。</p>
@@ -166,8 +164,7 @@ value_type&amp;。</p>
 <h4 id="赋值与swap">赋值与swap</h4>
 <p><code>c1 = c2</code>：将c1中的元素替换为c2中的元素。</p>
 <p><code>c = {a, b, c, d...}</code>：将c中的元素替换为列表中的元素（array不可用）。</p>
-<p><code>a.swap(b)</code>,
-<code>swap(a, b)</code>：交换a,b中的元素。</p>
+<p><code>a.swap(b)</code>, <code>swap(a, b)</code>：交换a,b中的元素。</p>
 <h4 id="大小">大小</h4>
 <p><code>c.size()</code>：c中元素数目。</p>
 <p><code>c.max_size()</code>：c最大可保存元素数目。</p>
@@ -183,15 +180,13 @@ value_type&amp;。</p>
 <h4 id="获取迭代器">获取迭代器</h4>
 <p><code>c.begin()</code>，<code>c.end()</code>：返回首迭代器和尾后迭代器。</p>
 <p><code>c.cbegin()</code>，<code>c.cend()</code>：返回const迭代器。</p>
-<h4
-id="反向迭代器不支持forward_list">反向迭代器(不支持forward_list)</h4>
+<h4 id="反向迭代器不支持forward_list">反向迭代器(不支持forward_list)</h4>
 <p><code>reverse_iterator</code>：按逆序寻址元素的迭代器</p>
 <p><code>const_reverse_iterator</code>：反向迭代器的只读版本。</p>
 <p><code>c.rbegin()</code>，<code>c.rend()</code>：返回尾迭代器和首前迭代器。</p>
 <p><code>c.crbegin()</code>，<code>c.crend()</code>：返回const反向迭代器。</p>
 <h3 id="顺序容器操作">顺序容器操作</h3>
-<p><strong>总是可以使用两个迭代器的范围表示多个已存在元素，用(n, t)或{a,
-b, c…}表示多个新元素。将这三种表示方法称为range</strong></p>
+<p><strong>总是可以使用两个迭代器的范围表示多个已存在元素，用(n, t)或{a, b, c…}表示多个新元素。将这三种表示方法称为range</strong></p>
 <h4 id="构造函数-1">构造函数</h4>
 <p><code>C seq(n)</code>：一个包含n个元素的顺序容器。</p>
 <p><code>C seq(range)</code>：一个元素为range的顺序容器。</p>
@@ -215,8 +210,7 @@ b, c…}表示多个新元素。将这三种表示方法称为range</strong></p>
 <p><code>c.pop_back()</code>：删除c的尾元素，c为空时UB。</p>
 <p><code>c.pop_front()</code>：删除c的首元素，c为空时UB。</p>
 <p><code>c.erase(p)</code>：删除迭代器p指向的元素，返回下一个元素的迭代器。p为尾后迭代器时UB。</p>
-<p><code>c.erase(b, e)</code>：删除迭代器b,
-e范围内的所有元素，返回下一个元素的迭代器。</p>
+<p><code>c.erase(b, e)</code>：删除迭代器b, e范围内的所有元素，返回下一个元素的迭代器。</p>
 <p><code>c.clear()</code>：删除所有元素，返回void。</p>
 <p><strong>删除deque中除首尾元素的任何元素会导致迭代器、指针和引用失效。</strong></p>
 <p><strong>删除vector或string中的元素会导致删除点之后的迭代器、指针和引用失效。</strong></p>
@@ -269,11 +263,8 @@ e范围内的所有元素，返回下一个元素的迭代器。</p>
 <p><code>pos1, n1, cp, n2</code>：从pos1开始的n1个字符与从cp开始的n2个字符比较。</p>
 <h5 id="数值转换">数值转换</h5>
 <p><code>to_string(val)</code>：返回val的string表示。</p>
-<p><code>sto{type}(s, p, b)</code>：返回s起始的子串的数值，由type指定返回值类型。b表示进制，默认为10。p是size_t指针，用来保存第一个非数值字符的下标，默认为0，即不保存下标。type可以为：i
-(int)、l (long)、ul (unsigned long)、ll (long long)、ull (unsigned long
-long)。</p>
-<p><code>sto{type}(s, p)</code>：基本同上，返回浮点数，不能指定进制。type可以为：f
-(float)、d (double)、ld (long double)。</p>
+<p><code>sto{type}(s, p, b)</code>：返回s起始的子串的数值，由type指定返回值类型。b表示进制，默认为10。p是size_t指针，用来保存第一个非数值字符的下标，默认为0，即不保存下标。type可以为：i (int)、l (long)、ul (unsigned long)、ll (long long)、ull (unsigned long long)。</p>
+<p><code>sto{type}(s, p)</code>：基本同上，返回浮点数，不能指定进制。type可以为：f (float)、d (double)、ld (long double)。</p>
 <h4 id="容器适配器操作">容器适配器操作</h4>
 <p><code>container_type</code>：实现适配器的底层容器类型。</p>
 <ul>
@@ -329,10 +320,8 @@ long)。</p>
 <p><code>const_local_iterator</code>：迭代器的const版本。</p>
 <p><code>c.begin(n)</code>、<code>c.end(n)</code>、<code>c.cbegin(n)</code>、<code>c.cend(n)</code>：桶n的对应迭代器。</p>
 <p><code>c.load_factor()</code>：每个桶的平均元素数量，返回float值。</p>
-<p><code>c.max_load_factor()</code>：c试图维护的平均桶大小，返回float值。c会在需要时添加新的桶，使load_factor
-&lt;= max_load_factor。</p>
-<p><code>c.rehash(n)</code>：重组存储，使bucket_count &gt;=
-n且bucket_count &gt; size / max_load_factor。</p>
+<p><code>c.max_load_factor()</code>：c试图维护的平均桶大小，返回float值。c会在需要时添加新的桶，使load_factor &lt;= max_load_factor。</p>
+<p><code>c.rehash(n)</code>：重组存储，使bucket_count &gt;= n且bucket_count &gt; size / max_load_factor。</p>
 <p><code>c.reserve(n)</code>：重组存储，使c可以保存n个元素而不用rehash。</p>
 <pre class="language-cpp line-numbers match-braces"><code>// 无序容器的使用
 T1 hash(args);

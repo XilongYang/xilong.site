@@ -56,19 +56,13 @@
 <p>现在是时候格式化分区了，就决定是你了Ext4……等等，既然这个分区只是用来托管代码，为什么不试试没用过的文件系统呢？就决定是你了——Btrfs！</p>
 <p>查阅了ArchWiki，Btrfs的介绍是这样的：</p>
 <blockquote>
-<p>Btrfs 是一种新型的写时复制 (CoW) Linux
-文件系统，已经并入内核主线。Btrfs
-在设计实现高级功能的同时，着重于容错、修复以及易于管理。它由 Oracle, Red
-Hat, Fujitsu, Intel, SUSE, STRATO 等企业和开发者共同开发，Btrfs 以 GNU
-GPL 协议授权，同时也欢迎任何人的贡献。</p>
+<p>Btrfs 是一种新型的写时复制 (CoW) Linux 文件系统，已经并入内核主线。Btrfs 在设计实现高级功能的同时，着重于容错、修复以及易于管理。它由 Oracle, Red Hat, Fujitsu, Intel, SUSE, STRATO 等企业和开发者共同开发，Btrfs 以 GNU GPL 协议授权，同时也欢迎任何人的贡献。</p>
 </blockquote>
 <p>经过了解，发现几个比较感兴趣的特点：</p>
 <ul>
 <li>写时复制：任何写入操作都发生在空闲空间。与传统方式最显著的区别大概在于文件覆写时：传统方式直接在文件相应位置写入，而写时复制方式在空闲空间写入数据并通过修改原文件的元数据以使其相应位置的引用指向写入的位置，并在原地址引用数为0时释放其数据。</li>
 <li>透明压缩：btrfs可以自动的尝试压缩文件，这样一方面减少了文件大小，另一方面显著延长了闪存介质的寿命。</li>
-<li>SSD TRIM：btrfs可以从支持TRIM 命令的 SSD
-驱动器中释放未使用的块。已释放的空间范围不会被马上丢弃，它们会被集中起来并在稍后由一个单独的工作线程进行
-TRIM，这将能改善提交延迟，以提高SSD的性能。</li>
+<li>SSD TRIM：btrfs可以从支持TRIM 命令的 SSD 驱动器中释放未使用的块。已释放的空间范围不会被马上丢弃，它们会被集中起来并在稍后由一个单独的工作线程进行 TRIM，这将能改善提交延迟，以提高SSD的性能。</li>
 </ul>
 <p>为了实现上述功能在挂载时需要添加两个参数：</p>
 <p><code>compress=zstd</code>：使用zstd算法启用自动压缩。</p>
@@ -97,12 +91,8 @@ fi</code></pre>
 <h3 id="使用udev">使用udev</h3>
 <p>ArchWiki对udev的介绍如下：</p>
 <blockquote>
-<p>udev 是 Linux 内核的设备管理器。总的来说，它取代了 devfs 和
-hotplug，负责管理 <code>/dev</code> 中的设备节点。同时，udev
-也处理所有用户空间发生的硬件添加、删除事件，以及某些特定设备所需的固件加载。</p>
-<p>与传统的顺序加载相比，udev
-通过并行加载内核模块提供了潜在的性能优势。异步加载模块的方式也有一个天生的缺点：无法保证每次加载模块的顺序，如果机器具有多个块设备，那么它们的设备节点可能随机变化。例如如果有两个硬盘，<code>/dev/sda</code>
-可能会随机变成<code>/dev/sdb</code>。</p>
+<p>udev 是 Linux 内核的设备管理器。总的来说，它取代了 devfs 和 hotplug，负责管理 <code>/dev</code> 中的设备节点。同时，udev 也处理所有用户空间发生的硬件添加、删除事件，以及某些特定设备所需的固件加载。</p>
+<p>与传统的顺序加载相比，udev 通过并行加载内核模块提供了潜在的性能优势。异步加载模块的方式也有一个天生的缺点：无法保证每次加载模块的顺序，如果机器具有多个块设备，那么它们的设备节点可能随机变化。例如如果有两个硬盘，<code>/dev/sda</code> 可能会随机变成<code>/dev/sdb</code>。</p>
 </blockquote>
 <p>当一个设备被添加或是移除时，udev会从kernel得知这个事件。然后遍历规则文件目录（默认在/etc/udev/rules.d）中的规则文件寻找匹配的规则，有就按规则处理，没有就作默认处理。</p>
 <p>也就是说，我们可以通过编写规则文件的方式让udev在加载硬盘时进行挂载处理。</p>
@@ -139,18 +129,9 @@ KERNEL==&quot;sd[a-z][0-9]&quot; \
 <p>到这里，非常开心地，我们掉进坑里了。这条规则可以运行，但mount命令会出错，导致并不能如预期那样工作。</p>
 <p>然后才看见ArchWiki上这条警告：</p>
 <blockquote>
-<p><strong>警告：</strong>
-要挂载可移动设备，请<strong>不要</strong>通过在 udev 规则中调用
-<code>mount</code> 命令的方法。对 FUSE 文件系统将会导致
-<code>Transport endpoint not connected</code> 错误。应代之以 <a
-href="https://wiki.archlinux.org/title/Udisks_(简体中文)">udisks</a>
-以正确处理自动挂载。或者把挂载动作放在 udev 规则内部：</p>
-<p>将 <code>/usr/lib/systemd/system/systemd-udevd.service</code> 复制到
-<code>/etc/systemd/system/systemd-udevd.service</code>，将
-<code>MountFlags=slave</code> 替换为 <code>MountFlags=shared</code>。<a
-href="https://unix.stackexchange.com/a/154318">（来源）</a></p>
-<p>Keep in mind though that udev is not intended to invoke long-running
-processes.</p>
+<p><strong>警告：</strong> 要挂载可移动设备，请<strong>不要</strong>通过在 udev 规则中调用 <code>mount</code> 命令的方法。对 FUSE 文件系统将会导致 <code>Transport endpoint not connected</code> 错误。应代之以 <a href="https://wiki.archlinux.org/title/Udisks_(简体中文)">udisks</a> 以正确处理自动挂载。或者把挂载动作放在 udev 规则内部：</p>
+<p>将 <code>/usr/lib/systemd/system/systemd-udevd.service</code> 复制到 <code>/etc/systemd/system/systemd-udevd.service</code>，将 <code>MountFlags=slave</code> 替换为 <code>MountFlags=shared</code>。<a href="https://unix.stackexchange.com/a/154318">（来源）</a></p>
+<p>Keep in mind though that udev is not intended to invoke long-running processes.</p>
 </blockquote>
 <p>试图更改systemd-udevd.service，发现没效果。几经辗转，发现使用systemd可以解决这个问题。不再需要折腾systemd-udevd.service了。</p>
 <p>首先创建一个service，repo.service：</p>
