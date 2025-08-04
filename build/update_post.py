@@ -56,7 +56,10 @@ def is_need_update(file):
     return os.path.getmtime(abs_post_path) < os.path.getmtime(abs_src_path)
 
 
-def preprocess(src_file, target_file):
+def preprocess(file):
+    src_file = abs_path(SRC_PATH, file)
+    target_file = abs_path(TEMP_PATH, file)
+
     contents = read_file_in_lines(src_file)
     # Insert abstract and toc
     start_pos = 0
@@ -90,7 +93,10 @@ def preprocess(src_file, target_file):
     write_file(target_file, contents)
 
 
-def compile(src, target):
+def compile(file):
+    src = abs_path(TEMP_PATH, file)
+    target = abs_path(POST_PATH, file)
+
     command = "pandoc {} -o {} --no-highlight --template={} --mathjax"
     subprocess.run(command.format(src, target, COMPILE_TEMPLATE), shell=True)
     print("Build:" + target)
@@ -150,20 +156,13 @@ def generate_toc(contents):
     return serialized_contents.replace('<p>[[toc]]</p>', toc_html)
 
 
-def postprocess(abs_post_path):
+def postprocess(file):
+    abs_post_path = abs_path(POST_PATH, file)
     # Generate TOC
     write_file(abs_post_path, generate_toc(read_file_in_lines(abs_post_path)))
     # Generate subset of fonts
-    file_name = os.path.splitext(os.path.basename(abs_post_path))[0]
     text = unique_text(abs_post_path)
-    gen_subset(file_name, text)
-
-
-def process_files(operation, src_path, target_path, list):
-    for file in list:
-        src = abs_path(src_path, file)
-        target = abs_path(target_path, file)
-        operation(src, target)
+    gen_subset(file, text)
 
 
 def update_post():
@@ -187,13 +186,9 @@ def update_post():
         write_file(COMPILE_TEMPLATE, gen_template(TEMPLATE_POST_PATH))
 
         for file in need_update_list:
-            abs_src_path = abs_path(SRC_PATH, file)
-            abs_temp_path = abs_path(TEMP_PATH, file)
-            abs_post_path = abs_path(POST_PATH, file)
-            # Generate posts
-            preprocess(abs_src_path, abs_temp_path)
-            compile(abs_temp_path, abs_post_path)
-            postprocess(abs_post_path)
+            preprocess(file)
+            compile(file)
+            postprocess(file)
     finally:
         # Delete Temp path
         shutil.rmtree(TEMP_PATH)
