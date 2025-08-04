@@ -8,7 +8,7 @@ TEMP_PATH = os.path.join(ROOT_PATH, 'temp')
 INDEX_PATH = os.path.join(ROOT_PATH, 'index.html')
 SEARCHDB_PATH = os.path.join(ROOT_PATH, 'searchdb.json')
 
-WEB_ROOT_PATH = ''
+WEB_ROOT_PATH = '/'
 WEB_POST_PATH = os.path.join(WEB_ROOT_PATH, 'posts')
 
 TEMPLATE_PATH = os.path.join(ROOT_PATH, 'template')
