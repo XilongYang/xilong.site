@@ -4,8 +4,12 @@ html {
     height: 100%;
 }
 
+@font-face{
+    font-family: "Source Han Serif CN";
+    src: url("/res/SourceHanSerifCN-Subset.woff2") format("woff2");
+}
 body {
-    font-family: 'Latin Modern', Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-family: 'Latin Modern', 'Source Han Serif CN', Georgia, Cambria, 'Times New Roman', Times, serif;
     transition: 0.5s ease;
 }
 

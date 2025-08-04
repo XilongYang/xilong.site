@@ -18,8 +18,6 @@ from common import gen_template
 from common import unique_file_list
 from common import read_file_in_lines
 from common import write_file
-from common import gen_subset
-from common import unique_text
 
 COMPILE_TEMPLATE = os.path.join(TEMP_PATH, 'compile_template.html')
 
@@ -160,9 +158,6 @@ def postprocess(file):
     abs_post_path = abs_path(POST_PATH, file)
     # Generate TOC
     write_file(abs_post_path, generate_toc(read_file_in_lines(abs_post_path)))
-    # Generate subset of fonts
-    text = unique_text(abs_post_path)
-    gen_subset(file, text)
 
 
 def update_post():
