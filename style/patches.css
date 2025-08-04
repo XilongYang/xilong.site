@@ -99,3 +99,10 @@ code[class*=language-], pre[class*=language-] {
     text-align: center;
     font-style: italic;
 }
+
+@media print {
+    .navbar, .navigator {
+        display: none;
+    }
+}
+
