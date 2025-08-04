@@ -10,4 +10,5 @@ clean:
 	-rm posts/*
 	-rm index.html
 	-rm searchdb.json
+	-rm res/SourceHanSerifCN-Subset.woff2
 
