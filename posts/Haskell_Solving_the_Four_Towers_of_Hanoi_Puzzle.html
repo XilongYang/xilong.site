@@ -31,10 +31,7 @@
 </div>
 <main>
 <div class="abstract">
-<p>初学Haskell，在做<a
-href="https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf">CIS
-194
-HomeWork1</a>时遇到的四柱汉渃塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。</p>
+<p>初学Haskell，在做<a href="https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf">CIS 194 HomeWork1</a>时遇到的四柱汉渃塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。</p>
 </div>
 <nav role="navigation" class="toc">
 <h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
@@ -42,30 +39,19 @@ HomeWork1</a>时遇到的四柱汉渃塔最优解问题。过程中对递归与�
 <ol><li><a href="#回顾汉诺塔是什么">回顾：汉诺塔是什么？</a></li>
 <li><a href="#haskell求解汉诺塔">Haskell求解汉诺塔</a></li>
 <li><a href="#再来一根四柱汉诺塔问题">再来一根：四柱汉诺塔问题</a></li>
+<li><a href="#你的时间非常值钱四柱汉诺塔最优解">你的时间非常值钱：四柱汉诺塔最优解</a></li>
 </ol>
 </div>
 </nav>
 <h2 id="回顾汉诺塔是什么">回顾：汉诺塔是什么？</h2>
 <blockquote>
-<p>The Towers of Hanoi is a classic puzzle with a solution that can be
-described recursively. Disks of different sizes are stacked on three
-pegs; the goal is to get from a starting configuration with all disks
-stacked on the first peg to an ending configuration with all disks
-stacked on the last peg, as shown in Figure 1.</p>
+<p>The Towers of Hanoi is a classic puzzle with a solution that can be described recursively. Disks of different sizes are stacked on three pegs; the goal is to get from a starting configuration with all disks stacked on the first peg to an ending configuration with all disks stacked on the last peg, as shown in Figure 1.</p>
 <p><img src="../res/post-imgs/Haskell_Solving_the_Four_Towers_of_Hanoi_Puzzle/image-20210127013232812.png" alt="image-20210127013232812" style="zoom:33%;" /></p>
-<p>​ Figure 1: The Towers of Hanoi The only rules are • you may only move
-one disk at a time, and • a larger disk may never be stacked on top of a
-smaller one. For example, as the first move all you can do is move the
-topmost, smallest disk onto a different peg, since only one disk may be
-moved at a time.</p>
+<p>​ Figure 1: The Towers of Hanoi The only rules are • you may only move one disk at a time, and • a larger disk may never be stacked on top of a smaller one. For example, as the first move all you can do is move the topmost, smallest disk onto a different peg, since only one disk may be moved at a time.</p>
 <p><img src="../res/post-imgs/Haskell_Solving_the_Four_Towers_of_Hanoi_Puzzle/image-20210127013307704.png" alt="image-20210127013307704" style="zoom:33%;" /></p>
-<p>​ Figure 2: A valid first move. From this point, it is illegal to move
-to the configuration shown in Figure 3, because you are not allowed to
-put the green disk on top of the smaller blue one.</p>
+<p>​ Figure 2: A valid first move. From this point, it is illegal to move to the configuration shown in Figure 3, because you are not allowed to put the green disk on top of the smaller blue one.</p>
 <p><img src="../res/post-imgs/Haskell_Solving_the_Four_Towers_of_Hanoi_Puzzle/image-20210127013331098.png" alt="image-20210127013331098" style="zoom:33%;" /></p>
-<p>​ Figure 3: An illegal configuration. To move n discs (stacked in
-increasing size) from peg a to peg b using peg c as temporary
-storage,</p>
+<p>​ Figure 3: An illegal configuration. To move n discs (stacked in increasing size) from peg a to peg b using peg c as temporary storage,</p>
 <ol type="1">
 <li>move n − 1 discs from a to c using b as temporary storage</li>
 <li>move the top disc from a to b</li>
@@ -75,9 +61,7 @@ storage,</p>
 <p>这东西相信大家都非常熟悉了，不多缀言。下面进入第一个问题，使用Haskell求解汉诺塔。</p>
 <h2 id="haskell求解汉诺塔">Haskell求解汉诺塔</h2>
 <blockquote>
-<p>Given the number of discs and names for the three pegs, hanoi should
-return a list of moves to be performed to move the stack of discs from
-the first peg to the second.</p>
+<p>Given the number of discs and names for the three pegs, hanoi should return a list of moves to be performed to move the stack of discs from the first peg to the second.</p>
 </blockquote>
 <p>先上代码：</p>
 <pre class="language-haskell line-numbers match-braces"><code>type Peg = String
@@ -86,11 +70,9 @@ type Move = (Peg, Peg)
 hanoi :: Integer-&gt;Peg-&gt;Peg-&gt;Peg-&gt;[Move]
 hanoi 0 a b c = []
 hanoi n a b c = hanoi (n - 1) a c b ++ [(a, b)] ++ hanoi (n - 1) c b a</code></pre>
-<p>这几行程序没费什么力，使我深深地体会到了Haskell的简洁与优雅，这种写法实在是太漂亮了。这里用了很简单的一个思路，hanoi
-n a b c表示由a柱，经c柱移动n个盘子到b柱。</p>
+<p>这几行程序没费什么力，使我深深地体会到了Haskell的简洁与优雅，这种写法实在是太漂亮了。这里用了很简单的一个思路，hanoi n a b c表示由a柱，经c柱移动n个盘子到b柱。</p>
 <p><code>hanoi n a b c = hanoi (n - 1) a c b ++ [(a, b)] ++ hanoi (n - 1) c b a</code></p>
-<p>这句代码表达先把上层 n -
-1个盘子由a柱移动到c柱，再把最底层盘子直接移动到b柱，最后把c柱上的盘子也移动到b柱。Haskell这种写法在简洁与表达力上实在是令我惊叹。</p>
+<p>这句代码表达先把上层 n - 1个盘子由a柱移动到c柱，再把最底层盘子直接移动到b柱，最后把c柱上的盘子也移动到b柱。Haskell这种写法在简洁与表达力上实在是令我惊叹。</p>
 <h2 id="再来一根四柱汉诺塔问题">再来一根：四柱汉诺塔问题</h2>
 <p>顾名思义，四柱汉诺塔就是在三柱汉诺塔的基础上再加一根柱子。同样是求将一根柱子上的盘子全部移动到另一根上的过程序列。</p>
 <p>解四柱汉诺塔的基本思路是由a柱，经过b柱、d柱的辅助，将一部分盘子移动到c柱。</p>
@@ -112,8 +94,7 @@ hanoiPlus n a b c d = hanoiPlus (left - k) a c b d
     where
         left = n - 1
         k = n `div` 2</code></pre>
-<h2
-id="你的时间非常值钱四柱汉诺塔最优解">你的时间非常值钱：四柱汉诺塔最优解</h2>
+<h2 id="你的时间非常值钱四柱汉诺塔最优解">你的时间非常值钱：四柱汉诺塔最优解</h2>
 <p>平分是无法达到最优效率的，因为3柱移动比4柱移动耗时，要达到最优效率，需要加一个分割函数。</p>
 <pre class="language-haskell line-numbers match-braces"><code>hanoiPlus :: Integer-&gt;Peg-&gt;Peg-&gt;Peg-&gt;Peg-&gt;[Move]
 hanoiPlus 0 _ _ _ _ = []

@@ -119,8 +119,7 @@ filterList :: (t -&gt; Bool) -&gt; List t -&gt; List t</code></pre>
 <pre class="language-haskell line-numbers match-braces"><code>a :: List Bool
 a = C True (C False (C True E))</code></pre>
 <h2 id="prelude">Prelude</h2>
-<p><a
-href="https://downloads.haskell.org/~ghc/latest/docs/html/libraries/base-4.15.0.0/Prelude.html">Prelude</a>是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如<code>filter</code>和<code>map</code>就是<code>filterList</code>和<code>map</code>在<code>Prelude</code>中的对应版本。另外，<code>Data.List</code>模块中定义了一个更强大的<code>List</code>类型。</p>
+<p><a href="https://downloads.haskell.org/~ghc/latest/docs/html/libraries/base-4.15.0.0/Prelude.html">Prelude</a>是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如<code>filter</code>和<code>map</code>就是<code>filterList</code>和<code>map</code>在<code>Prelude</code>中的对应版本。另外，<code>Data.List</code>模块中定义了一个更强大的<code>List</code>类型。</p>
 <p>此外，一个常用的多态数据类型是<code>Maybe</code>，定义为：</p>
 <pre class="language-haskell line-numbers match-braces"><code>data Maybe a = Nothing | Just a</code></pre>
 <p>一个<code>Maybe</code>类型可以是<code>Nothing</code>或一个类型的值，模块<code>Data.Maybe</code>中定义了关于<code>Maybe</code>的操作。</p>

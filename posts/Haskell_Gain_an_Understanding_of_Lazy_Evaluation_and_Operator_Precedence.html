@@ -31,10 +31,7 @@
 </div>
 <main>
 <div class="abstract">
-<p>做 <a
-href="https://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf">CIS
-194
-HomeWork6</a>时遇到了各种思维方面的困难。试图通过梳理它们加深对运算符优先级和惰性求值的理解。</p>
+<p>做 <a href="https://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf">CIS 194 HomeWork6</a>时遇到了各种思维方面的困难。试图通过梳理它们加深对运算符优先级和惰性求值的理解。</p>
 </div>
 <nav role="navigation" class="toc">
 <h2>Contents<i class="material-icons icon" id="toc-control">remove</i></h2>
@@ -82,9 +79,7 @@ fibs = map fib&#39; [1..]
         fib&#39; 2 = 1
         fib&#39; n = fibs!!(n - 1) + fibs!!(n - 2)</code></pre>
 <p>然而，这样会寻致计算<code>!!</code>的时候试图求出<code>fib</code>的值，因此会进入一个死循环。不可行。</p>
-<p>那么我们在<a
-href="https://www.seas.upenn.edu/~cis194/spring13/lectures/06-laziness.html">Lecture
-6</a>中见过的<code>Data.Array</code>可以完成这个任务吗？答案是不行，它仅仅是一个对列表的封装，本身不支持处理无限列表。且此处并不需要使用映射。</p>
+<p>那么我们在<a href="https://www.seas.upenn.edu/~cis194/spring13/lectures/06-laziness.html">Lecture 6</a>中见过的<code>Data.Array</code>可以完成这个任务吗？答案是不行，它仅仅是一个对列表的封装，本身不支持处理无限列表。且此处并不需要使用映射。</p>
 <p>黔驴技穷了，上网搜索解法，发现可以使用<code>zipWith</code>实现如下：</p>
 <pre class="language-haskell line-numbers match-braces"><code>fibs :: [Integer]
 fibs = 1:1:zipWith (+) fibs (tail fibs)</code></pre>
