@@ -36,3 +36,8 @@ This project uses the following open source projects:
 - Material Icons: [LICENSE](./res/fonts/MaterialIcons-LICENSE.txt)
 - Source Han Serif CN: [LICENSE](./res/fonts/SourceHanSerifCN-OFL.txt)
 
+## License
+
+- **Source code**: MIT License. See [LICENSE](./LICENSE).
+- **Articles & other written content**: Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). See [CONTENT_LICENSE](./CONTENT_LICENSE.txt).
+
