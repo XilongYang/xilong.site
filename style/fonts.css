@@ -1,9 +1,8 @@
-/* fallback */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url(/res/MaterialIcons/normal.woff2) format('woff2');
+  src: url('/res/fonts/MaterialIcons.woff2') format('woff2');
 }
 
 .material-icons {
@@ -20,4 +19,9 @@
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+  font-family: 'Jetbrains Mono';
+  src: url('/res/fonts/JetBrainsMono-Regular.ttf');
 }
