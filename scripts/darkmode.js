@@ -6,12 +6,12 @@ function refreshDarkMode() {
     if (sessionStorage.getItem("darkmode") == "true") {
         classList.add("latex-dark")
         icon.innerText = 'light_mode'
-        codeStyle.href = '/res/latex-css-1.10.0/prism/prism-dracula.css'
+        codeStyle.href = '/res/latex-css-1.13.0/prism/prism-dracula.css'
         imgInvert.href = '/style/img-dark.css'
     } else {
         classList.remove("latex-dark")
         icon.innerText = 'dark_mode'
-        codeStyle.href = '/res/latex-css-1.10.0/prism/prism-one-light.css'
+        codeStyle.href = '/res/latex-css-1.13.0/prism/prism-one-light.css'
         imgInvert.href = ''
     }
 }
