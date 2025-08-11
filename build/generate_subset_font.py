@@ -11,8 +11,8 @@ from common import ROOT_PATH
 from common import INDEX_PATH
 from common import POST_PATH
 
-FONT_SOURCE = os.path.join(ROOT_PATH, "res", "SourceHanSerifCN-Regular.otf")
-FONT_SUBSET = os.path.join(ROOT_PATH, "res", "SourceHanSerifCN-Subset.woff2")
+FONT_SOURCE = os.path.join(ROOT_PATH, "res", "fonts", "SourceHanSerifCN-Regular.otf")
+FONT_SUBSET = os.path.join(ROOT_PATH, "res", "fonts", "SourceHanSerifCN-Subset.woff2")
 
 
 def gen_subset(text):

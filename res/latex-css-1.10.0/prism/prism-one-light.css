@@ -28,10 +28,6 @@
  * --syntax-cursor-line: hsla(230, 8%, 24%, 0.05);
  */
 
-@font-face {
-    font-family: 'Jetbrains Mono';
-    src: url('/res/JetBrainsMono-Regular.ttf');
-}
 code[class*="language-"],
 pre[class*="language-"] {
 	background: hsl(230, 1%, 98%);
