@@ -64,8 +64,6 @@ function expressionValidate(exp) {
         var result = "null"
 
         switch (c) {
-            case " ":
-                continue
             case "&":
             case "|":
                 result = states[curST][ST.AND_OR]
@@ -101,6 +99,10 @@ function expressionValidate(exp) {
 
     if (curST == ST.AND_OR || curST == ST.NOT) {
         return new ErrorInfo(exp, exp.length - 1, EMP_FIELD)
+    }
+
+    if (curST == ST.ESC) {
+        return new ErrorInfo(exp, exp.length - 1, INVALID_ESC)
     }
 
     if (openParenthesisIndex.length > 0) {
