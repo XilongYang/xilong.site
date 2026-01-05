@@ -1,4 +1,4 @@
-# xilongyang.github.io
+# xilongyang.site
 
 This repo is the source code of my personal site (xilong.site).
 
