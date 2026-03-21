@@ -1,9 +1,9 @@
 all: src/* template/*
-	runghc -ibuild build/Main.hs
+	runghc -ibuilder builder/Main.hs
 
 .PHONY : test clean
 test:
-	runghc -ibuild -i. build/UT/RunTest.hs
+	runghc -ibuilder -i. builder/UT/RunTest.hs
 
 clean:
 	-rm posts/*
