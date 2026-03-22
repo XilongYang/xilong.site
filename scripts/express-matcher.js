@@ -10,12 +10,12 @@ const ST = {
 };
 
 const OPT_MISS      = "Operator Missing"
-const OPT_DUPL      = "Duplidate Operator"
+const OPT_DUPL      = "Duplicate Operator"
 const EMP_FIELD     = "Empty Field"
 const INVALID_ESC   = "Invalid Escape"
 const UNMATCH_P     = "Unmatched Parenthesis"
 
-//             [init   , normal     , and or   , not   , left parenthesis, right parenthesis, escape   ]
+//             [init   , normal     , and or   , not      , left parenthesis, right parenthesis, escape   ]
 const init   = [ST.INIT, ST.NORMAL  , EMP_FIELD, ST.NOT   , ST.PL           , ST.PR            , ST.ESC   ]
 const normal = [ST.INIT, ST.NORMAL  , ST.AND_OR, OPT_MISS , OPT_MISS        , ST.PR            , ST.ESC   ]
 const andOr  = [ST.INIT, ST.NORMAL  , OPT_DUPL , ST.NOT   , ST.PL           , EMP_FIELD        , ST.ESC   ]
@@ -85,6 +85,9 @@ function expressionValidate(exp) {
                 break
             case "\\":
                 result = states[curST][ST.ESC]
+                break
+            case " ":
+                result = curST
                 break
             default:
                 result = states[curST][ST.NORMAL]
@@ -183,8 +186,7 @@ function expressionParse(exp) {
 }
 
 function expressionMatch(matchTree, str) {
-    var matchingExp = matchTree.exp.trim()
-    var isSuccess = str.includes(matchingExp)
+    var isSuccess = str.includes(matchTree.exp.trim())
 
     if (isSuccess) {
         var next = matchTree.successNext.value.value
