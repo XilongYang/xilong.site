@@ -6,7 +6,7 @@ test:
 	runghc -ibuilder -i. builder/UT/RunTest.hs
 
 clean:
-	-rm posts/*
+	-rm post/*
 	-rm index.html
 	-rm searchdb.json
 	-rm res/SourceHanSerifCN-Subset.woff2
