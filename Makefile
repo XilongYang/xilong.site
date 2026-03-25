@@ -9,4 +9,4 @@ clean:
 	-rm post/*
 	-rm index.html
 	-rm searchdb.json
-	-rm res/SourceHanSerifCN-Subset.woff2
+	-rm res/fonts/SourceHanSerifCN-Subset.woff2
