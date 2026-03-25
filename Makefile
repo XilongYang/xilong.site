@@ -1,12 +1,13 @@
-all: src/* template/*
+.PHONY : all test clean
+
+all: 
 	runghc -ibuilder builder/Main.hs
 
-.PHONY : test clean
 test:
 	runghc -ibuilder -i. builder/UT/RunTest.hs
 
 clean:
-	-rm post/*
-	-rm index.html
-	-rm searchdb.json
-	-rm res/fonts/SourceHanSerifCN-Subset.woff2
+	rm -rf post
+	rm -f index.html
+	rm -f searchdb.json
+	rm -f res/fonts/SourceHanSerifCN-Subset.woff2
