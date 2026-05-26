@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Implementing SHA-256 in Haskell - Xilong Yang</title>
+            <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/res/apple-touch-icon.png">
+    <!-- Style & Script -->
+    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+    <script src="/scripts/anti-flash.js"></script>
+    <link href="/style/wrapper.css" rel="stylesheet">
+    <link id="code-style" href="/res/latex-css-1.13.0/prism/prism-one-light.css" rel="stylesheet">
+    <link id="img-invert" href="" rel="stylesheet">
+    <script src="/scripts/init.js" defer type="module"></script>
+    <script src="/res/latex-css-1.13.0/prism/prism.js"></script>
+    <script src="/res/mathjax-4.0.0/tex-chtml.js" id="MathJax-script" async></script>
+
+    </head>
+    <body>
+        <div class="navbar">
+    <i class="material-icons icon" id="darkmode">dark_mode</i>
+</div>
+        <div class="header">
+            <h1>Implementing SHA-256 in Haskell</h1>
+            <p class="author">Xilong Yang<br>2026-05-26</p>
+        </div>
+        <main>
+            <div class="abstract">
+            <p>I am refactoring my site builder from a Python implementation to Haskell. For signature generation, I implemented SHA-256 in Haskell. The implementation is correct, but it is about 30 times slower than the Linux sha256sum tool, even after accounting for process invocation overhead.</p>
+            <p>As a result, I switched to the system tool and wrote this post to preserve my non-production SHA-256 implementation.</p>
+            </div>
+            <p><nav role="navigation" class="toc">
+<h2>Contents
+<i class="material-icons icon" id="toc-control">remove</i>
+</h2>
+<div id="toc-items">
+<ol><li><a href="#sha-256-algorithm">SHA-256 Algorithm</a><ol>
+<li><a href="#key-components">Key components:</a><ol>
+
+</ol></li>
+<li><a href="#procedure">Procedure</a><ol>
+
+</ol></li>
+
+
+
+</ol></li>
+<li><a href="#complete-source-code">Complete Source Code</a><ol>
+
+</ol></li>
+<li><a href="#why-it-is-slow">Why It Is Slow</a><ol>
+
+</ol></li>
+
+
+
+</ol>
+</div>
+</nav>
+</p>
+            <h2 id="sha-256-algorithm">SHA-256 Algorithm</h2>
+            <h3 id="key-components">Key components:</h3>
+            <ul>
+            <li>8 initial hash values: the first 32 bits of the fractional parts of the <strong>square roots</strong> of the first eight primes</li>
+            <li>64 constants: the first 32 bits of the fractional parts of the <strong>cube roots</strong> of the first 64 primes</li>
+            <li>Chunk size: 512 bits</li>
+            <li>Scheduled words per chunk: 64 × 32-bit words</li>
+            <li>Rotate-right function: <code>RTOR</code></li>
+            <li>Functions for expanding a chunk to words: <code>S0</code>, <code>S1</code></li>
+            <li>Functions for updating the result hash values: <code>EP0</code>, <code>EP1</code>, <code>CH</code>, <code>MAJ</code></li>
+            </ul>
+            <h3 id="procedure">Procedure</h3>
+            <ol type="1">
+            <li>Preprocessing the message.
+            <ol type="1">
+            <li>Append a <code>1</code> bit after the message.</li>
+            <li>Append <code>0</code> bits after the message until the length mod the chunk size (512) is 448.</li>
+            <li>Append the length of the original message, in bits, as a 64-bit unsigned big-endian integer. So that the length of the message mod the chunk size is exactly 0. (448 + 64 = 512)</li>
+            </ol></li>
+            <li>Split the preprocessed message into chunks of size 512 bits.</li>
+            <li>Let <code>h[]</code> be the 8 initial hash values; let <code>k[]</code> be the 64 constants.</li>
+            <li>Process each chunk iteratively to update the hash state. For a single chunk:
+            <ol type="1">
+            <li>Create a list of 32-bit words containing 64 elements: <code>w[64]</code>.</li>
+            <li>Split the chunk into 16 words (512 = 32 * 16), and put them into the first 16 words.</li>
+            <li>Generate the remaining words using the following recurrence relation:
+            <ul>
+            <li><code>w[i] = w[i - 16] + S0(w[i - 15]) + w[i - 7] + S1(w[i - 2])</code></li>
+            <li><code>S0(x) = RTOR(x, 7) ^ RTOR(x, 18) ^ (x &gt;&gt; 3)</code></li>
+            <li><code>S1(x) = RTOR(x, 17) ^ RTOR(x, 19) ^ (x &gt;&gt; 10)</code></li>
+            </ul></li>
+            <li>Make a copy of <code>h[]</code> and call it <code>h'[]</code></li>
+            <li>Iterate over <code>w[]</code> to update values in <code>h'[]</code>
+            <ol type="1">
+            <li><code>t1 = h'[7] + EP1(h'[4]) + CH(h'[4], h'[5], h'[6]) + k[i] + w[i]</code>
+            <ul>
+            <li><code>EP1(x) = RTOR(x, 6) ^ RTOR(x, 11) ^ RTOR(x, 25)</code></li>
+            <li><code>CH(x, y, z) = (x &amp; y) ^ ((~x) &amp; z)</code></li>
+            </ul></li>
+            <li><code>t2 = EP0(h'[0]) + MAJ(h'[0], h'[1], h'[2])</code>
+            <ul>
+            <li><code>EP0(x) = RTOR(x, 2) ^ RTOR(x, 13) ^ RTOR(x, 22)</code></li>
+            <li><code>MAJ(x, y, z) = ((x &amp; y) ^ (x &amp; z) ^ (y &amp; z))</code></li>
+            </ul></li>
+            <li>Update <code>h' {a, b, c, d, e, f, g, h}</code> to <code>{t1 + t2, a, b, c, d + t1, e, f, g}</code></li>
+            </ol></li>
+            <li>Update <code>h[]</code> by adding the corresponding values from <code>h'[]</code> .</li>
+            </ol></li>
+            <li>Concatenate the final hash words <code>h[]</code> to the final result. (32 * 8 = 256 bit)</li>
+            </ol>
+            <h2 id="complete-source-code">Complete Source Code</h2>
+            <pre class="language-haskell line-numbers match-braces"><code>module Modules.Utils.Sha256 (sha256Hex) where
+
+import Data.Word
+import Data.Bits
+import Data.List
+import Numeric (showHex)
+import qualified Data.Text as Text
+import qualified Data.Text.Encoding as TextEncoding
+import qualified Data.ByteString as ByteString
+
+-- ---[ Overview ]------------------------------------------------------------
+-- | Pure SHA-256 implementation used by the builder.
+--
+-- Design notes:
+-- - public API takes &#39;String&#39;, encodes as UTF-8, and returns lowercase hex
+-- - core implementation follows SHA-256 standard flow:
+--   padding -&gt; 512-bit chunking -&gt; word schedule expansion -&gt; compression
+-- - this module is self-contained (no external crypto dependency)
+
+-- ---[ Public API ]------------------------------------------------------------
+
+-- | Computes SHA-256 digest as a lowercase hexadecimal string.
+--
+-- Input text is encoded as UTF-8 bytes before hashing.
+sha256Hex :: String -&gt; String
+sha256Hex = (concatMap byteToHex) . sha256 . utf8Encode
+  where
+    byteToHex :: Word8 -&gt; String
+    byteToHex b =
+      let s = showHex b &quot;&quot;
+      in if length s == 1 then &#39;0&#39; : s else s
+    
+    utf8Encode :: String -&gt; [Word8]
+    utf8Encode = ByteString.unpack . TextEncoding.encodeUtf8 . Text.pack
+
+-- ---[ Implementation Details ]-----------------------------------------------
+
+-- 512-bit chunk size in bytes.
+chunkSize :: Int
+chunkSize = 64
+
+-- Initial hash state constants (H0..H7).
+h :: [Word32]
+h = [ 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a
+    , 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]
+
+-- Round constants (K0..K63).
+k :: [Word32]
+k = [ 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b
+    , 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01
+    , 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7
+    , 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc
+    , 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152
+    , 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147
+    , 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc
+    , 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85
+    , 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819
+    , 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08
+    , 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f
+    , 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208
+    , 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2]
+
+messageSizeFieldBytes :: Int
+messageSizeFieldBytes = 8
+
+-- Number of words directly parsed from one 512-bit chunk.
+initialWordsCount :: Int
+initialWordsCount = 16
+
+-- Number of scheduled words per chunk after expansion.
+wordsCount :: Int
+wordsCount = 64
+
+-- Small sigma 0 for message schedule.
+s0 :: Word32 -&gt; Word32
+s0 x = rotateR x 7 `xor` rotateR x 18 `xor` shiftR x 3
+
+-- Small sigma 1 for message schedule.
+s1 :: Word32 -&gt; Word32
+s1 x = rotateR x 17 `xor` rotateR x 19 `xor` shiftR x 10
+
+-- Big sigma 0 for compression rounds.
+ep0 :: Word32 -&gt; Word32
+ep0 x = rotateR x 2 `xor` rotateR x 13 `xor` rotateR x 22
+
+-- Big sigma 1 for compression rounds.
+ep1 :: Word32 -&gt; Word32
+ep1 x = rotateR x 6 `xor` rotateR x 11 `xor` rotateR x 25
+
+-- Choice function.
+ch :: Word32 -&gt; Word32 -&gt; Word32 -&gt; Word32
+ch x y z = (x .&amp;. y) `xor` (complement x .&amp;. z) 
+
+-- Majority function.
+maj :: Word32 -&gt; Word32 -&gt; Word32 -&gt; Word32
+maj x y z = (x .&amp;. y) `xor` (x .&amp;. z) `xor` (y .&amp;. z)
+
+-- Hashes raw bytes and returns digest bytes.
+sha256 :: [Word8] -&gt; [Word8]
+sha256 msg = concatMap w32ToW8s finalH
+  where
+    initialWords :: [[Word32]]
+    initialWords = (splitChunksToWords . splitToChunks . padding) msg
+
+    expandedWords :: [[Word32]]
+    expandedWords = map expandWords initialWords
+
+    processChunk :: [Word32] -&gt; [Word32] -&gt; [Word32]
+    processChunk hs ws
+      | length hs /= 8 = error &quot;Wrong initial H for processChunk.&quot;
+      | length ws /= wordsCount = error &quot;Wrong words for processChunk.&quot;
+      | otherwise =
+          -- Start from previous hash state and run 64 compression rounds.
+          let finalWorking = foldl&#39; (refreshH ws) hs [0 .. wordsCount - 1]
+          in zipWith (+) hs finalWorking
+    
+    finalH :: [Word32]
+    finalH = foldl&#39; processChunk h expandedWords
+
+    w32ToW8s :: Word32 -&gt; [Word8]
+    w32ToW8s x =  
+      [ fromIntegral (shiftR x 24)
+      , fromIntegral (shiftR x 16)
+      , fromIntegral (shiftR x 8)
+      , fromIntegral x
+      ]
+
+-- Applies SHA-256 message padding:
+-- append 0x80, then zero bytes, then original message bit length in BE64.
+padding :: [Word8] -&gt; [Word8]
+padding msg = initBytes ++ replicate paddingSize continueByte ++ msgSizeBytes
+  where
+    firstByte :: Word8
+    firstByte = 0x80
+
+    continueByte :: Word8
+    continueByte = 0x00
+    
+    initBytes :: [Word8]
+    initBytes = msg ++ [firstByte]
+
+    modSize :: Int
+    modSize = length initBytes `mod` chunkSize
+
+    targetModSize :: Int
+    targetModSize = chunkSize - messageSizeFieldBytes
+
+    paddingSize :: Int
+    paddingSize = (targetModSize - modSize) `mod` chunkSize
+
+    msgSizeBytes :: [Word8]
+    msgSizeBytes = intToBE64 (fromIntegral (length msg) * 8)
+
+    intToBE64 :: Integer -&gt; [Word8]
+    intToBE64 x =  
+      let w = fromIntegral x :: Word64
+      in
+      [ fromIntegral (shiftR w 56)
+      , fromIntegral (shiftR w 48)
+      , fromIntegral (shiftR w 40)
+      , fromIntegral (shiftR w 32)
+      , fromIntegral (shiftR w 24)
+      , fromIntegral (shiftR w 16)
+      , fromIntegral (shiftR w 8)
+      , fromIntegral w
+      ]
+
+-- Splits padded bytes into 512-bit chunks.
+splitToChunks :: [Word8] -&gt; [[Word8]]
+splitToChunks msg 
+  | length msg `mod` chunkSize /= 0 = error &quot;Message length incorrect!&quot;
+  | otherwise = splitToChunks&#39; msg
+  where
+    splitToChunks&#39; :: [Word8] -&gt; [[Word8]]
+    splitToChunks&#39; [] = []
+    splitToChunks&#39; msg&#39; = 
+      let (chunk, rest) = splitAt chunkSize msg&#39;
+      in chunk : splitToChunks&#39; rest
+
+-- Converts each 512-bit chunk into sixteen big-endian Word32 values.
+splitChunksToWords :: [[Word8]] -&gt; [[Word32]]
+splitChunksToWords = map splitChunkToWords
+  where
+    splitChunkToWords :: [Word8] -&gt; [Word32]
+    splitChunkToWords chunk
+      | length chunk `mod` 4 /= 0 = error &quot;Chunk size incorrect!&quot;
+      | otherwise = splitChunkToWords&#39; chunk
+
+    splitChunkToWords&#39; :: [Word8] -&gt; [Word32]
+    splitChunkToWords&#39; [] = []
+    splitChunkToWords&#39; word8s =
+      let (wordGroup, rest) = splitAt 4 word8s
+      in bytesToWord32 wordGroup : splitChunkToWords&#39; rest
+    
+    bytesToWord32 :: [Word8] -&gt; Word32
+    bytesToWord32 [w0,w1,w2,w3] = 
+      shiftL (fromIntegral w0) 24 .|. 
+      shiftL (fromIntegral w1) 16 .|. 
+      shiftL (fromIntegral w2)  8 .|. 
+      fromIntegral w3 
+
+-- Expands 16 initial words into 64 scheduled words.
+expandWords :: [Word32] -&gt; [Word32]
+expandWords initialWords
+  | length initialWords /= initialWordsCount = error &quot;Count of initial words must be 16&quot;
+  | otherwise = expandWords&#39; initialWords initialWordsCount
+  where
+    expandWords&#39; :: [Word32] -&gt; Int -&gt; [Word32]
+    expandWords&#39; ws i
+      | i == 64 = ws
+      | otherwise = expandWords&#39; (ws ++ [nextWord ws i]) (i + 1)
+
+    nextWord :: [Word32] -&gt; Int -&gt; Word32
+    nextWord ws i = (ws !! (i - 16)) + s0(ws !! (i - 15)) + ws !! (i - 7) + s1(ws !! (i - 2))
+
+
+-- Executes one compression round and returns the next working state.
+refreshH :: [Word32] -&gt; [Word32] -&gt; Int -&gt; [Word32]
+refreshH ws h&#39; i
+  | i &lt; 0 || i &gt;= wordsCount = error &quot;Invalid number for refresh H.&quot;
+  | otherwise = 
+    case h&#39; of 
+      [h0, h1, h2, h3, h4, h5, h6, h7] -&gt;
+        let t1 = h7 + ep1 h4 + (ch h4 h5 h6) + (k !! i) + (ws !! i)
+            t2 = ep0 h0 + maj h0 h1 h2
+        in [t1 + t2, h0, h1, h2, h3 + t1, h4, h5, h6]
+      _ -&gt; error &quot;Wrong initial H for refresh H.&quot;</code></pre>
+            <h2 id="why-it-is-slow">Why It Is Slow</h2>
+            <p>The implementation is intentionally simple and list-oriented, which makes it easy to follow but extremely inefficient.</p>
+            <p>Some major performance costs include:</p>
+            <ul>
+            <li>linked-list indexing via <code>(!!)</code></li>
+            <li>repeated list concatenation using <code>(++)</code></li>
+            <li>boxed list representation for bytes and words</li>
+            <li>conversion from ByteString to <code>[Word8]</code></li>
+            </ul>
+            <p>Still, I like the current structure, and I am not interested in sacrificing readability for performance.</p>
+        </main>
+        <div class="navigator">
+    <i class="material-icons icon" id="search-button">search</i>
+    <i class="material-icons icon" id="back-top">arrow_upward</i>
+    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+</div>
+        <div id="search-panel" tabindex="0">
+    <div id="search-bar">
+        <i class="material-icons" id="search-hint">search</i>
+        <input type="text" id="search-box">
+        <button id="search-close">
+            <i class="material-icons icon">close</i>
+        </button>
+    </div>
+    <div id="search-result">
+        <div id="search-loading" class="material-icons">autorenew</div>
+    </div>
+</div>
+        <div class="footnotes">
+    © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+    | Powered by
+    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+    <a href="https://github.com/PrismJS/prism/">Prism</a>,
+    <a href="https://github.com/mathjax/MathJax">MathJax</a>
+    <div class="slogan">Amid the sixpences, may you find your moon.</div>
+</div>
+
+    </body>
+</html>
