@@ -18,20 +18,83 @@ function keyboardCatch(event) {
 }
 
 function loadDb(callback) {
-    fetch('/searchdb.json')
+    fetch('/searchdb.klb')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.text()
         })
-        .then (json => {
-            db = JSON.parse(json)
+        .then (klb => {
+            db = parseKlb(klb)
         })
         .then (callback)
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
         });
+}
+
+function parseKlb(klb) {
+    var posts = []
+    if (!klb) {
+        return { posts: posts }
+    }
+
+    var lines = klb.split(/\r?\n/)
+    var i = 0
+
+    while (i < lines.length) {
+        var header = lines[i]
+        i++
+
+        if (header === '') {
+            continue
+        }
+
+        var sep = header.indexOf(':')
+        if (sep <= 0 || header.slice(0, sep) !== 'size') {
+            continue
+        }
+
+        var size = Number(header.slice(sep + 1))
+        if (!Number.isInteger(size) || size <= 0) {
+            continue
+        }
+
+        var item = {}
+        var enoughLines = true
+        for (var j = 0; j < size; j++) {
+            if (i >= lines.length) {
+                enoughLines = false
+                break
+            }
+
+            var line = lines[i]
+            i++
+            var pairSep = line.indexOf(':')
+            if (pairSep <= 0) {
+                continue
+            }
+
+            var key = line.slice(0, pairSep)
+            var value = line.slice(pairSep + 1)
+            item[key] = value
+        }
+
+        if (!enoughLines) {
+            break
+        }
+
+        if (item.searchItemTitle && item.searchItemUrl && item.searchItemContent) {
+            posts.push({
+                title: item.searchItemTitle,
+                url: item.searchItemUrl,
+                content: item.searchItemContent
+            })
+        }
+    }
+
+    return { posts: posts }
 }
 
 function openPanel() {

@@ -1,15 +1,36 @@
 function loadFont() {
-    fetch(`/res/fonts/SourceHanSerifCN-Subset.woff2`, { method: 'HEAD' })
-        .then(resp => {
-        if (resp.ok) {
-            const font = new FontFace('Source Han Serif', `url(/res/fonts/SourceHanSerifCN-Subset.woff2)`);
-            font.load().then(f => {
-                document.fonts.add(f);
-                const fontFamily = "'Latin Modern', $TARGET$, Georgia, Cambria, 'Times New Roman', Times, serif"
-                document.body.style.fontFamily = fontFamily.replace("$TARGET$", "'Source Han Serif'");
-            });
+    const candidates = [
+        '/res/fonts/cn-subset.woff2',
+        '/res/fonts/SourceHanSerifCN-Subset.woff2'
+    ]
+
+    const loadWithUrl = (url) => {
+        const font = new FontFace('Source Han Serif', `url(${url})`)
+        font.load().then(f => {
+            document.fonts.add(f)
+            const fontFamily = "'Latin Modern', $TARGET$, Georgia, Cambria, 'Times New Roman', Times, serif"
+            document.body.style.fontFamily = fontFamily.replace("$TARGET$", "'Source Han Serif'")
+        })
+    }
+
+    const tryLoad = (idx) => {
+        if (idx >= candidates.length) {
+            return
         }
-    });
+
+        const url = candidates[idx]
+        fetch(url, { method: 'HEAD' })
+            .then(resp => {
+                if (resp.ok) {
+                    loadWithUrl(url)
+                } else {
+                    tryLoad(idx + 1)
+                }
+            })
+            .catch(() => tryLoad(idx + 1))
+    }
+
+    tryLoad(0)
 }
 
 export {loadFont}
