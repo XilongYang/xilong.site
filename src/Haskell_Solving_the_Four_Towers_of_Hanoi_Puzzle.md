@@ -6,6 +6,8 @@ date: 2021-01-27
 
 初学Haskell，在做[CIS 194 HomeWork1](https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf)时遇到的四柱汉渃塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。
 
+<!--more-->
+
 ## 回顾：汉诺塔是什么？
 
 > The Towers of Hanoi is a classic puzzle with a solution that can be described recursively. Disks of different sizes are stacked on three pegs; the goal is to get from a starting configuration with all disks stacked on the first peg to an ending configuration with all disks stacked on the last peg, as shown in Figure 1.

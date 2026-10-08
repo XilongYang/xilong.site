@@ -26,89 +26,48 @@
             <h1>基于C++的Python3入门笔记</h1>
             <p class="author">Xilong Yang<br>2020-06-07</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>虽然Python与C++有众多区别，但基本上同属命令式语言（甚至Python的解释器是C++实现的），因此在不求深入学习Python时记住一些基础语法差异即可大概使用。</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#基本区别" id="toc-基本区别">基本区别</a>
+                <ol>
+                <li><a href="#注释" id="toc-注释">注释</a></li>
+                </ol></li>
+                <li><a href="#变量" id="toc-变量">变量</a>
+                <ol>
+                <li><a href="#数值" id="toc-数值">数值</a></li>
+                <li><a href="#字符串" id="toc-字符串">字符串</a></li>
+                <li><a href="#listtuple和dictset"
+                id="toc-listtuple和dictset">list、tuple和dict、set</a></li>
+                </ol></li>
+                <li><a href="#运算符" id="toc-运算符">运算符</a></li>
+                <li><a href="#分支与循环" id="toc-分支与循环">分支与循环</a></li>
+                <li><a href="#函数" id="toc-函数">函数</a></li>
+                <li><a href="#类" id="toc-类">类</a></li>
+                <li><a href="#高级特性" id="toc-高级特性">高级特性</a>
+                <ol>
+                <li><a href="#切片" id="toc-切片">切片</a></li>
+                <li><a href="#列表生成式" id="toc-列表生成式">列表生成式</a></li>
+                <li><a href="#生成器" id="toc-生成器">生成器</a></li>
+                </ol></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#基本区别">基本区别</a><ol>
-<li><a href="#注释">注释</a><ol>
-
-</ol></li>
-
-
-</ol></li>
-<li><a href="#变量">变量</a><ol>
-<li><a href="#数值">数值</a><ol>
-
-</ol></li>
-<li><a href="#字符串">字符串</a><ol>
-
-</ol></li>
-<li><a href="#listtuple和dictset">list、tuple和dict、set</a><ol>
-<li><a href="#定义">定义</a><ol>
-
-</ol></li>
-<li><a href="#操作">操作</a><ol>
-
-</ol></li>
-
-
-
-</ol></li>
-
-
-
-
-</ol></li>
-<li><a href="#运算符">运算符</a><ol>
-
-</ol></li>
-<li><a href="#分支与循环">分支与循环</a><ol>
-
-</ol></li>
-<li><a href="#函数">函数</a><ol>
-
-</ol></li>
-<li><a href="#类">类</a><ol>
-
-</ol></li>
-<li><a href="#高级特性">高级特性</a><ol>
-<li><a href="#切片">切片</a><ol>
-
-</ol></li>
-<li><a href="#列表生成式">列表生成式</a><ol>
-
-</ol></li>
-<li><a href="#生成器">生成器</a><ol>
-
-</ol></li>
-
-
-
-
-</ol></li>
-
-
-
-
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="基本区别">基本区别</h2>
             <p>python中以缩进（4个空格）而不是花括号区分代码块。</p>
             <p>python中以换行而不是分号区分语句</p>
             <p>python中不需要main函数，从代码第一行开始执行</p>
             <h3 id="注释">注释</h3>
-            <pre class="language-python line-numbers match-braces"><code># 单行注释：井号+空格
+            <pre
+            class="language-python line-numbers match-braces"><code># 单行注释：井号+空格
 # 多行注释本质上是野生三引号字符串
 &#39;&#39;&#39;
 多行注释1:三个单引号
@@ -119,25 +78,29 @@
             <h2 id="变量">变量</h2>
             <h3 id="数值">数值</h3>
             <p>python是动态类型语言，定义变量时无需指定类型，且程序运行过程中可改变类型。</p>
-            <pre class="language-python line-numbers match-braces"><code>i = 1
+            <pre
+            class="language-python line-numbers match-braces"><code>i = 1
 f = 2.3
 str = &#39;string&#39;
 f = &#39;change to string&#39;</code></pre>
             <h3 id="字符串">字符串</h3>
-            <pre class="language-python line-numbers match-braces"><code># 单引号
+            <pre
+            class="language-python line-numbers match-braces"><code># 单引号
 &#39;Hello&quot;&quot;Wo\&#39;\&#39;rld&#39; # Hello&quot;&quot;Wo&#39;&#39;rld
 # 双引号
 &quot;Hello&#39;&#39;Wo\&quot;\&quot;rld&quot; #Hello&#39;&#39;Wo&quot;&quot;rld
 # 单双引号唯一的区别是其中包含哪种引号时需要转义
 # 三引号包含单双引号都不用转义，可作注释用</code></pre>
             <p>格式化</p>
-            <pre class="language-python line-numbers match-braces"><code># 占位符
+            <pre
+            class="language-python line-numbers match-braces"><code># 占位符
 &#39;Hello,%s %d %.2f, %02d&#39; % (&#39;World!&#39;, 123, 3.14159, 1) # Hello,World! 123 3.14 01
 # format(),用{0}{1}...当占位符
 &#39;Hello,{0}:{1:.1f}&#39;.format(&#39;World!&#39;, 3.14159) # Hello,World:3.1</code></pre>
             <h3 id="listtuple和dictset">list、tuple和dict、set</h3>
             <h4 id="定义">定义</h4>
-            <pre class="language-python line-numbers match-braces"><code># []、()、{}、([])
+            <pre
+            class="language-python line-numbers match-braces"><code># []、()、{}、([])
 # list用[]定义, 可变长，可变元素值，可用下标位序取值
 l = [1, 2, 3, 4]
 # tuple用()定义，不可变长，不可变元素值，可用下标位序取值
@@ -158,7 +121,8 @@ s = ([1, 1, 2, 2, 3, 4]) # set自动去重，s = {1, 2, 3, 4}</code></pre>
             <li>dict
             <ol type="1">
             <li>‘keyvalue’ in d //d中是否存在key值为‘keyvalue’</li>
-            <li>d.get(‘keyvalue’, -1) //无’keyvalue’时返回-1，没有第二个参数则无返回值</li>
+            <li>d.get(‘keyvalue’, -1)
+            //无’keyvalue’时返回-1，没有第二个参数则无返回值</li>
             <li>d.pop(‘keyvalue’) //删除keyvalue</li>
             </ol></li>
             <li>set
@@ -178,7 +142,8 @@ s = ([1, 1, 2, 2, 3, 4]) # set自动去重，s = {1, 2, 3, 4}</code></pre>
             <li>身份运算符：is is not //判断两对象地址是否相同</li>
             </ul>
             <h2 id="分支与循环">分支与循环</h2>
-            <pre class="language-python line-numbers match-braces"><code># if-else语句
+            <pre
+            class="language-python line-numbers match-braces"><code># if-else语句
 if condition:
     pass # 占位用关键字，不执行任何操作
 elif condition:
@@ -193,7 +158,8 @@ for x in l:
 while condition:
     psss</code></pre>
             <h2 id="函数">函数</h2>
-            <pre class="language-python line-numbers match-braces"><code>def Add(x, y):
+            <pre
+            class="language-python line-numbers match-braces"><code>def Add(x, y):
     return x+y
 
 def Dont_Do_Anything(x, y)
@@ -234,7 +200,8 @@ def person(name, *age, city)
     pass
 # 命名关键字参数，跟在可变数量参数或一个空*参数后，只能传入指定关键字</code></pre>
             <h2 id="类">类</h2>
-            <pre class="language-python line-numbers match-braces"><code>class My_Class(object):
+            <pre
+            class="language-python line-numbers match-braces"><code>class My_Class(object):
     def __init__(self, name, score): # 前后各2下划线，类内任何函数首参数都为self
         self.name = name
         self.__score = score #前置2下划线则私有，仍可通过._My_Class__score访问
@@ -272,7 +239,8 @@ Name(other)
             <h2 id="高级特性">高级特性</h2>
             <h3 id="切片">切片</h3>
             <p>取一个list或tuple的部分元素</p>
-            <pre class="language-python line-numbers match-braces"><code>L = [1, 2, 3, 4, 5]
+            <pre
+            class="language-python line-numbers match-braces"><code>L = [1, 2, 3, 4, 5]
 L[0:2] # 取{1, 2}即下标范围[0,2)的元素
 L[:2] # 第一个参数为0时可省略
 L[-1] # 取倒数第一个元素
@@ -280,7 +248,8 @@ L[-2:-1] # 取倒数两个元素
 L[-2:] #-1可省略</code></pre>
             <h3 id="列表生成式">列表生成式</h3>
             <p>用[express]生成一个列表</p>
-            <pre class="language-python line-numbers match-braces"><code>[x * x for x in range(1, 11)] # 1x1,2x2...10x10
+            <pre
+            class="language-python line-numbers match-braces"><code>[x * x for x in range(1, 11)] # 1x1,2x2...10x10
 [x * x for x in range(1, 11) if x % 2 == 0] # 2x2,4x4...10x10
 [m + n for m in &#39;ABC&#39; for n in &#39;DEF&#39;] # ABC与DEF的全排列
 # 当if出现在for后面时，不可带else
@@ -288,11 +257,13 @@ L[-2:] #-1可省略</code></pre>
             <h3 id="生成器">生成器</h3>
             <p>生成器仅存储一个生成方法而不是具体对象，有肋于节省空间。</p>
             <p>方法1: 用(express)生成一个生成器(generator)</p>
-            <pre class="language-python line-numbers match-braces"><code>g = (x * x for x in range(10))
+            <pre
+            class="language-python line-numbers match-braces"><code>g = (x * x for x in range(10))
 for n in g:
     print(n)</code></pre>
             <p>方法2: 用函数来生成一个生成器</p>
-            <pre class="language-python line-numbers match-braces"><code># 输出斐波那契数列的函数如下
+            <pre
+            class="language-python line-numbers match-braces"><code># 输出斐波那契数列的函数如下
 # a, b = b, a + b =&gt; a, b = (b, a + b) =&gt; a = b  b = a + b(a与b的值同时改变)
  def fib(max):
     n, a, b = 0, 0, 1

@@ -1,0 +1,27 @@
+{
+  "path" : {
+    "in"  : {
+      "src"          : "src",
+      "template"     : "template",
+      "fonts"        : "res/fonts"
+    },
+    "out" : {
+      "post"         : "post",
+      "fonts-subset" : "fonts-subset",
+      "searchdb"     : "searchdb.json",
+      "index"        : "index.html",
+      "cache"        : ".cache"
+    }
+  },
+  "webroot" : "/",
+  "toc" : {
+    "enable"          : true,
+    "depth"           : 3,
+    "number-sections" : true
+  },
+  "fonts" : {
+    "JetBrainsMono-Regular.ttf"    : "JetBrains Mono",
+    "MaterialIcons.woff2"          : "Material Icons",
+    "SourceHanSerifCN-Regular.otf" : "Source Han Serif CN"
+  }
+}

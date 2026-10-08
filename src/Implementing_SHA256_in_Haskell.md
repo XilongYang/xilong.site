@@ -8,6 +8,8 @@ I am refactoring my site builder from a Python implementation to Haskell. For si
 
 As a result, I switched to the system tool and wrote this post to preserve my non-production SHA-256 implementation.
 
+<!--more-->
+
 ## SHA-256 Algorithm
 
 ### Key components:

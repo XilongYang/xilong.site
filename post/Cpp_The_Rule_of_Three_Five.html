@@ -26,35 +26,25 @@
             <h1>C++三/五法则</h1>
             <p class="author">Xilong Yang<br>2021-07-19</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>本以为三/五法则作为一个基础知识早已烂熟于心，未想纸上得来终是浅，还是在这个地方翻了次车。</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#什么是三五法则"
+                id="toc-什么是三五法则">什么是三/五法则</a></li>
+                <li><a href="#翻车实况" id="toc-翻车实况">翻车实况</a></li>
+                <li><a href="#问题解决" id="toc-问题解决">问题解决</a></li>
+                <li><a href="#总结" id="toc-总结">总结</a></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#什么是三五法则">什么是三/五法则</a><ol>
-
-</ol></li>
-<li><a href="#翻车实况">翻车实况</a><ol>
-
-</ol></li>
-<li><a href="#问题解决">问题解决</a><ol>
-
-</ol></li>
-<li><a href="#总结">总结</a><ol>
-
-</ol></li>
-
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="什么是三五法则">什么是三/五法则</h2>
             <ul>
             <li>三法则：C++11之前，一个需要<code>析构函数</code>的类也需要<code>拷贝构造函数</code>和<code>拷贝赋值运算符</code>。这三个组件总是成套出现，因此叫三法则。</li>
@@ -63,7 +53,8 @@
             <p>对于这两个法则，虽然内容在添加移动语义后有一些变化，但核心思想都是一样的。即类的基础组件应该成套构成。因此合称为三/五法则。</p>
             <h2 id="翻车实况">翻车实况</h2>
             <p>也许你会疑惑，这么浅显的地方怎么会翻车，看了这个翻车实况或许就会发现你也可能犯这样的错误。</p>
-            <p>起因是昨天写<a href="/posts/014_The_Level_Order_Iteration_of_Binary_Tree.html">二叉树的层序遍历</a>时，需要一个C++的实现，方便起见，我定义了一个非常简单的二叉链表结构来构造二叉树：</p>
+            <p>起因是昨天写<a
+            href="/posts/014_The_Level_Order_Iteration_of_Binary_Tree.html">二叉树的层序遍历</a>时，需要一个C++的实现，方便起见，我定义了一个非常简单的二叉链表结构来构造二叉树：</p>
             <pre class="language-cpp line-numbers match-braces"><code>struct Tree {
     Tree() : left(nullptr), data(0), right(nullptr) {}
     Tree *left;

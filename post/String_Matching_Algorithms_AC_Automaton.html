@@ -26,43 +26,26 @@
             <h1>字符串匹配之AC自动机</h1>
             <p class="author">Xilong Yang<br>2021-11-02</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>AC自动机是一种综合了Tire树与KMP算法思想的字符串匹配算法，特点是同时进行多个模式串的匹配。</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#ac自动机介绍" id="toc-ac自动机介绍">AC自动机介绍</a></li>
+                <li><a href="#tire树" id="toc-tire树">Tire树</a></li>
+                <li><a href="#多模式匹配" id="toc-多模式匹配">多模式匹配</a></li>
+                <li><a href="#失配指针" id="toc-失配指针">失配指针</a></li>
+                <li><a href="#匹配过程" id="toc-匹配过程">匹配过程</a></li>
+                <li><a href="#c实现" id="toc-c实现">C++实现</a></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#ac自动机介绍">AC自动机介绍</a><ol>
-
-</ol></li>
-<li><a href="#tire树">Tire树</a><ol>
-
-</ol></li>
-<li><a href="#多模式匹配">多模式匹配</a><ol>
-
-</ol></li>
-<li><a href="#失配指针">失配指针</a><ol>
-
-</ol></li>
-<li><a href="#匹配过程">匹配过程</a><ol>
-
-</ol></li>
-<li><a href="#c实现">C++实现</a><ol>
-
-</ol></li>
-
-
-
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="ac自动机介绍">AC自动机介绍</h2>
             <p>AC自动机利用KMP([[字符串匹配之KMP]])的最长成功匹配思想对Tire树进行改造，使得搜索效率大副提高，并且可以对多个模式串进行匹配。缺点是效大的空间复杂度，是一种空间换时间的算法。</p>
             <h2 id="tire树">Tire树</h2>
@@ -74,8 +57,11 @@
             <p>构造过程为从根节点开始，对每个串的字符逐位判断，若存在字符相同的子节点则转移到子节点。否则创建一个新节点，并令其字符为当前字符。将每个串遍历结束时停留的节点标记为接受节点。下一个串仍从根节点开始构造。</p>
             <p>比如字母表限定为“小写英文字母（a-z）”，模式串为{“she”,“he”,“her”,“his”,“is”}时，可以生成如下所示Tire树：</p>
             <figure>
-            <img src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102120835270.png" alt="image-20211102120835270" />
-            <figcaption aria-hidden="true">image-20211102120835270</figcaption>
+            <img
+            src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102120835270.png"
+            alt="image-20211102120835270" />
+            <figcaption
+            aria-hidden="true">image-20211102120835270</figcaption>
             </figure>
             <p>要判断一个串是否与某一模式串相同只需要从根节点开始，对待匹配串逐位判断，若存在与该位字符相同的子节点则转移，否则匹配失败。如果匹配结束时停留在接受节点则匹配成功。例如：</p>
             <ul>
@@ -111,8 +97,11 @@
             <p>如对”sher”而言，匹配到”she”模式的末尾时位于第4层的’e’节点。匹配’r’时，无对应子节点而匹配失败，此时不从头开始，而是转移到第3层的’e’节点，其对应的”he”为”she”在该图中的最长后缀，此时继续匹配’r’，发现对应子节点，并转移到’r’。匹配结束，路径上的共有3个接受节点，分别对应”she”、“he”、“her”，这三个模式的匹配次数分别+1。</p>
             <p>如果将每个节点的失败后转移节点标记出来，就形成了下图结构（蓝色箭头表示失败后转移节点，没有标记的则转移到根节点）：</p>
             <figure>
-            <img src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102130728715.png" alt="image-20211102130728715" />
-            <figcaption aria-hidden="true">image-20211102130728715</figcaption>
+            <img
+            src="../res/post-imgs/String_Matching_Algorithms_AC_Automaton/image-20211102130728715.png"
+            alt="image-20211102130728715" />
+            <figcaption
+            aria-hidden="true">image-20211102130728715</figcaption>
             </figure>
             <h2 id="失配指针">失配指针</h2>
             <p>上一节中的匹配方式就构成了AC自动机。AC自动机算法即是在Tire树的基础上加入了匹配失败的处理，使其达成了很高的多次匹配效率，主要用于匹配子串中各模式串出现的位置与次数。其中匹配失败处理就是通过失配指针实现的，即在每个节点中加入一个指针指向匹配失败后转移的节点。</p>

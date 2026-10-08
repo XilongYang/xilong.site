@@ -26,73 +26,84 @@
             <h1>Implementing SHA-256 in Haskell</h1>
             <p class="author">Xilong Yang<br>2026-05-26</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>I am refactoring my site builder from a Python implementation to Haskell. For signature generation, I implemented SHA-256 in Haskell. The implementation is correct, but it is about 30 times slower than the Linux sha256sum tool, even after accounting for process invocation overhead.</p>
             <p>As a result, I switched to the system tool and wrote this post to preserve my non-production SHA-256 implementation.</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#sha-256-algorithm" id="toc-sha-256-algorithm">SHA-256
+                Algorithm</a>
+                <ol>
+                <li><a href="#key-components" id="toc-key-components">Key
+                components:</a></li>
+                <li><a href="#procedure" id="toc-procedure">Procedure</a></li>
+                </ol></li>
+                <li><a href="#complete-source-code"
+                id="toc-complete-source-code">Complete Source Code</a></li>
+                <li><a href="#why-it-is-slow" id="toc-why-it-is-slow">Why It Is
+                Slow</a></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#sha-256-algorithm">SHA-256 Algorithm</a><ol>
-<li><a href="#key-components">Key components:</a><ol>
-
-</ol></li>
-<li><a href="#procedure">Procedure</a><ol>
-
-</ol></li>
-
-
-
-</ol></li>
-<li><a href="#complete-source-code">Complete Source Code</a><ol>
-
-</ol></li>
-<li><a href="#why-it-is-slow">Why It Is Slow</a><ol>
-
-</ol></li>
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="sha-256-algorithm">SHA-256 Algorithm</h2>
             <h3 id="key-components">Key components:</h3>
             <ul>
-            <li>8 initial hash values: the first 32 bits of the fractional parts of the <strong>square roots</strong> of the first eight primes</li>
-            <li>64 constants: the first 32 bits of the fractional parts of the <strong>cube roots</strong> of the first 64 primes</li>
+            <li>8 initial hash values: the first 32 bits of the
+            fractional parts of the <strong>square roots</strong> of the
+            first eight primes</li>
+            <li>64 constants: the first 32 bits of the fractional parts
+            of the <strong>cube roots</strong> of the first 64
+            primes</li>
             <li>Chunk size: 512 bits</li>
             <li>Scheduled words per chunk: 64 × 32-bit words</li>
             <li>Rotate-right function: <code>RTOR</code></li>
-            <li>Functions for expanding a chunk to words: <code>S0</code>, <code>S1</code></li>
-            <li>Functions for updating the result hash values: <code>EP0</code>, <code>EP1</code>, <code>CH</code>, <code>MAJ</code></li>
+            <li>Functions for expanding a chunk to words:
+            <code>S0</code>, <code>S1</code></li>
+            <li>Functions for updating the result hash values:
+            <code>EP0</code>, <code>EP1</code>, <code>CH</code>,
+            <code>MAJ</code></li>
             </ul>
             <h3 id="procedure">Procedure</h3>
             <ol type="1">
             <li>Preprocessing the message.
             <ol type="1">
             <li>Append a <code>1</code> bit after the message.</li>
-            <li>Append <code>0</code> bits after the message until the length mod the chunk size (512) is 448.</li>
-            <li>Append the length of the original message, in bits, as a 64-bit unsigned big-endian integer. So that the length of the message mod the chunk size is exactly 0. (448 + 64 = 512)</li>
+            <li>Append <code>0</code> bits after the message until the
+            length mod the chunk size (512) is 448.</li>
+            <li>Append the length of the original message, in bits, as a
+            64-bit unsigned big-endian integer. So that the length of
+            the message mod the chunk size is exactly 0. (448 + 64 =
+            512)</li>
             </ol></li>
-            <li>Split the preprocessed message into chunks of size 512 bits.</li>
-            <li>Let <code>h[]</code> be the 8 initial hash values; let <code>k[]</code> be the 64 constants.</li>
-            <li>Process each chunk iteratively to update the hash state. For a single chunk:
+            <li>Split the preprocessed message into chunks of size 512
+            bits.</li>
+            <li>Let <code>h[]</code> be the 8 initial hash values; let
+            <code>k[]</code> be the 64 constants.</li>
+            <li>Process each chunk iteratively to update the hash state.
+            For a single chunk:
             <ol type="1">
-            <li>Create a list of 32-bit words containing 64 elements: <code>w[64]</code>.</li>
-            <li>Split the chunk into 16 words (512 = 32 * 16), and put them into the first 16 words.</li>
-            <li>Generate the remaining words using the following recurrence relation:
+            <li>Create a list of 32-bit words containing 64 elements:
+            <code>w[64]</code>.</li>
+            <li>Split the chunk into 16 words (512 = 32 * 16), and put
+            them into the first 16 words.</li>
+            <li>Generate the remaining words using the following
+            recurrence relation:
             <ul>
             <li><code>w[i] = w[i - 16] + S0(w[i - 15]) + w[i - 7] + S1(w[i - 2])</code></li>
             <li><code>S0(x) = RTOR(x, 7) ^ RTOR(x, 18) ^ (x &gt;&gt; 3)</code></li>
             <li><code>S1(x) = RTOR(x, 17) ^ RTOR(x, 19) ^ (x &gt;&gt; 10)</code></li>
             </ul></li>
-            <li>Make a copy of <code>h[]</code> and call it <code>h'[]</code></li>
-            <li>Iterate over <code>w[]</code> to update values in <code>h'[]</code>
+            <li>Make a copy of <code>h[]</code> and call it
+            <code>h'[]</code></li>
+            <li>Iterate over <code>w[]</code> to update values in
+            <code>h'[]</code>
             <ol type="1">
             <li><code>t1 = h'[7] + EP1(h'[4]) + CH(h'[4], h'[5], h'[6]) + k[i] + w[i]</code>
             <ul>
@@ -104,14 +115,18 @@
             <li><code>EP0(x) = RTOR(x, 2) ^ RTOR(x, 13) ^ RTOR(x, 22)</code></li>
             <li><code>MAJ(x, y, z) = ((x &amp; y) ^ (x &amp; z) ^ (y &amp; z))</code></li>
             </ul></li>
-            <li>Update <code>h' {a, b, c, d, e, f, g, h}</code> to <code>{t1 + t2, a, b, c, d + t1, e, f, g}</code></li>
+            <li>Update <code>h' {a, b, c, d, e, f, g, h}</code> to
+            <code>{t1 + t2, a, b, c, d + t1, e, f, g}</code></li>
             </ol></li>
-            <li>Update <code>h[]</code> by adding the corresponding values from <code>h'[]</code> .</li>
+            <li>Update <code>h[]</code> by adding the corresponding
+            values from <code>h'[]</code> .</li>
             </ol></li>
-            <li>Concatenate the final hash words <code>h[]</code> to the final result. (32 * 8 = 256 bit)</li>
+            <li>Concatenate the final hash words <code>h[]</code> to the
+            final result. (32 * 8 = 256 bit)</li>
             </ol>
             <h2 id="complete-source-code">Complete Source Code</h2>
-            <pre class="language-haskell line-numbers match-braces"><code>module Modules.Utils.Sha256 (sha256Hex) where
+            <pre
+            class="language-haskell line-numbers match-braces"><code>module Modules.Utils.Sha256 (sha256Hex) where
 
 import Data.Word
 import Data.Bits
@@ -339,7 +354,9 @@ refreshH ws h&#39; i
         in [t1 + t2, h0, h1, h2, h3 + t1, h4, h5, h6]
       _ -&gt; error &quot;Wrong initial H for refresh H.&quot;</code></pre>
             <h2 id="why-it-is-slow">Why It Is Slow</h2>
-            <p>The implementation is intentionally simple and list-oriented, which makes it easy to follow but extremely inefficient.</p>
+            <p>The implementation is intentionally simple and
+            list-oriented, which makes it easy to follow but extremely
+            inefficient.</p>
             <p>Some major performance costs include:</p>
             <ul>
             <li>linked-list indexing via <code>(!!)</code></li>
@@ -347,7 +364,8 @@ refreshH ws h&#39; i
             <li>boxed list representation for bytes and words</li>
             <li>conversion from ByteString to <code>[Word8]</code></li>
             </ul>
-            <p>Still, I like the current structure, and I am not interested in sacrificing readability for performance.</p>
+            <p>Still, I like the current structure, and I am not
+            interested in sacrificing readability for performance.</p>
         </main>
         <div class="navigator">
     <i class="material-icons icon" id="search-button">search</i>

@@ -6,6 +6,8 @@ date: 2021-09-19
 
 Java的语法和C++实在是很相似，这一方面方便了C++选手们上手Java，另一方面也使得我们在使用Java的时候总是串语法。不得不写篇文章总结一下Java的语法差异。
 
+<!--more-->
+
 ## 基本概念
 
 Java分为三个版本：SE（Standard Edition）、EE（Enterprise Edition）和ME（Micro Edition）。

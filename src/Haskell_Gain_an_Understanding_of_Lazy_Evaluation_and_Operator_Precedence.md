@@ -6,6 +6,8 @@ date: 2022-01-08
 
 做 [CIS 194 HomeWork6](https://www.seas.upenn.edu/~cis194/spring13/hw/06-laziness.pdf)时遇到了各种思维方面的困难。试图通过梳理它们加深对运算符优先级和惰性求值的理解。
 
+<!--more-->
+
 ## 引言：Fibonacci数列
 
 斐波那契数列，相信大家都很熟悉了，每个人刚接触递归与动态规划的思想时候都会看到它的身影。其定义为：

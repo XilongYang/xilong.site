@@ -6,6 +6,8 @@ date: 2025-05-28
 
 On my journey through Chapter 2 of CSAPP, some magical tricks appeared intermittently. So I am trying to catch them by writing this article.
 
+<!--more-->
+
 ## Fold bits
 
 Consider that we get a mission to check if all the odd-numbered bits in a int are set to 1. What is the faster way?

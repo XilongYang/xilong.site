@@ -26,120 +26,56 @@
             <h1>从零开始的Haskell（一）——Haskell基础</h1>
             <p class="author">Xilong Yang<br>2021-06-10</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>对Haskell一直挺感兴趣，也学习了一段时间。奈何IO太离谱，做不出实际的东西，导致学了忘忘了学痛苦万分。于是只好信奉好记性不如烂笔头，写几篇笔记记录下来。</p>
             <p>这是第一篇，主题是Haskell的介绍和基础语法。</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#给其它语言学习者的忠告"
+                id="toc-给其它语言学习者的忠告">给其它语言学习者的忠告</a></li>
+                <li><a href="#什么是haskell" id="toc-什么是haskell">什么是Haskell</a>
+                <ol>
+                <li><a href="#函数式" id="toc-函数式">函数式：</a></li>
+                <li><a href="#纯" id="toc-纯">纯：</a></li>
+                <li><a href="#惰性求值" id="toc-惰性求值">惰性求值：</a></li>
+                <li><a href="#静态强类型" id="toc-静态强类型">静态强类型：</a></li>
+                </ol></li>
+                <li><a href="#三个主题" id="toc-三个主题">三个主题</a>
+                <ol>
+                <li><a href="#类型" id="toc-类型">类型</a></li>
+                <li><a href="#抽象" id="toc-抽象">抽象</a></li>
+                <li><a href="#全麦编程" id="toc-全麦编程">全麦编程</a></li>
+                </ol></li>
+                <li><a href="#文档化的haskell"
+                id="toc-文档化的haskell">文档化的Haskell</a></li>
+                <li><a href="#声明与变量" id="toc-声明与变量">声明与变量</a></li>
+                <li><a href="#基本类型" id="toc-基本类型">基本类型</a></li>
+                <li><a href="#ghci" id="toc-ghci">GHCi</a></li>
+                <li><a href="#算术运算" id="toc-算术运算">算术运算</a></li>
+                <li><a href="#布尔运算" id="toc-布尔运算">布尔运算</a></li>
+                <li><a href="#定义基础函数" id="toc-定义基础函数">定义基础函数</a></li>
+                <li><a href="#序对" id="toc-序对">序对</a></li>
+                <li><a href="#接受多个参数的函数"
+                id="toc-接受多个参数的函数">接受多个参数的函数</a></li>
+                <li><a href="#列表" id="toc-列表">列表</a>
+                <ol>
+                <li><a href="#构建列表" id="toc-构建列表">构建列表</a></li>
+                <li><a href="#操作列表" id="toc-操作列表">操作列表</a></li>
+                </ol></li>
+                <li><a href="#处理列表的函数"
+                id="toc-处理列表的函数">处理列表的函数</a></li>
+                <li><a href="#组合函数" id="toc-组合函数">组合函数</a></li>
+                <li><a href="#关于错误信息" id="toc-关于错误信息">关于错误信息</a></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#给其它语言学习者的忠告">给其它语言学习者的忠告</a><ol>
-
-</ol></li>
-<li><a href="#什么是haskell">什么是Haskell</a><ol>
-<li><a href="#函数式">函数式：</a><ol>
-
-</ol></li>
-<li><a href="#纯">纯：</a><ol>
-
-</ol></li>
-<li><a href="#惰性求值">惰性求值：</a><ol>
-
-</ol></li>
-<li><a href="#静态强类型">静态强类型：</a><ol>
-
-</ol></li>
-
-
-
-
-
-</ol></li>
-<li><a href="#三个主题">三个主题</a><ol>
-<li><a href="#类型">类型</a><ol>
-
-</ol></li>
-<li><a href="#抽象">抽象</a><ol>
-
-</ol></li>
-<li><a href="#全麦编程">全麦编程</a><ol>
-
-</ol></li>
-
-
-
-
-</ol></li>
-<li><a href="#文档化的haskell">文档化的Haskell</a><ol>
-
-</ol></li>
-<li><a href="#声明与变量">声明与变量</a><ol>
-
-</ol></li>
-<li><a href="#基本类型">基本类型</a><ol>
-
-</ol></li>
-<li><a href="#ghci">GHCi</a><ol>
-
-</ol></li>
-<li><a href="#算术运算">算术运算</a><ol>
-
-</ol></li>
-<li><a href="#布尔运算">布尔运算</a><ol>
-
-</ol></li>
-<li><a href="#定义基础函数">定义基础函数</a><ol>
-
-</ol></li>
-<li><a href="#序对">序对</a><ol>
-
-</ol></li>
-<li><a href="#接受多个参数的函数">接受多个参数的函数</a><ol>
-
-</ol></li>
-<li><a href="#列表">列表</a><ol>
-<li><a href="#构建列表">构建列表</a><ol>
-
-</ol></li>
-<li><a href="#操作列表">操作列表</a><ol>
-
-</ol></li>
-
-
-
-</ol></li>
-<li><a href="#处理列表的函数">处理列表的函数</a><ol>
-
-</ol></li>
-<li><a href="#组合函数">组合函数</a><ol>
-
-</ol></li>
-<li><a href="#关于错误信息">关于错误信息</a><ol>
-
-</ol></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="给其它语言学习者的忠告">给其它语言学习者的忠告</h2>
             <p>如果你之前学习了一大票主流语言，比如C、C++、JAVA、Python、Shell、JS、PHP、汇编等等。我的建议是：<strong>忘记它们</strong>。</p>
             <p>之前为C++选手写过一篇入门Python的文章，本来也想写一篇基于C++基础入门Haskell的文章。但一上手发现，使用C++的思维还不如完全失忆更好接受Haskell。</p>
@@ -175,7 +111,8 @@
             <ul>
             <li>可以简单的使用函数定义一个控制结构。</li>
             <li>让使用无限数据的结构成为可能。</li>
-            <li>开启了一种更有创造性的编程风格（wholemeal programming直译为全麦编程，一种全局思考的编程风格）。</li>
+            <li>开启了一种更有创造性的编程风格（wholemeal
+            programming直译为全麦编程，一种全局思考的编程风格）。</li>
             <li>但它也带来了一个负面影响：非常难以计算时空复杂度。</li>
             </ul>
             <h3 id="静态强类型">静态强类型：</h3>
@@ -236,7 +173,8 @@ void foo() {
             <p>Haskell中支持一种以文档为主的文件格式<code>.lhs</code>，在这种格式下，以<code>&gt;</code>和一个空格开头的才被看做代码。这种文件格式可以更方便的写出大篇幅算法的解释等，毕竟没有人希望一个文件的主体全是注释。</p>
             <h2 id="声明与变量">声明与变量</h2>
             <p>观察以下代码：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>x :: Int
+            <pre
+            class="language-haskell line-numbers match-braces"><code>x :: Int
 x = 3
 
 -- 单行注释以两个横线开头
@@ -245,9 +183,12 @@ x = 3
             <p>这段代码声明了一个Int类型的变量x（::后面用于定义类型说明），并且将其值声明为3。此后x的值不能被改变。也不能对x进行重定义。</p>
             <p>不难看出=号在Haskell中的含义与在其它语言中的不同。它并不是赋值运算符（Haskell中无值可赋），而是用于定义。<code>x = 4</code>不应理解成将x的值置为4，应该理解为x被定义为4。</p>
             <p>考虑下面定义：</p>
-            <pre class="language-Haskell line-numbers match-braces"><code>y :: Int
+            <pre
+            class="language-Haskell line-numbers match-braces"><code>y :: Int
 y = y + 1</code></pre>
-            <p>多少人初学编程，无法理解这种等于自身+1的定义。后来终于将自己的思维扭转，只可惜历史是个圈。这个定义不再是y的值加1了，而是将y定义为y + 1。这是一个无限值，但由于Haskell的惰性求值特性，不使用它时并不会导致异常情况。</p>
+            <p>多少人初学编程，无法理解这种等于自身+1的定义。后来终于将自己的思维扭转，只可惜历史是个圈。这个定义不再是y的值加1了，而是将y定义为y
+            +
+            1。这是一个无限值，但由于Haskell的惰性求值特性，不使用它时并不会导致异常情况。</p>
             <h2 id="基本类型">基本类型</h2>
             <p>Haskell提供了一些耳熟能详的类型<code>Int</code>、<code>Char</code>、<code>Bool</code>、<code>Float</code>、<code>Double</code>与<code>String</code>，注意类型首字母要大写，以及几个注意事项。</p>
             <ul>
@@ -269,7 +210,8 @@ y = y + 1</code></pre>
             <p>在GHCi中，可以很方便的测试简单代码。</p>
             <h2 id="算术运算">算术运算</h2>
             <p>可以在GHCi中进行一些简单运算的尝试：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>-- 四则
+            <pre
+            class="language-haskell line-numbers match-braces"><code>-- 四则
 ex01 = 3 + 2
 ex02 = 19 - 27
 ex03 = 2.35 * 8.6
@@ -292,7 +234,8 @@ ex08 = (-3) * (-7)</code></pre>
             <li>出现负数时要使用括号括起来，因为Haskell中没有函数调用符，负号与减号存在二义性（Haskell中为数不多的丑陋语法之一）。</li>
             </ul>
             <p>Haskell中不存在隐式类型转换，需要时必须使用显式类型转换，比如：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>-- 将整型(Int, Integer)转换为任意其它类型时
+            <pre
+            class="language-haskell line-numbers match-braces"><code>-- 将整型(Int, Integer)转换为任意其它类型时
 fromIntegral n
 -- 将浮点型转换为整型时，根据截断方式使用
 round d
@@ -313,13 +256,15 @@ ceiling d</code></pre>
 }</code></pre>
             <p>其意义为满足一定条件时，返回对x进行一些操作后的值，否则输出x本身。</p>
             <p>而对于Haskell函数，需要这样写：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>foo n = if condition then modify n else n</code></pre>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>foo n = if condition then modify n else n</code></pre>
             <p>这样上述写法才在语义上等效，其中的关键思路是：Haskell中的表达式总是需要一个结果，省略掉else将导致程序无法产生结果。</p>
             <p>这也是Haskell与命令式语言不同之处的体现：并非逐步执行，而是计算表达式。</p>
             <p>不过Haskell中并不常用到if表达式，更多时候使用的是模式匹配和一种被称为<em>守卫（guards）</em>的机制。</p>
             <h2 id="定义基础函数">定义基础函数</h2>
             <p>一个函数可以这样定义</p>
-            <pre class="language-haskell line-numbers match-braces"><code>suntorial :: Integer -&gt; Integer
+            <pre
+            class="language-haskell line-numbers match-braces"><code>suntorial :: Integer -&gt; Integer
 sumtorial 0 = 0
 sumtorial n = n + sumtorial (n - 1)</code></pre>
             <p>其中的语法：</p>
@@ -335,14 +280,16 @@ sumtorial n = n + sumtorial (n - 1)</code></pre>
             </ul></li>
             </ul>
             <p>也可以使用布尔表达式来筛选参数，也就是守卫机制：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>hailstone :: Integer -&gt; Integer
+            <pre
+            class="language-haskell line-numbers match-braces"><code>hailstone :: Integer -&gt; Integer
 hailstone n
   | n `mod` 2 == 0 = n `div` 2
   | otherwise      = 3 * n + 1</code></pre>
             <p>守卫通过从句中的缩进（Haskell使用相同的缩进层级来划分代码块）和<code>|</code>来定义，从上而下进行判定，返回第一个满足条件的结果。<code>otherwise</code>表示无条件接收。</p>
             <p>如果没有从句可以匹配变量，程序将报错退出。</p>
             <p>一个细节，守卫是从句的下级机制，也就是说每个从句都可以拥有守卫：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>foo :: Integer -&gt; Integer
+            <pre
+            class="language-haskell line-numbers match-braces"><code>foo :: Integer -&gt; Integer
 foo 0 = 16
 foo 1
   | &quot;Haskell&quot; &gt; &quot;C++&quot; = 3
@@ -354,7 +301,8 @@ foo n
 -- = 号并不需要对齐，这里只是出于美观对齐的</code></pre>
             <p>这个例子也没啥意义，就是给看看怎么混合使用。</p>
             <p>下面的程序是完全正确的，但有些啰嗦，考虑下问题在哪：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>isEven :: Integer -&gt; Bool
+            <pre
+            class="language-haskell line-numbers match-braces"><code>isEven :: Integer -&gt; Bool
 isEven n
   n `mod` 2 == 0 = True
   otherwise      = False
@@ -365,32 +313,41 @@ isEven&#39; :: Integer -&gt; Bool
 isEven&#39; = n `mod` 2 == 0</code></pre>
             <h2 id="序对">序对</h2>
             <p>可以使用序对（Pair）将两个东西组合起来，比如：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>p :: (Int, Char)
+            <pre
+            class="language-haskell line-numbers match-braces"><code>p :: (Int, Char)
 p = (3, &#39;x&#39;)</code></pre>
             <p>注意：<code>(x, y)</code>这种语法既可以表示序对类型也可以表示序对的值。</p>
             <p>可以使用模式匹配将序对中的值提取出来：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>sumPair :: (Int, Int) -&gt; Int
+            <pre
+            class="language-haskell line-numbers match-braces"><code>sumPair :: (Int, Int) -&gt; Int
 sumPair (x, y) = x + y</code></pre>
             <p>Haskell中含有三元组和多元组，但很少使用，因为有更好的方法，这个方法容我日后再说。</p>
             <h2 id="接受多个参数的函数">接受多个参数的函数</h2>
             <p>要让函数接受多个参数，只要在类型声明时使用更多的-&gt;就可以了：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>f :: Int -&gt; Int -&gt; Int -&gt; Int
+            <pre
+            class="language-haskell line-numbers match-braces"><code>f :: Int -&gt; Int -&gt; Int -&gt; Int
 f x y z = x + y + z
 
 useF = f 1 2 3</code></pre>
             <p>在多个-&gt;组成的串中，前几项依序表示参数，最后一项表示返回类型。你可能会疑惑为什么使用这样一个似乎很容易混淆的形式，而不是类似于<code>f :: Int Int Int -&gt; Int</code>这样的形式。这背后是一个很优雅的语言特性，但这个特性也得留待后议。</p>
             <p>注意前缀函数的运算优先级比中缀函数要高，所以以下写法是错误的：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>f 3 n + 1 7</code></pre>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>f 3 n + 1 7</code></pre>
             <p>因为它实际上会被解析成：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>(f 3 n) + (1 7)</code></pre>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>(f 3 n) + (1 7)</code></pre>
             <p>正确的写法是加上括号：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>f 3 (n + 1) 7</code></pre>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>f 3 (n + 1) 7</code></pre>
             <h2 id="列表">列表</h2>
             <p>列表（List）是Haskell中最基本的类型之一，使用<code>[]</code>表示，其中元素以<code>,</code>分隔：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>nums :: [Integer]
+            <pre
+            class="language-haskell line-numbers match-braces"><code>nums :: [Integer]
 nums   = [1, 2, 3, 19]</code></pre>
-            <p>之前提到过<code>String</code>是List的语法糖, 实际上<code>String</code>类型就是<code>[Char]</code>类型，比如:</p>
-            <pre class="language-haskell line-numbers match-braces"><code>hello1 :: [Char]
+            <p>之前提到过<code>String</code>是List的语法糖,
+            实际上<code>String</code>类型就是<code>[Char]</code>类型，比如:</p>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>hello1 :: [Char]
 hello1 = [&#39;h&#39;, &#39;e&#39;, &#39;l&#39;, &#39;l&#39;, &#39;o&#39;]
 
 hello2 :: String
@@ -399,7 +356,8 @@ hello2 = &quot;hello&quot;
 -- helloSame 为 True
 helloSame = hello1 == hello2</code></pre>
             <h3 id="构建列表">构建列表</h3>
-            <pre class="language-haskell line-numbers match-braces"><code>-- 最简单的列表就是空列表了
+            <pre
+            class="language-haskell line-numbers match-braces"><code>-- 最简单的列表就是空列表了
 emptyList = []
 
 --使用构建运算符(:)将元素连接成列表, :运算符左边是一个元素，而右边是一个列表。
@@ -438,7 +396,8 @@ hailstoneSeq n = n : hailstoneSeq (hailstone n)
 </code></pre>
             <h3 id="操作列表">操作列表</h3>
             <p>列表的基本操作如下：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>-- 使用++运算符拼接两个列表
+            <pre
+            class="language-haskell line-numbers match-braces"><code>-- 使用++运算符拼接两个列表
 -- [1，2，3，4，5，6]
 list = [1,2,3] ++ [4,5,6]
 
@@ -447,7 +406,8 @@ list = [1,2,3] ++ [4,5,6]
 n = list!!1</code></pre>
             <h2 id="处理列表的函数">处理列表的函数</h2>
             <p>可以使用模式匹配来处理列表：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>intListLength :: [Integer] -&gt; Integer
+            <pre
+            class="language-haskell line-numbers match-braces"><code>intListLength :: [Integer] -&gt; Integer
 intListLength []  = 0
 intListLength (x:xs) = 1 + intListLength xs
 -- 对于仅仅用来表示模式而不实际使用的变量，如上例中x，可以使用下划线_占位
@@ -459,7 +419,8 @@ sumEveryTwo (x : []) = [x]
 sumEveryTwo (x : y : zs) = (x + y) : sunEveryTow zs</code></pre>
             <h2 id="组合函数">组合函数</h2>
             <p>在Haskell中要尽可能地使用简单的函数组合成复杂的功能，比如要求hailstone数的数量，可以这样编写：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>hailstoneLen :: Integer -&gt; Integer
+            <pre
+            class="language-haskell line-numbers match-braces"><code>hailstoneLen :: Integer -&gt; Integer
 hailstoneLen n = intListLength (hailstoneSeq n) - 1</code></pre>
             <p>在这个函数中通过之前的例子定义的函数组合起来达成目的，其实这些函数本身也是由简单的函数组合成的，这样层层抽象将使得我们的心智负担更小。</p>
             <h2 id="关于错误信息">关于错误信息</h2>

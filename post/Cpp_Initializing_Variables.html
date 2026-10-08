@@ -26,39 +26,25 @@
             <h1>C++变量初始化</h1>
             <p class="author">Xilong Yang<br>2021-07-19</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>使用列表初始化时发现记忆很模糊，写下来备忘顺便总结一下。</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#初始化的概念" id="toc-初始化的概念">初始化的概念</a></li>
+                <li><a href="#默认初始化" id="toc-默认初始化">默认初始化</a></li>
+                <li><a href="#直接初始化" id="toc-直接初始化">直接初始化</a></li>
+                <li><a href="#列表初始化" id="toc-列表初始化">列表初始化</a></li>
+                <li><a href="#拷贝初始化" id="toc-拷贝初始化">拷贝初始化</a></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#初始化的概念">初始化的概念</a><ol>
-
-</ol></li>
-<li><a href="#默认初始化">默认初始化</a><ol>
-
-</ol></li>
-<li><a href="#直接初始化">直接初始化</a><ol>
-
-</ol></li>
-<li><a href="#列表初始化">列表初始化</a><ol>
-
-</ol></li>
-<li><a href="#拷贝初始化">拷贝初始化</a><ol>
-
-</ol></li>
-
-
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="初始化的概念">初始化的概念</h2>
             <p>初始化是指<strong>创建变量时赋予其一个初始值</strong>。特别要注意C++中初始化与赋值的区别，赋值的含义是抹去原有的值后赋予一个新值。不可以将赋值和初始化混为一谈。</p>
             <p>比如对于一个类：</p>
@@ -101,7 +87,8 @@ Whatever::Whatever() {
 std::string str(&quot;Hello&quot;);</code></pre>
             <p>注意，只有定义时调用构造函数才是初始化，通过构造函数修改已存在变量的值也是赋值操作。</p>
             <h2 id="列表初始化">列表初始化</h2>
-            <p>在C++11之前，可以对POD（Plain Old Data，即可以使用memcpy拷贝的类型）类型和内置数组进行列表初始化，如：</p>
+            <p>在C++11之前，可以对POD（Plain Old
+            Data，即可以使用memcpy拷贝的类型）类型和内置数组进行列表初始化，如：</p>
             <pre class="language-cpp line-numbers match-braces"><code>int arr[3] = {1, 2, 3};
 struct A {
     int x;

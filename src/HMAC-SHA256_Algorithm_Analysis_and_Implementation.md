@@ -6,6 +6,8 @@ date: 2021-05-29
 
 对HMAC-SHA256算法做的整理。
 
+<!--more-->
+
 ## HMAC算法
 
 HMAC是Hash-based Message Authentication Code的缩写，意为基于哈希运算的消息认证码。基诞生目的是为了确保网络中报文的完整性以及信息来源的身份验证。其中有几个关键组成部分：

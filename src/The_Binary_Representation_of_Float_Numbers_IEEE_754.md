@@ -6,6 +6,8 @@ date: 2024-05-14
 
 The binary representation of floating-point numbers confused me greatly many years ago. Here is an introduction to the IEEE 754 standard.
 
+<!--more-->
+
 ## Issue
 
 Code for the issue:

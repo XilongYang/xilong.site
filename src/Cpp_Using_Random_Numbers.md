@@ -6,6 +6,8 @@ date: 2021-05-17
 
 整理一下STL中random库和cstdlib中随机数机制的用法区别。
 
+<!--more-->
+
 ## cstdlib中的随机数用法
 
 ```cpp

@@ -26,71 +26,42 @@
             <h1>从零开始的Haskell（六）——惰性求值</h1>
             <p class="author">Xilong Yang<br>2021-09-15</p>
         </div>
-        <main>
-            <div class="abstract">
+        <div class="abstract">
             <p>系列第六篇，介绍惰性求值。</p>
             <p>经过了前几篇的折磨，是时候介绍惰性求值了。</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <i class="material-icons icon" id="toc-control">remove</i>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#直接求值" id="toc-直接求值">直接求值</a></li>
+                <li><a href="#副作用和纯净" id="toc-副作用和纯净">副作用和纯净</a></li>
+                <li><a href="#惰性求值" id="toc-惰性求值">惰性求值</a></li>
+                <li><a href="#模式匹配驱动计算"
+                id="toc-模式匹配驱动计算">模式匹配驱动计算</a></li>
+                <li><a href="#惰性求值带来的影响"
+                id="toc-惰性求值带来的影响">惰性求值带来的影响</a>
+                <ol>
+                <li><a href="#纯净" id="toc-纯净">纯净</a></li>
+                <li><a href="#理解空间消耗" id="toc-理解空间消耗">理解空间消耗</a></li>
+                <li><a href="#短路运算符" id="toc-短路运算符">短路运算符</a></li>
+                <li><a href="#用户定义的控制结构"
+                id="toc-用户定义的控制结构">用户定义的控制结构</a></li>
+                <li><a href="#无限数据结构" id="toc-无限数据结构">无限数据结构</a></li>
+                <li><a href="#管道全麦编程" id="toc-管道全麦编程">管道/全麦编程</a></li>
+                <li><a href="#动态规划" id="toc-动态规划">动态规划</a></li>
+                </ol></li>
+                </ol>
             </div>
-            <p><nav role="navigation" class="toc">
-<h2>Contents
-<i class="material-icons icon" id="toc-control">remove</i>
-</h2>
-<div id="toc-items">
-<ol><li><a href="#直接求值">直接求值</a><ol>
-
-</ol></li>
-<li><a href="#副作用和纯净">副作用和纯净</a><ol>
-
-</ol></li>
-<li><a href="#惰性求值">惰性求值</a><ol>
-
-</ol></li>
-<li><a href="#模式匹配驱动计算">模式匹配驱动计算</a><ol>
-
-</ol></li>
-<li><a href="#惰性求值带来的影响">惰性求值带来的影响</a><ol>
-<li><a href="#纯净">纯净</a><ol>
-
-</ol></li>
-<li><a href="#理解空间消耗">理解空间消耗</a><ol>
-
-</ol></li>
-<li><a href="#短路运算符">短路运算符</a><ol>
-
-</ol></li>
-<li><a href="#用户定义的控制结构">用户定义的控制结构</a><ol>
-
-</ol></li>
-<li><a href="#无限数据结构">无限数据结构</a><ol>
-
-</ol></li>
-<li><a href="#管道全麦编程">管道/全麦编程</a><ol>
-
-</ol></li>
-<li><a href="#动态规划">动态规划</a><ol>
-
-</ol></li>
-
-
-
-
-
-
-
-
-</ol></li>
-
-
-
-
-
-</ol>
-</div>
-</nav>
-</p>
+        </nav>
+        <main>
             <h2 id="直接求值">直接求值</h2>
             <p>在讨论惰性求值之前首先来了解一下直接求值。在直接求值方式下，参数在传入函数之前就已经计算过了，传入函数的是计算结果。考虑如下函数：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>f x y = x + 2</code></pre>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>f x y = x + 2</code></pre>
             <p>在直接求值的语言中，<code>f 5 (29^35792)</code>会先分别计算出<code>5</code>和<code>29^35792</code>的值，然后才将这两个值传入函数中进行处理。对于我们这个函数而言，这样做显然浪费了计算<code>29^35792</code>耗费的计算资源。因为我们跟本没有使用参数<code>y</code>。</p>
             <p>那么为什么要使用直接求值呢？一个显著的好处是直接求值可以很方便的预测处理表达式的时机，对于有副作用的语言而言，比如C++中：</p>
             <pre class="language-cpp line-numbers match-braces"><code>f (x(), y());</code></pre>
@@ -108,8 +79,10 @@
             <p>现在我们已经知道了什么是直接求值，是时候看看惰性求值长什么样了。在惰性求值方式下，对函数参数的计算会尽可能地拖延：只有在必须用到它们的值的时候才计算它们。当向函数传递一个参数的时候，它们被整个打包（这个包称为thunk），以未计算表达式的方式传入。这过程中不作任何实际处理。</p>
             <p>举例来说，计算<code>f 5 (29^35792)</code>时，第二个参数被简单的打包成thunk并且不做任何实际的计算，并且<code>f</code>会被立刻调用。因为<code>f</code>实际上根本没用到第二个参数，这个thunk会被GC系统直接抛弃。</p>
             <h2 id="模式匹配驱动计算">模式匹配驱动计算</h2>
-            <p>所以一个表达式什么时候才必须进行计算呢？一个关键是看它什么时候被使用，但实际上这 并不是最重要的区别。考虑下面的例子：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>f1 :: Maybe a -&gt; [Maybe a]
+            <p>所以一个表达式什么时候才必须进行计算呢？一个关键是看它什么时候被使用，但实际上这
+            并不是最重要的区别。考虑下面的例子：</p>
+            <pre
+            class="language-haskell line-numbers match-braces"><code>f1 :: Maybe a -&gt; [Maybe a]
 f1 m = [m, m]
 
 f2 :: Maybe a -&gt; [a]
@@ -123,7 +96,8 @@ f2 Just x = [x]</code></pre>
             <li>表达式仅计算到足够当前模式使用的程度。</li>
             </ul>
             <p>来看一个更有趣的例子，<code>take 3 (repeat 7)</code>。作为参考，<code>take</code>和<code>repeat</code>的定义如下：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>repeat a -&gt; [a]
+            <pre
+            class="language-haskell line-numbers match-braces"><code>repeat a -&gt; [a]
 repeat x = x : repeat x
 
 take :: Int -&gt; [a] -&gt; [a]
@@ -131,7 +105,8 @@ take n _ | n &lt;= 0 = []
 take _ [] = []
 take n (x:xs) = x : take (n - 1) xs</code></pre>
             <p>来一步一步地考虑这个式子：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>take 3 (repeat 7) -- 首先对take的第一个模式进行匹配，3 &lt;= 0为False，因此第一个模式不匹配，此时尝试匹配第二模式，这里需要知道第二个参数是不是空列表，因此我们必须展开repeat 7。但我们是惰性求值，所以先展开一步看看。
+            <pre
+            class="language-haskell line-numbers match-braces"><code>take 3 (repeat 7) -- 首先对take的第一个模式进行匹配，3 &lt;= 0为False，因此第一个模式不匹配，此时尝试匹配第二模式，这里需要知道第二个参数是不是空列表，因此我们必须展开repeat 7。但我们是惰性求值，所以先展开一步看看。
 take 3 (7 : repeat 7) -- 这里已经足够看出第二个参数不是空列表了，所以不用继续展开，尝试匹配第三个模式，匹配。因此使用第三个表达式进行处理。注意（3-1）还不需要计算。
 7 : take (3 - 1) (repeat 7) -- 尝试对第一个模式进行匹配，判断(3 - 1) &lt;= 0时需要对（3 - 1）进行计算。
 7 : take 2 (repeat 7) -- 2 &lt;= 0为False，试图匹配第二个模式，过程不再赘述。
@@ -149,12 +124,14 @@ take 3 (7 : repeat 7) -- 这里已经足够看出第二个参数不是空列表�
             <p>正如之前所说，惰性求值特性迫使了我们选择纯净（除非你不想要程序员活了）。</p>
             <h3 id="理解空间消耗">理解空间消耗</h3>
             <p>惰性求值也有其缺点，其中之一就是很难估算程序对空间资源的消耗。考虑下例：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>-- 给出标准库foldl定义作为参考
+            <pre
+            class="language-haskell line-numbers match-braces"><code>-- 给出标准库foldl定义作为参考
 foldl :: (b -&gt; a -&gt; b) -&gt; b -&gt; [a] -&gt; b
 foldl _ z []  = z
 foldl f z (x:xs) = foldl f (f z x) xs</code></pre>
             <p>来看看如何处理<code>foldl (+) 0 [1,2,3]</code>：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>foldl (+) 0 [1,2,3]
+            <pre
+            class="language-haskell line-numbers match-braces"><code>foldl (+) 0 [1,2,3]
 = foldl (+) (0+1) [2,3]
 = foldl (+) ((0+1)+2) [3]
 = foldl (+) (((0+1)+2)+3) []
@@ -164,7 +141,8 @@ foldl f z (x:xs) = foldl f (f z x) xs</code></pre>
 = 6</code></pre>
             <p>这个式子一开始被处理为一个大的thunk<code>(((0+1)+2)+3)</code>并且没有进行实际上的运算，然后最终才由thunk计算出一个数值。这里至少存在两个问题，其一是将一个列表转换成一个类似列表的东西并没有任何价值。其二是处理这样的thunk将会消耗很多空间资源，比如在计算<code>1+2</code>时要先将<code>3</code>推入栈中。在这样的小例子中可能看不出什么消耗，但在处理大列表时这样的空间消耗是非常巨大的。</p>
             <p>这个问题的解决方案是使用<code>foldl'</code>，它是一个更接近直接求值的<code>foldl</code>实现，因此不会构建出一个巨大的thunk：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>foldl&#39; (+) 0 [1,2,3]
+            <pre
+            class="language-haskell line-numbers match-braces"><code>foldl&#39; (+) 0 [1,2,3]
 = foldl&#39; (+) (0 + 1) [2,3]
 = foldl&#39; (+) 1 [2,3]
 = foldl&#39; (+) (1 + 2) [3]
@@ -175,18 +153,21 @@ foldl f z (x:xs) = foldl f (f z x) xs</code></pre>
             <h3 id="短路运算符">短路运算符</h3>
             <p>对C++和Java比较熟悉的话，一定知道其中<code>&amp;&amp;</code>和<code>||</code>运算符的短路现象。对于这样的直接求值语言而言，函数的参数在传入之前应该先计算。显然短路是不符合这个特性的，因此短路其实是这些语言的一个特例。</p>
             <p>而对于Haskell，短路就显得非常自然了，比如<code>(&amp;&amp;)</code>函数定义如下：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>(&amp;&amp;) :: Bool -&gt; Bool -&gt; Bool
+            <pre
+            class="language-haskell line-numbers match-braces"><code>(&amp;&amp;) :: Bool -&gt; Bool -&gt; Bool
 True  &amp;&amp; x = x
 False &amp;&amp; _ = False</code></pre>
             <p>同时也有一个不短路的版本<code>&amp;&amp;!</code>，定义为：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>(&amp;&amp;!) :: Bool -&gt; Bool -&gt; Bool
+            <pre
+            class="language-haskell line-numbers match-braces"><code>(&amp;&amp;!) :: Bool -&gt; Bool -&gt; Bool
 True  &amp;&amp;! True  = True
 True  &amp;&amp;! False = True
 False &amp;&amp;! True  = True
 False &amp;&amp;! False = True</code></pre>
             <h3 id="用户定义的控制结构">用户定义的控制结构</h3>
             <p>基于与上面的短路同样的思路，我们可以定义自己的用户控制结构。大多数语言有内置的<code>if</code>语句，而在Haskell中可以简单的将<code>if</code>定义为一个函数，定义如下：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>if&#39; Bool -&gt; a -&gt; a -&gt; a
+            <pre
+            class="language-haskell line-numbers match-braces"><code>if&#39; Bool -&gt; a -&gt; a -&gt; a
 if&#39; True  x _ = x
 if&#39; False _ y = y</code></pre>
             <p>然而Haskell还是存在一个内置的<code>if</code>语句，可能是语言设计者觉得大家需要吧。不过<code>if</code>在Haskell中并没有许多用处，最好还是使用模式匹配和哨卫。</p>
@@ -198,7 +179,8 @@ if&#39; False _ y = y</code></pre>
             <h3 id="动态规划">动态规划</h3>
             <p>惰性求值给我们带来了更方便的动态规划技术。通常我们使用动态规划时要小心考虑状态表的求值顺序，如果顺序错了就将得到一个完全错误的结果。</p>
             <p>然而，我们可以使用惰性求值特性来让Haskell运行时为我们选择求值顺序。比如对于经典的0-1背包问题，我们可以这样解决：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>import Data.Array
+            <pre
+            class="language-haskell line-numbers match-braces"><code>import Data.Array
 
 knapsack01 :: [Double]   --物品价值
            -&gt; [Integer]  --物品重量
@@ -218,7 +200,8 @@ knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
                                           (m!(i - 1, w - ws!!i) + vs!!i)
                 ]</code></pre>
             <p>为了理解这个程序，首先解释一下<code>array</code>，其作用为封装一个指定范围内索引到值的映射列表，并提供运算符<code>!</code>实现方便的<code>k-v</code>映射，用法为：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>-- array key范围 映射列表
+            <pre
+            class="language-haskell line-numbers match-braces"><code>-- array key范围 映射列表
 -- array (min, max) [(index, value)]
 array :: Ix i =&gt; (i, i) -&gt; [(i, e)] -&gt; Array i e
 -- 如下例生成一个索引范围从1到10的映射，每个索引对应的值为索引值+1
@@ -234,11 +217,16 @@ snd $ l!!1 == 1</code></pre>
             </blockquote>
             <p>而解决思路可以概括为：</p>
             <blockquote>
-            <p>maxV(i, w)视作前i个物品在限重w时的最大价值。此时，如果没有将第i个物品加入背包，则其值等于maxV(i - 1, w)；如果将第i个物品加入了背包，其值则等于maxV(i - 1, w - ws[i]) + vs[i]。因此，只要选择两种情况下值比较大的作为maxV(i,w)的值就可以确保这个值是最优解。</p>
+            <p>maxV(i,
+            w)视作前i个物品在限重w时的最大价值。此时，如果没有将第i个物品加入背包，则其值等于maxV(i
+            - 1, w)；如果将第i个物品加入了背包，其值则等于maxV(i - 1, w
+            - ws[i]) +
+            vs[i]。因此，只要选择两种情况下值比较大的作为maxV(i,w)的值就可以确保这个值是最优解。</p>
             <p>同时要注意，如果当前物品价值超过了背包最大载重，则只有不加入背包一个选择。</p>
             </blockquote>
             <p>现在来逐步解析这个程序：</p>
-            <pre class="language-haskell line-numbers match-braces"><code>import Data.Array
+            <pre
+            class="language-haskell line-numbers match-braces"><code>import Data.Array
 
 knapsack01 :: [Double]   --物品价值
            -&gt; [Integer]  --物品重量

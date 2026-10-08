@@ -6,6 +6,8 @@ date: 2021-07-18
 
 对之前的文章：[二叉树的存储结构及其非层序遍历](/posts/Memory_Structure_of_Binary_Tree_and_Its_Non_Level_Order_Iteration.html)的一点小补充。
 
+<!--more-->
+
 ## 原理
 
 使用一个队列来对每个节点进行`入队-加入子节点-访问-出队`的操作即可，非常简单。
