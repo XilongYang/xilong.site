@@ -95,18 +95,18 @@ using std::function;
 
 template&lt;typename a, typename b, typename c&gt;
 function&lt;c(a)&gt; foo(const function&lt;c(b)&gt; &amp;f, const function&lt;b(a)&gt; &amp;g) {
-    return [&amp;f, &amp;g](a x) {
+    return [f, g](a x) {
         return f(g(x));
     };
 }</code></pre>
-            <p>可见C++在这方面已经挻不错了，不过与真正的函数式编程语言相比仍有些距离。</p>
+            <p>可见C++在这方面已经挺不错了，不过与真正的函数式编程语言相比仍有些距离。</p>
             <p>言归正传，<code>.</code>操作乍看起来好像没什么用，但下面这个例子会为其用途提供一个有力的说明：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>test :: [Integer] -&gt; Bool
-test xs = even (length (greatThan100 xs))
+test xs = even (length (greaterThan100 xs))
 -- 可以写作
 test&#39; :: [Integer] -&gt; Bool
-test&#39; = even.length.greatThan100</code></pre>
+test&#39; = even.length.greaterThan100</code></pre>
             <p>去掉了层层叠叠的括号和有些累缀的参数后，看起来优雅多了。<code>.</code>运算将函数<code>test'</code>的定义表示为了几个小函数的组合。接下来让我们再看看<code>.</code>运算：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>Prelude&gt; :t (.)
@@ -134,7 +134,7 @@ f x y = 2*x + y</code></pre>
 foobar [] = 0
 foobar (x:xs)
     | x &gt; 3 = (7 * x + 2) + foobar xs
-    | otherwise foobar xs</code></pre>
+    | otherwise = foobar xs</code></pre>
             <p>这个程序的功能看起来很直观，但并不是良好的Haskell风格，主要存在两点问题：</p>
             <ol type="1">
             <li>一个程序同时处理了过多的事务。</li>
@@ -143,7 +143,7 @@ foobar (x:xs)
             <p>我们可以将其功能实现为：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>foobar&#39; :: [Integer] -&gt; Integer
-foobar&#39; sum . map (\x -&gt; 7 * x + 2) . filter (&gt;3)</code></pre>
+foobar&#39; = sum . map (\x -&gt; 7 * x + 2) . filter (&gt;3)</code></pre>
             <p>这样的实现将很多只做好一件事的小函数组合起来，使得函数更加清晰与直观。</p>
             <h2 id="折叠">折叠</h2>
             <p>增加了许多知识后，我们可以讨论上一节中被搁置的折叠操作了。先来直观体会折叠操作：</p>
@@ -153,7 +153,7 @@ sum&#39; [] = 0
 sum&#39; (x:xs) = x + sum&#39; xs
 
 product&#39; :: [Integer] -&gt; Integer
-product&#39; [] = 0
+product&#39; [] = 1
 product&#39; (x:xs) = x * product&#39; xs
 
 length&#39; :: [a] -&gt; Int
@@ -173,7 +173,7 @@ fold z f [a,b,c] == a `f` (b `f` (c `f` z))</code></pre>
             <p>有了这个函数，之前的几个函数就可以写为：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>sum&#39;&#39; = fold 0 (+)
-product&#39;&#39; = fold 0 (*)
+product&#39;&#39; = fold 1 (*)
 length&#39;&#39; = fold 0 (\_ s -&gt; s + 1)</code></pre>
             <p>观察<code>\_ s -&gt; s + 1</code>，可以消去两边的<code>s</code>，化为<code>\_ -&gt; (+1)</code>。</p>
             <p>另一种思路是使用<code>const</code>函数。<code>const</code>函数的类型为<code>a-&gt;b-&gt;a</code>，效果是输入两个参数，并返回第一个参数作为结果（即丢弃第二个参数），和C++的const关键字完全不是一回事。</p>
@@ -190,13 +190,13 @@ f 2 3 == const (+1) 2 3 == (+1) 3 == 4</code></pre>
             <p>作为一个常用的函数，<code>fold</code>在<code>Prelude</code>中当然也有定义，即为<code>foldr</code>。<code>Prelude</code>中依赖于<code>foldr</code>定义的函数有：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>length :: [a] -&gt; Int
-sum :: Num a =&gt; a -&gt; a
+sum :: Num a =&gt; [a] -&gt; a
 product :: Num a =&gt; [a] -&gt; a
 and :: [Bool] -&gt; Bool
 or :: [Bool] -&gt; Bool
 any :: (a -&gt; Bool) -&gt; [a] -&gt; Bool
 all :: (a-&gt; Bool) -&gt; [a] -&gt; Bool</code></pre>
-            <p>你可能会对<code>=&gt;</code>感到默生，这个符号我们会在下一节进行介绍。</p>
+            <p>你可能会对<code>=&gt;</code>感到陌生，这个符号我们会在下一节进行介绍。</p>
             <p>还有一个<code>foldl</code>函数，表示从左边折叠，与<code>foldr</code>的区别如下：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>foldr f z [a,b,c] = a `f` (b `f` (c `f` z))

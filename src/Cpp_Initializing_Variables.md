@@ -80,7 +80,7 @@ struct A {
 // 列表初始化, x = 1, y = 2
 A a = {1, 2};
 // 列表初始化, x = 1, y默认构造
-A a = {1};
+A a2 = {1};
 ```
 
 C++11以后，这种初始化方式得到了普及，现在可以对任何对象使用列表初始化并且无需`=`号。如：
@@ -91,7 +91,7 @@ int arr[3]{1, 2, 3};
 std::string str{"hello"};
 ```
 
-列表初始化有一个重要特性，内置类型不会进行隐式类型转换。比如：
+列表初始化有一个重要特性，内置类型不允许进行窄化的隐式类型转换。比如：
 
 ```cpp
 int a = 1.5; // a == 1
@@ -114,7 +114,7 @@ A{a, b} == A(a, b) // .x == a, .y == b
 
 ```cpp
 struct A {
-    A(initializer_list<int> list)
+    A(std::initializer_list<int> list)
     : size(list.size()), head(new int[size]) {
         auto cur = head;
         for (auto i : list) {

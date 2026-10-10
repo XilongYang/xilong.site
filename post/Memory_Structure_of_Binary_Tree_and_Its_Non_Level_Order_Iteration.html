@@ -73,12 +73,13 @@
             <ol type="1">
             <li><p>二叉树的第i层上至多有<span class="math inline">\(2^{i
             - 1}\)</span>个结点</p></li>
-            <li><p>深度为k的二叉树至多有<span class="math inline">\(2^{k
-            - 1}\)</span>个结点</p></li>
+            <li><p>深度为k的二叉树至多有<span
+            class="math inline">\(2^{k} - 1\)</span>个结点</p></li>
             <li><p>对任何一棵二叉树T, 其终端结点数为度为2的结点数 +
             1</p></li>
             <li><p>具有n个结点的完全二叉树深度为：<span
-            class="math inline">\(log_2n + 1\)</span></p>
+            class="math inline">\(\lfloor log_2n \rfloor +
+            1\)</span></p>
             <p>满二叉树：每一层结点数都为最大</p>
             <p>完全二叉树：每一结点按层的编号都与对应的满二叉树一一对应</p>
             <figure>
@@ -137,8 +138,8 @@
             <h4 id="代码实现">代码实现</h4>
             <pre class="language-cpp line-numbers match-braces"><code>typedef struct Node
 {
-    Node *leftChild;
-    Node *rightChild;
+    Node *left;
+    Node *right;
     int data;
 } *BinTree;
 
@@ -158,16 +159,16 @@ int InsertChild(Node *aim, bool left)
     Node *newNode = new Node{nullptr, nullptr, 0};
     if(newNode == nullptr)
     {
-        cerr &lt;&lt; &quot;Error While Add Note!&quot; &lt;&lt; endl;
+        cerr &lt;&lt; &quot;Error While Add Node!&quot; &lt;&lt; endl;
         return -1;
     }
     if(left)
     {
-        aim-&gt;leftChild = newNode;
+        aim-&gt;left = newNode;
     }
     else
     {
-        aim-&gt;rightChild = newNode;
+        aim-&gt;right = newNode;
     }
     return 0;
 }
@@ -180,11 +181,11 @@ int DeleteChild(Node *aim, bool left)
     {
         if(preDel-&gt;left != nullptr)
         {
-            DeleteChild(preDel, left);
+            DeleteChild(preDel, true);
         }
         if(preDel-&gt;right != nullptr)
         {
-            DeleteChild(preDel, right);
+            DeleteChild(preDel, false);
         }
         delete preDel;
         preDel = nullptr;
@@ -200,7 +201,7 @@ int DeleteChild(Node *aim, bool left)
     return 0;
 }
 
-int Visit(Bintree T)
+int Visit(BinTree T)
 {
     if(T == nullptr) return -1;
     cout &lt;&lt; T-&gt;data &lt;&lt; endl;
@@ -349,7 +350,7 @@ int Visit(Bintree T)
             {
                 //右子树不存在或已遍历过，输出根结点并退栈
                 S.pop();
-                cout &lt;&lt; cour-&gt;data;
+                cout &lt;&lt; cur-&gt;data;
                 //if(cur-&gt;right == nullptr) cout &lt;&lt; cur-&gt;data; 中序遍历输出叶子结点
                 //令lastPop指向最后退栈结点，将cur指针置0以免下一轮循环将已退栈的结点重新入栈
                 lastPop = cur;

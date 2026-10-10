@@ -18,7 +18,7 @@ As a result, I switched to the system tool and wrote this post to preserve my no
 * 64 constants: the first 32 bits of the fractional parts of the **cube roots** of the first 64 primes
 * Chunk size: 512 bits
 * Scheduled words per chunk: 64 × 32-bit words
-* Rotate-right function: `RTOR`
+* Rotate-right function: `ROTR`
 * Functions for expanding a chunk to words: `S0`, `S1`
 * Functions for updating the result hash values: `EP0`, `EP1`, `CH`, `MAJ`
 
@@ -35,15 +35,15 @@ As a result, I switched to the system tool and wrote this post to preserve my no
    2. Split the chunk into 16 words (512 = 32 * 16), and put them into the first 16 words.
    3. Generate the remaining words using the following recurrence relation:
       * `w[i] = w[i - 16] + S0(w[i - 15]) + w[i - 7] + S1(w[i - 2])`
-      * `S0(x) = RTOR(x, 7) ^ RTOR(x, 18) ^ (x >> 3)`
-      * `S1(x) = RTOR(x, 17) ^ RTOR(x, 19) ^ (x >> 10)`
+      * `S0(x) = ROTR(x, 7) ^ ROTR(x, 18) ^ (x >> 3)`
+      * `S1(x) = ROTR(x, 17) ^ ROTR(x, 19) ^ (x >> 10)`
    4. Make a copy of `h[]` and call it `h'[]`
    5. Iterate over `w[]` to update values in `h'[]`
       1. `t1 = h'[7] + EP1(h'[4]) + CH(h'[4], h'[5], h'[6]) + k[i] + w[i]`
-         * `EP1(x) = RTOR(x, 6) ^ RTOR(x, 11) ^ RTOR(x, 25)`
+         * `EP1(x) = ROTR(x, 6) ^ ROTR(x, 11) ^ ROTR(x, 25)`
          * `CH(x, y, z) = (x & y) ^ ((~x) & z)`
       2. `t2 = EP0(h'[0]) + MAJ(h'[0], h'[1], h'[2])`
-         * `EP0(x) = RTOR(x, 2) ^ RTOR(x, 13) ^ RTOR(x, 22)`
+         * `EP0(x) = ROTR(x, 2) ^ ROTR(x, 13) ^ ROTR(x, 22)`
          * `MAJ(x, y, z) = ((x & y) ^ (x & z) ^ (y & z))`
       3. Update `h' {a, b, c, d, e, f, g, h}` to `{t1 + t2, a, b, c, d + t1, e, f, g}`
    6. Update `h[]` by adding the corresponding values from  `h'[]` .

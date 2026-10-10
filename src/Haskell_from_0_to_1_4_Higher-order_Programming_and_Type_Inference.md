@@ -93,22 +93,22 @@ using std::function;
 
 template<typename a, typename b, typename c>
 function<c(a)> foo(const function<c(b)> &f, const function<b(a)> &g) {
-    return [&f, &g](a x) {
+    return [f, g](a x) {
         return f(g(x));
     };
 }
 ```
 
-可见C++在这方面已经挻不错了，不过与真正的函数式编程语言相比仍有些距离。
+可见C++在这方面已经挺不错了，不过与真正的函数式编程语言相比仍有些距离。
 
 言归正传，`.`操作乍看起来好像没什么用，但下面这个例子会为其用途提供一个有力的说明：
 
 ```haskell
 test :: [Integer] -> Bool
-test xs = even (length (greatThan100 xs))
+test xs = even (length (greaterThan100 xs))
 -- 可以写作
 test' :: [Integer] -> Bool
-test' = even.length.greatThan100
+test' = even.length.greaterThan100
 ```
 
 去掉了层层叠叠的括号和有些累缀的参数后，看起来优雅多了。`.`运算将函数`test'`的定义表示为了几个小函数的组合。接下来让我们再看看`.`运算：
@@ -158,7 +158,7 @@ foobar :: [Integer] -> Integer
 foobar [] = 0
 foobar (x:xs)
     | x > 3 = (7 * x + 2) + foobar xs
-    | otherwise foobar xs
+    | otherwise = foobar xs
 ```
 
 这个程序的功能看起来很直观，但并不是良好的Haskell风格，主要存在两点问题：
@@ -170,7 +170,7 @@ foobar (x:xs)
 
 ```haskell
 foobar' :: [Integer] -> Integer
-foobar' sum . map (\x -> 7 * x + 2) . filter (>3)
+foobar' = sum . map (\x -> 7 * x + 2) . filter (>3)
 ```
 
 这样的实现将很多只做好一件事的小函数组合起来，使得函数更加清晰与直观。
@@ -185,7 +185,7 @@ sum' [] = 0
 sum' (x:xs) = x + sum' xs
 
 product' :: [Integer] -> Integer
-product' [] = 0
+product' [] = 1
 product' (x:xs) = x * product' xs
 
 length' :: [a] -> Int
@@ -215,7 +215,7 @@ fold z f [a,b,c] == a `f` (b `f` (c `f` z))
 
 ```haskell
 sum'' = fold 0 (+)
-product'' = fold 0 (*)
+product'' = fold 1 (*)
 length'' = fold 0 (\_ s -> s + 1)
 ```
 
@@ -242,7 +242,7 @@ f 2 3 == const (+1) 2 3 == (+1) 3 == 4
 
 ```haskell
 length :: [a] -> Int
-sum :: Num a => a -> a
+sum :: Num a => [a] -> a
 product :: Num a => [a] -> a
 and :: [Bool] -> Bool
 or :: [Bool] -> Bool
@@ -250,7 +250,7 @@ any :: (a -> Bool) -> [a] -> Bool
 all :: (a-> Bool) -> [a] -> Bool
 ```
 
-你可能会对`=>`感到默生，这个符号我们会在下一节进行介绍。
+你可能会对`=>`感到陌生，这个符号我们会在下一节进行介绍。
 
 还有一个`foldl`函数，表示从左边折叠，与`foldr`的区别如下：
 

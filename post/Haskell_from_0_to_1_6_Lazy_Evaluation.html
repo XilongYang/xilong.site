@@ -59,7 +59,7 @@
             <p>在讨论惰性求值之前首先来了解一下直接求值。在直接求值方式下，参数在传入函数之前就已经计算过了，传入函数的是计算结果。考虑如下函数：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>f x y = x + 2</code></pre>
-            <p>在直接求值的语言中，<code>f 5 (29^35792)</code>会先分别计算出<code>5</code>和<code>29^35792</code>的值，然后才将这两个值传入函数中进行处理。对于我们这个函数而言，这样做显然浪费了计算<code>29^35792</code>耗费的计算资源。因为我们跟本没有使用参数<code>y</code>。</p>
+            <p>在直接求值的语言中，<code>f 5 (29^35792)</code>会先分别计算出<code>5</code>和<code>29^35792</code>的值，然后才将这两个值传入函数中进行处理。对于我们这个函数而言，这样做显然浪费了计算<code>29^35792</code>耗费的计算资源。因为我们根本没有使用参数<code>y</code>。</p>
             <p>那么为什么要使用直接求值呢？一个显著的好处是直接求值可以很方便的预测处理表达式的时机，对于有副作用的语言而言，比如C++中：</p>
             <pre class="language-cpp line-numbers match-braces"><code>f (x(), y());</code></pre>
             <p>可以确保在函数<code>f</code>调用之前已经对<code>x()</code>与<code>y()</code>函数进行了处理，比如更改全局变量的值。因此我们可以使程序的行为和我们的预期相符。</p>
@@ -76,15 +76,14 @@
             <p>现在我们已经知道了什么是直接求值，是时候看看惰性求值长什么样了。在惰性求值方式下，对函数参数的计算会尽可能地拖延：只有在必须用到它们的值的时候才计算它们。当向函数传递一个参数的时候，它们被整个打包（这个包称为thunk），以未计算表达式的方式传入。这过程中不作任何实际处理。</p>
             <p>举例来说，计算<code>f 5 (29^35792)</code>时，第二个参数被简单的打包成thunk并且不做任何实际的计算，并且<code>f</code>会被立刻调用。因为<code>f</code>实际上根本没用到第二个参数，这个thunk会被GC系统直接抛弃。</p>
             <h2 id="模式匹配驱动计算">模式匹配驱动计算</h2>
-            <p>所以一个表达式什么时候才必须进行计算呢？一个关键是看它什么时候被使用，但实际上这
-            并不是最重要的区别。考虑下面的例子：</p>
+            <p>所以一个表达式什么时候才必须进行计算呢？一个关键是看它什么时候被使用，但实际上这并不是最重要的区别。考虑下面的例子：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>f1 :: Maybe a -&gt; [Maybe a]
 f1 m = [m, m]
 
 f2 :: Maybe a -&gt; [a]
 f2 Nothing = []
-f2 Just x = [x]</code></pre>
+f2 (Just x) = [x]</code></pre>
             <p>这里的<code>f1</code>与<code>f2</code>都使用了它们的参数，但其中有很大的区别。<code>f1</code>并不在乎参数是个什么东西，只要把它整个地丢进列表里就行了。而<code>f2</code>就必须知道参数的值，来决定如何处理参数。</p>
             <p>另一个关键是，thunk只会被计算到足够使用的程度，比如说<code>safeHead [3 ^ 500, 49]</code>会得到结果<code>Just (3^500)</code>，而不会接着计算<code>3 ^ 500</code>（属实够懒的……）。至于这个<code>3 ^ 500</code>之后会不会被计算，取决于这个thunk的使用方式。</p>
             <p>一个方便记忆的口诀就是本节标题：<strong>模式匹配驱动计算</strong>。两个重点：</p>
@@ -94,7 +93,7 @@ f2 Just x = [x]</code></pre>
             </ul>
             <p>来看一个更有趣的例子，<code>take 3 (repeat 7)</code>。作为参考，<code>take</code>和<code>repeat</code>的定义如下：</p>
             <pre
-            class="language-haskell line-numbers match-braces"><code>repeat a -&gt; [a]
+            class="language-haskell line-numbers match-braces"><code>repeat :: a -&gt; [a]
 repeat x = x : repeat x
 
 take :: Int -&gt; [a] -&gt; [a]
@@ -158,13 +157,13 @@ False &amp;&amp; _ = False</code></pre>
             <pre
             class="language-haskell line-numbers match-braces"><code>(&amp;&amp;!) :: Bool -&gt; Bool -&gt; Bool
 True  &amp;&amp;! True  = True
-True  &amp;&amp;! False = True
-False &amp;&amp;! True  = True
-False &amp;&amp;! False = True</code></pre>
+True  &amp;&amp;! False = False
+False &amp;&amp;! True  = False
+False &amp;&amp;! False = False</code></pre>
             <h3 id="用户定义的控制结构">用户定义的控制结构</h3>
             <p>基于与上面的短路同样的思路，我们可以定义自己的用户控制结构。大多数语言有内置的<code>if</code>语句，而在Haskell中可以简单的将<code>if</code>定义为一个函数，定义如下：</p>
             <pre
-            class="language-haskell line-numbers match-braces"><code>if&#39; Bool -&gt; a -&gt; a -&gt; a
+            class="language-haskell line-numbers match-braces"><code>if&#39; :: Bool -&gt; a -&gt; a -&gt; a
 if&#39; True  x _ = x
 if&#39; False _ y = y</code></pre>
             <p>然而Haskell还是存在一个内置的<code>if</code>语句，可能是语言设计者觉得大家需要吧。不过<code>if</code>在Haskell中并没有许多用处，最好还是使用模式匹配和哨卫。</p>
@@ -183,7 +182,7 @@ knapsack01 :: [Double]   --物品价值
            -&gt; [Integer]  --物品重量
            -&gt; Integer    --背包载量
            -&gt; Double     --最大价值
-knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
+knapsack01 vs ws maxW = m!(numItems - 1, maxW)
     where numItems = length vs
           m = array ((-1, 0), (numItems - 1, maxW)) $
                 [((-1, w), 0) | w &lt;- [0 .. maxW]] ++
@@ -204,10 +203,10 @@ array :: Ix i =&gt; (i, i) -&gt; [(i, e)] -&gt; Array i e
 -- 如下例生成一个索引范围从1到10的映射，每个索引对应的值为索引值+1
 a = array (1, 10) [(i, i + 1) | i &lt;- [1..10]]
 -- 取该映射中的一个value时，使用array！key的方式，如
-a!1 == 1
+a!1 == 2
 -- 似乎等效于直接对列表进行如下操作
 l = [(i, i + 1) | i &lt;- [1..10]]
-snd $ l!!1 == 1</code></pre>
+snd $ l!!0 == 2</code></pre>
             <p>再回顾一下0-1背包问题，问题描述为:</p>
             <blockquote>
             <p>给定n个物品与一个最大载重为maxW的背包。每个物品的重量w与价值v各不相同，可以选定任意物品装入背包，但背包中物品重量总和不可超过背包的最大载重。求背包最多可以装入多少价值的物品。</p>
@@ -219,7 +218,7 @@ snd $ l!!1 == 1</code></pre>
             - 1, w)；如果将第i个物品加入了背包，其值则等于maxV(i - 1, w
             - ws[i]) +
             vs[i]。因此，只要选择两种情况下值比较大的作为maxV(i,w)的值就可以确保这个值是最优解。</p>
-            <p>同时要注意，如果当前物品价值超过了背包最大载重，则只有不加入背包一个选择。</p>
+            <p>同时要注意，如果当前物品重量超过了背包最大载重，则只有不加入背包一个选择。</p>
             </blockquote>
             <p>现在来逐步解析这个程序：</p>
             <pre
@@ -232,7 +231,7 @@ knapsack01 :: [Double]   --物品价值
 -- 我们知道了m是一个Array类型，!运算可以取其对应索引的值
 -- m (i, w)这个形式即是之前所说的maxV(i,w)，求前n个物品的在限重w下的最大价值
 -- 这里numItems - 1是因为数组下标从0开始，第一个物品对应的i值为0
-knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
+knapsack01 vs ws maxW = m!(numItems - 1, maxW)
     where numItems = length vs
           -- 这里构建一个二维数组作状态表
           -- 索引范围是(-1, 0)到(numItems - 1, maxW)
@@ -250,18 +249,18 @@ knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
                            | otherwise = max (m!(i - 1, w))
                                           (m!(i - 1, w - ws!!i) + vs!!i)
                 ]</code></pre>
-            <p>这样看除了语法默生一点外似乎并没有什么太特别的地方，为了对比，给出这个问题的C++实现：</p>
+            <p>这样看除了语法陌生一点外似乎并没有什么太特别的地方，为了对比，给出这个问题的C++实现：</p>
             <pre class="language-cpp line-numbers match-braces"><code>#include &lt;vector&gt;
 
 using namespace std;
 
-double kanpsack01(const vector&lt;double&gt; &amp;vs, const vector&lt;int&gt; &amp;ws
+double knapsack01(const vector&lt;double&gt; &amp;vs, const vector&lt;int&gt; &amp;ws
                 , int maxW) {
 
     auto numItems = vs.size();
 
     // 留出物品数与载重为0的情况所需空间
-    auto m = vector(numItems + 1, vector&lt;double&gt;(maxW + 1， 0));
+    auto m = vector(numItems + 1, vector&lt;double&gt;(maxW + 1, 0));
 
     for (int i = 1; i &lt;= numItems; ++i) {
         for (int w = 1; w &lt;= maxW; ++w) {

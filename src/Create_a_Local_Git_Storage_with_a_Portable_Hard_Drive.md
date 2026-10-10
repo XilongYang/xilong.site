@@ -94,7 +94,7 @@ KERNEL=="video[0-9]*" \
   , SYMLINK+="video-cam1"
 ```
 
-* `KERNEL`是设备的卷标，这条规则使用了一个正则表达式对其进行匹配。
+* `KERNEL`是设备的内核名称，这条规则使用了一个正则表达式对其进行匹配。
 * `SUBSYSTEM`表示设备的类型
 * `ATTRS{sth.}`获取设备的某个属性，属性名写在大括号中。
 * `SYMLINK`是对该设备的软链接，使用+=对设备创建一个软链接。使用+=而不是=是因为不想覆盖掉默认操作。
@@ -168,7 +168,7 @@ KERNEL=="sd[a-z][0-9]" \
 
 ## 在硬盘上创建仓库
 
-在使用`git --bare init`创建一个远程仓库：
+使用`git --bare init`创建一个远程仓库：
 
 ```bash
 cd /mnt/Repo
@@ -182,7 +182,7 @@ git --bare init
 ```bash
 cd ~/someprojects
 git remote add Repo /mnt/Repo/test.git
-git push remote master
+git push Repo master
 ```
 
 ## 后记

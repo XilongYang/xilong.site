@@ -12,13 +12,13 @@ Java的语法和C++实在是很相似，这一方面方便了C++选手们上手J
 
 Java分为三个版本：SE（Standard Edition）、EE（Enterprise Edition）和ME（Micro Edition）。
 
-Java有三个重要工具：JRE（Java Runtime Environment）、JDK（Java Development Toolkit）和JVM（Java Virtual Machine）。其中JDK是开发中使用到的工具集；JRE是运行Java程序所必需的环境，它包括了JVM和一些类库等文件。
+Java有三个重要工具：JRE（Java Runtime Environment）、JDK（Java Development Kit）和JVM（Java Virtual Machine）。其中JDK是开发中使用到的工具集；JRE是运行Java程序所必需的环境，它包括了JVM和一些类库等文件。
 
 Java程序后缀为`.java`通过将其编译为后缀`.class`的字节码文件，交由JVM运行。
 
 ## 语言特性
 
-Java是一个静态弱类型语言。即一个变量声明后就不可以改变类型，并且语言支持隐式类型转换。Java虽然是弱类型，但没有完全弱，它仅支持小类型向大类型的隐式类型转换，换言之，不存在精度丢失的问题。
+Java是一个静态强类型语言。即一个变量声明后就不可以改变类型，并且语言只允许有限的隐式类型转换，它仅支持小类型向大类型的隐式类型转换，换言之，不存在精度丢失的问题。
 
 同时Java中并不存在指针类型，对于大类型的处理策略是**默认为引用**，同时语言带有GC系统。这大大减少了程序员的心智负担，但同时也带来了深浅拷贝这样的需要留意的问题。
 
@@ -30,7 +30,7 @@ Java是一个静态弱类型语言。即一个变量声明后就不可以改变�
 
 Java中的任何函数或变量都必须定义在类里，不允许出现类外的全局变量。
 
-Java程序以一个函数签名为`public static void main(String args[]）{}`的函数为入口。这个函数同样要定义在一个类里。
+Java程序以一个函数签名为`public static void main(String args[]) {}`的函数为入口。这个函数同样要定义在一个类里。
 
 ### 编译单元
 
@@ -54,7 +54,7 @@ Java并不存在头文件源文件之分，所有类都定义在`.java`文件中
 package name1[.name2.name3 ... .namen];
 
 import name1[.name2.name3 ... .classname]; // 使用classname代替其全称。
-import name1[.name2.name3 ... .*] //对包内所有public类，使用类名代替全称。
+import name1[.name2.name3 ... .*]; //对包内所有public类，使用类名代替全称。
 ```
 
 同时，由于包之间是独立的，默认包中的类将不能被其它包中的类访问。
@@ -87,9 +87,9 @@ import name1[.name2.name3 ... .*] //对包内所有public类，使用类名代�
 
 `private`：同一类可见。不能修饰外部类。
 
-`protected`：同一包内所有子类skmb。不能修饰外部类。
+`protected`：同一包内的类可见，也对不同包中的子类可见。不能修饰外部类。
 
-`static`：用以声明独立于类的变量与函数。不可以修饰局部变量。
+`static`：用以声明独立于对象（实例）的变量与函数。不可以修饰局部变量。
 
 `final`：变量不能变、函数不能重写、类不能继承。
 
@@ -197,7 +197,7 @@ class Pair {
 
 ### 继承
 
- Java不支持多继承，即一个类只能有一个父类。子类继承父类的非`private`方法。子类使用`extend`关键字继承父类。
+ Java不支持多继承，即一个类只能有一个父类。子类继承父类的非`private`方法。子类使用`extends`关键字继承父类。
 
 Java中所有类都是`java.lang.Object`类的子类。
 
@@ -207,7 +207,7 @@ Java中所有类都是`java.lang.Object`类的子类。
 
 ### 抽象类与接口
 
-含有任何`abstract`函数的类或被显式声明为`abstract`的类为抽象类，抽象类不能被实例化的类。
+含有任何`abstract`函数的类或被显式声明为`abstract`的类为抽象类，抽象类不能被实例化。
 
 接口使用`interface`声明，是一个抽象方法的集合。接口可以使用`extends`来继承其它接口，允许多继承。
 
@@ -218,7 +218,7 @@ Java中所有类都是`java.lang.Object`类的子类。
 }
 ```
 
-类可以通过`implements`关键字实现接口。抽象类可以不实现接口中的方法，但普通类必需全部实现。
+类可以通过`implements`关键字实现接口。抽象类可以不实现接口中的方法，但普通类必须全部实现。
 
 ## 异常处理
 
@@ -228,8 +228,8 @@ Java中所有类都是`java.lang.Object`类的子类。
 try {
 } catch (异常类型 变量名) {
 } catch (异常类型 变量名) {
-} final {
-} // catch数量大于等于1个，final是可选的，处理未被catch的类型异常。
+} finally {
+} // catch数量大于等于1个，finally是可选的，无论是否发生异常都会执行。
 ```
 
 程序中使用`throw`抛出异常，一个可能抛出异常的函数要使用`throws`声明可能抛出的异常的类型。
@@ -247,7 +247,7 @@ public void test() throws RuntimeException {
 泛型这个概念是C++的模板带来的，因此声明语法上也大差不差。但有两点不同：
 
 1. 参数只能是类型，不能是值。
-2. 参数必需是引用类型， 不能是基础类型。
+2. 参数必须是引用类型， 不能是基础类型。
 
 **泛型类/接口**
 
@@ -265,24 +265,24 @@ public <T> T func(T obj) {}
 
 ### 类型擦除
 
-Java的泛型是使用类型擦除的方式实现的，运行时丢失所有类型信息。因此不能使用与类型有关的操作，如：转型、`instanceof`和`new`。这也意味着，泛型类无法向上转型。
+Java的泛型是使用类型擦除的方式实现的，运行时丢失所有类型信息。因此不能使用与类型有关的操作，如：转型、`instanceof`和`new`。这也意味着，泛型类的类型参数不能协变地向上转型。
 
 ```java
 Integer ---> Object
-ArrayList<Integer> ---> List<Interger>
+ArrayList<Integer> ---> List<Integer>
 List<Integer> -x--> List<Object>
 ```
 
-`Integer`继承了`Object`，可以转为`Object`。`ArrayList`继承了`List`，可以转为`List`。但`List<Integer>`不能转为`List<object>`。
+`Integer`继承了`Object`，可以转为`Object`。`ArrayList`继承了`List`，可以转为`List`。但`List<Integer>`不能转为`List<Object>`。
 
 因为泛型类并不存在独有的Class对象，即不存在`List<Object>.class`或`List<Integer>.class`，编译器会将两者都视为`List.class`。
 
 ### 类型边界
 
-可以使用`extends`限制类型必需是某个类的子类或实现了哪些接口：
+可以使用`extends`限制类型必须是某个类的子类或实现了哪些接口：
 
 ```java
-<T extends A & B & C> // 可以有多个限制，使用&隔开。只有第一个限制可以是类，其它的必需是接口。
+<T extends A & B & C> // 可以有多个限制，使用&隔开。只有第一个限制可以是类，其它的必须是接口。
 ```
 
 ### 类型通配符
@@ -291,7 +291,7 @@ List<Integer> -x--> List<Object>
 
 ```java
 List<?>; // 可以是任何类型
-List<? extends A & B & C>; // 匹配A & B & C的子类或实现
+List<? extends A>; // 匹配A的子类或实现（通配符的extends只支持单个边界，不支持&交叉类型）
 List<? super S> // 匹配S的父类
 ```
 

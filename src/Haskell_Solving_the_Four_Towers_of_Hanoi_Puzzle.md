@@ -4,7 +4,7 @@ author: Xilong Yang
 date: 2021-01-27
 ---
 
-初学Haskell，在做[CIS 194 HomeWork1](https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf)时遇到的四柱汉渃塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。
+初学Haskell，在做[CIS 194 HomeWork1](https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf)时遇到的四柱汉诺塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。
 
 <!--more-->
 
@@ -34,7 +34,7 @@ date: 2021-01-27
 > 2. move the top disc from a to b
 > 3. move n − 1 discs from c to b using a as temporary storage.
 
-这东西相信大家都非常熟悉了，不多缀言。下面进入第一个问题，使用Haskell求解汉诺塔。
+这东西相信大家都非常熟悉了，不多赘言。下面进入第一个问题，使用Haskell求解汉诺塔。
 
 ## Haskell求解汉诺塔
 
@@ -71,7 +71,7 @@ hanoi n a b c = hanoi (n - 1) a c b ++ [(a, b)] ++ hanoi (n - 1) c b a
 
 现在的状态是，a柱、d柱上没有盘子，c柱上有一开始移动出去的盘子，b柱上有剩下的盘子。由于c柱上的盘子都小于b柱上的盘子，故而在移动时可以借助b柱。则由c柱经过a柱、d柱的辅助将盘子移动到b柱上，即完成了将所有盘子由a柱移动到b柱的过程。
 
-那么应该怎么把盘子分成两份呢？这里简单起见，将盘子平分成两分。
+那么应该怎么把盘子分成两份呢？这里简单起见，将盘子平分成两份。
 
 ```haskell
 hanoiPlus :: Integer->Peg->Peg->Peg->Peg->[Move]

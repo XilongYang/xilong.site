@@ -136,7 +136,7 @@ baz p@(Person n _ _) = &quot;The name field of (&quot; ++ show p ++ &quot;) is &
             <pre
             class="language-haskell line-numbers match-braces"><code>checkFav :: Person -&gt; String
 checkFav (Person n _ SealingWax) = n ++ &quot;, you&#39;re my kind of person!&quot;
-checkFav (Person n _ _)          = n ++ &quot;, you favorite thing is lame.&quot;</code></pre>
+checkFav (Person n _ _)          = n ++ &quot;, your favorite thing is lame.&quot;</code></pre>
             <p>注意这里的<code>Person</code>和<code>SealingWax</code>是嵌套的模式。</p></li>
             </ol>
             <p>注意，对于像<code>2</code>和<code>'c'</code>这样字面值，可以看做是一个不接受参数的值构造器。</p>

@@ -12,11 +12,11 @@ date: 2020-04-24
 
 1. 二叉树的第i层上至多有$2^{i - 1}$个结点
 
-2. 深度为k的二叉树至多有$2^{k - 1}$个结点
+2. 深度为k的二叉树至多有$2^{k} - 1$个结点
 
 3. 对任何一棵二叉树T, 其终端结点数为度为2的结点数 + 1
 
-4. 具有n个结点的完全二叉树深度为：$log_2n + 1$
+4. 具有n个结点的完全二叉树深度为：$\lfloor log_2n \rfloor + 1$
 
 	满二叉树：每一层结点数都为最大
 
@@ -73,8 +73,8 @@ date: 2020-04-24
 ```cpp
 typedef struct Node
 {
-    Node *leftChild;
-    Node *rightChild;
+    Node *left;
+    Node *right;
     int data;
 } *BinTree;
 
@@ -94,16 +94,16 @@ int InsertChild(Node *aim, bool left)
     Node *newNode = new Node{nullptr, nullptr, 0};
     if(newNode == nullptr)
     {
-        cerr << "Error While Add Note!" << endl;
+        cerr << "Error While Add Node!" << endl;
         return -1;
     }
     if(left)
     {
-        aim->leftChild = newNode;
+        aim->left = newNode;
     }
     else
     {
-        aim->rightChild = newNode;
+        aim->right = newNode;
     }
     return 0;
 }
@@ -116,11 +116,11 @@ int DeleteChild(Node *aim, bool left)
     {
         if(preDel->left != nullptr)
         {
-            DeleteChild(preDel, left);
+            DeleteChild(preDel, true);
         }
         if(preDel->right != nullptr)
         {
-            DeleteChild(preDel, right);
+            DeleteChild(preDel, false);
 		}
         delete preDel;
         preDel = nullptr;
@@ -136,7 +136,7 @@ int DeleteChild(Node *aim, bool left)
     return 0;
 }
 
-int Visit(Bintree T)
+int Visit(BinTree T)
 {
     if(T == nullptr) return -1;
     cout << T->data << endl;
@@ -321,7 +321,7 @@ int LRD(BinTree T)
             {
                 //右子树不存在或已遍历过，输出根结点并退栈
                 S.pop();
-                cout << cour->data;
+                cout << cur->data;
                 //if(cur->right == nullptr) cout << cur->data; 中序遍历输出叶子结点
                 //令lastPop指向最后退栈结点，将cur指针置0以免下一轮循环将已退栈的结点重新入栈
                 lastPop = cur;

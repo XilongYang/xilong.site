@@ -78,7 +78,7 @@ absAll (Cons x xs) = Cons (abs x) (absAll xs)</code></pre>
             <pre
             class="language-haskell line-numbers match-braces"><code>squareAll :: IntList -&gt; IntList
 squareAll Empty = Empty
-squareAll (Cons x xs) = Cons (x*x) (squreAll xs)</code></pre>
+squareAll (Cons x xs) = Cons (x*x) (squareAll xs)</code></pre>
             <p>有没有发现些许违和感？是的，这两个函数实在太像了，看起来非常啰嗦。我们可以用一个<code>Int-&gt;Int</code>类型的函数来指定这些操作，并且使用一个接受对应参数的函数来处理列表：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>square :: Int -&gt; Int
@@ -106,8 +106,8 @@ evenOnly (Cons x xs)
             class="language-haskell line-numbers match-braces"><code>filterIntList :: (Int -&gt; Bool) -&gt; IntList -&gt; IntList
 filterIntList _ Empty = Empty
 filterIntList func (Cons x xs)
-    | func x = Cons x (filterIntList xs)
-    | otherwise = filterIntList xs</code></pre>
+    | func x = Cons x (filterIntList func xs)
+    | otherwise = filterIntList func xs</code></pre>
             <p>此时即可通过下面代码实现<code>evenOnly</code>的功能了：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>-- list是一个IntList
@@ -125,8 +125,8 @@ filterIntList even list</code></pre>
             <pre
             class="language-haskell line-numbers match-braces"><code>filterList _ E = E
 filterList func (C x xs)
-    | func x = C x (filterList xs)
-    | otherwise = filterList xs</code></pre>
+    | func x = C x (filterList func xs)
+    | otherwise = filterList func xs</code></pre>
             <p>那么filterList的类型是什么呢？通过ghci查询结果如下：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>:t filterList
@@ -137,7 +137,7 @@ filterList :: (t -&gt; Bool) -&gt; List t -&gt; List t</code></pre>
 a = C True (C False (C True E))</code></pre>
             <h2 id="prelude">Prelude</h2>
             <p><a
-            href="https://hackage.haskell.org/package/base-4.15.0.0/docs/Prelude.html">Prelude</a>是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如<code>filter</code>和<code>map</code>就是<code>filterList</code>和<code>map</code>在<code>Prelude</code>中的对应版本。另外，<code>Data.List</code>模块中定义了一个更强大的<code>List</code>类型。</p>
+            href="https://hackage.haskell.org/package/base-4.15.0.0/docs/Prelude.html">Prelude</a>是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如<code>filter</code>和<code>map</code>就是<code>filterList</code>和<code>map</code>在<code>Prelude</code>中的对应版本。另外，<code>Data.List</code>模块中定义了大量其它处理列表的函数。</p>
             <p>此外，一个常用的多态数据类型是<code>Maybe</code>，定义为：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>data Maybe a = Nothing | Just a</code></pre>
@@ -151,9 +151,9 @@ a = C True (C False (C True E))</code></pre>
 head (x : _) = x</code></pre>
             <p><code>head</code>作为一个不安全的函数是不应该出现在<code>Prelude</code>里的，这是一个失误。我们应该尽可能地不用偏函数。如果要将head转化为一个全函数，只需使用上面的<code>Maybe</code>：</p>
             <pre
-            class="language-haskell line-numbers match-braces"><code>headSafe :: [Maybe a] -&gt; Maybe a
-head [] = Nothing
-head (x : _) = Just x</code></pre>
+            class="language-haskell line-numbers match-braces"><code>headSafe :: [a] -&gt; Maybe a
+headSafe [] = Nothing
+headSafe (x : _) = Just x</code></pre>
             <p>尽可能地使用全函数可以大大减少我们犯错的可能。</p>
         </main>
         <div class="navigator">

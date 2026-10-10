@@ -139,7 +139,7 @@ foo Constr4         = ...
    ```haskell
    checkFav :: Person -> String
    checkFav (Person n _ SealingWax) = n ++ ", you're my kind of person!"
-   checkFav (Person n _ _)          = n ++ ", you favorite thing is lame."
+   checkFav (Person n _ _)          = n ++ ", your favorite thing is lame."
    ```
 
    注意这里的`Person`和`SealingWax`是嵌套的模式。

@@ -42,7 +42,7 @@ absAll (Cons x xs) = Cons (abs x) (absAll xs)
 ```haskell
 squareAll :: IntList -> IntList
 squareAll Empty = Empty
-squareAll (Cons x xs) = Cons (x*x) (squreAll xs)
+squareAll (Cons x xs) = Cons (x*x) (squareAll xs)
 ```
 
 有没有发现些许违和感？是的，这两个函数实在太像了，看起来非常啰嗦。我们可以用一个`Int->Int`类型的函数来指定这些操作，并且使用一个接受对应参数的函数来处理列表：
@@ -84,8 +84,8 @@ evenOnly (Cons x xs)
 filterIntList :: (Int -> Bool) -> IntList -> IntList
 filterIntList _ Empty = Empty
 filterIntList func (Cons x xs)
-    | func x = Cons x (filterIntList xs)
-    | otherwise = filterIntList xs
+    | func x = Cons x (filterIntList func xs)
+    | otherwise = filterIntList func xs
 ```
 
 此时即可通过下面代码实现`evenOnly`的功能了：
@@ -118,8 +118,8 @@ data List t = E | C t (List t)
 ```haskell
 filterList _ E = E
 filterList func (C x xs)
-    | func x = C x (filterList xs)
-    | otherwise = filterList xs
+    | func x = C x (filterList func xs)
+    | otherwise = filterList func xs
 ```
 
 那么filterList的类型是什么呢？通过ghci查询结果如下：
@@ -138,7 +138,7 @@ a = C True (C False (C True E))
 
 ## Prelude
 
-[Prelude](https://hackage.haskell.org/package/base-4.15.0.0/docs/Prelude.html)是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如`filter`和`map`就是`filterList`和`map`在`Prelude`中的对应版本。另外，`Data.List`模块中定义了一个更强大的`List`类型。
+[Prelude](https://hackage.haskell.org/package/base-4.15.0.0/docs/Prelude.html)是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如`filter`和`map`就是`filterList`和`map`在`Prelude`中的对应版本。另外，`Data.List`模块中定义了大量其它处理列表的函数。
 
 此外，一个常用的多态数据类型是`Maybe`，定义为：
 
@@ -164,9 +164,9 @@ head (x : _) = x
 `head`作为一个不安全的函数是不应该出现在`Prelude`里的，这是一个失误。我们应该尽可能地不用偏函数。如果要将head转化为一个全函数，只需使用上面的`Maybe`：
 
 ```haskell
-headSafe :: [Maybe a] -> Maybe a
-head [] = Nothing
-head (x : _) = Just x
+headSafe :: [a] -> Maybe a
+headSafe [] = Nothing
+headSafe (x : _) = Just x
 ```
 
 尽可能地使用全函数可以大大减少我们犯错的可能。

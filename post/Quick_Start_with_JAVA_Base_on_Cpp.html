@@ -72,18 +72,18 @@
             <p>Java分为三个版本：SE（Standard Edition）、EE（Enterprise
             Edition）和ME（Micro Edition）。</p>
             <p>Java有三个重要工具：JRE（Java Runtime
-            Environment）、JDK（Java Development Toolkit）和JVM（Java
+            Environment）、JDK（Java Development Kit）和JVM（Java
             Virtual
             Machine）。其中JDK是开发中使用到的工具集；JRE是运行Java程序所必需的环境，它包括了JVM和一些类库等文件。</p>
             <p>Java程序后缀为<code>.java</code>通过将其编译为后缀<code>.class</code>的字节码文件，交由JVM运行。</p>
             <h2 id="语言特性">语言特性</h2>
-            <p>Java是一个静态弱类型语言。即一个变量声明后就不可以改变类型，并且语言支持隐式类型转换。Java虽然是弱类型，但没有完全弱，它仅支持小类型向大类型的隐式类型转换，换言之，不存在精度丢失的问题。</p>
+            <p>Java是一个静态强类型语言。即一个变量声明后就不可以改变类型，并且语言只允许有限的隐式类型转换，它仅支持小类型向大类型的隐式类型转换，换言之，不存在精度丢失的问题。</p>
             <p>同时Java中并不存在指针类型，对于大类型的处理策略是<strong>默认为引用</strong>，同时语言带有GC系统。这大大减少了程序员的心智负担，但同时也带来了深浅拷贝这样的需要留意的问题。</p>
             <p>同C++相比，Java牺牲了不少运行效率。因此具体场所使用Java还是C++还需自行斟酌。不过这个时代需要极高性能的场所正在渐渐减少，且语言性能带来的提升很多时候比不上一个更优秀的算法带来的提升。</p>
             <p>总体而言，Java是一门非常实用的语言，能带来更高的开发效率和更少的折磨。</p>
             <h2 id="程序结构">程序结构</h2>
             <p>Java中的任何函数或变量都必须定义在类里，不允许出现类外的全局变量。</p>
-            <p>Java程序以一个函数签名为<code>public static void main(String args[]）{}</code>的函数为入口。这个函数同样要定义在一个类里。</p>
+            <p>Java程序以一个函数签名为<code>public static void main(String args[]) {}</code>的函数为入口。这个函数同样要定义在一个类里。</p>
             <h3 id="编译单元">编译单元</h3>
             <p>一个<code>.java</code>文件就是一个编译单元，每个编译单元中只能有一个<code>public</code>类。这个<code>public</code>类的名字必须与<code>.java</code>文件的名字相同。编译单元中的其它类由于不能声明为<code>public</code>，只能在编译单元内访问与使用。</p>
             <h3 id="包package">包(Package)</h3>
@@ -99,7 +99,7 @@
 package name1[.name2.name3 ... .namen];
 
 import name1[.name2.name3 ... .classname]; // 使用classname代替其全称。
-import name1[.name2.name3 ... .*] //对包内所有public类，使用类名代替全称。</code></pre>
+import name1[.name2.name3 ... .*]; //对包内所有public类，使用类名代替全称。</code></pre>
             <p>同时，由于包之间是独立的，默认包中的类将不能被其它包中的类访问。</p>
             <h2 id="基础语法差异">基础语法差异</h2>
             <h3 id="类型">类型</h3>
@@ -115,8 +115,8 @@ import name1[.name2.name3 ... .*] //对包内所有public类，使用类名代�
             <p><code>default</code>：什么也不写，同一包内可见。</p>
             <p><code>public</code>：所有包可见。</p>
             <p><code>private</code>：同一类可见。不能修饰外部类。</p>
-            <p><code>protected</code>：同一包内所有子类skmb。不能修饰外部类。</p>
-            <p><code>static</code>：用以声明独立于类的变量与函数。不可以修饰局部变量。</p>
+            <p><code>protected</code>：同一包内的类可见，也对不同包中的子类可见。不能修饰外部类。</p>
+            <p><code>static</code>：用以声明独立于对象（实例）的变量与函数。不可以修饰局部变量。</p>
             <p><code>final</code>：变量不能变、函数不能重写、类不能继承。</p>
             <p><code>abstract</code>：声明抽象方法与抽象类，与<code>final</code>冲突，有抽象方法的类一定是抽象类。</p>
             <p><code>synchronized</code>：同一时间仅能被一个线程访问。</p>
@@ -185,25 +185,25 @@ class Pair {
             <p>数组提供<code>length</code>成员保存大小。</p>
             <p>数组的一些常用操作以<code>static</code>方法的方式提供在<code>java.util.Arrays</code>类中。</p>
             <h3 id="继承">继承</h3>
-            <p>Java不支持多继承，即一个类只能有一个父类。子类继承父类的非<code>private</code>方法。子类使用<code>extend</code>关键字继承父类。</p>
+            <p>Java不支持多继承，即一个类只能有一个父类。子类继承父类的非<code>private</code>方法。子类使用<code>extends</code>关键字继承父类。</p>
             <p>Java中所有类都是<code>java.lang.Object</code>类的子类。</p>
             <h3 id="重写与重载">重写与重载</h3>
             <p>子类可以重写父类的函数，可以理解为所有函数都是虚函数，而<code>abstract</code>函数相当于纯虚函数。</p>
             <h3 id="抽象类与接口">抽象类与接口</h3>
-            <p>含有任何<code>abstract</code>函数的类或被显式声明为<code>abstract</code>的类为抽象类，抽象类不能被实例化的类。</p>
+            <p>含有任何<code>abstract</code>函数的类或被显式声明为<code>abstract</code>的类为抽象类，抽象类不能被实例化。</p>
             <p>接口使用<code>interface</code>声明，是一个抽象方法的集合。接口可以使用<code>extends</code>来继承其它接口，允许多继承。</p>
             <pre class="language-java line-numbers match-braces"><code>[可见度] interface [名称] [extends 其它接口名] {
     // 抽象方法，隐式指定为public abstract，同时也只能是这种类型。
     // 变量，隐式指定为public static final，同时只能是这种类型。
 }</code></pre>
-            <p>类可以通过<code>implements</code>关键字实现接口。抽象类可以不实现接口中的方法，但普通类必需全部实现。</p>
+            <p>类可以通过<code>implements</code>关键字实现接口。抽象类可以不实现接口中的方法，但普通类必须全部实现。</p>
             <h2 id="异常处理">异常处理</h2>
             <p>使用<code>try-catch-finally</code>语句块来处理异常：</p>
             <pre class="language-java line-numbers match-braces"><code>try {
 } catch (异常类型 变量名) {
 } catch (异常类型 变量名) {
-} final {
-} // catch数量大于等于1个，final是可选的，处理未被catch的类型异常。</code></pre>
+} finally {
+} // catch数量大于等于1个，finally是可选的，无论是否发生异常都会执行。</code></pre>
             <p>程序中使用<code>throw</code>抛出异常，一个可能抛出异常的函数要使用<code>throws</code>声明可能抛出的异常的类型。</p>
             <pre class="language-java line-numbers match-braces"><code>public void test() throws RuntimeException {
     throw new RuntimeException();
@@ -213,7 +213,7 @@ class Pair {
             <p>泛型这个概念是C++的模板带来的，因此声明语法上也大差不差。但有两点不同：</p>
             <ol type="1">
             <li>参数只能是类型，不能是值。</li>
-            <li>参数必需是引用类型， 不能是基础类型。</li>
+            <li>参数必须是引用类型， 不能是基础类型。</li>
             </ol>
             <p><strong>泛型类/接口</strong></p>
             <pre class="language-java line-numbers match-braces"><code>class name &lt;T1, T2,...,Tn&gt; {...}
@@ -222,19 +222,19 @@ interface name &lt;T1, T2,...,Tn&gt; {...}</code></pre>
             <p><strong>泛型函数</strong></p>
             <pre class="language-java line-numbers match-braces"><code>public &lt;T&gt; T func(T obj) {}</code></pre>
             <h3 id="类型擦除">类型擦除</h3>
-            <p>Java的泛型是使用类型擦除的方式实现的，运行时丢失所有类型信息。因此不能使用与类型有关的操作，如：转型、<code>instanceof</code>和<code>new</code>。这也意味着，泛型类无法向上转型。</p>
+            <p>Java的泛型是使用类型擦除的方式实现的，运行时丢失所有类型信息。因此不能使用与类型有关的操作，如：转型、<code>instanceof</code>和<code>new</code>。这也意味着，泛型类的类型参数不能协变地向上转型。</p>
             <pre class="language-java line-numbers match-braces"><code>Integer ---&gt; Object
-ArrayList&lt;Integer&gt; ---&gt; List&lt;Interger&gt;
+ArrayList&lt;Integer&gt; ---&gt; List&lt;Integer&gt;
 List&lt;Integer&gt; -x--&gt; List&lt;Object&gt;</code></pre>
-            <p><code>Integer</code>继承了<code>Object</code>，可以转为<code>Object</code>。<code>ArrayList</code>继承了<code>List</code>，可以转为<code>List</code>。但<code>List&lt;Integer&gt;</code>不能转为<code>List&lt;object&gt;</code>。</p>
+            <p><code>Integer</code>继承了<code>Object</code>，可以转为<code>Object</code>。<code>ArrayList</code>继承了<code>List</code>，可以转为<code>List</code>。但<code>List&lt;Integer&gt;</code>不能转为<code>List&lt;Object&gt;</code>。</p>
             <p>因为泛型类并不存在独有的Class对象，即不存在<code>List&lt;Object&gt;.class</code>或<code>List&lt;Integer&gt;.class</code>，编译器会将两者都视为<code>List.class</code>。</p>
             <h3 id="类型边界">类型边界</h3>
-            <p>可以使用<code>extends</code>限制类型必需是某个类的子类或实现了哪些接口：</p>
-            <pre class="language-java line-numbers match-braces"><code>&lt;T extends A &amp; B &amp; C&gt; // 可以有多个限制，使用&amp;隔开。只有第一个限制可以是类，其它的必需是接口。</code></pre>
+            <p>可以使用<code>extends</code>限制类型必须是某个类的子类或实现了哪些接口：</p>
+            <pre class="language-java line-numbers match-braces"><code>&lt;T extends A &amp; B &amp; C&gt; // 可以有多个限制，使用&amp;隔开。只有第一个限制可以是类，其它的必须是接口。</code></pre>
             <h3 id="类型通配符">类型通配符</h3>
             <p>使用泛型类实例时可以通过通配符匹配类型，如：</p>
             <pre class="language-java line-numbers match-braces"><code>List&lt;?&gt;; // 可以是任何类型
-List&lt;? extends A &amp; B &amp; C&gt;; // 匹配A &amp; B &amp; C的子类或实现
+List&lt;? extends A&gt;; // 匹配A的子类或实现（通配符的extends只支持单个边界，不支持&amp;交叉类型）
 List&lt;? super S&gt; // 匹配S的父类</code></pre>
             <p>可以使用通配符实现向上转型：</p>
             <pre class="language-java line-numbers match-braces"><code>List&lt;Integer&gt; intList1 = new ArrayList&lt;&gt;();

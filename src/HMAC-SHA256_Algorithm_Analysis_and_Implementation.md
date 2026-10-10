@@ -10,7 +10,7 @@ date: 2021-05-29
 
 ## HMAC算法
 
-HMAC是Hash-based Message Authentication Code的缩写，意为基于哈希运算的消息认证码。基诞生目的是为了确保网络中报文的完整性以及信息来源的身份验证。其中有几个关键组成部分：
+HMAC是Hash-based Message Authentication Code的缩写，意为基于哈希运算的消息认证码。其诞生目的是为了确保网络中报文的完整性以及信息来源的身份验证。其中有几个关键组成部分：
 
 * 哈希函数(Hash)：用以将任意长度的消息映射成为定长的哈希值。
 * 密钥(key)：与原始消息组合后通过哈希函数，以起到身份验证功能。
@@ -23,7 +23,7 @@ HMAC算法描述为：
 1. 对key值进行填充，形成padded-key，填充方法如下：
    1. 若key的长度小于Hash函数的分组长度，在其后用0填充至Hash函数分组长度。
    2. 若key的长度大于Hash函数的分组长度，使用Hash(key)生成padded-key。
-2. 将生成的padded-key分别与ipad/opad进行XOR运算，得到ipad-key和opan-key。
+2. 将生成的padded-key分别与ipad/opad进行XOR运算，得到ipad-key和opad-key。
 3. 将ipad-key与message首尾相接（ipad-key在message前），进行Hash(ipad-key+message)运算，得到hash1。
 4. 将得到的opad-key与hash1首尾相接，进行Hash(opad-key+hash1)运算，就得到了HMAC值。
 
@@ -38,7 +38,7 @@ ipad(chunk_size, 0x36)
 opad(chunk_size, 0x5c)
 
 padded_key = if (key.size <= chunk_size)
-			 then key + pading(chunk_size - key.size, 0)
+			 then key + padding(chunk_size - key.size, 0)
 			 else Hash(key)
 
 ipad_key = XOR(padded_key, ipad)
@@ -103,8 +103,8 @@ SHA是Secure Hash Algorithm的缩写，是一个由美国国家安全局研发�
 
       * 字节序，对于长度超过1字节的数据，在内存中的存储有两种顺序：
 
-        1. 低地址存储低位字节，高地址存储高位字节，称为大端字节序。
-        2. 低地址存储高位字节，高地址存储低信字节，称为小端字节序。
+        1. 低地址存储高位字节，高地址存储低位字节，称为大端字节序。
+        2. 低地址存储低位字节，高地址存储高位字节，称为小端字节序。
 
         例如，对于0x1234，若使用内存地址0x01, 0x02存储这两个字节，表现为：
 
@@ -185,7 +185,7 @@ word_count = 64;
 CROR(x, n) = x循环右移n位
 S0(x) = CROR(x, 7) ^ CROR(x, 18) ^ (x >> 3)
 S1(x) = CROR(x, 17) ^ CROR(x, 19) ^ (x >> 10)
-EP(x) = CROR(x, 2) ^ CROR(x, 13) ^ CROR(x, 22)
+EP0(x) = CROR(x, 2) ^ CROR(x, 13) ^ CROR(x, 22)
 EP1(x) = CROR(x, 6) ^ CROR(x, 11) ^ CROR(x, 25)
 CH(x, y, z) = (x & y) ^ ((~x) & z)
 MAJ(x, y, z) = ((x & y) ^ (x & z) ^ (y & z))
@@ -199,7 +199,7 @@ first_append = 0x80
 // 大小信息以bit为单位
 length = message.size * 8
 
-need_size = taget_byte - (messaage.size % chunk_size)
+need_size = target_size - (message.size % chunk_size)
 need_size += if (need_size <= 0) then chunk_size else 0;
 
 // zero构造一个长度为need_size - 1字节的串，big_endian保证返回一个数的大端序格式
@@ -209,7 +209,7 @@ message += first_append + zero(need_size - 1) + big_endian(length)
 chunk_count = message.size / chunk_size
 for i in (0, chunk_count):
 	// divide将chunk分解为16个机器字节序的word
-	w[word_count] = divide(chunk[i])
+	w[0..15] = divide(chunk[i])
 	// 生成剩下的word
 	for i in (16, word_count):
 		w[i] = w[i - 16] + S0(w[i - 15]) + w[i - 7] + S1(w[i - 2])

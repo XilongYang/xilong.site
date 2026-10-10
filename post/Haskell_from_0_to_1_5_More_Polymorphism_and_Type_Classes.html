@@ -118,7 +118,7 @@ f2 x y = y</code></pre>
             <li><p><code>(b -&gt; c) -&gt; (a -&gt; b) -&gt; (a -&gt; c)</code></p>
             <p><code>f g h = \x -&gt; g(h x)</code>，即<code>.</code>运算符。也就是对函数进行操作，但不对具体类型进行操作即可。</p></li>
             <li><p><code>(a -&gt; a) -&gt; a -&gt; a</code></p>
-            <p>由于函数的返回类型和参数类型相同，符合要求的函数可以是一个自已定义自己的函数，如：<code>f = f</code>。</p></li>
+            <p>由于函数的返回类型和参数类型相同，符合要求的函数可以是一个自己定义自己的函数，如：<code>f = f</code>。</p></li>
             </ul>
             <p>经过这几个例子的思考，你可能会发现，想要实现多态性，就不要对元素进行任何操作。因为你要接受一个任意类型的参数，而无论什么操作，总会有不支持的类型。这并不只是一个约束，同时是一个非常强大的保护。这样严格的类型系统使得函数的使用者可以更放心的调用函数，同时也使得一个函数的类型说明包含了足够大致了解一个函数的信息。</p>
             <p>比如你看到一个<code>a -&gt; a</code>类型的函数就可以肯定这个函数接受任意接收一个类型的值并返回一个同类型的值，而无需担心其它影响。而一个函数签名为<code>T func(T)</code>的C++函数则无法提供如此担保，你可能会担心这个函数对全局状态产生影响，或是传入的类型不对导致程序崩溃。</p>
@@ -164,7 +164,7 @@ instance Eq Foo where
             class="language-haskell line-numbers match-braces"><code>class Eq a where
   (==), (/=) :: a -&gt; a -&gt; Bool
   x == y = not (x /= y)
-  x /= y = x == y</code></pre>
+  x /= y = not (x == y)</code></pre>
             <p>这个定义可以使我们只用定义<code>==</code>与<code>/=</code>中的任意一个，但要小心，如果我们一个也没定义就会导致一个无限循环。</p>
             <p>对于<code>Eq</code>与其它几个比较特殊的类型类，GHC可以为我们自动生成它们的实例，就像我们之前使用过的那样：</p>
             <pre
@@ -193,7 +193,7 @@ instance Eq Foo where
             <p>这意味着5可以被用作任何数字类型，包括自己定义的类型。</p>
             <p><code>Show</code>：定义模式show，将值转换为<code>String</code>类型。</p>
             <p><code>Read</code>：<code>Show</code>的逆运算。</p>
-            <p><code>Integal</code>：表示整数类型，如<code>Int</code>和<code>Integer</code>。</p>
+            <p><code>Integral</code>：表示整数类型，如<code>Int</code>和<code>Integer</code>。</p>
             <h3 id="类型类实例">类型类实例</h3>
             <p>这一节我们来定义一个自己的类型类，如下：</p>
             <pre

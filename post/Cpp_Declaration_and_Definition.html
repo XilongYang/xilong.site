@@ -25,7 +25,7 @@
         </div>
         <div class="abstract">
             <p>偶然间看见一个声明:</p>
-            <p>struct tm <em>(</em>(<em>Pfunc)[3])(int(</em>)(int, int), float(*[])(float));</p>
+            <p><code>struct tm *(*(*Pfunc)[3])(int(*)(int, int), float(*[])(float));</code></p>
             <p>一时间感到云里雾里。为了弄懂此类复杂的声明学习一些相关的知识，在此总结。</p>
         </div>
         <nav role="navigation" class="toc">
@@ -88,8 +88,7 @@
             </ul>
             <pre class="language-cpp line-numbers match-braces"><code>extern int a; //声明int型变量a，但未定义
 extern int b = 2; //声明并定义int型变量b，并为其赋初始值2</code></pre>
-            <p>​
-            <strong><em>任何显式初始化的声明即成为定义</em></strong><em>。即使一个声明符已用extern标记，对其进行初始化仍会导致定义行为。</em></p>
+            <p><strong><em>任何显式初始化的声明即成为定义</em></strong>。即使一个声明符已用extern标记，对其进行初始化仍会导致定义行为。</p>
             <ul>
             <li><p>对于<strong>多文件</strong>程序，若要在多个文件中使用<strong>同一个变量</strong>，则必须在<strong>所有</strong>使用该变量的文件中<strong>声明</strong>它，但仅可在<strong>一个</strong>文件中<strong>定义</strong>该变量。</p></li>
             <li><p><strong>不可在函数体内部初始化</strong>一个含有extern标记的变量。</p></li>
@@ -139,7 +138,7 @@ int *p3 = NULL; //#include&lt;cstdlib&gt;, 值等于0</code></pre>
             <li><p>指向指针的指针</p></li>
             </ol>
             <pre class="language-cpp line-numbers match-braces"><code>int *p1;
-int **p2 = p1;</code></pre>
+int **p2 = &amp;p1;</code></pre>
             <ol start="4" type="1">
             <li>指向数组的指针</li>
             </ol>
@@ -154,7 +153,7 @@ p1(&lt;&gt;);//函数指针使用时可以不用解引用
             <ol start="6" type="1">
             <li>指针的数组</li>
             </ol>
-            <pre class="language-cpp line-numbers match-braces"><code>int *p1[5]</code></pre>
+            <pre class="language-cpp line-numbers match-braces"><code>int *p1[5];</code></pre>
             <ol start="7" type="1">
             <li>常量指针</li>
             </ol>
@@ -170,13 +169,13 @@ p1(&lt;&gt;);//函数指针使用时可以不用解引用
             </ul>
             <pre class="language-cpp line-numbers match-braces"><code>int i = 2; //i的值可变
 const int &amp;ri = i; //不可通过ri改变i的值
-const int *pib = &amp;i; //不可通过pib改变i的值， 可改变pib的值
-int *const pib = &amp;i; //可通过pib改变i的值， 不可改变pib的值
-const int *const pib = &amp;i;//不可通过pib改变i的值， 不可改变pib的值
+const int *pib1 = &amp;i; //不可通过pib1改变i的值， 可改变pib1的值
+int *const pib2 = &amp;i; //可通过pib2改变i的值， 不可改变pib2的值
+const int *const pib3 = &amp;i;//不可通过pib3改变i的值， 不可改变pib3的值
 const int j = 3;
 int &amp;rj = j; //X
-int *pj = j; //X
-int const* pj = j; //X，必须是底层const才能绑定const对象。
+int *pj = &amp;j; //X
+int const* pj2 = &amp;j; //合法，底层const可以绑定const对象。
 /*
 class A{
 public:
@@ -200,10 +199,10 @@ a2.HW_c();//合法</code></pre>
             <li>返回类型及所有形参类型都是字面值类型。</li>
             <li>函数体中有且只有一条return语句。</li>
             </ul>
-            <pre class="language-cpp line-numbers match-braces"><code>constexpr int *p = null; //p是指向整数的常量指针
-const int *p1 = null;   //p1是指向整数常量的指针
-constexpr const int *p2 = null; //p2是指向整数常量的常量指针
-const int *const p3 = null; //p3是指向整数常量的常量指针</code></pre>
+            <pre class="language-cpp line-numbers match-braces"><code>constexpr int *p = nullptr; //p是指向整数的常量指针
+const int *p1 = nullptr;    //p1是指向整数常量的指针
+constexpr const int *p2 = nullptr;  //p2是指向整数常量的常量指针
+const int *const p3 = nullptr;  //p3是指向整数常量的常量指针</code></pre>
             <h2 id="static关键字">static关键字</h2>
             <p>static将作用对象声明为静态对象，有四种主要用法：</p>
             <ol type="1">
@@ -240,7 +239,7 @@ public:
         cout &lt;&lt; &quot;HelloWorld!&quot; &lt;&lt; endl;
     }
     static void HW();
-}
+};
 
 //错误，不可重复static
 static void A::HW(){
@@ -253,7 +252,7 @@ void A::HW(){
 
 int A::d = 10;
 
-constexpr A::e;
+constexpr int A::e;
 
 //void AnotherFunc(const int &amp;A);
 AnotherFunc(A::e);
@@ -272,7 +271,7 @@ SI s; //等价于 StringItem s;</code></pre>
 using PC2 = char*;
 // 此时PC1与PC2表示的类型都是char的指针
 PC1 &amp;p1;
-// 对于这个变量，其类型为PC1的引用即char的指针的引用：char &amp;*p1；而不是char *&amp;p1;
+// 对于这个变量，其类型为PC1的引用即char的指针的引用：char *&amp;p1；而不是char &amp;*p1;
 // 对PC2同理，但PC2更容易犯这样的错误，如PC2&amp; = (char*)&amp; = char*&amp;这样的理解是绝对不行的。</code></pre>
             <h2 id="类型推导">类型推导</h2>
             <h3 id="auto关键字">auto关键字</h3>
@@ -284,9 +283,9 @@ PC1 &amp;p1;
             </ul>
             <pre class="language-cpp line-numbers match-braces"><code>int i = 2;
 int &amp;a = i;
-int *p = i;
-const int *p1 = i;
-const int *const p2 = i;
+int *p = &amp;i;
+const int *p1 = &amp;i;
+const int *const p2 = &amp;i;
 auto ii = i; //ii为int
 auto aa = a; //aa为int
 auto pp = p; //pp为int*
@@ -294,10 +293,10 @@ auto pp1 = p1; //pp1为 const int*
 auto pp2 = p2; //pp2为 const int*
 
 auto &amp;raa = a; //raa为int&amp;
-const auto cpp1 = p1; //cpp1为 const int const*
+const auto cpp1 = p1; //cpp1为 const int *const
 const auto &amp;rii = i; //rii为 const int&amp;
 
-auto b = rii, c = raa;//X, rii为const int, raa为int</code></pre>
+auto b = rii, c = raa;//合法, rii与raa均为int（auto会舍弃顶层const与引用）</code></pre>
             <h3 id="decltype关键字">decltype关键字</h3>
             <p>decltype(表达式) <声明符></p>
             <ul>
@@ -312,7 +311,7 @@ int &amp;r = i;
 int *const p = &amp;i;
 
 decltype(r) rr = i; //rr为 int&amp;
-decltype(p) pp = null;//pp为 int *const</code></pre>
+decltype(p) pp = nullptr;//pp为 int *const</code></pre>
             <h3 id="复杂声明的理解">复杂声明的理解</h3>
             <p><strong>由内而外，由右及左。</strong></p>
             <p>即优先找离声明符最近的复合类型声明。对于距离声明符距离相同的复合类型声明，优先处理声明符右边。</p>

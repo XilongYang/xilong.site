@@ -137,7 +137,7 @@ exprTFold f g h (Add a b) = g (exprTFold f g h a) (exprTFold f g h b)
 exprTFold f g h (Mul a b) = h (exprTFold f g h a) (exprTFold f g h b)
 
 eval&#39; :: ExprT -&gt; Integer
-eval&#39; exprTFold id (+) (*)</code></pre>
+eval&#39; = exprTFold id (+) (*)</code></pre>
             <p>现在我们可以做一些别的事，比如计算表达式中数字的个数：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>numLiterals :: ExprT -&gt; Int
@@ -164,7 +164,7 @@ numLiterals = exprTFold (const 1) (+) (+)</code></pre>
     mconcat :: [m] -&gt; m
     mconcat = foldr mappend mempty
 
-(&lt;&gt;) Monoid m =&gt; m -&gt; m -&gt; m
+(&lt;&gt;) :: Monoid m =&gt; m -&gt; m -&gt; m
 (&lt;&gt;) = mappend</code></pre>
             <p>其中<code>mempty</code>相当于单位元的定义，<code>mappend</code>与其符号简写<code>&lt;&gt;</code>为幺半群中的二元运算。<code>mconcat</code>用于将整个列表折叠成一个值，默认使用<code>foldr</code>来实现，但由于对某种特定的<code>Monoid</code>类型可能存在更高效的实现，模块中提供了它的定义供修改。</p>
             <p>正如之前提到的幺半群的性质，对任何<code>Monoid</code>类型的值<code>x</code>、<code>y</code>、<code>z</code>有：</p>
@@ -206,7 +206,7 @@ getProduct :: Product a -&gt; a
 getProduct (Product a) = a
 
 instance Num a =&gt; Monoid (Product a) where
-    mempty  = Product 0
+    mempty  = Product 1
     mappend = (*)</code></pre>
             <blockquote>
             <p>类型的定义方式：</p>
@@ -220,7 +220,7 @@ instance Num a =&gt; Monoid (Product a) where
 lst = [1,5,8,23,423,99]
 
 prod :: Integer
-prod = getProduct . mappend . map Product $ lst</code></pre>
+prod = getProduct . mconcat . map Product $ lst</code></pre>
             <p>当然这个例子显得舍近求远，非常地蠢。但这个模式可以方便的说明<code>Monoid</code>的应用方式。</p>
             <p>两个可以作为<code>Monoid</code>实例的类组成的<code>Pair</code>也可以作为<code>Monoid</code>的实例，如下：</p>
             <pre
@@ -247,10 +247,9 @@ instance Monoid Or where
             class="language-haskell line-numbers match-braces"><code>class Semigroup a =&gt; Monoid a where
     mempty  :: a
     mappend :: a -&gt; a -&gt; a
-    mconcat :: foldr mappend mempty
-
-(&lt;&gt;) Monoid m =&gt; m -&gt; m -&gt; m
-(&lt;&gt;) = mappend</code></pre>
+    mappend = (&lt;&gt;)
+    mconcat :: [a] -&gt; a
+    mconcat = foldr mappend mempty</code></pre>
             <p>关于<code>&lt;&gt;</code>与<code>mappend</code>的关系更准确的说法是，<code>mappend</code>是<code>&lt;&gt;</code>的别名。因而，<code>&lt;&gt;</code>才是主要定义，就是说一个类要成为<code>Monoid</code>的实例就必须也成为<code>Semigroup</code>的实例。则<code>Bool</code>类型的<code>Monoid</code>应定义为：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>newtype Or = Or {getOr :: Bool}

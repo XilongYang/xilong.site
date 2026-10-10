@@ -18,7 +18,7 @@ date: 2021-05-17
 int main() {
     srand(time(0));
     for (int i = 0; i < 10; ++i) {
-        print("%d\n", rand());
+        printf("%d\n", rand());
     }
     return 0;
 }
@@ -33,10 +33,12 @@ int main() {
 #include <ctime>
 #include <cstdio>
 
+using namespace std;
+
 int main() {
     default_random_engine e(time(0));
     for (int i = 0; i < 10; ++i) {
-        print("%d\n", e());
+        printf("%d\n", e());
     }
     return 0;
 }
@@ -55,6 +57,8 @@ int main() {
 #include <cstdlib>
 #include <ctime>
 
+using namespace std;
+
 int main() {
     default_random_engine e;
     // 设置种子
@@ -67,8 +71,8 @@ int main() {
     uniform_int_distribution<unsigned> u(min, max);
     u(e);
     // 生成随机实数，STL的方法精度高于使用rand() / double的方式生成的实数
-    uniform_real_distribution<double> u(min, max);
-    u(e);
+    uniform_real_distribution<double> u2(min, max);
+    u2(e);
     // 生成随机布尔, 注意这个描述器不是模板
     bernoulli_distribution b;
     b(e);
@@ -88,6 +92,8 @@ int main() {
 #include <random>
 #include <ctime>
 
+using namespace std;
+
 int main() {
     for (int i = 0; i < 10; ++i) {
         srand(time(0));
@@ -105,6 +111,8 @@ int main() {
 #include <cstdlib>
 #include <random>
 #include <ctime>
+
+using namespace std;
 
 int main() {
     srand(time(0));

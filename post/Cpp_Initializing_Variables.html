@@ -94,12 +94,12 @@ struct A {
 // 列表初始化, x = 1, y = 2
 A a = {1, 2};
 // 列表初始化, x = 1, y默认构造
-A a = {1};</code></pre>
+A a2 = {1};</code></pre>
             <p>C++11以后，这种初始化方式得到了普及，现在可以对任何对象使用列表初始化并且无需<code>=</code>号。如：</p>
             <pre class="language-cpp line-numbers match-braces"><code>int a{5};
 int arr[3]{1, 2, 3};
 std::string str{&quot;hello&quot;};</code></pre>
-            <p>列表初始化有一个重要特性，内置类型不会进行隐式类型转换。比如：</p>
+            <p>列表初始化有一个重要特性，内置类型不允许进行窄化的隐式类型转换。比如：</p>
             <pre class="language-cpp line-numbers match-braces"><code>int a = 1.5; // a == 1
 int b(1.5);  // b == 1
 int c{1.5};  // error</code></pre>
@@ -112,7 +112,7 @@ int c{1.5};  // error</code></pre>
 A{a, b} == A(a, b) // .x == a, .y == b</code></pre>
             <p>那么类似于数组形式的列表初始化是如何实现的呢？使用<code>std::initializer_list</code>：</p>
             <pre class="language-cpp line-numbers match-braces"><code>struct A {
-    A(initializer_list&lt;int&gt; list)
+    A(std::initializer_list&lt;int&gt; list)
     : size(list.size()), head(new int[size]) {
         auto cur = head;
         for (auto i : list) {

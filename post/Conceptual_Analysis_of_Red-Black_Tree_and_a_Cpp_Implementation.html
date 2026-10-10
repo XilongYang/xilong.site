@@ -71,7 +71,7 @@
             <ol type="1">
             <li>每个节点都有颜色，可以是红色或黑色。</li>
             <li>根节点是黑色。</li>
-            <li>每个叶子节点（NULL）是黑色。尤其注意这里的结子节点指的是NULL。</li>
+            <li>每个叶子节点（NULL）是黑色。尤其注意这里的叶子节点指的是NULL。</li>
             <li>红色节点的子节点必为黑色。</li>
             <li>任一结点到其所有后代叶节点的路径中具有相同数目的黑色节点。</li>
             </ol>
@@ -99,7 +99,7 @@ R_BNode *R_BNode::Nil = new R_BNode(0, R_BNode::BLACK);</code></pre>
             <p>定义红黑树类型为指向红黑树节点的指针。并创建一个静态变量<code>Nil</code>作为所有叶子节点的指代，这样做就可以把本不存在的叶子节点视为普通节点来处理了。</p>
             <p>红黑树可以实现如下：</p>
             <pre class="language-cpp line-numbers match-braces"><code>struct R_BTree {
-    explicit R_BTree() : root_(R_BNODE::Nil) {}
+    explicit R_BTree() : root_(R_BNode::Nil) {}
 
     R_BNode *root_;
 };</code></pre>
@@ -180,7 +180,7 @@ void R_BTree::RightRotate(R_BNode *x) {
         }
     }
     z-&gt;parent_ = y;
-    if (y = R_BNode::Nil) {
+    if (y == R_BNode::Nil) {
         root_ = z;
     } else if (z-&gt;data_ &lt; y-&gt;data_) {
         y-&gt;left_ = z;
@@ -206,21 +206,21 @@ void R_BTree::RightRotate(R_BNode *x) {
             <p>当我们插入的节点作为根节点时，就违反了规则2。此时只要改变节点的颜色就可以修复红黑树。此时可以实现出：</p>
             <pre class="language-cpp line-numbers match-braces"><code>void R_BTree::InsertFixup(R_BNode *z) {
     ...
-    root_-&gt;color = R_BNode::BLACK;
+    root_-&gt;color_ = R_BNode::BLACK;
 }</code></pre>
             <blockquote>
             <p>规则4：红色节点的孩子一定是黑色节点。</p>
             </blockquote>
             <p>当插入节点的父节点是红色时，违反规则4。总共存在三种可能的情况：</p>
             <h3 id="情况一叔节点是红色">情况一：叔节点是红色</h3>
-            <p>此时将叔节点与父节点都设为黑色，并把祖父节点设为红色。然后对祖父节点使用<code>InsertFixup</code>函数即可。因为对祖父节点的任何子孙节点，都必然途径祖父节点，以及父节点、叔节点中的一个。将父节点与叔节点都设成黑色等于所有路径的黑色节点数加一，而将祖父节点设为红色等于所有路径的黑色节点数减一。因此不会违反规则5。同时这样将规则4的违反提升到了更高的层次去处理，这样至多处理log(h)（h为树高）次。</p>
+            <p>此时将叔节点与父节点都设为黑色，并把祖父节点设为红色。然后对祖父节点使用<code>InsertFixup</code>函数即可。因为对祖父节点的任何子孙节点，都必然途径祖父节点，以及父节点、叔节点中的一个。将父节点与叔节点都设成黑色等于所有路径的黑色节点数加一，而将祖父节点设为红色等于所有路径的黑色节点数减一。因此不会违反规则5。同时这样将规则4的违反提升到了更高的层次去处理，这样至多处理h（h为树高）次。</p>
             <pre class="language-cpp line-numbers match-braces"><code>void R_BTree::InsertFixup(R_BNode *z) {
-    while (z-&gt;parent-&gt;color == R_BNode::RED) {
-        if (z-&gt;parent_ = z-&gt;parent_-&gt;parent_-&gt;left_) {
+    while (z-&gt;parent_-&gt;color_ == R_BNode::RED) {
+        if (z-&gt;parent_ == z-&gt;parent_-&gt;parent_-&gt;left_) {
             auto y = z-&gt;parent_-&gt;parent_-&gt;right_;
             // case 1
-            if (y-&gt;color_ = R_BNode::RED) {
-                z-&gt;parent_-&gt;color_ == R_BNode::BLACK;
+            if (y-&gt;color_ == R_BNode::RED) {
+                z-&gt;parent_-&gt;color_ = R_BNode::BLACK;
                 y-&gt;color_ = R_BNode::BLACK;
                 z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
                 z = z-&gt;parent_-&gt;parent_;
@@ -230,8 +230,8 @@ void R_BTree::RightRotate(R_BNode *x) {
         } else {
             auto y = z-&gt;parent_-&gt;parent_-&gt;left_;
             // case 1
-            if (y-&gt;color_ = R_BNode::RED) {
-                z-&gt;parent_-&gt;color_ == R_BNode::BLACK;
+            if (y-&gt;color_ == R_BNode::RED) {
+                z-&gt;parent_-&gt;color_ = R_BNode::BLACK;
                 y-&gt;color_ = R_BNode::BLACK;
                 z-&gt;parent_-&gt;parent_-&gt;color_ = R_BNode::RED;
                 z = z-&gt;parent_-&gt;parent_;
@@ -240,7 +240,7 @@ void R_BTree::RightRotate(R_BNode *x) {
             ...
         }
     }
-    root_-&gt;color = R_BNode::BLACK;
+    root_-&gt;color_ = R_BNode::BLACK;
 }</code></pre>
             <h3
             id="情况二叔节点是黑色且z与父节点异侧">情况二：叔节点是黑色，且z与父节点异侧</h3>
@@ -356,7 +356,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             </ol>
             <p>现在考虑对破坏的修复，如果y黑色，将导致3个问题：</p>
             <ol type="1">
-            <li>如果y是原来的节结点，而继承它位置的节点是红色，则违反了性质2。</li>
+            <li>如果y是原来的根节点，而继承它位置的节点是红色，则违反了性质2。</li>
             <li>如果x和x.p是红色的，则违反了性质4。</li>
             <li>移动y导致先前树中所有包含y的简单路径中黑色节点的数目减一，导致了所有y的祖先节点都不符合性质5。</li>
             </ol>
@@ -395,7 +395,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             m-&gt;color_ = R_BNode::BLACK;
             x-&gt;parent_-&gt;color_ = R_BNode::RED;
             LeftRotate(x-&gt;parent_);
-            m = x-parent_-&gt;right_;
+            m = x-&gt;parent_-&gt;right_;
         }
         ...
     } else {
@@ -405,7 +405,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
             m-&gt;color_ = R_BNode::BLACK;
             x-&gt;parent_-&gt;color_ = R_BNode::RED;
             RightRotate(x-&gt;parent_);
-            m = x-parent_-&gt;left_;
+            m = x-&gt;parent_-&gt;left_;
         }
         ...
     }
@@ -429,7 +429,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
                m-&gt;color_ = R_BNode::BLACK;
                x-&gt;parent_-&gt;color_ = R_BNode::RED;
                LeftRotate(x-&gt;parent_);
-               m = x-parent_-&gt;right_;
+               m = x-&gt;parent_-&gt;right_;
            }
            // case 2
            if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
@@ -446,7 +446,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
                m-&gt;color_ = R_BNode::BLACK;
                x-&gt;parent_-&gt;color_ = R_BNode::RED;
                RightRotate(x-&gt;parent_);
-               m = x-parent_-&gt;left_;
+               m = x-&gt;parent_-&gt;left_;
            }
            // case 2
            if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
@@ -458,7 +458,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
            ...
         }
     }
-     x-&gt;color_ = R_BNode::Black;
+     x-&gt;color_ = R_BNode::BLACK;
 }</code></pre>
             <h3
             id="情况3x的兄弟节点m为黑色且m的异侧孩子为红色同侧孩子为黑色">情况3：x的兄弟节点m为黑色，且m的异侧孩子为红色，同侧孩子为黑色</h3>
@@ -479,7 +479,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
                m-&gt;color_ = R_BNode::BLACK;
                x-&gt;parent_-&gt;color_ = R_BNode::RED;
                LeftRotate(x-&gt;parent_);
-               m = x-parent_-&gt;right_;
+               m = x-&gt;parent_-&gt;right_;
            }
            // case 2
            if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
@@ -488,7 +488,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
                x = x-&gt;parent_;
                continue;
            } else if (m-&gt;left_-&gt;color_ == R_BNode::RED
-                     &amp;&amp; m-&gt;right_color_ == R_BNode::BLACK) {
+                     &amp;&amp; m-&gt;right_-&gt;color_ == R_BNode::BLACK) {
                // case 3
                m-&gt;color_ = R_BNode::RED;
                m-&gt;left_-&gt;color_ = R_BNode::BLACK;
@@ -504,7 +504,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
                m-&gt;color_ = R_BNode::BLACK;
                x-&gt;parent_-&gt;color_ = R_BNode::RED;
                RightRotate(x-&gt;parent_);
-               m = x-parent_-&gt;left_;
+               m = x-&gt;parent_-&gt;left_;
            }
            // case 2
            if (m-&gt;left_-&gt;color_ == R_BNode::BLACK
@@ -513,7 +513,7 @@ void R_BTree::Transplant(R_BNode *u, R_BNode *v) {
                x = x-&gt;parent_;
                continue;
            } else if (m-&gt;right_-&gt;color_ == R_BNode::RED
-                     &amp;&amp; m-&gt;left_color_ == R_BNode::BLACK) {
+                     &amp;&amp; m-&gt;left_-&gt;color_ == R_BNode::BLACK) {
                // case 3
                m-&gt;color_ = R_BNode::RED;
                m-&gt;right_-&gt;color_ = R_BNode::BLACK;

@@ -125,7 +125,7 @@ exprTFold f g h (Add a b) = g (exprTFold f g h a) (exprTFold f g h b)
 exprTFold f g h (Mul a b) = h (exprTFold f g h a) (exprTFold f g h b)
 
 eval' :: ExprT -> Integer
-eval' exprTFold id (+) (*)
+eval' = exprTFold id (+) (*)
 ```
 
 现在我们可以做一些别的事，比如计算表达式中数字的个数：
@@ -160,7 +160,7 @@ class Monoid m where
     mconcat :: [m] -> m
     mconcat = foldr mappend mempty
 
-(<>) Monoid m => m -> m -> m
+(<>) :: Monoid m => m -> m -> m
 (<>) = mappend
 ```
 
@@ -216,7 +216,7 @@ getProduct :: Product a -> a
 getProduct (Product a) = a
 
 instance Num a => Monoid (Product a) where
-    mempty  = Product 0
+    mempty  = Product 1
     mappend = (*)
 ```
 
@@ -235,7 +235,7 @@ lst :: [Integer]
 lst = [1,5,8,23,423,99]
 
 prod :: Integer
-prod = getProduct . mappend . map Product $ lst
+prod = getProduct . mconcat . map Product $ lst
 ```
 
 当然这个例子显得舍近求远，非常地蠢。但这个模式可以方便的说明`Monoid`的应用方式。
@@ -278,10 +278,9 @@ class Semigroup a where
 class Semigroup a => Monoid a where
     mempty  :: a
     mappend :: a -> a -> a
-    mconcat :: foldr mappend mempty
-
-(<>) Monoid m => m -> m -> m
-(<>) = mappend
+    mappend = (<>)
+    mconcat :: [a] -> a
+    mconcat = foldr mappend mempty
 ```
 
 关于`<>`与`mappend`的关系更准确的说法是，`mappend`是`<>`的别名。因而，`<>`才是主要定义，就是说一个类要成为`Monoid`的实例就必须也成为`Semigroup`的实例。则`Bool`类型的`Monoid`应定义为：

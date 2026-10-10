@@ -14,7 +14,7 @@ date: 2021-09-23
 
 1. 每个节点都有颜色，可以是红色或黑色。
 2. 根节点是黑色。
-3. 每个叶子节点（NULL）是黑色。尤其注意这里的结子节点指的是NULL。
+3. 每个叶子节点（NULL）是黑色。尤其注意这里的叶子节点指的是NULL。
 4. 红色节点的子节点必为黑色。
 5. 任一结点到其所有后代叶节点的路径中具有相同数目的黑色节点。
 
@@ -52,7 +52,7 @@ R_BNode *R_BNode::Nil = new R_BNode(0, R_BNode::BLACK);
 
 ```cpp
 struct R_BTree {
-    explicit R_BTree() : root_(R_BNODE::Nil) {}
+    explicit R_BTree() : root_(R_BNode::Nil) {}
 
     R_BNode *root_;
 };
@@ -143,7 +143,7 @@ void R_BTree::Insert(int value) {
         }
     }
     z->parent_ = y;
-    if (y = R_BNode::Nil) {
+    if (y == R_BNode::Nil) {
         root_ = z;
     } else if (z->data_ < y->data_) {
         y->left_ = z;
@@ -175,7 +175,7 @@ void R_BTree::Insert(int value) {
 ```cpp
 void R_BTree::InsertFixup(R_BNode *z) {
     ...
-    root_->color = R_BNode::BLACK;
+    root_->color_ = R_BNode::BLACK;
 }
 ```
 
@@ -185,16 +185,16 @@ void R_BTree::InsertFixup(R_BNode *z) {
 
 ### 情况一：叔节点是红色
 
-此时将叔节点与父节点都设为黑色，并把祖父节点设为红色。然后对祖父节点使用`InsertFixup`函数即可。因为对祖父节点的任何子孙节点，都必然途径祖父节点，以及父节点、叔节点中的一个。将父节点与叔节点都设成黑色等于所有路径的黑色节点数加一，而将祖父节点设为红色等于所有路径的黑色节点数减一。因此不会违反规则5。同时这样将规则4的违反提升到了更高的层次去处理，这样至多处理log(h)（h为树高）次。
+此时将叔节点与父节点都设为黑色，并把祖父节点设为红色。然后对祖父节点使用`InsertFixup`函数即可。因为对祖父节点的任何子孙节点，都必然途径祖父节点，以及父节点、叔节点中的一个。将父节点与叔节点都设成黑色等于所有路径的黑色节点数加一，而将祖父节点设为红色等于所有路径的黑色节点数减一。因此不会违反规则5。同时这样将规则4的违反提升到了更高的层次去处理，这样至多处理h（h为树高）次。
 
 ```cpp
 void R_BTree::InsertFixup(R_BNode *z) {
-    while (z->parent->color == R_BNode::RED) {
-        if (z->parent_ = z->parent_->parent_->left_) {
+    while (z->parent_->color_ == R_BNode::RED) {
+        if (z->parent_ == z->parent_->parent_->left_) {
             auto y = z->parent_->parent_->right_;
             // case 1
-            if (y->color_ = R_BNode::RED) {
-                z->parent_->color_ == R_BNode::BLACK;
+            if (y->color_ == R_BNode::RED) {
+                z->parent_->color_ = R_BNode::BLACK;
                 y->color_ = R_BNode::BLACK;
                 z->parent_->parent_->color_ = R_BNode::RED;
                 z = z->parent_->parent_;
@@ -204,8 +204,8 @@ void R_BTree::InsertFixup(R_BNode *z) {
         } else {
             auto y = z->parent_->parent_->left_;
             // case 1
-            if (y->color_ = R_BNode::RED) {
-                z->parent_->color_ == R_BNode::BLACK;
+            if (y->color_ == R_BNode::RED) {
+                z->parent_->color_ = R_BNode::BLACK;
                 y->color_ = R_BNode::BLACK;
                 z->parent_->parent_->color_ = R_BNode::RED;
                 z = z->parent_->parent_;
@@ -214,7 +214,7 @@ void R_BTree::InsertFixup(R_BNode *z) {
             ...
         }
     }
-    root_->color = R_BNode::BLACK;
+    root_->color_ = R_BNode::BLACK;
 }
 ```
 
@@ -349,7 +349,7 @@ void R_BTree::Delete(R_BNode *z) {
 
 现在考虑对破坏的修复，如果y黑色，将导致3个问题：
 
-1. 如果y是原来的节结点，而继承它位置的节点是红色，则违反了性质2。
+1. 如果y是原来的根节点，而继承它位置的节点是红色，则违反了性质2。
 2. 如果x和x.p是红色的，则违反了性质4。
 3. 移动y导致先前树中所有包含y的简单路径中黑色节点的数目减一，导致了所有y的祖先节点都不符合性质5。
 
@@ -392,7 +392,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
             m->color_ = R_BNode::BLACK;
             x->parent_->color_ = R_BNode::RED;
             LeftRotate(x->parent_);
-            m = x-parent_->right_;
+            m = x->parent_->right_;
         }
         ...
     } else {
@@ -402,7 +402,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
             m->color_ = R_BNode::BLACK;
             x->parent_->color_ = R_BNode::RED;
             RightRotate(x->parent_);
-            m = x-parent_->left_;
+            m = x->parent_->left_;
         }
         ...
     }
@@ -427,7 +427,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
                m->color_ = R_BNode::BLACK;
                x->parent_->color_ = R_BNode::RED;
                LeftRotate(x->parent_);
-               m = x-parent_->right_;
+               m = x->parent_->right_;
            }
            // case 2
            if (m->left_->color_ == R_BNode::BLACK
@@ -444,7 +444,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
                m->color_ = R_BNode::BLACK;
                x->parent_->color_ = R_BNode::RED;
                RightRotate(x->parent_);
-               m = x-parent_->left_;
+               m = x->parent_->left_;
            }
            // case 2
            if (m->left_->color_ == R_BNode::BLACK
@@ -456,7 +456,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
            ...
         }
     }
-     x->color_ = R_BNode::Black;
+     x->color_ = R_BNode::BLACK;
 }
 ```
 
@@ -478,7 +478,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
                m->color_ = R_BNode::BLACK;
                x->parent_->color_ = R_BNode::RED;
                LeftRotate(x->parent_);
-               m = x-parent_->right_;
+               m = x->parent_->right_;
            }
            // case 2
            if (m->left_->color_ == R_BNode::BLACK
@@ -487,7 +487,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
                x = x->parent_;
                continue;
            } else if (m->left_->color_ == R_BNode::RED
-                     && m->right_color_ == R_BNode::BLACK) {
+                     && m->right_->color_ == R_BNode::BLACK) {
                // case 3
                m->color_ = R_BNode::RED;
                m->left_->color_ = R_BNode::BLACK;
@@ -503,7 +503,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
                m->color_ = R_BNode::BLACK;
                x->parent_->color_ = R_BNode::RED;
                RightRotate(x->parent_);
-               m = x-parent_->left_;
+               m = x->parent_->left_;
            }
            // case 2
            if (m->left_->color_ == R_BNode::BLACK
@@ -512,7 +512,7 @@ void R_BTree::DeleteFixup(R_BNode *x) {
                x = x->parent_;
                continue;
            } else if (m->right_->color_ == R_BNode::RED
-                     && m->left_color_ == R_BNode::BLACK) {
+                     && m->left_->color_ == R_BNode::BLACK) {
                // case 3
                m->color_ = R_BNode::RED;
                m->right_->color_ = R_BNode::BLACK;

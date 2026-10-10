@@ -48,10 +48,10 @@ CMakeList.txt是逐行解析的，因此变量的定义应在使用之前。
 有了这几条命令，我们就可以编写一个能用的CMakeList.txt文件了：
 
 ```cmake
-cmake_minimun_required(3.1)
+cmake_minimum_required(3.1)
 project(HelloWorld)
 include_directories(${CMAKE_SOURCE_DIR}/include)
-aux_source_dirctory(${CMAKE_SOURCE_DIR}/src DIR_SRC)
+aux_source_directory(${CMAKE_SOURCE_DIR}/src DIR_SRC)
 add_executable(helloworld ${DIR_SRC})
 ```
 
@@ -60,7 +60,7 @@ add_executable(helloworld ${DIR_SRC})
 * if
 
 ```cmake
-if(conditon)
+if(condition)
 ...
 elseif(condition)
 ...
@@ -95,17 +95,17 @@ endforeach(var)
 
 `add_library(name [STATIC|SHARED] src1 src2...)`：创建库，如果未指定库类型则默认构建STATIC库，可以通过定义变量`BUILD_SHARED_LIBS`改为默认构建SHARED库。
 
-`target_link_library(target-name lib1 lib2 ...)`：为taget链接库。
+`target_link_libraries(target-name lib1 lib2 ...)`：为target链接库。
 
-`add_subdirectory(subdir1 subdir2 ...)`：添加子目录，使用子目录的CMakeLists.txt构建子目录中的文件。
+`add_subdirectory(subdir)`：添加子目录，使用子目录的CMakeLists.txt构建子目录中的文件。
 
 `add_test(testname execname arg1 arg2...)`：添加测试，execname可以是任何可执行文件的名称。在生成makefile后可以使用`make test`来进行测试。
 
-`ebable_test()`：开启测试开关，没有这条指令则任何add_test指令都是无效的。
+`enable_testing()`：开启测试开关，没有这条指令则任何add_test指令都是无效的。
 
 `find_library(var NAMES name1 name2 ... PATHS path1 path2 ...)`：在path中查找基础名称为name的库，并将其完整路径赋予变量var。
 
-`file_path(var file path1 path2 ...)`：在path中查找file，并将path路径赋予变量var。
+`find_path(var file path1 path2 ...)`：在path中查找file，并将path路径赋予变量var。
 
 ## 常用变量
 

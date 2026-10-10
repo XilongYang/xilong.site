@@ -53,7 +53,7 @@
 int main() {
     srand(time(0));
     for (int i = 0; i &lt; 10; ++i) {
-        print(&quot;%d\n&quot;, rand());
+        printf(&quot;%d\n&quot;, rand());
     }
     return 0;
 }</code></pre>
@@ -63,10 +63,12 @@ int main() {
 #include &lt;ctime&gt;
 #include &lt;cstdio&gt;
 
+using namespace std;
+
 int main() {
     default_random_engine e(time(0));
     for (int i = 0; i &lt; 10; ++i) {
-        print(&quot;%d\n&quot;, e());
+        printf(&quot;%d\n&quot;, e());
     }
     return 0;
 }</code></pre>
@@ -78,6 +80,8 @@ int main() {
             <pre class="language-cpp line-numbers match-braces"><code>#include &lt;random&gt;
 #include &lt;cstdlib&gt;
 #include &lt;ctime&gt;
+
+using namespace std;
 
 int main() {
     default_random_engine e;
@@ -91,8 +95,8 @@ int main() {
     uniform_int_distribution&lt;unsigned&gt; u(min, max);
     u(e);
     // 生成随机实数，STL的方法精度高于使用rand() / double的方式生成的实数
-    uniform_real_distribution&lt;double&gt; u(min, max);
-    u(e);
+    uniform_real_distribution&lt;double&gt; u2(min, max);
+    u2(e);
     // 生成随机布尔, 注意这个描述器不是模板
     bernoulli_distribution b;
     b(e);
@@ -106,6 +110,8 @@ int main() {
             <pre class="language-cpp line-numbers match-braces"><code>#include &lt;cstdlib&gt;
 #include &lt;random&gt;
 #include &lt;ctime&gt;
+
+using namespace std;
 
 int main() {
     for (int i = 0; i &lt; 10; ++i) {
@@ -121,6 +127,8 @@ int main() {
             <pre class="language-cpp line-numbers match-braces"><code>#include &lt;cstdlib&gt;
 #include &lt;random&gt;
 #include &lt;ctime&gt;
+
+using namespace std;
 
 int main() {
     srand(time(0));

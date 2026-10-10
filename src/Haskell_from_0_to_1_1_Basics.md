@@ -237,7 +237,7 @@ floor d
 ceiling d
 ```
 
-`/`运算符无法作用于整型，只能作用于符点类型。整除函数为`div`，是一个前缀函数。
+`/`运算符无法作用于整型，只能作用于浮点类型。整除函数为`div`，是一个前缀函数。
 
 ## 布尔运算
 
@@ -278,7 +278,7 @@ foo n = if condition then modify n else n
 一个函数可以这样定义
 
 ```haskell
-suntorial :: Integer -> Integer
+sumtorial :: Integer -> Integer
 sumtorial 0 = 0
 sumtorial n = n + sumtorial (n - 1)
 ```
@@ -326,13 +326,13 @@ foo n
 ``` haskell
 isEven :: Integer -> Bool
 isEven n
-  n `mod` 2 == 0 = True
-  otherwise      = False
+  | n `mod` 2 == 0 = True
+  | otherwise      = False
 
 -- 其实真正有效的部分只有n `mod` 2 == 0，所以可以写成以下形式
 -- 函数命名使用单引号是合法的
 isEven' :: Integer -> Bool
-isEven' = n `mod` 2 == 0
+isEven' n = n `mod` 2 == 0
 ```
 
 ## 序对
@@ -478,7 +478,7 @@ intListLength (_:xs) = 1 + intListLength xs
 sumEveryTwo :: [Integer] -> [Integer]
 sumEveryTwo [] = []
 sumEveryTwo (x : []) = [x]
-sumEveryTwo (x : y : zs) = (x + y) : sunEveryTow zs
+sumEveryTwo (x : y : zs) = (x + y) : sumEveryTwo zs
 ```
 
 ## 组合函数
@@ -504,7 +504,7 @@ Prelude> 'x' ++ "foo"
 
 ```none
 <interactive>:1:1:
-  Coundn't match expected type '[a0]' with actual type 'Char'
+  Couldn't match expected type '[a0]' with actual type 'Char'
   In the first argument of '(++)', namely 'x'
   In the expression: 'x' ++ "foo"
   In an equation for 'it' : it = 'x' ++ "foo"

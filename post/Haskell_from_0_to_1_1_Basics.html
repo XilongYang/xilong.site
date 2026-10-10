@@ -238,7 +238,7 @@ fromIntegral n
 round d
 floor d
 ceiling d</code></pre>
-            <p><code>/</code>运算符无法作用于整型，只能作用于符点类型。整除函数为<code>div</code>，是一个前缀函数。</p>
+            <p><code>/</code>运算符无法作用于整型，只能作用于浮点类型。整除函数为<code>div</code>，是一个前缀函数。</p>
             <h2 id="布尔运算">布尔运算</h2>
             <p>与或非运算分别为：<code>&amp;&amp;</code>、<code>||</code>、<code>not</code>。注意非运算不再是！号了。</p>
             <p>比较运算有：<code>==</code>、<code>/=</code>、<code>&lt;</code>、<code>&gt;</code>、<code>&lt;=</code>、<code>&gt;=</code>。同样注意不等于不再是!=而是<code>/=</code>。</p>
@@ -261,7 +261,7 @@ ceiling d</code></pre>
             <h2 id="定义基础函数">定义基础函数</h2>
             <p>一个函数可以这样定义</p>
             <pre
-            class="language-haskell line-numbers match-braces"><code>suntorial :: Integer -&gt; Integer
+            class="language-haskell line-numbers match-braces"><code>sumtorial :: Integer -&gt; Integer
 sumtorial 0 = 0
 sumtorial n = n + sumtorial (n - 1)</code></pre>
             <p>其中的语法：</p>
@@ -301,13 +301,13 @@ foo n
             <pre
             class="language-haskell line-numbers match-braces"><code>isEven :: Integer -&gt; Bool
 isEven n
-  n `mod` 2 == 0 = True
-  otherwise      = False
+  | n `mod` 2 == 0 = True
+  | otherwise      = False
 
 -- 其实真正有效的部分只有n `mod` 2 == 0，所以可以写成以下形式
 -- 函数命名使用单引号是合法的
 isEven&#39; :: Integer -&gt; Bool
-isEven&#39; = n `mod` 2 == 0</code></pre>
+isEven&#39; n = n `mod` 2 == 0</code></pre>
             <h2 id="序对">序对</h2>
             <p>可以使用序对（Pair）将两个东西组合起来，比如：</p>
             <pre
@@ -413,7 +413,7 @@ intListLength (_:xs) = 1 + intListLength xs
 sumEveryTwo :: [Integer] -&gt; [Integer]
 sumEveryTwo [] = []
 sumEveryTwo (x : []) = [x]
-sumEveryTwo (x : y : zs) = (x + y) : sunEveryTow zs</code></pre>
+sumEveryTwo (x : y : zs) = (x + y) : sumEveryTwo zs</code></pre>
             <h2 id="组合函数">组合函数</h2>
             <p>在Haskell中要尽可能地使用简单的函数组合成复杂的功能，比如要求hailstone数的数量，可以这样编写：</p>
             <pre
@@ -425,7 +425,7 @@ hailstoneLen n = intListLength (hailstoneSeq n) - 1</code></pre>
             <pre class="language-none line-numbers match-braces"><code>Prelude&gt; &#39;x&#39; ++ &quot;foo&quot;</code></pre>
             <p>将导致以下报错:</p>
             <pre class="language-none line-numbers match-braces"><code>&lt;interactive&gt;:1:1:
-  Coundn&#39;t match expected type &#39;[a0]&#39; with actual type &#39;Char&#39;
+  Couldn&#39;t match expected type &#39;[a0]&#39; with actual type &#39;Char&#39;
   In the first argument of &#39;(++)&#39;, namely &#39;x&#39;
   In the expression: &#39;x&#39; ++ &quot;foo&quot;
   In an equation for &#39;it&#39; : it = &#39;x&#39; ++ &quot;foo&quot;</code></pre>

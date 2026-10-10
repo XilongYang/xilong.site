@@ -119,7 +119,7 @@ fi</code></pre>
   , ATTRS{idProduct}==&quot;4519&quot; \
   , SYMLINK+=&quot;video-cam1&quot;</code></pre>
             <ul>
-            <li><code>KERNEL</code>是设备的卷标，这条规则使用了一个正则表达式对其进行匹配。</li>
+            <li><code>KERNEL</code>是设备的内核名称，这条规则使用了一个正则表达式对其进行匹配。</li>
             <li><code>SUBSYSTEM</code>表示设备的类型</li>
             <li><code>ATTRS{sth.}</code>获取设备的某个属性，属性名写在大括号中。</li>
             <li><code>SYMLINK</code>是对该设备的软链接，使用+=对设备创建一个软链接。使用+=而不是=是因为不想覆盖掉默认操作。</li>
@@ -185,7 +185,7 @@ KERNEL==&quot;sd[a-z][0-9]&quot; \
             <p>使用<code>udevadm control --reload</code>重新加载规则。</p>
             <p>到这里，自动挂载就可以正常工作了。</p>
             <h2 id="在硬盘上创建仓库">在硬盘上创建仓库</h2>
-            <p>在使用<code>git --bare init</code>创建一个远程仓库：</p>
+            <p>使用<code>git --bare init</code>创建一个远程仓库：</p>
             <pre class="language-bash line-numbers match-braces"><code>cd /mnt/Repo
 mkdir test.git
 cd test.git
@@ -193,7 +193,7 @@ git --bare init</code></pre>
             <p>为本地git仓库添加这个远程仓库：</p>
             <pre class="language-bash line-numbers match-braces"><code>cd ~/someprojects
 git remote add Repo /mnt/Repo/test.git
-git push remote master</code></pre>
+git push Repo master</code></pre>
             <h2 id="后记">后记</h2>
             <p>这次的折腾算是记录一下与udev的初次接触。使用linux的过程中总能用到以为永远不会碰的工具，这也是linux的魅力所在吧。</p>
         </main>

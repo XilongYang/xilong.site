@@ -33,7 +33,9 @@ fib n = fib (n - 1) + fib (n - 2)
 
 ```cpp
 int fib(int n) {
-	int fibs[n] = {1,1};
+	std::vector<int> fibs(n);
+	fibs[0] = 1;
+	fibs[1] = 1;
     for (int i = 2; i < n; ++i) {
         fibs[i] = fibs[i - 1] + fibs[i - 2];
     }
@@ -106,9 +108,9 @@ zipWith f = go
 
 ```haskell
 fibs = 1:1:zipWith (+) fibs (tail fibs)
- == 1:1:(go (1: (1:ys))
- == 1:1:((1 + 1) : xs : ys)
- == 1:1:((1 + 1) : tail fibs : tail (tail fibs))
+ == 1:1:(go (1:xs) (1:ys))
+ == 1:1:((1 + 1) : go xs ys)
+ == 1:1:((1 + 1) : go (tail fibs) (tail (tail fibs)))
  ...
 ```
 
@@ -116,9 +118,9 @@ fibs = 1:1:zipWith (+) fibs (tail fibs)
 
 ## 谈谈运算符优先级
 
-* Why not `fib = 1:1:(zipWith (+) fibs (tail fibs))`
+* Why not `fibs = 1:1:(zipWith (+) fibs (tail fibs))`
 
-这里的答案是`:`运算符是`cons`函数的语法糖，而`[emelments]`又是`:`的语法糖，关系如下：
+这里的答案是`:`运算符是`cons`函数的语法糖，而`[elements]`又是`:`的语法糖，关系如下：
 
 ```haskell
 [1,2,3] == 1:2:3:[] == cons 1 (cons 2 (cons 3 []))
@@ -137,7 +139,7 @@ fibs = 1:1:zipWith (+) fibs (tail fibs)
 
 而不可以将`zipWith (+) fibs (tail fibs)`写做`zipWith (+) fibs tail fibs`，则是因为前缀函数调用优先级相同，且从左向右开始分析。因此上式等价于：`(zipWith (+) fibs tail) fibs`。
 
-* Why not `fib = 1:1:zipWith (+) fibs $ tail fibs`
+* Why not `fibs = 1:1:zipWith (+) fibs $ tail fibs`
 
 根据`$`运算符的作用是“*省略之后的括号*”来理解，这样写是可行的，然而这个理解是错误的。`$`运算符真正的作用是，将**前后两部分都括上括号**。因此上式转换为前缀写法后，错误就显而易见了，如下：
 
@@ -169,8 +171,8 @@ map + [1] /= map (+) [1]
 为什么同样是占据高优先级函数的参数位置，中缀运算符不会被当作参数传递呢？因为当我们使用中缀函数时，实际上表达式会被当作等价的前缀形式来处理，即：
 
 ``` haskell
-f $ g x == ($) (f) (g x) == ($ f) (g x) == f (g x) -- 注意：当转换为前缀形式后，由于所有的函数都成为了前缀函数，不再有优先级一说。
-map + [1] == (+) (map) ([1]) == (+ map) ([1]) -- 错误：函数(+ map)参数类型与[]不匹配。
+f $ g x == ($) (f) (g x) == (f $) (g x) == f (g x) -- 注意：当转换为前缀形式后，由于所有的函数都成为了前缀函数，不再有优先级一说。
+map + [1] == (+) (map) ([1]) == (map +) ([1]) -- 错误：函数(map +)参数类型与[]不匹配。
 ```
 
 上例也可看出，所谓的优先级只在中缀表达式到前缀表达式的转换中有效，即：
@@ -179,7 +181,7 @@ map + [1] == (+) (map) ([1]) == (+ map) ([1]) -- 错误：函数(+ map)参数类
 (f.g) x == ((.) f g) (x)
 f.g $ x == ($) (f.g) (x) == ($) ((.) f g) (x)
 1 + 2 * 3 + 4
-  == (+) (1 + 2 * 3) + (4)
+  == (+) (1 + 2 * 3) (4)
   == (+) ((+) (1) (2 * 3)) (4)
   == (+) ((+) (1) ((*) 2 3)) 4
 ```

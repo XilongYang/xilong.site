@@ -18,7 +18,7 @@ date: 2021-09-15
 f x y = x + 2
 ```
 
-在直接求值的语言中，`f 5 (29^35792)`会先分别计算出`5`和`29^35792`的值，然后才将这两个值传入函数中进行处理。对于我们这个函数而言，这样做显然浪费了计算`29^35792`耗费的计算资源。因为我们跟本没有使用参数`y`。
+在直接求值的语言中，`f 5 (29^35792)`会先分别计算出`5`和`29^35792`的值，然后才将这两个值传入函数中进行处理。对于我们这个函数而言，这样做显然浪费了计算`29^35792`耗费的计算资源。因为我们根本没有使用参数`y`。
 
 那么为什么要使用直接求值呢？一个显著的好处是直接求值可以很方便的预测处理表达式的时机，对于有副作用的语言而言，比如C++中：
 
@@ -48,7 +48,7 @@ f (x(), y());
 
 ## 模式匹配驱动计算
 
-所以一个表达式什么时候才必须进行计算呢？一个关键是看它什么时候被使用，但实际上这 并不是最重要的区别。考虑下面的例子：
+所以一个表达式什么时候才必须进行计算呢？一个关键是看它什么时候被使用，但实际上这并不是最重要的区别。考虑下面的例子：
 
 ```haskell
 f1 :: Maybe a -> [Maybe a]
@@ -56,7 +56,7 @@ f1 m = [m, m]
 
 f2 :: Maybe a -> [a]
 f2 Nothing = []
-f2 Just x = [x]
+f2 (Just x) = [x]
 ```
 
 这里的`f1`与`f2`都使用了它们的参数，但其中有很大的区别。`f1`并不在乎参数是个什么东西，只要把它整个地丢进列表里就行了。而`f2`就必须知道参数的值，来决定如何处理参数。
@@ -71,7 +71,7 @@ f2 Just x = [x]
 来看一个更有趣的例子，`take 3 (repeat 7)`。作为参考，`take`和`repeat`的定义如下：
 
 ```haskell
-repeat a -> [a]
+repeat :: a -> [a]
 repeat x = x : repeat x
 
 take :: Int -> [a] -> [a]
@@ -162,9 +162,9 @@ False && _ = False
 ```haskell
 (&&!) :: Bool -> Bool -> Bool
 True  &&! True  = True
-True  &&! False = True
-False &&! True  = True
-False &&! False = True
+True  &&! False = False
+False &&! True  = False
+False &&! False = False
 ```
 
 ### 用户定义的控制结构
@@ -172,7 +172,7 @@ False &&! False = True
 基于与上面的短路同样的思路，我们可以定义自己的用户控制结构。大多数语言有内置的`if`语句，而在Haskell中可以简单的将`if`定义为一个函数，定义如下：
 
 ```haskell
-if' Bool -> a -> a -> a
+if' :: Bool -> a -> a -> a
 if' True  x _ = x
 if' False _ y = y
 ```
@@ -202,7 +202,7 @@ knapsack01 :: [Double]   --物品价值
            -> [Integer]  --物品重量
            -> Integer    --背包载量
            -> Double     --最大价值
-knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
+knapsack01 vs ws maxW = m!(numItems - 1, maxW)
     where numItems = length vs
           m = array ((-1, 0), (numItems - 1, maxW)) $
                 [((-1, w), 0) | w <- [0 .. maxW]] ++
@@ -226,10 +226,10 @@ array :: Ix i => (i, i) -> [(i, e)] -> Array i e
 -- 如下例生成一个索引范围从1到10的映射，每个索引对应的值为索引值+1
 a = array (1, 10) [(i, i + 1) | i <- [1..10]]
 -- 取该映射中的一个value时，使用array！key的方式，如
-a!1 == 1
+a!1 == 2
 -- 似乎等效于直接对列表进行如下操作
 l = [(i, i + 1) | i <- [1..10]]
-snd $ l!!1 == 1
+snd $ l!!0 == 2
 ```
 
 再回顾一下0-1背包问题，问题描述为:
@@ -240,7 +240,7 @@ snd $ l!!1 == 1
 
 > maxV(i, w)视作前i个物品在限重w时的最大价值。此时，如果没有将第i个物品加入背包，则其值等于maxV(i - 1, w)；如果将第i个物品加入了背包，其值则等于maxV(i - 1, w - ws[i]) + vs[i]。因此，只要选择两种情况下值比较大的作为maxV(i,w)的值就可以确保这个值是最优解。
 >
-> 同时要注意，如果当前物品价值超过了背包最大载重，则只有不加入背包一个选择。
+> 同时要注意，如果当前物品重量超过了背包最大载重，则只有不加入背包一个选择。
 
 现在来逐步解析这个程序：
 
@@ -254,7 +254,7 @@ knapsack01 :: [Double]   --物品价值
 -- 我们知道了m是一个Array类型，!运算可以取其对应索引的值
 -- m (i, w)这个形式即是之前所说的maxV(i,w)，求前n个物品的在限重w下的最大价值
 -- 这里numItems - 1是因为数组下标从0开始，第一个物品对应的i值为0
-knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
+knapsack01 vs ws maxW = m!(numItems - 1, maxW)
     where numItems = length vs
           -- 这里构建一个二维数组作状态表
           -- 索引范围是(-1, 0)到(numItems - 1, maxW)
@@ -274,20 +274,20 @@ knaspsack01 vs ws maxW = m!(numItems - 1, maxW)
                 ]
 ```
 
-这样看除了语法默生一点外似乎并没有什么太特别的地方，为了对比，给出这个问题的C++实现：
+这样看除了语法陌生一点外似乎并没有什么太特别的地方，为了对比，给出这个问题的C++实现：
 
 ```cpp
 #include <vector>
 
 using namespace std;
 
-double kanpsack01(const vector<double> &vs, const vector<int> &ws
+double knapsack01(const vector<double> &vs, const vector<int> &ws
                 , int maxW) {
 
     auto numItems = vs.size();
 
     // 留出物品数与载重为0的情况所需空间
-    auto m = vector(numItems + 1, vector<double>(maxW + 1， 0));
+    auto m = vector(numItems + 1, vector<double>(maxW + 1, 0));
 
     for (int i = 1; i <= numItems; ++i) {
         for (int w = 1; w <= maxW; ++w) {

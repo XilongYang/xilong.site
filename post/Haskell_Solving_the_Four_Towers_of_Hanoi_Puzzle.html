@@ -24,7 +24,7 @@
             <p class="author">Xilong Yang<br>2021-01-27</p>
         </div>
         <div class="abstract">
-            <p>初学Haskell，在做<a href="https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf">CIS 194 HomeWork1</a>时遇到的四柱汉渃塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。</p>
+            <p>初学Haskell，在做<a href="https://www.seas.upenn.edu/~cis194/spring13/hw/01-intro.pdf">CIS 194 HomeWork1</a>时遇到的四柱汉诺塔最优解问题。过程中对递归与函数式编程产生了许多新的理解，在此做一下记录。</p>
         </div>
         <nav role="navigation" class="toc">
             <h2>
@@ -77,7 +77,7 @@
             storage.</li>
             </ol>
             </blockquote>
-            <p>这东西相信大家都非常熟悉了，不多缀言。下面进入第一个问题，使用Haskell求解汉诺塔。</p>
+            <p>这东西相信大家都非常熟悉了，不多赘言。下面进入第一个问题，使用Haskell求解汉诺塔。</p>
             <h2 id="haskell求解汉诺塔">Haskell求解汉诺塔</h2>
             <blockquote>
             <p>Given the number of discs and names for the three pegs,
@@ -108,7 +108,7 @@ hanoi n a b c = hanoi (n - 1) a c b ++ [(a, b)] ++ hanoi (n - 1) c b a</code></p
             <li>由d柱经过a柱的辅助将盘子移动到b柱</li>
             </ol>
             <p>现在的状态是，a柱、d柱上没有盘子，c柱上有一开始移动出去的盘子，b柱上有剩下的盘子。由于c柱上的盘子都小于b柱上的盘子，故而在移动时可以借助b柱。则由c柱经过a柱、d柱的辅助将盘子移动到b柱上，即完成了将所有盘子由a柱移动到b柱的过程。</p>
-            <p>那么应该怎么把盘子分成两份呢？这里简单起见，将盘子平分成两分。</p>
+            <p>那么应该怎么把盘子分成两份呢？这里简单起见，将盘子平分成两份。</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>hanoiPlus :: Integer-&gt;Peg-&gt;Peg-&gt;Peg-&gt;Peg-&gt;[Move]
 hanoiPlus 0 _ _ _ _ = []

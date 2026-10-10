@@ -60,7 +60,9 @@ fib n = fib (n - 1) + fib (n - 2)</code></pre>
             <h2 id="fib函数的递推实现">fib函数的递推实现</h2>
             <p>不难看出，上面的实现非常自然，几乎与数学方式给出的定义一样。然而大家可能都知道，这种定义方式的计算效率是很低的，在过程式语言中可以引出DP思想：</p>
             <pre class="language-cpp line-numbers match-braces"><code>int fib(int n) {
-    int fibs[n] = {1,1};
+    std::vector&lt;int&gt; fibs(n);
+    fibs[0] = 1;
+    fibs[1] = 1;
     for (int i = 2; i &lt; n; ++i) {
         fibs[i] = fibs[i - 1] + fibs[i - 2];
     }
@@ -112,17 +114,17 @@ zipWith f = go
             <p>由于这个函数没有用到如<code>!!</code>或<code>length</code>这类需要先将值计算出来的函数，符合惰性求值的作用条件，计算过程如下：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>fibs = 1:1:zipWith (+) fibs (tail fibs)
- == 1:1:(go (1: (1:ys))
- == 1:1:((1 + 1) : xs : ys)
- == 1:1:((1 + 1) : tail fibs : tail (tail fibs))
+ == 1:1:(go (1:xs) (1:ys))
+ == 1:1:((1 + 1) : go xs ys)
+ == 1:1:((1 + 1) : go (tail fibs) (tail (tail fibs)))
  ...</code></pre>
             <p>可以总结出一条规律，要想使用惰性求值特性，就要使每一个计算步骤都不依赖完整的结果。</p>
             <h2 id="谈谈运算符优先级">谈谈运算符优先级</h2>
             <ul>
             <li>Why not
-            <code>fib = 1:1:(zipWith (+) fibs (tail fibs))</code></li>
+            <code>fibs = 1:1:(zipWith (+) fibs (tail fibs))</code></li>
             </ul>
-            <p>这里的答案是<code>:</code>运算符是<code>cons</code>函数的语法糖，而<code>[emelments]</code>又是<code>:</code>的语法糖，关系如下：</p>
+            <p>这里的答案是<code>:</code>运算符是<code>cons</code>函数的语法糖，而<code>[elements]</code>又是<code>:</code>的语法糖，关系如下：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>[1,2,3] == 1:2:3:[] == cons 1 (cons 2 (cons 3 []))</code></pre>
             <p>不难看出，为满足这个关系，<code>:</code>是一个右结合运算符。因此：</p>
@@ -135,7 +137,7 @@ zipWith f = go
             <p>而不可以将<code>zipWith (+) fibs (tail fibs)</code>写做<code>zipWith (+) fibs tail fibs</code>，则是因为前缀函数调用优先级相同，且从左向右开始分析。因此上式等价于：<code>(zipWith (+) fibs tail) fibs</code>。</p>
             <ul>
             <li>Why not
-            <code>fib = 1:1:zipWith (+) fibs $ tail fibs</code></li>
+            <code>fibs = 1:1:zipWith (+) fibs $ tail fibs</code></li>
             </ul>
             <p>根据<code>$</code>运算符的作用是“<em>省略之后的括号</em>”来理解，这样写是可行的，然而这个理解是错误的。<code>$</code>运算符真正的作用是，将<strong>前后两部分都括上括号</strong>。因此上式转换为前缀写法后，错误就显而易见了，如下：</p>
             <pre
@@ -156,14 +158,14 @@ f $ g x /= ((f $) g) x
 map + [1] /= map (+) [1]</code></pre>
             <p>为什么同样是占据高优先级函数的参数位置，中缀运算符不会被当作参数传递呢？因为当我们使用中缀函数时，实际上表达式会被当作等价的前缀形式来处理，即：</p>
             <pre
-            class="language-haskell line-numbers match-braces"><code>f $ g x == ($) (f) (g x) == ($ f) (g x) == f (g x) -- 注意：当转换为前缀形式后，由于所有的函数都成为了前缀函数，不再有优先级一说。
-map + [1] == (+) (map) ([1]) == (+ map) ([1]) -- 错误：函数(+ map)参数类型与[]不匹配。</code></pre>
+            class="language-haskell line-numbers match-braces"><code>f $ g x == ($) (f) (g x) == (f $) (g x) == f (g x) -- 注意：当转换为前缀形式后，由于所有的函数都成为了前缀函数，不再有优先级一说。
+map + [1] == (+) (map) ([1]) == (map +) ([1]) -- 错误：函数(map +)参数类型与[]不匹配。</code></pre>
             <p>上例也可看出，所谓的优先级只在中缀表达式到前缀表达式的转换中有效，即：</p>
             <pre
             class="language-haskell line-numbers match-braces"><code>(f.g) x == ((.) f g) (x)
 f.g $ x == ($) (f.g) (x) == ($) ((.) f g) (x)
 1 + 2 * 3 + 4
-  == (+) (1 + 2 * 3) + (4)
+  == (+) (1 + 2 * 3) (4)
   == (+) ((+) (1) (2 * 3)) (4)
   == (+) ((+) (1) ((*) 2 3)) 4</code></pre>
             <p>这里又可看出一个有趣的规律：优先级不同的运算符先转换较低级的，同级的运算符则根据结合律来决定顺序（转换顺序与结合顺序相反）。即后运算的先转换。</p>

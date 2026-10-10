@@ -6,7 +6,7 @@ date: 2020-02-26
 
 偶然间看见一个声明:
 
-struct tm *(*(*Pfunc)[3])(int(*)(int, int), float(*[])(float));
+`struct tm *(*(*Pfunc)[3])(int(*)(int, int), float(*[])(float));`
 
 一时间感到云里雾里。为了弄懂此类复杂的声明学习一些相关的知识，在此总结。
 
@@ -44,7 +44,7 @@ extern int a; //声明int型变量a，但未定义
 extern int b = 2; //声明并定义int型变量b，并为其赋初始值2
 ```
 
-​	 ***任何显式初始化的声明即成为定义****。即使一个声明符已用extern标记，对其进行初始化仍会导致定义行为。*
+***任何显式初始化的声明即成为定义***。即使一个声明符已用extern标记，对其进行初始化仍会导致定义行为。
 
 * 对于**多文件**程序，若要在多个文件中使用**同一个变量**，则必须在**所有**使用该变量的文件中**声明**它，但仅可在**一个**文件中**定义**该变量。
 
@@ -115,7 +115,7 @@ int *p3 = NULL; //#include<cstdlib>, 值等于0
 
 ```cpp
 int *p1;
-int **p2 = p1;
+int **p2 = &p1;
 ```
 
 4. 指向数组的指针
@@ -136,7 +136,7 @@ p1(<>);//函数指针使用时可以不用解引用
 6. 指针的数组
 
 ```cpp
-int *p1[5]
+int *p1[5];
 ```
 
 7. 常量指针
@@ -161,13 +161,13 @@ int *const p1 = 0;
 ```cpp
 int i = 2; //i的值可变
 const int &ri = i; //不可通过ri改变i的值
-const int *pib = &i; //不可通过pib改变i的值， 可改变pib的值
-int *const pib = &i; //可通过pib改变i的值， 不可改变pib的值
-const int *const pib = &i;//不可通过pib改变i的值， 不可改变pib的值
+const int *pib1 = &i; //不可通过pib1改变i的值， 可改变pib1的值
+int *const pib2 = &i; //可通过pib2改变i的值， 不可改变pib2的值
+const int *const pib3 = &i;//不可通过pib3改变i的值， 不可改变pib3的值
 const int j = 3;
 int &rj = j; //X
-int *pj = j; //X
-int const* pj = j; //X，必须是底层const才能绑定const对象。
+int *pj = &j; //X
+int const* pj2 = &j; //合法，底层const可以绑定const对象。
 /*
 class A{
 public:
@@ -197,10 +197,10 @@ constexpr函数需要满足：
 * 函数体中有且只有一条return语句。
 
 ```cpp
-constexpr int *p = null; //p是指向整数的常量指针
-const int *p1 = null;	//p1是指向整数常量的指针
-constexpr const int *p2 = null;	//p2是指向整数常量的常量指针
-const int *const p3 = null;	//p3是指向整数常量的常量指针
+constexpr int *p = nullptr; //p是指向整数的常量指针
+const int *p1 = nullptr;	//p1是指向整数常量的指针
+constexpr const int *p2 = nullptr;	//p2是指向整数常量的常量指针
+const int *const p3 = nullptr;	//p3是指向整数常量的常量指针
 ```
 
 ## static关键字
@@ -239,7 +239,7 @@ public:
         cout << "HelloWorld!" << endl;
     }
     static void HW();
-}
+};
 
 //错误，不可重复static
 static void A::HW(){
@@ -252,7 +252,7 @@ void A::HW(){
 
 int A::d = 10;
 
-constexpr A::e;
+constexpr int A::e;
 
 //void AnotherFunc(const int &A);
 AnotherFunc(A::e);
@@ -286,7 +286,7 @@ typedef char *PC1;
 using PC2 = char*;
 // 此时PC1与PC2表示的类型都是char的指针
 PC1 &p1;
-// 对于这个变量，其类型为PC1的引用即char的指针的引用：char &*p1；而不是char *&p1;
+// 对于这个变量，其类型为PC1的引用即char的指针的引用：char *&p1；而不是char &*p1;
 // 对PC2同理，但PC2更容易犯这样的错误，如PC2& = (char*)& = char*&这样的理解是绝对不行的。
 ```
 
@@ -303,9 +303,9 @@ PC1 &p1;
 ```cpp
 int i = 2;
 int &a = i;
-int *p = i;
-const int *p1 = i;
-const int *const p2 = i;
+int *p = &i;
+const int *p1 = &i;
+const int *const p2 = &i;
 auto ii = i; //ii为int
 auto aa = a; //aa为int
 auto pp = p; //pp为int*
@@ -313,10 +313,10 @@ auto pp1 = p1; //pp1为 const int*
 auto pp2 = p2; //pp2为 const int*
 
 auto &raa = a; //raa为int&
-const auto cpp1 = p1; //cpp1为 const int const*
+const auto cpp1 = p1; //cpp1为 const int *const
 const auto &rii = i; //rii为 const int&
 
-auto b = rii, c = raa;//X, rii为const int, raa为int
+auto b = rii, c = raa;//合法, rii与raa均为int（auto会舍弃顶层const与引用）
 ```
 
 ### decltype关键字
@@ -334,7 +334,7 @@ int &r = i;
 int *const p = &i;
 
 decltype(r) rr = i; //rr为 int&
-decltype(p) pp = null;//pp为 int *const
+decltype(p) pp = nullptr;//pp为 int *const
 ```
 
 ### 复杂声明的理解
