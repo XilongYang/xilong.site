@@ -3,26 +3,23 @@
     <head>
         <title>从零开始的Haskell（五）——更多多态与类型类 - Xilong Yang</title>
             <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <!-- Icons -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/res/apple-touch-icon.png">
-    <!-- Style & Script -->
-    <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
-    <script src="/scripts/anti-flash.js"></script>
-    <link href="/style/wrapper.css" rel="stylesheet">
-    <link id="code-style" href="/res/latex-css-1.13.0/prism/prism-one-light.css" rel="stylesheet">
-    <link id="img-invert" href="" rel="stylesheet">
-    <script src="/scripts/init.js" defer type="module"></script>
-    <script src="/res/latex-css-1.13.0/prism/prism.js"></script>
-    <script src="/res/mathjax-4.0.0/tex-chtml.js" id="MathJax-script" async></script>
-
-    </head>
+            <meta name="viewport" content="width=device-width,initial-scale=1.0">
+            <!-- Icons -->
+            <link rel="icon" href="/favicon.ico" type="image/x-icon">
+            <link rel="apple-touch-icon" href="/res/apple-touch-icon.png">
+            <!-- Style & Script -->
+            <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+            <script src="/scripts/anti-flash.js"></script>
+            <link href="/style/wrapper.css" rel="stylesheet">
+            <link id="code-style" href="/res/latex-css-1.13.0/prism/prism-one-light.css" rel="stylesheet">
+            <link id="img-invert" href="" rel="stylesheet">
+            <script src="/scripts/init.js" defer type="module"></script>
+            <script src="/res/latex-css-1.13.0/prism/prism.js"></script>
+            <script src="/res/mathjax-4.0.0/tex-chtml.js" id="MathJax-script" async></script>    </head>
     <body>
         <div class="navbar">
-    <i class="material-icons icon" id="darkmode">dark_mode</i>
-</div>
-        <div class="header">
+            <i class="material-icons icon" id="darkmode">dark_mode</i>
+        </div>        <div class="header">
             <h1>从零开始的Haskell（五）——更多多态与类型类</h1>
             <p class="author">Xilong Yang<br>2021-09-10</p>
         </div>
@@ -239,31 +236,27 @@ sumL x = sum (toList x)</code></pre>
             <p>只要类型变量在函数定义中，我们就可以为它指定类型类。注意，这个函数并不是递归函数，调用的<code>toList x</code>与<code>toList y</code>是其它类型的实例，而不是该函数本身。</p>
         </main>
         <div class="navigator">
-    <i class="material-icons icon" id="search-button">search</i>
-    <i class="material-icons icon" id="back-top">arrow_upward</i>
-    <i class="material-icons icon" id="go-bottom">arrow_downward</i>
-</div>
-        <div id="search-panel" tabindex="0">
-    <div id="search-bar">
-        <i class="material-icons" id="search-hint">search</i>
-        <input type="text" id="search-box">
-        <button id="search-close">
-            <i class="material-icons icon">close</i>
-        </button>
-    </div>
-    <div id="search-result">
-        <div id="search-loading" class="material-icons">autorenew</div>
-    </div>
-</div>
-        <div class="footnotes">
-    © 2019-<span id="current-year"></span> <a href="https://xilong.site">Xilong Yang</a>
-    | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
-    | Powered by
-    <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
-    <a href="https://github.com/PrismJS/prism/">Prism</a>,
-    <a href="https://github.com/mathjax/MathJax">MathJax</a>
-    <div class="slogan">Amid the sixpences, may you find your moon.</div>
-</div>
-
-    </body>
+            <i class="material-icons icon" id="search-button">search</i>
+            <i class="material-icons icon" id="back-top">arrow_upward</i>
+            <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+        </div>        <div id="search-panel" tabindex="0">
+                  <div id="search-bar">
+                      <i class="material-icons" id="search-hint">search</i>
+                      <input type="text" id="search-box">
+                      <button id="search-close">
+                          <i class="material-icons icon">close</i>
+                      </button>
+                  </div>
+                  <div id="search-result">
+                      <div id="search-loading" class="material-icons">autorenew</div>
+                  </div>
+              </div>        <div class="footnotes">
+                  © 2019-<span id="current-year"></span> <a href="https://xilong.site">Xilong Yang</a>
+                  | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+                  | Powered by
+                  <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+                  <a href="https://github.com/PrismJS/prism/">Prism</a>,
+                  <a href="https://github.com/mathjax/MathJax">MathJax</a>
+                  <div class="slogan">Amid the sixpences, may you find your moon.</div>
+              </div>    </body>
 </html>

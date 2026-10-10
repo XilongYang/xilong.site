@@ -2,10 +2,10 @@
 <html>
     <head>
         <title>Xilong Yang</title>
-        <!--<common_head>-->
+        ${ component/common_head() }
     </head>
     <body>
-        <!--<navbar>-->
+        ${ component/navbar() }
         <div class="header">
             <h1>Xilong Yang</h1>
         </div>
@@ -33,12 +33,25 @@
                     <span id="post-filter-input" contenteditable="true"></span>
                 </h2>
                 <div id="posts_wrapper">
-                $posts$
+                <div class="post-wrapper">
+$for(posts)$
+$if(posts.newYear)$
+                    <div class="post-year-wrapper" style="display: block;">
+                        <h3>$posts.year$</h3>
+$endif$
+                        <div class="post-wrapper" style="display: block;">
+                            <p>$posts.monthDay$ <a href="$posts.url$">$posts.title$</a></p>
+                        </div>
+$if(posts.lastOfYear)$
+                    </div>
+$endif$
+$endfor$
+                </div>
                 </div>
             </article>
         </main>
-        <!--<navigator>-->
-        <!--<search_panel>-->
-        <!--<footnotes>-->
+        ${ component/navigator() }
+        ${ component/search_panel() }
+        ${ component/footnotes() }
     </body>
 </html>
