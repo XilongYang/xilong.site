@@ -19,7 +19,7 @@ date: 2021-07-19
 
 也许你会疑惑，这么浅显的地方怎么会翻车，看了这个翻车实况或许就会发现你也可能犯这样的错误。
 
-起因是昨天写[二叉树的层序遍历](/posts/014_The_Level_Order_Iteration_of_Binary_Tree.html)时，需要一个C++的实现，方便起见，我定义了一个非常简单的二叉链表结构来构造二叉树：
+起因是昨天写[二叉树的层序遍历](/post/The_Level_Order_Iteration_of_Binary_Tree.html)时，需要一个C++的实现，方便起见，我定义了一个非常简单的二叉链表结构来构造二叉树：
 
 ```cpp
 struct Tree {

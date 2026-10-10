@@ -138,7 +138,7 @@ a = C True (C False (C True E))
 
 ## Prelude
 
-[Prelude](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/base-4.15.0.0/Prelude.html)是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如`filter`和`map`就是`filterList`和`map`在`Prelude`中的对应版本。另外，`Data.List`模块中定义了一个更强大的`List`类型。
+[Prelude](https://hackage.haskell.org/package/base-4.15.0.0/docs/Prelude.html)是一个所有Haskell程序都默认包括的模块，定义了很多常用的多态数据类型和多态函数。例如`filter`和`map`就是`filterList`和`map`在`Prelude`中的对应版本。另外，`Data.List`模块中定义了一个更强大的`List`类型。
 
 此外，一个常用的多态数据类型是`Maybe`，定义为：
 
