@@ -57,9 +57,9 @@ f = 'change to string'
 
 ```python
 # 占位符
-'Hello,%s %d %.2f, %02d' % ('World!', 123, 3.14159, 1) # Hello,World! 123 3.14 01
+'Hello,%s %d %.2f, %02d' % ('World!', 123, 3.14159, 1) # Hello,World! 123 3.14, 01
 # format(),用{0}{1}...当占位符
-'Hello,{0}:{1:.1f}'.format('World!', 3.14159) # Hello,World:3.1
+'Hello,{0}:{1:.1f}'.format('World!', 3.14159) # Hello,World!:3.1
 ```
 
 ### list、tuple和dict、set
@@ -73,9 +73,9 @@ l = [1, 2, 3, 4]
 # tuple用()定义，不可变长，不可变元素值，可用下标位序取值
 t = (1, 2, 3, 4)
 t1 = (1, ) # 若无逗号则为整数1
-# dict用{}定义， 类似c++的map; set用([])定义，类似set
+# dict用{}定义， 类似c++的map; set用{}定义（或set()函数），类似set
 d = {a:1, 2:b, 3:c} # d[a] = 1, d[2] = b, d[3] = c
-s = ([1, 1, 2, 2, 3, 4]) # set自动去重，s = {1, 2, 3, 4}
+s = {1, 1, 2, 2, 3, 4} # set自动去重，s = {1, 2, 3, 4}
 ```
 
 #### 操作
@@ -87,7 +87,7 @@ s = ([1, 1, 2, 2, 3, 4]) # set自动去重，s = {1, 2, 3, 4}
    4. l.insert(pos, vue)
 2. dict
    1. 'keyvalue' in d //d中是否存在key值为‘keyvalue’
-   2. d.get('keyvalue', -1) //无'keyvalue'时返回-1，没有第二个参数则无返回值
+   2. d.get('keyvalue', -1) //无'keyvalue'时返回-1，没有第二个参数则返回None
    3. d.pop('keyvalue') //删除keyvalue
 3. set
    1. add(key)
@@ -119,7 +119,7 @@ for x in l:
 # 可用range(10)生成0-9的列表
 # while
 while condition:
-    psss
+    pass
 ```
 
 ## 函数
@@ -128,42 +128,42 @@ while condition:
 def Add(x, y):
     return x+y
 
-def Dont_Do_Anything(x, y)
-	return x, y
+def Dont_Do_Anything(x, y):
+    return x, y
 #隐式返回一个元组
 
-def Default_Function(x, y=2)
-	return x**y;
+def Default_Function(x, y=2):
+    return x**y
 #默认参数
 
-def Add_End(L)
-	L.append('End')
+def Add_End(L):
+    L.append('End')
     return L
 #多次调用会出现{End, End, End}，原因：参数并非临时变量，故而改进
 
-def Add_End_Fixed(L=None)
+def Add_End_Fixed(L=None):
     if L is None:
         L = []
     L.append('End')
     return L
 
-def Calc(*numbers)
-	sum = 0
-	for x in numbers:
+def Calc(*numbers):
+    sum = 0
+    for x in numbers:
         sum += x
     return sum
 #可变数量参数，隐式生成一个tuple, 已有list或tuple可直接前加*传入
 
-def person(name, age, **kw)
-	if 'key' in kw:
+def person(name, age, **kw):
+    if 'key' in kw:
         pass
 
 # 关键字参数，调用时连关键字一同写入，如person('Jack', 23, city='Heaven')
-def person(name, *, city, age)
-	pass
+def person(name, *, city, age):
+    pass
 
-def person(name, *age, city)
-	pass
+def person(name, *age, city):
+    pass
 # 命名关键字参数，跟在可变数量参数或一个空*参数后，只能传入指定关键字
 ```
 
@@ -180,7 +180,7 @@ class My_Class(object):
 # 括号内表示父类，object是python中的根基类；__init__()相当于构造函数
 # 构造函数外的属性相当于static成员
 
-mc = MyClass('Jack', 70)
+mc = My_Class('Jack', 70)
 mc.age = 10
 # 通过构造函数来实例化类对象，可以给对象添加属性
 # 使用del mc.age删除属性
@@ -231,12 +231,12 @@ L[-2:] #-1可省略
 [x * x for x in range(1, 11) if x % 2 == 0] # 2x2,4x4...10x10
 [m + n for m in 'ABC' for n in 'DEF'] # ABC与DEF的全排列
 # 当if出现在for后面时，不可带else
-# 当if出现在fot前面时，必须带else
+# 当if出现在for前面时，必须带else
 ```
 
 ### 生成器
 
-生成器仅存储一个生成方法而不是具体对象，有肋于节省空间。
+生成器仅存储一个生成方法而不是具体对象，有助于节省空间。
 
 方法1: 用(express)生成一个生成器(generator)
 
@@ -251,7 +251,7 @@ for n in g:
 ```python
 # 输出斐波那契数列的函数如下
 # a, b = b, a + b => a, b = (b, a + b) => a = b  b = a + b(a与b的值同时改变)
- def fib(max):
+def fib(max):
     n, a, b = 0, 0, 1
     while n < max:
         print(b)

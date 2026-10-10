@@ -40,7 +40,7 @@ date: 2021-07-21
 | multiset           | key可重复出现的set。        |
 | unordered_multiset | multiset的无序版本。        |
 
-有序关联容器要求key值类型必顺定义<运算符。无序关联容器则要求key值定义==运算符。
+有序关联容器要求key值类型必须定义<运算符。无序关联容器则要求key值定义==运算符。
 
 ## 容器操作
 
@@ -54,7 +54,7 @@ date: 2021-07-21
 
 `size_type`: 无符号整数类型，保存最大容器大小。
 
-`differenct_type`: 带符号整数类型，保存两个迭代器间的距离。
+`difference_type`: 带符号整数类型，保存两个迭代器间的距离。
 
 `value_type`: 元素类型。
 
@@ -86,7 +86,7 @@ date: 2021-07-21
 
 `c.max_size()`：c最大可保存元素数目。
 
-`c.empty`：c是否为空。
+`c.empty()`：c是否为空。
 
 #### 增删元素（array不可用）
 
@@ -132,7 +132,7 @@ date: 2021-07-21
 
 #### 赋值
 
-`seq.assign(range)`：将seq中元素替换为迭代器range中的元素，b的e不可指向seq中的元素。
+`seq.assign(range)`：将seq中元素替换为迭代器range中的元素，b和e不可指向seq中的元素。
 
 #### 关系运算符
 
@@ -201,7 +201,7 @@ date: 2021-07-21
 
 #### 缓存操作
 
-`c.shrink_to_fit()`：将实际内存占用减少为与size()相同。只适用于vector，string和deque
+`c.shrink_to_fit()`：将实际内存占用减少为与size()相同。只适用于vector，string和deque。
 
 `c.capacity()`：已分配的实际内存可以保存多少元素。只适用于vector和string。
 
@@ -213,9 +213,9 @@ date: 2021-07-21
 
 `string s(cp, n)`：cp指向数组中前n个字符。
 
-`string s(s2, pos, len = 0)`：字符串s2从下标pos开始的len个字符。下标越界则UB。
+`string s(s2, pos, len = string::npos)`：字符串s2从下标pos开始的len个字符，默认取到s2末尾。下标越界则UB。
 
-`s.sub_str(pos = 0, n = s.size() - pos)`：返回s从下标pos开始的n的字符的拷贝。
+`s.substr(pos = 0, n = s.size() - pos)`：返回s从下标pos开始的n个字符的拷贝。
 
 ##### 搜索
 
@@ -253,7 +253,7 @@ args为以下形式之一：
 
 `pos1, n1, s2`：从pos1开始的n1个字符与s2比较。
 
-`pos1, n1, s2, pos2, n2`：从pos1开始的n1人字符与s2中从pos2开始的n2的字符比较。
+`pos1, n1, s2, pos2, n2`：从pos1开始的n1个字符与s2中从pos2开始的n2的字符比较。
 
 `cp`：与C风格字符串cp比较。
 
@@ -275,7 +275,7 @@ args为以下形式之一：
 
 * stack
 
-  `s.pop`：删除栈顶元素。
+  `s.pop()`：删除栈顶元素。
 
   `s.push(item)`：压入元素item的拷贝或移动。
 
@@ -289,9 +289,9 @@ args为以下形式之一：
 
   `q.pop()`：删除queue的首元素或priority_queue最高优先级的元素。
 
-  `s.push(item)`：加入元素item的拷贝或移动。
+  `q.push(item)`：加入元素item的拷贝或移动。
 
-  `s.emplace(args)`：加入由args构造的元素。
+  `q.emplace(args)`：加入由args构造的元素。
 
   // 仅适用于queue
 
@@ -317,7 +317,7 @@ args为以下形式之一：
 
 ##### 插入元素
 
-`c.insert(v)`：对于map和set，key值重复的插入会失败，返回一个bool表示是否成功。而multimap和multiset可以插入key值重复的元素，返回指向该元素的迭代器。
+`c.insert(v)`：对于map和set，返回一个pair，包含指向该元素的迭代器和一个bool表示是否插入成功；key值重复时插入会失败。而multimap和multiset可以插入key值重复的元素，只返回指向该元素的迭代器。
 
 `c.emplace(args)`：行为同上，使用args构建元素。
 
@@ -355,7 +355,7 @@ args为以下形式之一：
 
 ##### 无序容器
 
-无序容器`unorderd_map`和`unordered_set`，在存储上组织为一组桶，每个桶保存0或多个元素。使用hash函数将元素映射到桶。因此，无序元素的性能依赖于hash函数的质量和桶的数量与大小。
+无序容器`unordered_map`和`unordered_set`，在存储上组织为一组桶，每个桶保存0或多个元素。使用hash函数将元素映射到桶。因此，无序元素的性能依赖于hash函数的质量和桶的数量与大小。
 
 适用于有序容器的操作也适用于无序容器，此外无序容器提供了一组管理桶的函数：
 
@@ -386,6 +386,6 @@ args为以下形式之一：
 T1 hash(args);
 bool equal(T2 a, T2 b);
 // 由于模版参数接受的是类型，使用decltype取得函数的类型。
-unordered_map<T2, decltype(hash)*, decltype(equal)*> foo;
+unordered_set<T2, decltype(hash)*, decltype(equal)*> foo;
 ```
 

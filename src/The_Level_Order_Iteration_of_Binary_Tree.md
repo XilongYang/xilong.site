@@ -20,9 +20,10 @@ date: 2021-07-18
 View:
   queue.push Tree
   while !queue.empty:
-    if (Tree.left) queue.push Tree.left
-    if (Tree.right) queue.push Tree.right
-    Tree.show
+    cur = queue.front
+    if (cur.left) queue.push cur.left
+    if (cur.right) queue.push cur.right
+    cur.show
     queue.pop
 ```
 

@@ -10,7 +10,7 @@ On my journey through Chapter 2 of CSAPP, some magical tricks appeared intermitt
 
 ## Fold bits
 
-Consider that we get a mission to check if all the odd-numbered bits in a int are set to 1. What is the faster way?
+Consider that we get a mission to check if all the odd-numbered bits in an int are set to 1. What is the faster way?
 
 The answer is: to fold it.
 
@@ -32,7 +32,7 @@ int allOddBits(int x) {
 }
 ```
 
-By using the fold technic, We can implement logical not without operator `!` by folding the 'or' operation:
+By using the fold technique, we can implement logical not without operator `!` by folding the 'or' operation:
 
 ```c
 /*
@@ -53,7 +53,7 @@ int logicalNeg(int x) {
 }
 ```
 
-Furthermore, we can fill all the bits in the right ( left ) side of the most ( least ) significant bit to 1 by a inverse way (the shift number's order is reversal):
+Furthermore, we can fill all the bits in the right ( left ) side of the most ( least ) significant bit to 1 by an inverse way (the shift number's order is reversed):
 
 ```c
 // All of the bits in the right side of the most significant 1 should set to 1.
@@ -64,7 +64,7 @@ compare = compare | (compare >> 8);
 compare = compare | (compare >> 16);
 ```
 
-By combining those technic, it is possible to compare two integer number x and y without any arithmetic operator or compare operator:
+By combining those techniques, it is possible to compare two integer number x and y without any arithmetic operator or compare operator:
 
 ```c
 /*
@@ -125,9 +125,9 @@ int isLessOrEqual(int x, int y) {
 
 ## Count bits
 
-Consider that we need to find the minimum number of bits required to represent x in two's component. And all of the operators that allowed to use are: `! ~ & ^ | + << >>`.
+Consider that we need to find the minimum number of bits required to represent x in two's complement. And all of the operators that allowed to use are: `! ~ & ^ | + << >>`.
 
-First at all, the minimum number of bits is only decided by the position of the most significant 1 in the number's two's component representation. That is, consider we have `x = 00001010`, the most significant 1 is located at the 4th position from the right. So we can represent x by using 5  bits (don't forget the sign bit).
+First at all, the minimum number of bits is only decided by the position of the most significant 1 in the number's two's complement representation. That is, consider we have `x = 00001010`, the most significant 1 is located at the 4th position from the right. So we can represent x by using 5 bits (don't forget the sign bit).
 
 Wait a minute. How about the negative number? Consider if the x is equals to `11110101`, what is the minimum number of bits to represent it? The answer is also 5 bits. In this situation, we need to find the position of the most significant 0 instead 1. However, it is unnecessary to distinct if the x is negative or positive. Just inverse all of the bits in a negative number, so that we can consider it as a same way to positive numbers.
 
@@ -136,7 +136,7 @@ Wait a minute. How about the negative number? Consider if the x is equals to `11
 x = (x >> 31) ^ x;
 ```
 
-It seems hard to find a easy way to find the position of the most significant 1. So we can fill all of the bits located in the right side of the most significant 1 by using the fold technic, so that the problem that find the most significant 1 is converted to the problem that count the number of bits which is set to 1.
+It seems hard to find an easy way to find the position of the most significant 1. So we can fill all of the bits located in the right side of the most significant 1 by using the fold technique, so that the problem of finding the most significant 1 is converted to the problem of counting the number of bits that are set to 1.
 
 ```C
 // Set the bits in the right side of most significant 1 to 1.
@@ -159,22 +159,22 @@ By using a longer mask, we can count the number of 1s for each 2 bits in a numbe
 
 ```C
 int mask = 0x55555555; // 01010101....
-x = (x & mask) + ((x >> 1) & mask)
+x = (x & mask) + ((x >> 1) & mask);
 ```
 
 After this, the number can be considered as a list of 2 bits numbers. Each 2 bits number in the list saves the number of 1 in those 2 bits. For example:
 
 ```bash
-x                              = 0x01001110
-mask                           = 0x01010101
-x & mask                       = 0x01000100
-(x >> 1) & mask                = 0x00000101
-(x & mask) + ((x >> 1) & mask) = 0x01001101
+x                              = 0b01001110
+mask                           = 0b01010101
+x & mask                       = 0b01000100
+(x >> 1) & mask                = 0b00000101
+(x & mask) + ((x >> 1) & mask) = 0b01001001
 2 bits group of x              = 01 00 11 10
-2 bits group of result         = 01 00 11 01 (numbers of 1s of the 2 bits group of x)
+2 bits group of result         = 01 00 10 01 (numbers of 1s of the 2 bits group of x)
 ```
 
-So we can simply count the 1s for each 4 bits and so far by using a similar way, so that we can implement a function to find the minimum number of bits required to represent x in two's component.:
+So we can simply count the 1s for each 4 bits and so forth by using a similar way, so that we can implement a function to find the minimum number of bits required to represent x in two's complement:
 
 ```C
 /* howManyBits - return the minimum number of bits required to represent x in

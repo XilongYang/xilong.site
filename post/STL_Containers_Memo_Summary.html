@@ -149,7 +149,7 @@
             </tr>
             </tbody>
             </table>
-            <p>有序关联容器要求key值类型必顺定义&lt;运算符。无序关联容器则要求key值定义==运算符。</p>
+            <p>有序关联容器要求key值类型必须定义&lt;运算符。无序关联容器则要求key值定义==运算符。</p>
             <h2 id="容器操作">容器操作</h2>
             <h3 id="通用操作">通用操作</h3>
             <h4 id="类型别名">类型别名</h4>
@@ -157,7 +157,7 @@
             <p><code>const_iterator</code>: 迭代器的只读版本。</p>
             <p><code>size_type</code>:
             无符号整数类型，保存最大容器大小。</p>
-            <p><code>differenct_type</code>:
+            <p><code>difference_type</code>:
             带符号整数类型，保存两个迭代器间的距离。</p>
             <p><code>value_type</code>: 元素类型。</p>
             <p><code>reference</code>:
@@ -177,7 +177,7 @@
             <h4 id="大小">大小</h4>
             <p><code>c.size()</code>：c中元素数目。</p>
             <p><code>c.max_size()</code>：c最大可保存元素数目。</p>
-            <p><code>c.empty</code>：c是否为空。</p>
+            <p><code>c.empty()</code>：c是否为空。</p>
             <h4 id="增删元素array不可用">增删元素（array不可用）</h4>
             <p><code>c.insert(args)</code>：将args中的元素拷贝进c。</p>
             <p><code>c.emplace(inits)</code>：使用inits构造c中的一个元素。inits必需与元素的构造函数匹配。</p>
@@ -203,7 +203,7 @@
             <p><code>C seq(n)</code>：一个包含n个元素的顺序容器。</p>
             <p><code>C seq(range)</code>：一个元素为range的顺序容器。</p>
             <h4 id="赋值">赋值</h4>
-            <p><code>seq.assign(range)</code>：将seq中元素替换为迭代器range中的元素，b的e不可指向seq中的元素。</p>
+            <p><code>seq.assign(range)</code>：将seq中元素替换为迭代器range中的元素，b和e不可指向seq中的元素。</p>
             <h4 id="关系运算符-1">关系运算符</h4>
             <p>两个大小相等且对位元素相等的顺序容器相等。</p>
             <p>顺序容器a是另一个顺序容器b的前缀子序列时，a &lt; b。</p>
@@ -244,14 +244,14 @@
             <p><code>lst_insert_after(p, args)</code>，<code>emplace_after(p, inits)</code>：在p后添加元素，参数形式与通用的insert相同。</p>
             <p><code>lst_erase_after(p)</code>，<code>lst_erase_after(p, e)</code>：删除p之后的一个或一段元素，返回下一个位置。</p>
             <h4 id="缓存操作">缓存操作</h4>
-            <p><code>c.shrink_to_fit()</code>：将实际内存占用减少为与size()相同。只适用于vector，string和deque</p>
+            <p><code>c.shrink_to_fit()</code>：将实际内存占用减少为与size()相同。只适用于vector，string和deque。</p>
             <p><code>c.capacity()</code>：已分配的实际内存可以保存多少元素。只适用于vector和string。</p>
             <p><code>c.reserve(n)</code>：分配至少能容纳n个元素的空间。只适用于vector和string。</p>
             <h4 id="string特有操作">string特有操作</h4>
             <h5 id="截取">截取</h5>
             <p><code>string s(cp, n)</code>：cp指向数组中前n个字符。</p>
-            <p><code>string s(s2, pos, len = 0)</code>：字符串s2从下标pos开始的len个字符。下标越界则UB。</p>
-            <p><code>s.sub_str(pos = 0, n = s.size() - pos)</code>：返回s从下标pos开始的n的字符的拷贝。</p>
+            <p><code>string s(s2, pos, len = string::npos)</code>：字符串s2从下标pos开始的len个字符，默认取到s2末尾。下标越界则UB。</p>
+            <p><code>s.substr(pos = 0, n = s.size() - pos)</code>：返回s从下标pos开始的n个字符的拷贝。</p>
             <h5 id="搜索">搜索</h5>
             <p>string提供了六个不同的搜索函数，每个函数又有4个重载版本。它们成功时返回匹配位置的下标，失败则返回<code>string::npos</code>。返回数类型都是<code>string::size_type</code>，是无符号整数类型。</p>
             <p><code>s.find(args)</code>：args第一次出现的位置。</p>
@@ -270,7 +270,7 @@
             <p>args为以下形式之一：</p>
             <p><code>s2</code>：与字符串s2比较。</p>
             <p><code>pos1, n1, s2</code>：从pos1开始的n1个字符与s2比较。</p>
-            <p><code>pos1, n1, s2, pos2, n2</code>：从pos1开始的n1人字符与s2中从pos2开始的n2的字符比较。</p>
+            <p><code>pos1, n1, s2, pos2, n2</code>：从pos1开始的n1个字符与s2中从pos2开始的n2的字符比较。</p>
             <p><code>cp</code>：与C风格字符串cp比较。</p>
             <p><code>pos1, n1, cp</code>：从pos1开始的n1个字符与cp比较。</p>
             <p><code>pos1, n1, cp, n2</code>：从pos1开始的n1个字符与从cp开始的n2个字符比较。</p>
@@ -285,15 +285,15 @@
             <p><code>container_type</code>：实现适配器的底层容器类型。</p>
             <ul>
             <li><p>stack</p>
-            <p><code>s.pop</code>：删除栈顶元素。</p>
+            <p><code>s.pop()</code>：删除栈顶元素。</p>
             <p><code>s.push(item)</code>：压入元素item的拷贝或移动。</p>
             <p><code>s.emplace(args)</code>：压入由args构造的元素。</p>
             <p><code>s.top()</code>：返回栈顶元素。</p></li>
             <li><p>queue &amp; priority_queue</p>
             <p>// 通用</p>
             <p><code>q.pop()</code>：删除queue的首元素或priority_queue最高优先级的元素。</p>
-            <p><code>s.push(item)</code>：加入元素item的拷贝或移动。</p>
-            <p><code>s.emplace(args)</code>：加入由args构造的元素。</p>
+            <p><code>q.push(item)</code>：加入元素item的拷贝或移动。</p>
+            <p><code>q.emplace(args)</code>：加入由args构造的元素。</p>
             <p>// 仅适用于queue</p>
             <p><code>q.front()</code>：返回首元素。</p>
             <p><code>q.back()</code>：返回尾元素。</p>
@@ -307,7 +307,7 @@
             <h5 id="遍历">遍历</h5>
             <p>可以通过<code>begin()</code>和<code>end()</code>获取对应的迭代器从而实现遍历。</p>
             <h5 id="插入元素">插入元素</h5>
-            <p><code>c.insert(v)</code>：对于map和set，key值重复的插入会失败，返回一个bool表示是否成功。而multimap和multiset可以插入key值重复的元素，返回指向该元素的迭代器。</p>
+            <p><code>c.insert(v)</code>：对于map和set，返回一个pair，包含指向该元素的迭代器和一个bool表示是否插入成功；key值重复时插入会失败。而multimap和multiset可以插入key值重复的元素，只返回指向该元素的迭代器。</p>
             <p><code>c.emplace(args)</code>：行为同上，使用args构建元素。</p>
             <p><code>c.insert(b, e)</code>：插入迭代器范围内的元素。</p>
             <p><code>c.insert(li)</code>：插入初始化列表中的元素。</p>
@@ -326,7 +326,7 @@
             <p><code>c.upper_bound(k)</code>：返回指向第一个key值大于k的元素的迭代器。</p>
             <p><code>c.equal_range(k)</code>：返回一个迭代器pair，表示关键字等于k的元素的范围。</p>
             <h5 id="无序容器">无序容器</h5>
-            <p>无序容器<code>unorderd_map</code>和<code>unordered_set</code>，在存储上组织为一组桶，每个桶保存0或多个元素。使用hash函数将元素映射到桶。因此，无序元素的性能依赖于hash函数的质量和桶的数量与大小。</p>
+            <p>无序容器<code>unordered_map</code>和<code>unordered_set</code>，在存储上组织为一组桶，每个桶保存0或多个元素。使用hash函数将元素映射到桶。因此，无序元素的性能依赖于hash函数的质量和桶的数量与大小。</p>
             <p>适用于有序容器的操作也适用于无序容器，此外无序容器提供了一组管理桶的函数：</p>
             <p><code>c.bucket_count()</code>：正在使用的桶的数目。</p>
             <p><code>c.max_bucket_count()</code>：容器能容纳的最多的桶的数目。</p>
@@ -345,7 +345,7 @@
 T1 hash(args);
 bool equal(T2 a, T2 b);
 // 由于模版参数接受的是类型，使用decltype取得函数的类型。
-unordered_map&lt;T2, decltype(hash)*, decltype(equal)*&gt; foo;</code></pre>
+unordered_set&lt;T2, decltype(hash)*, decltype(equal)*&gt; foo;</code></pre>
         </main>
         <div class="navigator">
             <i class="material-icons icon" id="search-button">search</i>

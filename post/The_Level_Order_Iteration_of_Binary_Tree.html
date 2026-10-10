@@ -48,9 +48,10 @@
 View:
   queue.push Tree
   while !queue.empty:
-    if (Tree.left) queue.push Tree.left
-    if (Tree.right) queue.push Tree.right
-    Tree.show
+    cur = queue.front
+    if (cur.left) queue.push cur.left
+    if (cur.right) queue.push cur.right
+    cur.show
     queue.pop</code></pre>
             <h2 id="c实现">C++实现</h2>
             <pre class="language-cpp line-numbers match-braces"><code>#include &lt;iostream&gt;
