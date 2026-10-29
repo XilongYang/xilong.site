@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Xilong Yang</title>
+    <subtitle>Amid the sixpences, may you find your moon.</subtitle>
+    <id>$site-url$/</id>
+    <link rel="alternate" type="text/html" href="$site-url$/" />
+    <link rel="self" type="application/atom+xml" href="$site-url$/atom.xml" />
+    <author>
+        <name>Xilong Yang</name>
+    </author>
+    <rights>CC BY-NC 4.0</rights>
+    <generator>kiln</generator>
+$for(posts)$$if(posts.first)$    <updated>$posts.date$T00:00:00Z</updated>
+$endif$$endfor$
+$for(posts)$
+    <entry>
+        <title type="html"><![CDATA[$posts.title$]]></title>
+        <id>$posts.url$</id>
+        <link rel="alternate" type="text/html" href="$posts.url$" />
+        <updated>$posts.date$T00:00:00Z</updated>
+        <!-- Every post here opens with an abstract, which is what
+             `abstract` holds and what `content` therefore starts after.
+             A feed carries the whole article, so it needs both, in the
+             order the page itself shows them. -->
+        <content type="html"><![CDATA[$posts.abstract$
+$posts.content$]]></content>
+    </entry>
+$endfor$
+</feed>
