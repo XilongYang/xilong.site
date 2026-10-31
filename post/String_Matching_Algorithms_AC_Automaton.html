@@ -7,17 +7,24 @@
             <!-- Icons -->
             <link rel="icon" href="/favicon.ico" type="image/x-icon">
             <link rel="apple-touch-icon" href="/res/apple-touch-icon.png">
-            <!-- Feed -->
+            <!-- Feed: lets a reader subscribe from the site's URL alone -->
             <link rel="alternate" type="application/atom+xml" title="Xilong Yang" href="/atom.xml">
-            <!-- Style & Script -->
+            <!-- Stylesheets -->
             <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
-            <script src="/scripts/anti-flash.js"></script>
             <link href="/style/wrapper.css" rel="stylesheet">
             <link id="code-style" href="/res/latex-css-1.13.0/prism/prism-one-light.css" rel="stylesheet">
             <link id="img-invert" href="" rel="stylesheet">
-            <script src="/scripts/init.js" defer type="module"></script>
+
+            <!-- Must run right after the stylesheets above, before first paint, to swap in the dark variant -->
+            <script src="/scripts/classic/anti-flash.js"></script>
+
+            <!-- Must run before tex-chtml.js: sets window.MathJax before MathJax's own script executes -->
+            <script src="/scripts/classic/mathjax-config.js"></script>
+            <script src="/res/mathjax-4.0.0/tex-chtml.js" id="MathJax-script" async></script>
+
+            <!-- Feature scripts -->
             <script src="/res/latex-css-1.13.0/prism/prism.js"></script>
-            <script src="/res/mathjax-4.0.0/tex-chtml.js" id="MathJax-script" async></script>    </head>
+            <script src="/scripts/init.js" defer type="module"></script>    </head>
     <body>
         <div class="navbar">
             <i class="material-icons icon" id="darkmode">dark_mode</i>
@@ -264,10 +271,11 @@ private:
                       <div id="search-loading" class="material-icons">autorenew</div>
                   </div>
               </div>        <div class="footnotes">
-                  © 2019-<span id="current-year"></span> <a href="https://xilong.site">Xilong Yang</a>
+                  © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
                   | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
                   | <a href="/atom.xml">RSS</a>
                   | Powered by
+                  <a href="https://github.com/xilongyang/kiln">Kiln</a>,
                   <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
                   <a href="https://github.com/PrismJS/prism/">Prism</a>,
                   <a href="https://github.com/mathjax/MathJax">MathJax</a>

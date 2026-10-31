@@ -8,7 +8,9 @@ import {clearErrorMsg, inputFilter, refreshFilter, toggleInput} from "./post-fil
 refreshDarkMode()
 
 var darkmode = document.getElementById('darkmode')
-darkmode.addEventListener('click', switchDarkMode)
+if (darkmode != null) {
+    darkmode.addEventListener('click', switchDarkMode)
+}
 
 var toc = document.getElementById('toc-control')
 if (toc != null) {
@@ -16,33 +18,49 @@ if (toc != null) {
 }
 
 var currentYear = document.getElementById('current-year')
-currentYear.innerText = getCurrentYear()
+if (currentYear != null) {
+    currentYear.innerText = getCurrentYear()
+}
 
 var backTopButton = document.getElementById('back-top')
-backTopButton.addEventListener('click', backTop)
+if (backTopButton != null) {
+    backTopButton.addEventListener('click', backTop)
+}
 
 var goBottomButton = document.getElementById('go-bottom')
-goBottomButton.addEventListener('click', goBottom)
+if (goBottomButton != null) {
+    goBottomButton.addEventListener('click', goBottom)
+}
 
 var searchButton = document.getElementById("search-button")
-searchButton.addEventListener("click", openPanel)
+if (searchButton != null) {
+    searchButton.addEventListener("click", openPanel)
+}
 
 var closeSearchButton = document.getElementById("search-close")
-closeSearchButton.addEventListener('click', closePanel)
+if (closeSearchButton != null) {
+    closeSearchButton.addEventListener('click', closePanel)
+}
 
 var searchBox = document.getElementById("search-box")
-searchBox.addEventListener('input', search)
+if (searchBox != null) {
+    searchBox.addEventListener('input', search)
+}
 
 var antiFlash = document.getElementById("anti-flash")
-antiFlash.parentNode.removeChild(antiFlash)
+if (antiFlash != null) {
+    antiFlash.parentNode.removeChild(antiFlash)
+}
 
 var postFilter = document.getElementById("post-filter")
 if (postFilter != null) {
     postFilter.addEventListener('click', toggleInput)
 
     var postFilterInput = document.getElementById("post-filter-input")
-    postFilterInput.addEventListener('keypress', inputFilter)
-    postFilterInput.addEventListener('input', inputFilter)
-    postFilterInput.addEventListener('focus', clearErrorMsg)
-    postFilterInput.addEventListener('focusout', refreshFilter)
+    if (postFilterInput != null) {
+        postFilterInput.addEventListener('keypress', inputFilter)
+        postFilterInput.addEventListener('input', inputFilter)
+        postFilterInput.addEventListener('focus', clearErrorMsg)
+        postFilterInput.addEventListener('focusout', refreshFilter)
+    }
 }
