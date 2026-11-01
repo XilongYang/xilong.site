@@ -27,7 +27,9 @@
             <script src="/scripts/init.js" defer type="module"></script>    </head>
     <body>
         <div class="navbar">
-            <i class="material-icons icon" id="darkmode">dark_mode</i>
+            <button type="button" class="icon icon-button" id="darkmode" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="material-icons" id="darkmode-icon" aria-hidden="true">dark_mode</i>
+            </button>
         </div>        <div class="header">
             <h1>从零开始的Haskell（一）——Haskell基础</h1>
             <p class="author">Xilong Yang<br>2021-06-10</p>
@@ -39,7 +41,9 @@
         <nav role="navigation" class="toc">
             <h2>
                 Contents
-                <i class="material-icons icon" id="toc-control">remove</i>
+                <button type="button" class="icon icon-button" id="toc-control" aria-label="Toggle contents" aria-expanded="true" aria-controls="toc-items">
+                    <i class="material-icons" id="toc-control-icon" aria-hidden="true">remove</i>
+                </button>
             </h2>
             <div id="toc-items" style="display: inherit;">
                 <ol>
@@ -441,19 +445,25 @@ hailstoneLen n = intListLength (hailstoneSeq n) - 1</code></pre>
             <p>乍一看头都大了，怎么这么长一串报错。实际上耐心看下去就会发现，错误信息包括了出错原因与地点，还层层递进的显示了出错的语法，是非常友好的。</p>
         </main>
         <div class="navigator">
-            <i class="material-icons icon" id="search-button">search</i>
-            <i class="material-icons icon" id="back-top">arrow_upward</i>
-            <i class="material-icons icon" id="go-bottom">arrow_downward</i>
+            <button type="button" class="icon icon-button" id="search-button" aria-label="Search posts">
+                <i class="material-icons" aria-hidden="true">search</i>
+            </button>
+            <button type="button" class="icon icon-button" id="back-top" aria-label="Back to top">
+                <i class="material-icons" aria-hidden="true">arrow_upward</i>
+            </button>
+            <button type="button" class="icon icon-button" id="go-bottom" aria-label="Go to bottom">
+                <i class="material-icons" aria-hidden="true">arrow_downward</i>
+            </button>
         </div>        <div id="search-panel" tabindex="0">
                   <div id="search-bar">
-                      <i class="material-icons" id="search-hint">search</i>
-                      <input type="text" id="search-box" placeholder="Input to search posts, opts: &amp; | ~ ()">
-                      <button id="search-close">
-                          <i class="material-icons icon">close</i>
+                      <i class="material-icons" id="search-hint" aria-hidden="true">search</i>
+                      <input type="text" id="search-box" aria-label="Search posts" placeholder="Input to search posts, opts: &amp; | ~ ()">
+                      <button type="button" id="search-close" aria-label="Close search">
+                          <i class="material-icons icon" aria-hidden="true">close</i>
                       </button>
                   </div>
                   <div id="search-result">
-                      <div id="search-loading" class="material-icons">autorenew</div>
+                      <div id="search-loading" class="material-icons" aria-hidden="true">autorenew</div>
                   </div>
               </div>        <div class="footnotes">
                   © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
