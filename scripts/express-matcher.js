@@ -234,14 +234,21 @@ function expressionCompress(matchTree) {
     return matchTree
 }
 
-function expressionMatch(matchTree, str) {
+// `hits`, when given, collects the terms that tested true along the path taken.
+// Short-circuiting keeps untested terms out, but a negated term may still land
+// there -- it is a highlighting hint, not a record of why the match succeeded.
+function expressionMatch(matchTree, str, hits) {
     // Parsing keeps spaces, so trim only drops operator padding; inner ones count.
-    var isSuccess = str.includes(matchTree.exp.trim())
+    var exp = matchTree.exp.trim()
+    var isSuccess = str.includes(exp)
+    if (isSuccess && hits != undefined && exp != "") {
+        hits.push(exp)
+    }
     var next = isSuccess ? matchTree.successNext : matchTree.failureNext
     if (typeof(next) == 'boolean') {
         return next;
     }
-    return expressionMatch(next, str)
+    return expressionMatch(next, str, hits)
 }
 
 
