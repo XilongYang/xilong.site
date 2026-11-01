@@ -32,13 +32,18 @@ function toggleInput() {
     if(filterIcon.classList.contains("icon-active")) {
         filterIcon.classList.add("icon")
         filterIcon.classList.remove("icon-active")
+        filterIcon.setAttribute("aria-expanded", "false")
         input.style.display = "none"
         input.innerHTML = ""
         refreshFilter()
     } else {
         filterIcon.classList.add("icon-active")
         filterIcon.classList.remove("icon")
+        filterIcon.setAttribute("aria-expanded", "true")
         input.style.display = "inline-block"
+        // Reached by Enter or Space now, so hand over the caret instead of
+        // leaving focus on the button.
+        input.focus()
     }
 }
 

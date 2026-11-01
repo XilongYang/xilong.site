@@ -73,6 +73,13 @@ function closePanel() {
     panel.removeEventListener('keydown', keyboardCatch)
     document.getElementById("search-box").value = ""
     document.getElementById("search-result").innerHTML = ""
+
+    // The panel took focus on open; hand it back so a keyboard user resumes at
+    // the icon instead of at the top of the document.
+    var button = document.getElementById("search-button")
+    if (button != null) {
+        button.focus()
+    }
 }
 
 function escapeHtml(text) {
