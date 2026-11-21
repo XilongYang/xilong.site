@@ -145,9 +145,9 @@ Now we can change which instruction executes next by setting the IP with a jump 
 ```assembly
 jmp .LABEL     # unconditional jump to LABEL.
 jmp *Operand   # Operand: register or memory address. Unconditional jump to the address stored in the operand.
-jCC .LABEL     # jump to LABEL if the condition given by the suffix CC is satisfied.
+J .LABEL       # jump to LABEL if the condition given by the suffix is satisfied.
 
-.LABEL:        # marks the next instruction; defined as `.<name>:`. The assembler replaces it with that instruction's address.
+.LABEL:        # marks the next instruction; defined as `<name>:`. The assembler replaces it with that instruction's address.
 ```
 
 For example, jump if the value of `%rax` is equal to the value of `%rbx`:
@@ -182,14 +182,14 @@ Here are the suffixes used by the conditional jump instructions:
 
 A program may need to handle far more data than the number of registers can hold. A technique called the runtime stack was designed to solve this problem. It uses two registers, `sp` and `bp`, to mark the two ends of a region of memory (the current stack frame), and the memory between them is used to store data.
 
-Two instructions to save/take values to the stack:
+Two instructions move values onto and off the stack:
 
 ```assembly
 pushq S # %rsp <- %rsp - 8, (%rsp) <- S
-S: {Imm, Reg}
+S: {Imm, Reg, Mem}
 
 popq D  # D <- (%rsp), %rsp <- %rsp + 8
-D: {Reg}
+D: {Reg, Mem}
 ```
 
 Note that the stack is located at high addresses and grows downward: pushing data decreases the value of `sp`, and popping data increases it.
@@ -206,6 +206,17 @@ popq %rbp
 ```
 
 #### Step-by-Step Diagrams: Lifecycle of a Stack Frame
+
+The diagrams below trace this instruction sequence, one step per instruction:
+
+```assembly
+pushq %rbp
+movq %rsp, %rbp
+pushq %rax
+movq %rbp, %rsp
+popq %rbp
+popq %rdi
+```
 
 ![Stack frame, step 1: pushq %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-1.png)
 
@@ -296,11 +307,9 @@ r-               e-       -    -l     <- prefix/suffix
 
 ## Appendix: Instructions
 
-Suffixes: 8byte: **q**uad, 4byte: **l**ong, 2byte: **w**ord, 1byte: **b**yte
+Suffixes: 8-byte: **q**uad, 4-byte: **l**ong, 2-byte: **w**ord, 1-byte: **b**yte
 
 ### Move
-
-Used for referencing and dereferencing.
 
 | Instruction | Effect                   | Operands                      | Suffixes                                       |
 | ----------- | ------------------------ | ----------------------------- | ---------------------------------------------- |
@@ -319,44 +328,44 @@ Used for referencing and dereferencing.
 
 A stack grows toward the lower addresses, and %rsp always holds the address of the top element.
 
-| Instruction | Effect                              | Operands    |
-| ----------- | ----------------------------------- | ----------- |
-| pushq S     | %rsp <- %rsp - 8, then (%rsp) <- S  | S: Imm, Reg |
-| popq D      | D <- (%rsp), then %rsp <- %rsp + 8  | D: Reg      |
+| Instruction | Effect                             | Operands         |
+| ----------- | ---------------------------------- | ---------------- |
+| pushq S     | %rsp <- %rsp - 8, then (%rsp) <- S | S: Imm, Reg, Mem |
+| popq D      | D <- (%rsp), then %rsp <- %rsp + 8 | D: Reg, Mem      |
 
 ### Load Effective Address
 
 Get the address itself instead of the value stored at that address.
 
-| Instruction | Effect | Operands            | Notes                           |
-| ----------- | ------ | ------------------- | ------------------------------- |
-| leaq S,D    | D <- &S | S: Mem; D: Reg     | Will not set the condition flags |
+| Instruction | Effect  | Operands       | Notes                            |
+| ----------- | ------- | -------------- | -------------------------------- |
+| leaq S,D    | D <- &S | S: Mem; D: Reg | Will not set the condition flags |
 
 ### Unary Operations
 
-| Instruction | Effect     | Operands    | Flags                        |
-| ----------- | ---------- | ----------- | ---------------------------- |
-| INC D       | D <- D + 1 | D: Reg, Mem | OF, ZF (will not set the CF) |
-| DEC D       | D <- D - 1 | D: Reg, Mem | OF, ZF (will not set the CF) |
-| NEG D       | D <- -D    | D: Reg, Mem |                              |
-| NOT D       | D <- ~D    | D: Reg, Mem | CF:0, OF:0                   |
+| Instruction | Effect     | Operands    | Flags                                                       |
+| ----------- | ---------- | ----------- | ----------------------------------------------------------- |
+| INC D       | D <- D + 1 | D: Reg, Mem | OF, ZF (will not set the CF)                                |
+| DEC D       | D <- D - 1 | D: Reg, Mem | OF, ZF (will not set the CF)                                |
+| NEG D       | D <- -D    | D: Reg, Mem | CF: 0 if D was 0, otherwise 1; OF, SF, ZF set by the result |
+| NOT D       | D <- ~D    | D: Reg, Mem | None                                                        |
 
 ### Binary Operations
 
 All take S: {Imm, Reg, Mem} and D: {Reg, Mem}.
 
-| Instruction | Effect      | Flags      |
-| ----------- | ----------- | ---------- |
-| ADD S,D     | D <- D + S  |            |
-| SUB S,D     | D <- D - S  |            |
-| IMUL S,D    | D <- D * S  |            |
-| XOR S,D     | D <- D ^ S  | CF:0, OF:0 |
-| OR S,D      | D <- D \| S | CF:0, OF:0 |
-| AND S,D     | D <- D & S  | CF:0, OF:0 |
+| Instruction | Effect      | Flags             |
+| ----------- | ----------- | ----------------- |
+| ADD S,D     | D <- D + S  | Set by the result |
+| SUB S,D     | D <- D - S  | Set by the result |
+| IMUL S,D    | D <- D * S  | Set by the result |
+| XOR S,D     | D <- D ^ S  | CF:0, OF:0        |
+| OR S,D      | D <- D \| S | CF:0, OF:0        |
+| AND S,D     | D <- D & S  | CF:0, OF:0        |
 
 ### Shift Operations
 
-For a w bits long data, the shift amount is the value of the low-order m bits of %cl, where 2^m = w. In other words, it will not shift over the data's length. All take k: {Imm, %cl} and D: {Reg, Mem}, and set OF:0 and CF to the last bit shifted out.
+For a w bits long data, the shift amount is the value of the low-order m bits of %cl, where 2^m = w. In other words, it will not shift over the data's length. All take k: {Imm, %cl} and D: {Reg, Mem}, and set CF to the last bit shifted out. OF is only meaningful for a 1-bit shift, where it depends on the shift direction; for larger shift counts it is undefined.
 
 | Instruction | Effect                  |
 | ----------- | ----------------------- |
@@ -379,7 +388,7 @@ These instructions take a single operand S: {Reg, Mem} (except cqto, which takes
 
 ### Compare
 
-Used for setting the condition flags without touching the operands. Both take S1, S2: {Imm, Reg, Mem}.
+Used for setting the condition flags without touching the operands. S1: {Imm, Reg, Mem}, S2: {Reg, Mem}; the two cannot both be Mem.
 
 | Instruction | Effect                                                        | Suffixes                   |
 | ----------- | ------------------------------------------------------------- | -------------------------- |

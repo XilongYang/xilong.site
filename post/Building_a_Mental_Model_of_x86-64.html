@@ -360,9 +360,9 @@ TEST S1, S2   # Set the flags according to S1 &amp; S2. (Usually used as `TEST S
             <pre
             class="language-assembly line-numbers match-braces"><code>jmp .LABEL     # unconditional jump to LABEL.
 jmp *Operand   # Operand: register or memory address. Unconditional jump to the address stored in the operand.
-jCC .LABEL     # jump to LABEL if the condition given by the suffix CC is satisfied.
+J .LABEL       # jump to LABEL if the condition given by the suffix is satisfied.
 
-.LABEL:        # marks the next instruction; defined as `.&lt;name&gt;:`. The assembler replaces it with that instruction&#39;s address.</code></pre>
+.LABEL:        # marks the next instruction; defined as `&lt;name&gt;:`. The assembler replaces it with that instruction&#39;s address.</code></pre>
             <p>For example, jump if the value of <code>%rax</code> is
             equal to the value of <code>%rbx</code>:</p>
             <pre
@@ -453,13 +453,13 @@ je .LABEL
             registers, <code>sp</code> and <code>bp</code>, to mark the
             two ends of a region of memory (the current stack frame),
             and the memory between them is used to store data.</p>
-            <p>Two instructions to save/take values to the stack:</p>
+            <p>Two instructions move values onto and off the stack:</p>
             <pre
             class="language-assembly line-numbers match-braces"><code>pushq S # %rsp &lt;- %rsp - 8, (%rsp) &lt;- S
-S: {Imm, Reg}
+S: {Imm, Reg, Mem}
 
 popq D  # D &lt;- (%rsp), %rsp &lt;- %rsp + 8
-D: {Reg}</code></pre>
+D: {Reg, Mem}</code></pre>
             <p>Note that the stack is located at high addresses and
             grows downward: pushing data decreases the value of
             <code>sp</code>, and popping data increases it.</p>
@@ -474,6 +474,15 @@ popq %rbp</code></pre>
             <h4
             id="step-by-step-diagrams-lifecycle-of-a-stack-frame">Step-by-Step
             Diagrams: Lifecycle of a Stack Frame</h4>
+            <p>The diagrams below trace this instruction sequence, one
+            step per instruction:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>pushq %rbp
+movq %rsp, %rbp
+pushq %rax
+movq %rbp, %rsp
+popq %rbp
+popq %rdi</code></pre>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-1.png"
@@ -676,11 +685,10 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </tbody>
             </table>
             <h2 id="appendix-instructions">Appendix: Instructions</h2>
-            <p>Suffixes: 8byte: <strong>q</strong>uad, 4byte:
-            <strong>l</strong>ong, 2byte: <strong>w</strong>ord, 1byte:
-            <strong>b</strong>yte</p>
+            <p>Suffixes: 8-byte: <strong>q</strong>uad, 4-byte:
+            <strong>l</strong>ong, 2-byte: <strong>w</strong>ord,
+            1-byte: <strong>b</strong>yte</p>
             <h3 id="move">Move</h3>
-            <p>Used for referencing and dereferencing.</p>
             <table>
             <colgroup>
             <col style="width: 10%" />
@@ -756,12 +764,12 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <tr>
             <td>pushq S</td>
             <td>%rsp &lt;- %rsp - 8, then (%rsp) &lt;- S</td>
-            <td>S: Imm, Reg</td>
+            <td>S: Imm, Reg, Mem</td>
             </tr>
             <tr>
             <td>popq D</td>
             <td>D &lt;- (%rsp), then %rsp &lt;- %rsp + 8</td>
-            <td>D: Reg</td>
+            <td>D: Reg, Mem</td>
             </tr>
             </tbody>
             </table>
@@ -770,10 +778,10 @@ ret              # Return from call: pop the address to the PC</code></pre>
             that address.</p>
             <table>
             <colgroup>
-            <col style="width: 16%" />
-            <col style="width: 8%" />
-            <col style="width: 28%" />
-            <col style="width: 46%" />
+            <col style="width: 17%" />
+            <col style="width: 10%" />
+            <col style="width: 21%" />
+            <col style="width: 50%" />
             </colgroup>
             <thead>
             <tr>
@@ -795,10 +803,10 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <h3 id="unary-operations">Unary Operations</h3>
             <table>
             <colgroup>
-            <col style="width: 18%" />
-            <col style="width: 16%" />
-            <col style="width: 18%" />
-            <col style="width: 46%" />
+            <col style="width: 12%" />
+            <col style="width: 10%" />
+            <col style="width: 12%" />
+            <col style="width: 64%" />
             </colgroup>
             <thead>
             <tr>
@@ -825,13 +833,14 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <td>NEG D</td>
             <td>D &lt;- -D</td>
             <td>D: Reg, Mem</td>
-            <td></td>
+            <td>CF: 0 if D was 0, otherwise 1; OF, SF, ZF set by the
+            result</td>
             </tr>
             <tr>
             <td>NOT D</td>
             <td>D &lt;- ~D</td>
             <td>D: Reg, Mem</td>
-            <td>CF:0, OF:0</td>
+            <td>None</td>
             </tr>
             </tbody>
             </table>
@@ -849,17 +858,17 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <tr>
             <td>ADD S,D</td>
             <td>D &lt;- D + S</td>
-            <td></td>
+            <td>Set by the result</td>
             </tr>
             <tr>
             <td>SUB S,D</td>
             <td>D &lt;- D - S</td>
-            <td></td>
+            <td>Set by the result</td>
             </tr>
             <tr>
             <td>IMUL S,D</td>
             <td>D &lt;- D * S</td>
-            <td></td>
+            <td>Set by the result</td>
             </tr>
             <tr>
             <td>XOR S,D</td>
@@ -882,8 +891,10 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <p>For a w bits long data, the shift amount is the value of
             the low-order m bits of %cl, where 2^m = w. In other words,
             it will not shift over the data’s length. All take k: {Imm,
-            %cl} and D: {Reg, Mem}, and set OF:0 and CF to the last bit
-            shifted out.</p>
+            %cl} and D: {Reg, Mem}, and set CF to the last bit shifted
+            out. OF is only meaningful for a 1-bit shift, where it
+            depends on the shift direction; for larger shift counts it
+            is undefined.</p>
             <table>
             <thead>
             <tr>
@@ -962,7 +973,8 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </table>
             <h3 id="compare-1">Compare</h3>
             <p>Used for setting the condition flags without touching the
-            operands. Both take S1, S2: {Imm, Reg, Mem}.</p>
+            operands. S1: {Imm, Reg, Mem}, S2: {Reg, Mem}; the two
+            cannot both be Mem.</p>
             <table>
             <colgroup>
             <col style="width: 11%" />
