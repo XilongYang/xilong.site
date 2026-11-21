@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Building a Mental Model of x86-64 - Xilong Yang</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1.0">
+            <!-- Icons -->
+            <link rel="icon" href="/favicon.ico" type="image/x-icon">
+            <link rel="apple-touch-icon" href="/res/apple-touch-icon.png">
+            <!-- Feed: lets a reader subscribe from the site's URL alone -->
+            <link rel="alternate" type="application/atom+xml" title="Xilong Yang" href="/atom.xml">
+            <!-- Stylesheets -->
+            <link id="anti-flash" href="/style/anti-flash-light.css" rel="stylesheet">
+            <link href="/style/wrapper.css" rel="stylesheet">
+            <link id="code-style" href="/res/latex-css-1.13.0/prism/prism-one-light.css" rel="stylesheet">
+            <link id="img-invert" href="" rel="stylesheet">
+
+            <!-- Must run right after the stylesheets above, before first paint, to swap in the dark variant -->
+            <script src="/scripts/classic/anti-flash.js"></script>
+
+            <!-- Must run before tex-chtml.js: sets window.MathJax before MathJax's own script executes -->
+            <script src="/scripts/classic/mathjax-config.js"></script>
+            <script src="/res/mathjax-4.0.0/tex-chtml.js" id="MathJax-script" async></script>
+
+            <!-- Feature scripts -->
+            <script src="/res/latex-css-1.13.0/prism/prism.js"></script>
+            <script src="/scripts/init.js" defer type="module"></script>    </head>
+    <body>
+        <div class="navbar">
+            <button type="button" class="icon icon-button" id="darkmode" aria-label="Toggle dark mode" aria-pressed="false">
+                <i class="material-icons" id="darkmode-icon" aria-hidden="true">dark_mode</i>
+            </button>
+        </div>        <div class="header">
+            <h1>Building a Mental Model of x86-64</h1>
+            <p class="author">Xilong Yang<br>2026-11-21</p>
+        </div>
+        <div class="abstract">
+            <p>After studying Chapter 3 of <em>CS:APP</em>, I have developed a mental model of x86-64 assembly programming. At its core, everything revolves around three entities: the CPU, registers, and memory. Instructions move data between them, transform data stored in them, and control the flow of execution based on their contents.</p>
+        </div>
+        <nav role="navigation" class="toc">
+            <h2>
+                Contents
+                <button type="button" class="icon icon-button" id="toc-control" aria-label="Toggle contents" aria-expanded="true" aria-controls="toc-items">
+                    <i class="material-icons" id="toc-control-icon" aria-hidden="true">remove</i>
+                </button>
+            </h2>
+            <div id="toc-items" style="display: inherit;">
+                <ol>
+                <li><a href="#overview" id="toc-overview">Overview</a></li>
+                <li><a href="#ipinstruction-pointer"
+                id="toc-ipinstruction-pointer">IP：Instruction Pointer</a></li>
+                <li><a href="#byte-the-real-unit-of-addressing"
+                id="toc-byte-the-real-unit-of-addressing">Byte: The Real Unit of
+                Addressing</a></li>
+                <li><a href="#assembly-syntax-i-basic-operand-types"
+                id="toc-assembly-syntax-i-basic-operand-types">Assembly Syntax I: Basic
+                Operand Types</a>
+                <ol>
+                <li><a href="#immediate-values" id="toc-immediate-values">Immediate
+                Values</a></li>
+                <li><a href="#registers" id="toc-registers">Registers</a></li>
+                <li><a href="#memory-address" id="toc-memory-address">Memory
+                Address</a></li>
+                </ol></li>
+                <li><a href="#assembly-syntax-ii-set-data"
+                id="toc-assembly-syntax-ii-set-data">Assembly Syntax II: Set Data</a>
+                <ol>
+                <li><a href="#general-purpose-registers"
+                id="toc-general-purpose-registers">General-Purpose Registers</a></li>
+                <li><a href="#move-instructions" id="toc-move-instructions">Move
+                Instructions</a></li>
+                </ol></li>
+                <li><a href="#assembly-syntax-iii-compute-data"
+                id="toc-assembly-syntax-iii-compute-data">Assembly Syntax III: Compute
+                Data</a>
+                <ol>
+                <li><a href="#arithmetic-instructions"
+                id="toc-arithmetic-instructions">Arithmetic Instructions</a></li>
+                <li><a href="#flag-registers" id="toc-flag-registers">Flag
+                Registers</a></li>
+                </ol></li>
+                <li><a href="#assembly-syntax-iv-control-flow"
+                id="toc-assembly-syntax-iv-control-flow">Assembly Syntax IV: Control
+                Flow</a>
+                <ol>
+                <li><a href="#compare" id="toc-compare">Compare</a></li>
+                <li><a href="#jump" id="toc-jump">Jump</a></li>
+                </ol></li>
+                <li><a href="#assembly-syntax-v-procedures"
+                id="toc-assembly-syntax-v-procedures">Assembly Syntax V: Procedures</a>
+                <ol>
+                <li><a href="#sp-bp-run-time-stack" id="toc-sp-bp-run-time-stack">SP
+                &amp; BP: Run-Time Stack</a></li>
+                <li><a href="#function-call" id="toc-function-call">Function
+                Call</a></li>
+                </ol></li>
+                <li><a href="#appendix-general-purpose-registers"
+                id="toc-appendix-general-purpose-registers">Appendix: General-Purpose
+                Registers</a>
+                <ol>
+                <li><a href="#legacy-registers" id="toc-legacy-registers">Legacy
+                Registers</a></li>
+                <li><a href="#modern-registers" id="toc-modern-registers">Modern
+                Registers</a></li>
+                <li><a href="#condition-registers"
+                id="toc-condition-registers">Condition Registers</a></li>
+                </ol></li>
+                <li><a href="#appendix-instructions"
+                id="toc-appendix-instructions">Appendix: Instructions</a>
+                <ol>
+                <li><a href="#move" id="toc-move">Move</a></li>
+                <li><a href="#stack" id="toc-stack">Stack</a></li>
+                <li><a href="#load-effective-address"
+                id="toc-load-effective-address">Load Effective Address</a></li>
+                <li><a href="#unary-operations" id="toc-unary-operations">Unary
+                Operations</a></li>
+                <li><a href="#binary-operations" id="toc-binary-operations">Binary
+                Operations</a></li>
+                <li><a href="#shift-operations" id="toc-shift-operations">Shift
+                Operations</a></li>
+                <li><a href="#full-multiply-divide" id="toc-full-multiply-divide">Full
+                Multiply &amp; Divide</a></li>
+                <li><a href="#compare-1" id="toc-compare-1">Compare</a></li>
+                <li><a href="#control" id="toc-control">Control</a></li>
+                </ol></li>
+                </ol>
+            </div>
+        </nav>
+        <main>
+            <h2 id="overview">Overview</h2>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model1.png"
+            alt="The CPU, its registers, and memory" />
+            <figcaption aria-hidden="true">The CPU, its registers, and
+            memory</figcaption>
+            </figure>
+            <p>When an x86-64 program is executed, the
+            <strong>CPU</strong> fetches an <strong>instruction</strong>
+            from <strong>memory</strong>, decodes it, and performs the
+            specified operation. For example, it may read values from
+            two registers, add them together, and write the result back
+            to a register or a memory location. It then fetches the next
+            instruction and repeats this process continuously until the
+            program terminates.</p>
+            <p>As the diagram shows, everything stored in memory or
+            registers is composed of a <strong>sequence of
+            bits</strong>. Each bit has exactly one value:s either 0 or
+            1. To locate an instruction or a piece of data, it is
+            necessary to know its starting position, known as an
+            <strong>address</strong>, and its length.</p>
+            <p>There is no inherent difference between an instruction
+            and data stored in memory. The distinction depends on the
+            <strong>context</strong>. If the CPU interprets a sequence
+            of bits as data, then it is data; if the CPU interprets the
+            same bits as an instruction, then it is an instruction. As
+            <em>CS:APP</em> says, information is <strong>bits +
+            context.</strong></p>
+            <h2 id="ipinstruction-pointer">IP：Instruction Pointer</h2>
+            <p>We already know that whether a sequence of bits is
+            interpreted as an instruction or as data depends on the
+            context. But what exactly is this context? In x86, one key
+            part of the answer is a special register called the
+            <strong>Instruction Pointer (IP)</strong>, which is also
+            known as the <strong>Program Counter (PC)</strong>.</p>
+            <p>The IP holds the address of the first byte of the next
+            instruction to be executed. Since x86 instructions can have
+            different lengths, the CPU must decode each instruction to
+            determine where it ends and where the next one begins.</p>
+            <p>Once the current instruction has been executed, the CPU
+            uses the instruction pointer to locate the next instruction.
+            The IP is then updated to reflect the next execution
+            address, allowing the CPU to continue executing the program
+            one instruction at a time.</p>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model2.png"
+            alt="The IP holds the address of the next instruction" />
+            <figcaption aria-hidden="true">The IP holds the address of
+            the next instruction</figcaption>
+            </figure>
+            <p>At this point, it may seem that the CPU can only execute
+            instructions sequentially, one after another. But that would
+            be too limiting. There must be a way to make the <em>IP</em>
+            point to an address other than that of the next sequential
+            instruction.</p>
+            <p>In fact, some instructions can modify the <em>IP</em> to
+            change the flow of execution. These instructions allow the
+            CPU to jump to a different location in the program, deciding
+            what to execute next. This is the basis of conditional
+            branching, loops, and function calls.</p>
+            <p>After all, the <em>IP</em> is a register, and its value
+            can be changed by some instructions—not just advanced to the
+            next instruction.</p>
+            <h2 id="byte-the-real-unit-of-addressing">Byte: The Real
+            Unit of Addressing</h2>
+            <p>Actually, we don’t use the bit as the unit of addressing.
+            It’s too fine-grained: addresses would need very large
+            numbers. Instead, we use the byte, a group of 8 bits. This
+            way, a much smaller address can cover the same amount of
+            memory.</p>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model3.png"
+            alt="Bits grouped into bytes, the unit of addressing" />
+            <figcaption aria-hidden="true">Bits grouped into bytes, the
+            unit of addressing</figcaption>
+            </figure>
+            <h2 id="assembly-syntax-i-basic-operand-types">Assembly
+            Syntax I: Basic Operand Types</h2>
+            <p>Now that we know a machine has an execution unit, memory,
+            and a set of registers (one of which holds the address of
+            the next instruction), it’s time to learn how to refer to
+            these things in assembly code.</p>
+            <h3 id="immediate-values">Immediate Values</h3>
+            <p>An <em>immediate</em> is a constant value encoded
+            directly in an instruction, rather than a value that the
+            instruction must retrieve from a register or a separate
+            memory location. Examples include the numbers 1, 2, and
+            3.</p>
+            <p>In assembly syntax, an immediate value is prefixed with
+            <code>$</code>. For example, to represent the immediate
+            value 1, we write <code>$1</code>.</p>
+            <h3 id="registers">Registers</h3>
+            <p>Each register has a name, which we can use to refer to it
+            in assembly code. Register names are prefixed with
+            <code>%</code>. For example, <code>%rax</code> refers to the
+            64-bit <code>RAX</code> register.</p>
+            <p>See Appendix: Registers.</p>
+            <h3 id="memory-address">Memory Address</h3>
+            <p>A common form of a memory address syntax is:
+            <code>Imm(%b, %i, s)</code>. Where:</p>
+            <ol type="1">
+            <li><code>Imm</code> is an optional immediate displacement,
+            specified without the <code>$</code> prefix.</li>
+            <li><code>%b</code> is an optional register that holds a
+            base address, known as the <em>base register</em>.</li>
+            <li><code>%i</code> is an optional register that holds an
+            index value, known as the <em>index register</em>.</li>
+            <li><code>s</code> is an optional scale factor that can be
+            <code>1</code>, <code>2</code>, <code>4</code>, or
+            <code>8</code>. It determines the multiplier applied to the
+            index value.</li>
+            </ol>
+            <p>Each component is optional, although the scale factor is
+            meaningful only when an index register is specified.</p>
+            <p>The effective memory address is calculated as:
+            <code>Imm + %b + %i * s</code>.</p>
+            <p>Any omitted component is treated as zero, except that an
+            omitted scale factor defaults to <code>1</code> when an
+            index register is present.</p>
+            <h2 id="assembly-syntax-ii-set-data">Assembly Syntax II: Set
+            Data</h2>
+            <p>Now we have the core components: the CPU, the registers,
+            and the memory. We already know how to represent them, so
+            it’s time to manipulate the data.</p>
+            <h3 id="general-purpose-registers">General-Purpose
+            Registers</h3>
+            <p>Unlike the IP, which can only be set by special
+            instructions (such as <code>jmp</code>, <code>call</code>
+            and <code>ret</code>), some registers are designed for
+            general-purpose use. They include <code>ax</code>,
+            <code>bx</code>, <code>cx</code>, <code>dx</code>,
+            <code>di</code>, <code>si</code>, <code>sp</code>,
+            <code>bp</code>, and <code>r8</code>–<code>r15</code>. See
+            Appendix: General-Purpose Registers.</p>
+            <h3 id="move-instructions">Move Instructions</h3>
+            <p>A move instruction has the general form
+            <code>MOV S, D</code>, where <code>S</code> stands for
+            “Source”, which can be an immediate, a memory address, or a
+            register, and <code>D</code> stands for “Destination”, which
+            can be a memory address or a register. A move instruction
+            copies data from the source to the destination. When the
+            source is a memory address, the destination can only be a
+            register. Thus, we can’t move data directly between two
+            memory addresses.</p>
+            <p>For example, to load the register <code>ax</code> with
+            the value stored at the address <code>19</code>, we can
+            write:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>movq 19, %rax</code></pre>
+            <p>Here, the <code>movq</code> instruction has a suffix
+            <code>-q</code> and the register <code>ax</code> has a
+            prefix <code>r-</code>. Both indicate that the operation
+            works on 64-bit values.</p>
+            <p>See Appendix: Instruction</p>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model4.png"
+            alt="movq 19, %rax" />
+            <figcaption aria-hidden="true">movq 19, %rax</figcaption>
+            </figure>
+            <h2 id="assembly-syntax-iii-compute-data">Assembly Syntax
+            III: Compute Data</h2>
+            <h3 id="arithmetic-instructions">Arithmetic
+            Instructions</h3>
+            <pre><code>Now we know how to move data between registers and memory. It&#39;s time to compute with it.
+Arithmetic instructions operate on one or two operands and store the result in the destination. For example, `ADD S, D` adds `S` to `D` and stores the sum in `D`, overwriting its previous value.</code></pre>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>addq %rax, %rdi</code></pre>
+            <h3 id="flag-registers">Flag Registers</h3>
+            <p>There are 4 special registers: <code>ZF</code>,
+            <code>SF</code>, <code>OF</code>, <code>CF</code>, which
+            designed to represent the status of last operation. Almost
+            all of the arithmetic instructions will set those
+            registers.</p>
+            <table>
+            <thead>
+            <tr>
+            <th>Name</th>
+            <th>Meaning</th>
+            <th>Condition</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>ZF</td>
+            <td>Zero Flag</td>
+            <td>Yielded 0</td>
+            </tr>
+            <tr>
+            <td>SF</td>
+            <td>Sign Flag</td>
+            <td>Yielded negative</td>
+            </tr>
+            <tr>
+            <td>OF</td>
+            <td>Overflow Flag</td>
+            <td>Overflow for signed</td>
+            </tr>
+            <tr>
+            <td>CF</td>
+            <td>Carry Flag</td>
+            <td>Overflow for unsigned</td>
+            </tr>
+            </tbody>
+            </table>
+            <p>For example, when adding two 4bit numbers:</p>
+            <pre><code>0111 + 0001 = 1000</code></pre>
+            <p>The result is not <code>0</code>, so <code>ZF</code> is
+            set to <code>0</code>. If the result is treated as a signed
+            number, it is negative and a signed overflow has occurred,
+            so <code>SF</code> and <code>OF</code> are set to
+            <code>1</code>. If the result is treated as an unsigned
+            number, there is no carry out of the most significant bit,
+            so <code>CF</code> is set to <code>0</code>.</p>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model5.png"
+            alt="addq %rax, %rdi sets the condition flags" />
+            <figcaption aria-hidden="true">addq %rax, %rdi sets the
+            condition flags</figcaption>
+            </figure>
+            <h2 id="assembly-syntax-iv-control-flow">Assembly Syntax IV:
+            Control Flow</h2>
+            <p>We can combine the condition flags to test whether the
+            result of the previous instruction satisfies a condition,
+            which lets us implement control flow.</p>
+            <h3 id="compare">Compare</h3>
+            <p>Two instructions set the flags without modifying any
+            register:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>CMP S1, S2    # Set the flags according to S2 - S1.
+TEST S1, S2   # Set the flags according to S1 &amp; S2. (Usually used as `TEST S1, S1` to check whether S1 is 0.)</code></pre>
+            <h3 id="jump">Jump</h3>
+            <p>Now we can change which instruction executes next by
+            setting the IP with a jump instruction. There are three
+            kinds:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>jmp .LABEL     # unconditional jump to LABEL.
+jmp *Operand   # Operand: register or memory address. Unconditional jump to the address stored in the operand.
+jCC .LABEL     # jump to LABEL if the condition given by the suffix CC is satisfied.
+
+.LABEL:        # marks the next instruction; defined as `.&lt;name&gt;:`. The assembler replaces it with that instruction&#39;s address.</code></pre>
+            <p>For example, jump if the value of <code>%rax</code> is
+            equals the value of <code>%rbx</code>:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>cmpq %rax, %rbx
+je .Label
+&lt;some instructions&gt;
+.Label:
+&lt;some instructions&gt;</code></pre>
+            <p>Here are the suffixs used by the conditional jump
+            instructions:</p>
+            <table>
+            <thead>
+            <tr>
+            <th>Suffix</th>
+            <th>Condition</th>
+            <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>e</td>
+            <td>ZF</td>
+            <td>Equal</td>
+            </tr>
+            <tr>
+            <td>ne</td>
+            <td>~ZF</td>
+            <td>Not Equal</td>
+            </tr>
+            <tr>
+            <td>s</td>
+            <td>SF</td>
+            <td>Negative</td>
+            </tr>
+            <tr>
+            <td>ns</td>
+            <td>~SF</td>
+            <td>Nonnegative</td>
+            </tr>
+            <tr>
+            <td>g</td>
+            <td>~(SF^OF) &amp; ~ZF</td>
+            <td>Greater</td>
+            </tr>
+            <tr>
+            <td>ge</td>
+            <td>~(SF^OF)</td>
+            <td>Greater or equal</td>
+            </tr>
+            <tr>
+            <td>l</td>
+            <td>SF^OF</td>
+            <td>Less</td>
+            </tr>
+            <tr>
+            <td>le</td>
+            <td>(SF^OF) | ZF</td>
+            <td>Less or equal</td>
+            </tr>
+            <tr>
+            <td>a</td>
+            <td>~CF &amp; ~ZF</td>
+            <td>Above</td>
+            </tr>
+            <tr>
+            <td>ae</td>
+            <td>~CF</td>
+            <td>Above or equal</td>
+            </tr>
+            <tr>
+            <td>b</td>
+            <td>CF</td>
+            <td>Below</td>
+            </tr>
+            <tr>
+            <td>be</td>
+            <td>CF | ZF</td>
+            <td>Below or equal</td>
+            </tr>
+            </tbody>
+            </table>
+            <h2 id="assembly-syntax-v-procedures">Assembly Syntax V:
+            Procedures</h2>
+            <h3 id="sp-bp-run-time-stack">SP &amp; BP: Run-Time
+            Stack</h3>
+            <p>A program may need to handle far more data than the
+            number of registers can hold. A technique called the runtime
+            stack was designed to solve this problem. It uses two
+            registers, <code>sp</code> and <code>bp</code>, to mark the
+            two ends of a region of memory (the current stack frame),
+            and the memory between them is used to store data.</p>
+            <p>Two instructions to save/take values to the stack:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>pushq S # %rsp &lt;- %rsp - 8, (%rsp) &lt;- S
+S: {Imm, Reg}
+
+popq D  # D &lt;- (%rsp), %rsp &lt;- %rsp + 8
+D: {Reg}</code></pre>
+            <p>Note that the stack is located at high addresses and
+            grows downward: pushing data decreases the value of
+            <code>sp</code>, and popping data increases it.</p>
+            <p>Here is a typical procedure:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>push %rbp
+movq %rsp, %rbp     # Save the origin address of sp to the bp
+subq 20, %rsp       # Allocate 20 bytes for the stack
+&lt;some sintructions&gt;
+movq %rbp, %rsp     # Free the stack by setting the sp to it&#39;s origin address
+pop  %rbp</code></pre>
+            <h4
+            id="step-by-step-diagrams-lifecycle-of-a-stack-frame">Step-by-Step
+            Diagrams: Lifecycle of a Stack Frame</h4>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-1.png"
+            alt="Stack frame, step 1: push %rbp" />
+            <figcaption aria-hidden="true">Stack frame, step 1: push
+            %rbp</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-2.png"
+            alt="Stack frame, step 2: mov %rsp, %rbp" />
+            <figcaption aria-hidden="true">Stack frame, step 2: mov
+            %rsp, %rbp</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-3.png"
+            alt="Stack frame, step 3: push %rax" />
+            <figcaption aria-hidden="true">Stack frame, step 3: push
+            %rax</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-4.png"
+            alt="Stack frame, step 4: movq %rbp, %rsp" />
+            <figcaption aria-hidden="true">Stack frame, step 4: movq
+            %rbp, %rsp</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-5.png"
+            alt="Stack frame, step 5: pop %rbp" />
+            <figcaption aria-hidden="true">Stack frame, step 5: pop
+            %rbp</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-6.png"
+            alt="Stack frame, step 6: pop %rdi" />
+            <figcaption aria-hidden="true">Stack frame, step 6: pop
+            %rdi</figcaption>
+            </figure>
+            <h3 id="function-call">Function Call</h3>
+            <p>What needs to happen when a function is called? First,
+            the next instruction must be set to the first instruction of
+            the callee. Second, some arguments may need to be passed to
+            the callee. Finally, when the callee is done, execution must
+            resume at the instruction right after the call site,
+            possibly with a return value.</p>
+            <h4 id="calling-and-return">Calling and Return</h4>
+            <p>Two instructions handle function calls, giving us the
+            ability to jump to the callee and return to the right place
+            afterwards:</p>
+            <pre
+            class="language-assembly line-numbers match-braces"><code>call Label       # Procedure call: push the return address and jump to the Label
+call *Operand    # Procedure call: push the return address and jump to the indirect address
+ret              # Return from call: pop the address to the PC</code></pre>
+            <p>The callee places the return value, if any, in
+            <code>ax</code>.</p>
+            <h4 id="passing-arguments">Passing Arguments</h4>
+            <p>The first six arguments are passed in these registers, in
+            order: <code>di</code>, <code>si</code>, <code>dx</code>,
+            <code>cx</code>, <code>r8</code>, and <code>r9</code>. Any
+            further arguments are passed on the stack.</p>
+            <h4 id="callee-saved-registers">Callee-Saved Registers</h4>
+            <p>Some registers are designated as callee-saved, which
+            means the callee must preserve their values: when the
+            function returns, they must hold the same values as when it
+            was called. Therefore, a function that wants to use a
+            callee-saved register must first save its value (for
+            example, with <code>push</code>) and restore it (with
+            <code>pop</code>) before returning.</p>
+            <h4 id="local-variables">Local Variables</h4>
+            <p>A function may store local variables on the stack, so its
+            frame contains a region for them, located between the saved
+            callee-saved registers and the outgoing arguments area used
+            for the next function call.</p>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model7.png"
+            alt="Layout of a stack frame" />
+            <figcaption aria-hidden="true">Layout of a stack
+            frame</figcaption>
+            </figure>
+            <h4
+            id="step-by-step-diagrams-calling-a-function-and-returning-immediately">Step-by-Step
+            Diagrams: Calling a Function and Returning Immediately</h4>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-1.png"
+            alt="Function call, step 1: push 0x12" />
+            <figcaption aria-hidden="true">Function call, step 1: push
+            0x12</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-2.png"
+            alt="Function call, step 2: call pushes the return address" />
+            <figcaption aria-hidden="true">Function call, step 2: call
+            pushes the return address</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-3.png"
+            alt="Function call, step 3: ret pops it back into the IP" />
+            <figcaption aria-hidden="true">Function call, step 3: ret
+            pops it back into the IP</figcaption>
+            </figure>
+            <figure>
+            <img
+            src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-4.png"
+            alt="Function call, step 4: execution resumes after the call" />
+            <figcaption aria-hidden="true">Function call, step 4:
+            execution resumes after the call</figcaption>
+            </figure>
+            <h2 id="appendix-general-purpose-registers">Appendix:
+            General-Purpose Registers</h2>
+            <h3 id="legacy-registers">Legacy Registers</h3>
+            <pre><code>r-               e-       -    -l     &lt;- prefix/suffix
+┌────────────────┬────────┬────┬────┐
+│%rax            │%eax    │%ax │%al │
+└────────────────┴────────┴────┴────┘
+8                4        2    1      &lt;- size(byte)</code></pre>
+            <table>
+            <thead>
+            <tr>
+            <th>Name</th>
+            <th>Usage</th>
+            <th>Name</th>
+            <th>Usage</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>ax</td>
+            <td>return value</td>
+            <td>di</td>
+            <td>1st argument</td>
+            </tr>
+            <tr>
+            <td>sp</td>
+            <td>stack pointers</td>
+            <td>si</td>
+            <td>2nd argument</td>
+            </tr>
+            <tr>
+            <td>bp</td>
+            <td>base point/callee saved</td>
+            <td>dx</td>
+            <td>3rd argument</td>
+            </tr>
+            <tr>
+            <td>bx</td>
+            <td>callee saved</td>
+            <td>cx</td>
+            <td>4th argument</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="modern-registers">Modern Registers</h3>
+            <pre><code>\-                -d       -w   -b    &lt;- suffix
+┌────────────────┬────────┬────┬────┐
+│%r8             │%r8d    │%r8w│%r8b│
+└────────────────┴────────┴────┴────┘
+8                4        2    1      &lt;- size(byte)</code></pre>
+            <table>
+            <thead>
+            <tr>
+            <th>Name</th>
+            <th>Usage</th>
+            <th>Name</th>
+            <th>Usage</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>r8</td>
+            <td>5th argument</td>
+            <td>r12</td>
+            <td>callee saved</td>
+            </tr>
+            <tr>
+            <td>r9</td>
+            <td>6th argument</td>
+            <td>r13</td>
+            <td>callee saved</td>
+            </tr>
+            <tr>
+            <td>r10</td>
+            <td></td>
+            <td>r14</td>
+            <td>callee saved</td>
+            </tr>
+            <tr>
+            <td>r11</td>
+            <td></td>
+            <td>r15</td>
+            <td>callee saved</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="condition-registers">Condition Registers</h3>
+            <table>
+            <colgroup>
+            <col style="width: 6%" />
+            <col style="width: 20%" />
+            <col style="width: 73%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Name</th>
+            <th>Meaning</th>
+            <th>Condition</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>ZF</td>
+            <td>Zero Flag</td>
+            <td>Yielded 0</td>
+            </tr>
+            <tr>
+            <td>SF</td>
+            <td>Sign Flag</td>
+            <td>Yielded negative</td>
+            </tr>
+            <tr>
+            <td>OF</td>
+            <td>Overflow Flag</td>
+            <td>Overflow for signed</td>
+            </tr>
+            <tr>
+            <td>CF</td>
+            <td>Carry Flag</td>
+            <td>Carry out of the sign bit Overflow for unsigned</td>
+            </tr>
+            </tbody>
+            </table>
+            <h2 id="appendix-instructions">Appendix: Instructions</h2>
+            <p>Suffixs: 8byte: <strong>q</strong>uote, 4byte:
+            <strong>l</strong>ong, 2byte: <strong>w</strong>ord, 1byte:
+            <strong>b</strong>yte</p>
+            <h3 id="move">Move</h3>
+            <p>Using for referencing and dereferencing.</p>
+            <table>
+            <colgroup>
+            <col style="width: 10%" />
+            <col style="width: 21%" />
+            <col style="width: 26%" />
+            <col style="width: 41%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Operands</th>
+            <th>Suffixes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>MOV S,D</td>
+            <td>D &lt;- S</td>
+            <td>S: Imm, Reg, Mem; D: Reg, Mem</td>
+            <td>movb, movw, movl, movq</td>
+            </tr>
+            <tr>
+            <td>movabsq I,R</td>
+            <td>R &lt;- I</td>
+            <td>I: Imm; R: Reg</td>
+            <td>—</td>
+            </tr>
+            <tr>
+            <td>MOVZ S,R</td>
+            <td>R &lt;- ZeroExtend(S)</td>
+            <td>S: Reg, Mem; R: Reg</td>
+            <td>movzbw, movzbl, movzbq, movzwl, movzwq</td>
+            </tr>
+            <tr>
+            <td>MOVS S,R</td>
+            <td>R &lt;- SignExtend(S)</td>
+            <td>S: Reg, Mem; R: Reg</td>
+            <td>movsbw, movsbl, movsbq, movswl, movswq, movslq</td>
+            </tr>
+            <tr>
+            <td>cltq</td>
+            <td>%rax &lt;- SignExtend(%eax)</td>
+            <td>none</td>
+            <td>—</td>
+            </tr>
+            </tbody>
+            </table>
+            <ul>
+            <li>MOV cannot go Mem -&gt; Mem.</li>
+            <li>movl sets the higher 4 bytes to 0, which is why there is
+            no movzlq.</li>
+            <li>movq takes only a 32-bit source immediate and fills the
+            higher 4 bytes with its sign bit; movabsq is the form that
+            takes a full 64-bit immediate, and its destination must be a
+            register.</li>
+            <li>cltq means Convert Long To Quad; it takes no operand,
+            the source and the destination are always %eax and
+            %rax.</li>
+            </ul>
+            <h3 id="stack">Stack</h3>
+            <p>A stack grows toward the lower addresses, and %rsp always
+            holds the address of the top element.</p>
+            <table>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Operands</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>pushq S</td>
+            <td>%rsp &lt;- %rsp - 8, then (%rsp) &lt;- S</td>
+            <td>S: Imm, Reg</td>
+            </tr>
+            <tr>
+            <td>popq D</td>
+            <td>D &lt;- (%rsp), then %rsp &lt;- %rsp + 8</td>
+            <td>D: Reg</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="load-effective-address">Load Effective Address</h3>
+            <p>Get the address itself instead the value stored in that
+            address.</p>
+            <table>
+            <colgroup>
+            <col style="width: 16%" />
+            <col style="width: 8%" />
+            <col style="width: 28%" />
+            <col style="width: 46%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Operands</th>
+            <th>Notes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>leaq S,D</td>
+            <td>D &lt;- &amp;S</td>
+            <td>S: Mem; D: Reg</td>
+            <td>Will not set the condition flags</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="unary-operations">Unary Operations</h3>
+            <table>
+            <colgroup>
+            <col style="width: 18%" />
+            <col style="width: 16%" />
+            <col style="width: 18%" />
+            <col style="width: 46%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Operands</th>
+            <th>Flags</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>INC D</td>
+            <td>D &lt;- D + 1</td>
+            <td>D: Reg, Mem</td>
+            <td>OF, ZF (will not set the CF)</td>
+            </tr>
+            <tr>
+            <td>DEC D</td>
+            <td>D &lt;- D - 1</td>
+            <td>D: Reg, Mem</td>
+            <td>OF, ZF (will not set the CF)</td>
+            </tr>
+            <tr>
+            <td>NEG D</td>
+            <td>D &lt;- -D</td>
+            <td>D: Reg, Mem</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>NOT D</td>
+            <td>D &lt;- ~D</td>
+            <td>D: Reg, Mem</td>
+            <td>CF:0, OF:0</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="binary-operations">Binary Operations</h3>
+            <p>All take S: {Imm, Reg, Mem} and D: {Reg, Mem}.</p>
+            <table>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Flags</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>ADD S,D</td>
+            <td>D &lt;- D + S</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>SUB S,D</td>
+            <td>D &lt;- D - S</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>IMUL S,D</td>
+            <td>D &lt;- D * S</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>XOR S,D</td>
+            <td>D &lt;- D ^ S</td>
+            <td>CF:0, OF:0</td>
+            </tr>
+            <tr>
+            <td>OR S,D</td>
+            <td>D &lt;- D | S</td>
+            <td>CF:0, OF:0</td>
+            </tr>
+            <tr>
+            <td>AND S,D</td>
+            <td>D &lt;- D &amp; S</td>
+            <td>CF:0, OF:0</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="shift-operations">Shift Operations</h3>
+            <p>For a w bits long data, the shift amount is the value of
+            the low-order m bits of %cl, where 2^m = w. In other words,
+            it will not shift over the data’s length. All take k: {Imm,
+            %cl} and D: {Reg, Mem}, and set OF:0 and CF to the last bit
+            shifted out.</p>
+            <table>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>SAL k,D</td>
+            <td>D &lt;- D &lt;&lt; k</td>
+            </tr>
+            <tr>
+            <td>SHL k,D</td>
+            <td>D &lt;- D &lt;&lt; k</td>
+            </tr>
+            <tr>
+            <td>SAR k,D</td>
+            <td>D &lt;- D &gt;&gt; k, arithmetic</td>
+            </tr>
+            <tr>
+            <td>SHR k,D</td>
+            <td>D &lt;- D &gt;&gt; k, logical</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="full-multiply-divide">Full Multiply &amp;
+            Divide</h3>
+            <p>These instructions take a single operand S: {Reg, Mem}
+            (except cqto, which takes none); the other operand and the
+            destination are always %rax, or the 128-bits pair
+            %rdx:%rax.</p>
+            <table>
+            <colgroup>
+            <col style="width: 8%" />
+            <col style="width: 35%" />
+            <col style="width: 55%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Notes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>imulq S</td>
+            <td>%rdx:%rax &lt;- S * %rax</td>
+            <td>Signed full multiply</td>
+            </tr>
+            <tr>
+            <td>mulq S</td>
+            <td>%rdx:%rax &lt;- S * %rax</td>
+            <td>Unsigned full multiply</td>
+            </tr>
+            <tr>
+            <td>cqto</td>
+            <td>%rdx:%rax &lt;- SignExtend(%rax)</td>
+            <td>Convert Quad to Octword; prepares the 128-bits dividend
+            for idivq</td>
+            </tr>
+            <tr>
+            <td>idivq S</td>
+            <td>%rdx &lt;- %rdx:%rax mod S, %rax &lt;- %rdx:%rax /
+            S</td>
+            <td>Signed divide</td>
+            </tr>
+            <tr>
+            <td>divq S</td>
+            <td>%rdx &lt;- %rdx:%rax mod S, %rax &lt;- %rdx:%rax /
+            S</td>
+            <td>Unsigned divide</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="compare-1">Compare</h3>
+            <p>Using for setting the condition flags without touching
+            the operands. Both take S1, S2: {Imm, Reg, Mem}.</p>
+            <table>
+            <colgroup>
+            <col style="width: 11%" />
+            <col style="width: 62%" />
+            <col style="width: 26%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Suffixes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>CMP S1,S2</td>
+            <td>Set the condition flags as SUB but not change the
+            destination</td>
+            <td>cmpb, cmpw, cmpl, cmpq</td>
+            </tr>
+            <tr>
+            <td>TEST S1,S2</td>
+            <td>Set the condition flags as AND but not change the
+            destination</td>
+            <td>testb, testw, testl, testq</td>
+            </tr>
+            </tbody>
+            </table>
+            <h3 id="control">Control</h3>
+            <p>Using for reading the condition flags and changing the
+            flow of execution. The suffix of these instructions selects
+            the condition; see the suffix table in <em>Assembly Syntax
+            IV: Control Flow</em>.</p>
+            <table>
+            <colgroup>
+            <col style="width: 8%" />
+            <col style="width: 35%" />
+            <col style="width: 35%" />
+            <col style="width: 20%" />
+            </colgroup>
+            <thead>
+            <tr>
+            <th>Instruction</th>
+            <th>Effect</th>
+            <th>Operands</th>
+            <th>Notes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td>SET D</td>
+            <td>D &lt;- result based on the suffix and the condition
+            flags</td>
+            <td>D: low-order single byte of Reg, or single byte of
+            Mem</td>
+            <td></td>
+            </tr>
+            <tr>
+            <td>jmp Label</td>
+            <td>Direct jump</td>
+            <td>—</td>
+            <td>No condition</td>
+            </tr>
+            <tr>
+            <td>jmp *Operand</td>
+            <td>Jump to the address saved in the operand</td>
+            <td>Operand: Reg, Mem</td>
+            <td>Indirect, no condition</td>
+            </tr>
+            <tr>
+            <td>J Label</td>
+            <td>Conditional jump</td>
+            <td>—</td>
+            <td>Condition depends on the suffix</td>
+            </tr>
+            <tr>
+            <td>CMOV S,R</td>
+            <td>R &lt;- condition ? S : R</td>
+            <td>S: Reg, Mem; R: Reg</td>
+            <td>Condition depends on the suffix</td>
+            </tr>
+            </tbody>
+            </table>
+        </main>
+        <div class="navigator">
+            <button type="button" class="icon icon-button" id="search-button" aria-label="Search posts">
+                <i class="material-icons" aria-hidden="true">search</i>
+            </button>
+            <button type="button" class="icon icon-button" id="back-top" aria-label="Back to top">
+                <i class="material-icons" aria-hidden="true">arrow_upward</i>
+            </button>
+            <button type="button" class="icon icon-button" id="go-bottom" aria-label="Go to bottom">
+                <i class="material-icons" aria-hidden="true">arrow_downward</i>
+            </button>
+        </div>        <div id="search-panel" tabindex="0">
+                  <div id="search-bar">
+                      <i class="material-icons" id="search-hint" aria-hidden="true">search</i>
+                      <span id="search-box" contenteditable="true" role="textbox" aria-multiline="false" aria-label="Search posts"></span>
+                      <button type="button" id="search-close" aria-label="Close search">
+                          <i class="material-icons icon" aria-hidden="true">close</i>
+                      </button>
+                  </div>
+                  <div id="search-result">
+                      <div id="search-loading" class="material-icons" aria-hidden="true">autorenew</div>
+                  </div>
+              </div>        <div class="footnotes">
+                  © 2019-<span id="current-year"></span> <a href="/">Xilong Yang</a>
+                  | <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>
+                  | <a href="/atom.xml">RSS</a>
+                  | Powered by
+                  <a href="https://github.com/xilongyang/kiln">Kiln</a>,
+                  <a href="https://github.com/vincentdoerig/latex-css">LaTeX.css</a>,
+                  <a href="https://github.com/PrismJS/prism/">Prism</a>,
+                  <a href="https://github.com/mathjax/MathJax">MathJax</a>
+                  <div class="slogan">Amid the sixpences, may you find your moon.</div>
+              </div>    </body>
+</html>
