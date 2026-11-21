@@ -14,11 +14,11 @@ After studying Chapter 3 of *CS:APP*, I have developed a mental model of x86-64 
 
 When an x86-64 program is executed, the **CPU** fetches an **instruction** from **memory**, decodes it, and performs the specified operation. For example, it may read values from two registers, add them together, and write the result back to a register or a memory location. It then fetches the next instruction and repeats this process continuously until the program terminates.
 
-As the diagram shows, everything stored in memory or registers is composed of a **sequence of bits**. Each bit has exactly one value:s either 0 or 1. To locate an instruction or a piece of data, it is necessary to know its starting position, known as an **address**, and its length.
+As the diagram shows, everything stored in memory or registers is composed of a **sequence of bits**. Each bit has exactly one value: either 0 or 1. To locate an instruction or a piece of data, it is necessary to know its starting position, known as an **address**, and its length.
 
 There is no inherent difference between an instruction and data stored in memory. The distinction depends on the **context**. If the CPU interprets a sequence of bits as data, then it is data; if the CPU interprets the same bits as an instruction, then it is an instruction. As *CS:APP* says, information is **bits + context.**
 
-## IP：Instruction Pointer
+## IP: Instruction Pointer
 
 We already know that whether a sequence of bits is interpreted as an instruction or as data depends on the context. But what exactly is this context? In x86, one key part of the answer is a special register called the **Instruction Pointer (IP)**, which is also known as the **Program Counter (PC)**.
 
@@ -40,7 +40,7 @@ Actually, we don't use the bit as the unit of addressing. It's too fine-grained:
 
 ![Bits grouped into bytes, the unit of addressing](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model3.png)
 
-## Assembly Syntax I: Basic Operand Types
+## Operands: How to Name Things
 
 Now that we know a machine has an execution unit, memory, and a set of registers (one of which holds the address of the next instruction), it's time to learn how to refer to these things in assembly code.
 
@@ -54,7 +54,7 @@ In assembly syntax, an immediate value is prefixed with `$`. For example, to rep
 
 Each register has a name, which we can use to refer to it in assembly code. Register names are prefixed with `%`. For example, `%rax` refers to the 64-bit `RAX` register.
 
-See Appendix: Registers.
+See Appendix: General-Purpose Registers.
 
 ### Memory Address
 
@@ -71,13 +71,14 @@ The effective memory address is calculated as:  `Imm + %b + %i * s`.
 
 Any omitted component is treated as zero, except that an omitted scale factor defaults to `1` when an index register is present.
 
-## Assembly Syntax II: Set Data
+## Moving Data
 
 Now we have the core components: the CPU, the registers, and the memory. We already know how to represent them, so it's time to manipulate the data.
 
 ### General-Purpose Registers
 
 Unlike the IP, which can only be set by special instructions (such as `jmp`, `call` and `ret`), some registers are designed for general-purpose use. They include `ax`, `bx`, `cx`, `dx`, `di`, `si`, `sp`, `bp`, and `r8`–`r15`.
+
 See Appendix: General-Purpose Registers.
 
 ### Move Instructions
@@ -90,20 +91,19 @@ For example, to load the register `ax` with the value stored at the address `19`
 movq 19, %rax
 ```
 
-Here, the `movq` instruction has a suffix `-q` and the register `ax` has a prefix `r-`. Both indicate that the operation works on 64-bit values. 
+Here, the `movq` instruction has a suffix `-q` and the register `ax` has a prefix `r-`. Both indicate that the operation works on 64-bit values.
 
-See Appendix: Instruction
+See Appendix: Instructions.
 
 ![movq 19, %rax](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model4.png)
 
-## Assembly Syntax III: Compute Data
+## Transforming Data
 
 ### Arithmetic Instructions
 
-```
 Now we know how to move data between registers and memory. It's time to compute with it.
+
 Arithmetic instructions operate on one or two operands and store the result in the destination. For example, `ADD S, D` adds `S` to `D` and stores the sum in `D`, overwriting its previous value.
-```
 
 ```assembly
 addq %rax, %rdi
@@ -111,16 +111,16 @@ addq %rax, %rdi
 
 ### Flag Registers
 
-There are 4 special registers: `ZF`, `SF`, `OF`, `CF`, which designed to represent the status of last operation. Almost all of the arithmetic instructions will set those registers.
+There are 4 special registers: `ZF`, `SF`, `OF`, `CF`, which are designed to represent the status of the last operation. Almost all of the arithmetic instructions will set those registers.
 
-| Name | Meaning       | Condition             |
-| ---- | ------------- | --------------------- |
-| ZF   | Zero Flag     | Yielded 0             |
-| SF   | Sign Flag     | Yielded negative      |
-| OF   | Overflow Flag | Overflow for signed   |
-| CF   | Carry Flag    | Overflow for unsigned |
+| Name | Meaning       | Condition                                                     |
+| ---- | ------------- | ------------------------------------------------------------- |
+| ZF   | Zero Flag     | Yielded 0                                                      |
+| SF   | Sign Flag     | Yielded negative                                               |
+| OF   | Overflow Flag | Overflow for signed                                            |
+| CF   | Carry Flag    | Carry out of the most significant bit (overflow for unsigned)  |
 
-For example, when adding two 4bit numbers:
+For example, when adding two 4-bit numbers:
 ```
 0111 + 0001 = 1000
 ```
@@ -131,7 +131,7 @@ If the result is treated as an unsigned number, there is no carry out of the mos
 
 ![addq %rax, %rdi sets the condition flags](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model5.png)
 
-## Assembly Syntax IV: Control Flow
+## Controlling the Flow
 
 We can combine the condition flags to test whether the result of the previous instruction satisfies a condition, which lets us implement control flow.
 
@@ -181,11 +181,11 @@ Here are the suffixs used by the conditional jump instructions:
 | b      | CF             | Below            |
 | be     | CF \| ZF       | Below or equal   |
 
-## Assembly Syntax V: Procedures
+## Procedures
 
 ### SP & BP: Run-Time Stack
 
-A program may need to handle far more data than the number of registers can hold. A technique called the runtime stack was designed to solve this problem. It uses two registers, `sp` and `bp`, to mark the two ends of a region of memory (the current stack frame), and the memory between them is used to store data. 
+A program may need to handle far more data than the number of registers can hold. A technique called the runtime stack was designed to solve this problem. It uses two registers, `sp` and `bp`, to mark the two ends of a region of memory (the current stack frame), and the memory between them is used to store data.
 
 Two instructions to save/take values to the stack:
 
@@ -202,27 +202,27 @@ Note that the stack is located at high addresses and grows downward: pushing dat
 Here is a typical procedure:
 
 ```assembly
-push %rbp
-movq %rsp, %rbp     # Save the origin address of sp to the bp
-subq 20, %rsp       # Allocate 20 bytes for the stack
-<some sintructions>
-movq %rbp, %rsp     # Free the stack by setting the sp to it's origin address
-pop  %rbp
+pushq %rbp
+movq %rsp, %rbp     # Save the original address of sp to the bp
+subq $20, %rsp      # Allocate 20 bytes for the stack
+<some instructions>
+movq %rbp, %rsp     # Free the stack by setting the sp to its original address
+popq %rbp
 ```
 
 #### Step-by-Step Diagrams: Lifecycle of a Stack Frame
 
-![Stack frame, step 1: push %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-1.png)
+![Stack frame, step 1: pushq %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-1.png)
 
-![Stack frame, step 2: mov %rsp, %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-2.png)
+![Stack frame, step 2: movq %rsp, %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-2.png)
 
-![Stack frame, step 3: push %rax](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-3.png)
+![Stack frame, step 3: pushq %rax](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-3.png)
 
 ![Stack frame, step 4: movq %rbp, %rsp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-4.png)
 
-![Stack frame, step 5: pop %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-5.png)
+![Stack frame, step 5: popq %rbp](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-5.png)
 
-![Stack frame, step 6: pop %rdi](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-6.png)
+![Stack frame, step 6: popq %rdi](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-6.png)
 
 ### Function Call
 
@@ -241,7 +241,7 @@ The callee places the return value, if any, in `ax`.
 
 #### Passing Arguments
 
-The first six arguments are passed in these registers, in order: `di`, `si`, `dx`, `cx`, `r8`, and `r9`. Any further arguments are passed on the stack. 
+The first six arguments are passed in these registers, in order: `di`, `si`, `dx`, `cx`, `r8`, and `r9`. Any further arguments are passed on the stack.
 
 #### Callee-Saved Registers
 
@@ -255,7 +255,7 @@ A function may store local variables on the stack, so its frame contains a regio
 
 #### Step-by-Step Diagrams: Calling a Function and Returning Immediately
 
-![Function call, step 1: push 0x12](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-1.png)
+![Function call, step 1: pushq $0x12](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-1.png)
 
 ![Function call, step 2: call pushes the return address](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-2.png)
 
@@ -300,18 +300,9 @@ r-               e-       -    -l     <- prefix/suffix
 | r10  |              | r14  | callee saved |
 | r11  |              | r15  | callee saved |
 
-### Condition Registers
-
-| Name | Meaning       | Condition                                        |
-| ---- | ------------- | ------------------------------------------------ |
-| ZF   | Zero Flag     | Yielded 0                                        |
-| SF   | Sign Flag     | Yielded negative                                 |
-| OF   | Overflow Flag | Overflow for signed                              |
-| CF   | Carry Flag    | Carry out of the sign bit  Overflow for unsigned |
-
 ## Appendix: Instructions
 
-Suffixs: 8byte: **q**uote, 4byte: **l**ong, 2byte: **w**ord, 1byte: **b**yte
+Suffixes: 8byte: **q**uad, 4byte: **l**ong, 2byte: **w**ord, 1byte: **b**yte
 
 ### Move
 
@@ -403,7 +394,7 @@ Using for setting the condition flags without touching the operands. Both take S
 
 ### Control
 
-Using for reading the condition flags and changing the flow of execution. The suffix of these instructions selects the condition; see the suffix table in *Assembly Syntax IV: Control Flow*.
+Using for reading the condition flags and changing the flow of execution. The suffix of these instructions selects the condition; see the suffix table in *Controlling the Flow*.
 
 | Instruction   | Effect                                                 | Operands                                               | Notes                           |
 | ------------- | ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |

@@ -47,14 +47,13 @@
             <div id="toc-items" style="display: inherit;">
                 <ol>
                 <li><a href="#overview" id="toc-overview">Overview</a></li>
-                <li><a href="#ipinstruction-pointer"
-                id="toc-ipinstruction-pointer">IP：Instruction Pointer</a></li>
+                <li><a href="#ip-instruction-pointer"
+                id="toc-ip-instruction-pointer">IP: Instruction Pointer</a></li>
                 <li><a href="#byte-the-real-unit-of-addressing"
                 id="toc-byte-the-real-unit-of-addressing">Byte: The Real Unit of
                 Addressing</a></li>
-                <li><a href="#assembly-syntax-i-basic-operand-types"
-                id="toc-assembly-syntax-i-basic-operand-types">Assembly Syntax I: Basic
-                Operand Types</a>
+                <li><a href="#operands-how-to-name-things"
+                id="toc-operands-how-to-name-things">Operands: How to Name Things</a>
                 <ol>
                 <li><a href="#immediate-values" id="toc-immediate-values">Immediate
                 Values</a></li>
@@ -62,16 +61,14 @@
                 <li><a href="#memory-address" id="toc-memory-address">Memory
                 Address</a></li>
                 </ol></li>
-                <li><a href="#assembly-syntax-ii-set-data"
-                id="toc-assembly-syntax-ii-set-data">Assembly Syntax II: Set Data</a>
+                <li><a href="#moving-data" id="toc-moving-data">Moving Data</a>
                 <ol>
                 <li><a href="#general-purpose-registers"
                 id="toc-general-purpose-registers">General-Purpose Registers</a></li>
                 <li><a href="#move-instructions" id="toc-move-instructions">Move
                 Instructions</a></li>
                 </ol></li>
-                <li><a href="#assembly-syntax-iii-compute-data"
-                id="toc-assembly-syntax-iii-compute-data">Assembly Syntax III: Compute
+                <li><a href="#transforming-data" id="toc-transforming-data">Transforming
                 Data</a>
                 <ol>
                 <li><a href="#arithmetic-instructions"
@@ -79,15 +76,13 @@
                 <li><a href="#flag-registers" id="toc-flag-registers">Flag
                 Registers</a></li>
                 </ol></li>
-                <li><a href="#assembly-syntax-iv-control-flow"
-                id="toc-assembly-syntax-iv-control-flow">Assembly Syntax IV: Control
-                Flow</a>
+                <li><a href="#controlling-the-flow"
+                id="toc-controlling-the-flow">Controlling the Flow</a>
                 <ol>
                 <li><a href="#compare" id="toc-compare">Compare</a></li>
                 <li><a href="#jump" id="toc-jump">Jump</a></li>
                 </ol></li>
-                <li><a href="#assembly-syntax-v-procedures"
-                id="toc-assembly-syntax-v-procedures">Assembly Syntax V: Procedures</a>
+                <li><a href="#procedures" id="toc-procedures">Procedures</a>
                 <ol>
                 <li><a href="#sp-bp-run-time-stack" id="toc-sp-bp-run-time-stack">SP
                 &amp; BP: Run-Time Stack</a></li>
@@ -102,8 +97,6 @@
                 Registers</a></li>
                 <li><a href="#modern-registers" id="toc-modern-registers">Modern
                 Registers</a></li>
-                <li><a href="#condition-registers"
-                id="toc-condition-registers">Condition Registers</a></li>
                 </ol></li>
                 <li><a href="#appendix-instructions"
                 id="toc-appendix-instructions">Appendix: Instructions</a>
@@ -145,7 +138,7 @@
             program terminates.</p>
             <p>As the diagram shows, everything stored in memory or
             registers is composed of a <strong>sequence of
-            bits</strong>. Each bit has exactly one value:s either 0 or
+            bits</strong>. Each bit has exactly one value: either 0 or
             1. To locate an instruction or a piece of data, it is
             necessary to know its starting position, known as an
             <strong>address</strong>, and its length.</p>
@@ -156,7 +149,7 @@
             same bits as an instruction, then it is an instruction. As
             <em>CS:APP</em> says, information is <strong>bits +
             context.</strong></p>
-            <h2 id="ipinstruction-pointer">IP：Instruction Pointer</h2>
+            <h2 id="ip-instruction-pointer">IP: Instruction Pointer</h2>
             <p>We already know that whether a sequence of bits is
             interpreted as an instruction or as data depends on the
             context. But what exactly is this context? In x86, one key
@@ -206,8 +199,8 @@
             <figcaption aria-hidden="true">Bits grouped into bytes, the
             unit of addressing</figcaption>
             </figure>
-            <h2 id="assembly-syntax-i-basic-operand-types">Assembly
-            Syntax I: Basic Operand Types</h2>
+            <h2 id="operands-how-to-name-things">Operands: How to Name
+            Things</h2>
             <p>Now that we know a machine has an execution unit, memory,
             and a set of registers (one of which holds the address of
             the next instruction), it’s time to learn how to refer to
@@ -226,7 +219,7 @@
             in assembly code. Register names are prefixed with
             <code>%</code>. For example, <code>%rax</code> refers to the
             64-bit <code>RAX</code> register.</p>
-            <p>See Appendix: Registers.</p>
+            <p>See Appendix: General-Purpose Registers.</p>
             <h3 id="memory-address">Memory Address</h3>
             <p>A common form of a memory address syntax is:
             <code>Imm(%b, %i, s)</code>. Where:</p>
@@ -249,8 +242,7 @@
             <p>Any omitted component is treated as zero, except that an
             omitted scale factor defaults to <code>1</code> when an
             index register is present.</p>
-            <h2 id="assembly-syntax-ii-set-data">Assembly Syntax II: Set
-            Data</h2>
+            <h2 id="moving-data">Moving Data</h2>
             <p>Now we have the core components: the CPU, the registers,
             and the memory. We already know how to represent them, so
             it’s time to manipulate the data.</p>
@@ -262,8 +254,8 @@
             general-purpose use. They include <code>ax</code>,
             <code>bx</code>, <code>cx</code>, <code>dx</code>,
             <code>di</code>, <code>si</code>, <code>sp</code>,
-            <code>bp</code>, and <code>r8</code>–<code>r15</code>. See
-            Appendix: General-Purpose Registers.</p>
+            <code>bp</code>, and <code>r8</code>–<code>r15</code>.</p>
+            <p>See Appendix: General-Purpose Registers.</p>
             <h3 id="move-instructions">Move Instructions</h3>
             <p>A move instruction has the general form
             <code>MOV S, D</code>, where <code>S</code> stands for
@@ -283,28 +275,37 @@
             <code>-q</code> and the register <code>ax</code> has a
             prefix <code>r-</code>. Both indicate that the operation
             works on 64-bit values.</p>
-            <p>See Appendix: Instruction</p>
+            <p>See Appendix: Instructions.</p>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model4.png"
             alt="movq 19, %rax" />
             <figcaption aria-hidden="true">movq 19, %rax</figcaption>
             </figure>
-            <h2 id="assembly-syntax-iii-compute-data">Assembly Syntax
-            III: Compute Data</h2>
+            <h2 id="transforming-data">Transforming Data</h2>
             <h3 id="arithmetic-instructions">Arithmetic
             Instructions</h3>
-            <pre><code>Now we know how to move data between registers and memory. It&#39;s time to compute with it.
-Arithmetic instructions operate on one or two operands and store the result in the destination. For example, `ADD S, D` adds `S` to `D` and stores the sum in `D`, overwriting its previous value.</code></pre>
+            <p>Now we know how to move data between registers and
+            memory. It’s time to compute with it.</p>
+            <p>Arithmetic instructions operate on one or two operands
+            and store the result in the destination. For example,
+            <code>ADD S, D</code> adds <code>S</code> to <code>D</code>
+            and stores the sum in <code>D</code>, overwriting its
+            previous value.</p>
             <pre
             class="language-assembly line-numbers match-braces"><code>addq %rax, %rdi</code></pre>
             <h3 id="flag-registers">Flag Registers</h3>
             <p>There are 4 special registers: <code>ZF</code>,
-            <code>SF</code>, <code>OF</code>, <code>CF</code>, which
-            designed to represent the status of last operation. Almost
-            all of the arithmetic instructions will set those
+            <code>SF</code>, <code>OF</code>, <code>CF</code>, which are
+            designed to represent the status of the last operation.
+            Almost all of the arithmetic instructions will set those
             registers.</p>
             <table>
+            <colgroup>
+            <col style="width: 5%" />
+            <col style="width: 16%" />
+            <col style="width: 78%" />
+            </colgroup>
             <thead>
             <tr>
             <th>Name</th>
@@ -331,11 +332,12 @@ Arithmetic instructions operate on one or two operands and store the result in t
             <tr>
             <td>CF</td>
             <td>Carry Flag</td>
-            <td>Overflow for unsigned</td>
+            <td>Carry out of the most significant bit (overflow for
+            unsigned)</td>
             </tr>
             </tbody>
             </table>
-            <p>For example, when adding two 4bit numbers:</p>
+            <p>For example, when adding two 4-bit numbers:</p>
             <pre><code>0111 + 0001 = 1000</code></pre>
             <p>The result is not <code>0</code>, so <code>ZF</code> is
             set to <code>0</code>. If the result is treated as a signed
@@ -351,8 +353,7 @@ Arithmetic instructions operate on one or two operands and store the result in t
             <figcaption aria-hidden="true">addq %rax, %rdi sets the
             condition flags</figcaption>
             </figure>
-            <h2 id="assembly-syntax-iv-control-flow">Assembly Syntax IV:
-            Control Flow</h2>
+            <h2 id="controlling-the-flow">Controlling the Flow</h2>
             <p>We can combine the condition flags to test whether the
             result of the previous instruction satisfies a condition,
             which lets us implement control flow.</p>
@@ -453,8 +454,7 @@ je .Label
             </tr>
             </tbody>
             </table>
-            <h2 id="assembly-syntax-v-procedures">Assembly Syntax V:
-            Procedures</h2>
+            <h2 id="procedures">Procedures</h2>
             <h3 id="sp-bp-run-time-stack">SP &amp; BP: Run-Time
             Stack</h3>
             <p>A program may need to handle far more data than the
@@ -475,34 +475,34 @@ D: {Reg}</code></pre>
             <code>sp</code>, and popping data increases it.</p>
             <p>Here is a typical procedure:</p>
             <pre
-            class="language-assembly line-numbers match-braces"><code>push %rbp
-movq %rsp, %rbp     # Save the origin address of sp to the bp
-subq 20, %rsp       # Allocate 20 bytes for the stack
-&lt;some sintructions&gt;
-movq %rbp, %rsp     # Free the stack by setting the sp to it&#39;s origin address
-pop  %rbp</code></pre>
+            class="language-assembly line-numbers match-braces"><code>pushq %rbp
+movq %rsp, %rbp     # Save the original address of sp to the bp
+subq $20, %rsp      # Allocate 20 bytes for the stack
+&lt;some instructions&gt;
+movq %rbp, %rsp     # Free the stack by setting the sp to its original address
+popq %rbp</code></pre>
             <h4
             id="step-by-step-diagrams-lifecycle-of-a-stack-frame">Step-by-Step
             Diagrams: Lifecycle of a Stack Frame</h4>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-1.png"
-            alt="Stack frame, step 1: push %rbp" />
-            <figcaption aria-hidden="true">Stack frame, step 1: push
+            alt="Stack frame, step 1: pushq %rbp" />
+            <figcaption aria-hidden="true">Stack frame, step 1: pushq
             %rbp</figcaption>
             </figure>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-2.png"
-            alt="Stack frame, step 2: mov %rsp, %rbp" />
-            <figcaption aria-hidden="true">Stack frame, step 2: mov
+            alt="Stack frame, step 2: movq %rsp, %rbp" />
+            <figcaption aria-hidden="true">Stack frame, step 2: movq
             %rsp, %rbp</figcaption>
             </figure>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-3.png"
-            alt="Stack frame, step 3: push %rax" />
-            <figcaption aria-hidden="true">Stack frame, step 3: push
+            alt="Stack frame, step 3: pushq %rax" />
+            <figcaption aria-hidden="true">Stack frame, step 3: pushq
             %rax</figcaption>
             </figure>
             <figure>
@@ -515,15 +515,15 @@ pop  %rbp</code></pre>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-5.png"
-            alt="Stack frame, step 5: pop %rbp" />
-            <figcaption aria-hidden="true">Stack frame, step 5: pop
+            alt="Stack frame, step 5: popq %rbp" />
+            <figcaption aria-hidden="true">Stack frame, step 5: popq
             %rbp</figcaption>
             </figure>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model6-6.png"
-            alt="Stack frame, step 6: pop %rdi" />
-            <figcaption aria-hidden="true">Stack frame, step 6: pop
+            alt="Stack frame, step 6: popq %rdi" />
+            <figcaption aria-hidden="true">Stack frame, step 6: popq
             %rdi</figcaption>
             </figure>
             <h3 id="function-call">Function Call</h3>
@@ -574,9 +574,9 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <figure>
             <img
             src="../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-1.png"
-            alt="Function call, step 1: push 0x12" />
-            <figcaption aria-hidden="true">Function call, step 1: push
-            0x12</figcaption>
+            alt="Function call, step 1: pushq $0x12" />
+            <figcaption aria-hidden="true">Function call, step 1: pushq
+            $0x12</figcaption>
             </figure>
             <figure>
             <img
@@ -685,45 +685,8 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </tr>
             </tbody>
             </table>
-            <h3 id="condition-registers">Condition Registers</h3>
-            <table>
-            <colgroup>
-            <col style="width: 6%" />
-            <col style="width: 20%" />
-            <col style="width: 73%" />
-            </colgroup>
-            <thead>
-            <tr>
-            <th>Name</th>
-            <th>Meaning</th>
-            <th>Condition</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-            <td>ZF</td>
-            <td>Zero Flag</td>
-            <td>Yielded 0</td>
-            </tr>
-            <tr>
-            <td>SF</td>
-            <td>Sign Flag</td>
-            <td>Yielded negative</td>
-            </tr>
-            <tr>
-            <td>OF</td>
-            <td>Overflow Flag</td>
-            <td>Overflow for signed</td>
-            </tr>
-            <tr>
-            <td>CF</td>
-            <td>Carry Flag</td>
-            <td>Carry out of the sign bit Overflow for unsigned</td>
-            </tr>
-            </tbody>
-            </table>
             <h2 id="appendix-instructions">Appendix: Instructions</h2>
-            <p>Suffixs: 8byte: <strong>q</strong>uote, 4byte:
+            <p>Suffixes: 8byte: <strong>q</strong>uad, 4byte:
             <strong>l</strong>ong, 2byte: <strong>w</strong>ord, 1byte:
             <strong>b</strong>yte</p>
             <h3 id="move">Move</h3>
@@ -1041,8 +1004,8 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <h3 id="control">Control</h3>
             <p>Using for reading the condition flags and changing the
             flow of execution. The suffix of these instructions selects
-            the condition; see the suffix table in <em>Assembly Syntax
-            IV: Control Flow</em>.</p>
+            the condition; see the suffix table in <em>Controlling the
+            Flow</em>.</p>
             <table>
             <colgroup>
             <col style="width: 8%" />
