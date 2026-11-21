@@ -54,11 +54,13 @@ In assembly syntax, an immediate value is prefixed with `$`. For example, to rep
 
 Each register has a name, which we can use to refer to it in assembly code. Register names are prefixed with `%`. For example, `%rax` refers to the 64-bit `RAX` register.
 
+Unlike the IP, which can only be set by special instructions (such as `jmp`, `call` and `ret`), some registers are designed for general-purpose use. They include `ax`, `bx`, `cx`, `dx`, `di`, `si`, `sp`, `bp`, and `r8`–`r15`.
+
 See Appendix: General-Purpose Registers.
 
 ### Memory Address
 
-A common form of a memory address syntax is: `Imm(%b, %i, s)`. Where:
+A common form of a memory address syntax is `Imm(%b, %i, s)`, where:
 
 1. `Imm` is an optional immediate displacement, specified without the `$` prefix.
 2. `%b` is an optional register that holds a base address, known as the *base register*.
@@ -67,7 +69,7 @@ A common form of a memory address syntax is: `Imm(%b, %i, s)`. Where:
 
 Each component is optional, although the scale factor is meaningful only when an index register is specified.
 
-The effective memory address is calculated as:  `Imm + %b + %i * s`.
+The effective memory address is calculated as: `Imm + %b + %i * s`.
 
 Any omitted component is treated as zero, except that an omitted scale factor defaults to `1` when an index register is present.
 
@@ -75,15 +77,8 @@ Any omitted component is treated as zero, except that an omitted scale factor de
 
 Now we have the core components: the CPU, the registers, and the memory. We already know how to represent them, so it's time to manipulate the data.
 
-### General-Purpose Registers
-
-Unlike the IP, which can only be set by special instructions (such as `jmp`, `call` and `ret`), some registers are designed for general-purpose use. They include `ax`, `bx`, `cx`, `dx`, `di`, `si`, `sp`, `bp`, and `r8`–`r15`.
-
-See Appendix: General-Purpose Registers.
-
-### Move Instructions
-
 A move instruction has the general form `MOV S, D`, where `S` stands for "Source", which can be an immediate, a memory address, or a register, and `D` stands for "Destination", which can be a memory address or a register. A move instruction copies data from the source to the destination.
+
 When the source is a memory address, the destination can only be a register. Thus, we can't move data directly between two memory addresses.
 
 For example, to load the register `ax` with the value stored at the address `19`, we can write:
@@ -137,7 +132,7 @@ We can combine the condition flags to test whether the result of the previous in
 
 ### Compare
 
-Two instructions set the flags without modifying any register:
+Two instructions set the flags without modifying their operands:
 ```assembly
 CMP S1, S2    # Set the flags according to S2 - S1.
 TEST S1, S2   # Set the flags according to S1 & S2. (Usually used as `TEST S1, S1` to check whether S1 is 0.)
@@ -155,16 +150,16 @@ jCC .LABEL     # jump to LABEL if the condition given by the suffix CC is satisf
 .LABEL:        # marks the next instruction; defined as `.<name>:`. The assembler replaces it with that instruction's address.
 ```
 
-For example, jump if the value of `%rax` is equals the value of `%rbx`:
+For example, jump if the value of `%rax` is equal to the value of `%rbx`:
 ```assembly
 cmpq %rax, %rbx
-je .Label
+je .LABEL
 <some instructions>
-.Label:
+.LABEL:
 <some instructions>
 ```
 
-Here are the suffixs used by the conditional jump instructions:
+Here are the suffixes used by the conditional jump instructions:
 
 | Suffix | Condition      | Description      |
 | ------ | -------------- | ---------------- |
@@ -263,7 +258,6 @@ A function may store local variables on the stack, so its frame contains a regio
 
 ![Function call, step 4: execution resumes after the call](../res/post-imgs/Building_a_Mental_Model_of_x86-64/model8-4.png)
 
-
 ## Appendix: General-Purpose Registers
 
 ### Legacy Registers
@@ -276,17 +270,17 @@ r-               e-       -    -l     <- prefix/suffix
 8                4        2    1      <- size(byte)
 ```
 
-| Name | Usage                   | Name | Usage        |
-| ---- | ----------------------- | ---- | ------------ |
-| ax   | return value            | di   | 1st argument |
-| sp   | stack pointers          | si   | 2nd argument |
-| bp   | base point/callee saved | dx   | 3rd argument |
-| bx   | callee saved            | cx   | 4th argument |
+| Name | Usage                     | Name | Usage        |
+| ---- | ------------------------- | ---- | ------------ |
+| ax   | return value              | di   | 1st argument |
+| sp   | stack pointer             | si   | 2nd argument |
+| bp   | base pointer/callee saved | dx   | 3rd argument |
+| bx   | callee saved              | cx   | 4th argument |
 
 ### Modern Registers
 
 ```
-\-                -d       -w   -b    <- suffix
+-                 -d       -w   -b    <- suffix
 ┌────────────────┬────────┬────┬────┐
 │%r8             │%r8d    │%r8w│%r8b│
 └────────────────┴────────┴────┴────┘
@@ -306,7 +300,7 @@ Suffixes: 8byte: **q**uad, 4byte: **l**ong, 2byte: **w**ord, 1byte: **b**yte
 
 ### Move
 
-Using for referencing and dereferencing.
+Used for referencing and dereferencing.
 
 | Instruction | Effect                   | Operands                      | Suffixes                                       |
 | ----------- | ------------------------ | ----------------------------- | ---------------------------------------------- |
@@ -332,7 +326,7 @@ A stack grows toward the lower addresses, and %rsp always holds the address of t
 
 ### Load Effective Address
 
-Get the address itself instead the value stored in that address.
+Get the address itself instead of the value stored at that address.
 
 | Instruction | Effect | Operands            | Notes                           |
 | ----------- | ------ | ------------------- | ------------------------------- |
@@ -373,28 +367,28 @@ For a w bits long data, the shift amount is the value of the low-order m bits of
 
 ### Full Multiply & Divide
 
-These instructions take a single operand S: {Reg, Mem} (except cqto, which takes none); the other operand and the destination are always %rax, or the 128-bits pair %rdx:%rax.
+These instructions take a single operand S: {Reg, Mem} (except cqto, which takes none); the other operand and the destination are always %rax, or the 128-bit pair %rdx:%rax.
 
 | Instruction | Effect                                          | Notes                                                                     |
 | ----------- | ----------------------------------------------- | ------------------------------------------------------------------------- |
 | imulq S     | %rdx:%rax <- S * %rax                           | Signed full multiply                                                       |
 | mulq S      | %rdx:%rax <- S * %rax                           | Unsigned full multiply                                                     |
-| cqto        | %rdx:%rax <- SignExtend(%rax)                   | Convert Quad to Octword; prepares the 128-bits dividend for idivq          |
+| cqto        | %rdx:%rax <- SignExtend(%rax)                   | Convert Quad to Octword; prepares the 128-bit dividend for idivq          |
 | idivq S     | %rdx <- %rdx:%rax mod S, %rax <- %rdx:%rax / S  | Signed divide                                                              |
 | divq S      | %rdx <- %rdx:%rax mod S, %rax <- %rdx:%rax / S  | Unsigned divide                                                            |
 
 ### Compare
 
-Using for setting the condition flags without touching the operands. Both take S1, S2: {Imm, Reg, Mem}.
+Used for setting the condition flags without touching the operands. Both take S1, S2: {Imm, Reg, Mem}.
 
 | Instruction | Effect                                                        | Suffixes                   |
 | ----------- | ------------------------------------------------------------- | -------------------------- |
-| CMP S1,S2   | Set the condition flags as SUB but not change the destination  | cmpb, cmpw, cmpl, cmpq     |
-| TEST S1,S2  | Set the condition flags as AND but not change the destination  | testb, testw, testl, testq |
+| CMP S1,S2   | Set the condition flags as SUB but do not change the destination  | cmpb, cmpw, cmpl, cmpq     |
+| TEST S1,S2  | Set the condition flags as AND but do not change the destination  | testb, testw, testl, testq |
 
 ### Control
 
-Using for reading the condition flags and changing the flow of execution. The suffix of these instructions selects the condition; see the suffix table in *Controlling the Flow*.
+Used for reading the condition flags and changing the flow of execution. The suffix of these instructions selects the condition; see the suffix table in *Controlling the Flow*.
 
 | Instruction   | Effect                                                 | Operands                                               | Notes                           |
 | ------------- | ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------- |

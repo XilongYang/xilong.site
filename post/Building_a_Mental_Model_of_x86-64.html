@@ -61,13 +61,7 @@
                 <li><a href="#memory-address" id="toc-memory-address">Memory
                 Address</a></li>
                 </ol></li>
-                <li><a href="#moving-data" id="toc-moving-data">Moving Data</a>
-                <ol>
-                <li><a href="#general-purpose-registers"
-                id="toc-general-purpose-registers">General-Purpose Registers</a></li>
-                <li><a href="#move-instructions" id="toc-move-instructions">Move
-                Instructions</a></li>
-                </ol></li>
+                <li><a href="#moving-data" id="toc-moving-data">Moving Data</a></li>
                 <li><a href="#transforming-data" id="toc-transforming-data">Transforming
                 Data</a>
                 <ol>
@@ -219,10 +213,17 @@
             in assembly code. Register names are prefixed with
             <code>%</code>. For example, <code>%rax</code> refers to the
             64-bit <code>RAX</code> register.</p>
+            <p>Unlike the IP, which can only be set by special
+            instructions (such as <code>jmp</code>, <code>call</code>
+            and <code>ret</code>), some registers are designed for
+            general-purpose use. They include <code>ax</code>,
+            <code>bx</code>, <code>cx</code>, <code>dx</code>,
+            <code>di</code>, <code>si</code>, <code>sp</code>,
+            <code>bp</code>, and <code>r8</code>–<code>r15</code>.</p>
             <p>See Appendix: General-Purpose Registers.</p>
             <h3 id="memory-address">Memory Address</h3>
-            <p>A common form of a memory address syntax is:
-            <code>Imm(%b, %i, s)</code>. Where:</p>
+            <p>A common form of a memory address syntax is
+            <code>Imm(%b, %i, s)</code>, where:</p>
             <ol type="1">
             <li><code>Imm</code> is an optional immediate displacement,
             specified without the <code>$</code> prefix.</li>
@@ -246,26 +247,15 @@
             <p>Now we have the core components: the CPU, the registers,
             and the memory. We already know how to represent them, so
             it’s time to manipulate the data.</p>
-            <h3 id="general-purpose-registers">General-Purpose
-            Registers</h3>
-            <p>Unlike the IP, which can only be set by special
-            instructions (such as <code>jmp</code>, <code>call</code>
-            and <code>ret</code>), some registers are designed for
-            general-purpose use. They include <code>ax</code>,
-            <code>bx</code>, <code>cx</code>, <code>dx</code>,
-            <code>di</code>, <code>si</code>, <code>sp</code>,
-            <code>bp</code>, and <code>r8</code>–<code>r15</code>.</p>
-            <p>See Appendix: General-Purpose Registers.</p>
-            <h3 id="move-instructions">Move Instructions</h3>
             <p>A move instruction has the general form
             <code>MOV S, D</code>, where <code>S</code> stands for
             “Source”, which can be an immediate, a memory address, or a
             register, and <code>D</code> stands for “Destination”, which
             can be a memory address or a register. A move instruction
-            copies data from the source to the destination. When the
-            source is a memory address, the destination can only be a
-            register. Thus, we can’t move data directly between two
-            memory addresses.</p>
+            copies data from the source to the destination.</p>
+            <p>When the source is a memory address, the destination can
+            only be a register. Thus, we can’t move data directly
+            between two memory addresses.</p>
             <p>For example, to load the register <code>ax</code> with
             the value stored at the address <code>19</code>, we can
             write:</p>
@@ -358,8 +348,8 @@
             result of the previous instruction satisfies a condition,
             which lets us implement control flow.</p>
             <h3 id="compare">Compare</h3>
-            <p>Two instructions set the flags without modifying any
-            register:</p>
+            <p>Two instructions set the flags without modifying their
+            operands:</p>
             <pre
             class="language-assembly line-numbers match-braces"><code>CMP S1, S2    # Set the flags according to S2 - S1.
 TEST S1, S2   # Set the flags according to S1 &amp; S2. (Usually used as `TEST S1, S1` to check whether S1 is 0.)</code></pre>
@@ -374,14 +364,14 @@ jCC .LABEL     # jump to LABEL if the condition given by the suffix CC is satisf
 
 .LABEL:        # marks the next instruction; defined as `.&lt;name&gt;:`. The assembler replaces it with that instruction&#39;s address.</code></pre>
             <p>For example, jump if the value of <code>%rax</code> is
-            equals the value of <code>%rbx</code>:</p>
+            equal to the value of <code>%rbx</code>:</p>
             <pre
             class="language-assembly line-numbers match-braces"><code>cmpq %rax, %rbx
-je .Label
+je .LABEL
 &lt;some instructions&gt;
-.Label:
+.LABEL:
 &lt;some instructions&gt;</code></pre>
-            <p>Here are the suffixs used by the conditional jump
+            <p>Here are the suffixes used by the conditional jump
             instructions:</p>
             <table>
             <thead>
@@ -625,13 +615,13 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </tr>
             <tr>
             <td>sp</td>
-            <td>stack pointers</td>
+            <td>stack pointer</td>
             <td>si</td>
             <td>2nd argument</td>
             </tr>
             <tr>
             <td>bp</td>
-            <td>base point/callee saved</td>
+            <td>base pointer/callee saved</td>
             <td>dx</td>
             <td>3rd argument</td>
             </tr>
@@ -644,7 +634,7 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </tbody>
             </table>
             <h3 id="modern-registers">Modern Registers</h3>
-            <pre><code>\-                -d       -w   -b    &lt;- suffix
+            <pre><code>-                 -d       -w   -b    &lt;- suffix
 ┌────────────────┬────────┬────┬────┐
 │%r8             │%r8d    │%r8w│%r8b│
 └────────────────┴────────┴────┴────┘
@@ -690,7 +680,7 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <strong>l</strong>ong, 2byte: <strong>w</strong>ord, 1byte:
             <strong>b</strong>yte</p>
             <h3 id="move">Move</h3>
-            <p>Using for referencing and dereferencing.</p>
+            <p>Used for referencing and dereferencing.</p>
             <table>
             <colgroup>
             <col style="width: 10%" />
@@ -776,8 +766,8 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </tbody>
             </table>
             <h3 id="load-effective-address">Load Effective Address</h3>
-            <p>Get the address itself instead the value stored in that
-            address.</p>
+            <p>Get the address itself instead of the value stored at
+            that address.</p>
             <table>
             <colgroup>
             <col style="width: 16%" />
@@ -924,7 +914,7 @@ ret              # Return from call: pop the address to the PC</code></pre>
             Divide</h3>
             <p>These instructions take a single operand S: {Reg, Mem}
             (except cqto, which takes none); the other operand and the
-            destination are always %rax, or the 128-bits pair
+            destination are always %rax, or the 128-bit pair
             %rdx:%rax.</p>
             <table>
             <colgroup>
@@ -953,7 +943,7 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <tr>
             <td>cqto</td>
             <td>%rdx:%rax &lt;- SignExtend(%rax)</td>
-            <td>Convert Quad to Octword; prepares the 128-bits dividend
+            <td>Convert Quad to Octword; prepares the 128-bit dividend
             for idivq</td>
             </tr>
             <tr>
@@ -971,8 +961,8 @@ ret              # Return from call: pop the address to the PC</code></pre>
             </tbody>
             </table>
             <h3 id="compare-1">Compare</h3>
-            <p>Using for setting the condition flags without touching
-            the operands. Both take S1, S2: {Imm, Reg, Mem}.</p>
+            <p>Used for setting the condition flags without touching the
+            operands. Both take S1, S2: {Imm, Reg, Mem}.</p>
             <table>
             <colgroup>
             <col style="width: 11%" />
@@ -989,20 +979,20 @@ ret              # Return from call: pop the address to the PC</code></pre>
             <tbody>
             <tr>
             <td>CMP S1,S2</td>
-            <td>Set the condition flags as SUB but not change the
+            <td>Set the condition flags as SUB but do not change the
             destination</td>
             <td>cmpb, cmpw, cmpl, cmpq</td>
             </tr>
             <tr>
             <td>TEST S1,S2</td>
-            <td>Set the condition flags as AND but not change the
+            <td>Set the condition flags as AND but do not change the
             destination</td>
             <td>testb, testw, testl, testq</td>
             </tr>
             </tbody>
             </table>
             <h3 id="control">Control</h3>
-            <p>Using for reading the condition flags and changing the
+            <p>Used for reading the condition flags and changing the
             flow of execution. The suffix of these instructions selects
             the condition; see the suffix table in <em>Controlling the
             Flow</em>.</p>
